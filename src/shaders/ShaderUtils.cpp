@@ -13,7 +13,7 @@ ShaderUtils::ShaderUtils() {
 * @param fShaderName the fragment shader
 * @return PhongShader or NULL if failed
 */
-PhongShader ShaderUtils::installPhongShader(const GLchar *vShaderName, const GLchar *fShaderName) {
+static PhongShader ShaderUtils::installPhongShader(const GLchar *vShaderName, const GLchar *fShaderName) {
    GLuint VS; //handles to shader object
    GLuint FS; //handles to frag shader object
    GLint vCompiled; //status

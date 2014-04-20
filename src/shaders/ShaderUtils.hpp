@@ -18,6 +18,7 @@
 
 class ShaderUtils {
    public:
+      static PhongShader installPhongShader(const GLchar, const GLchar);
+   private:
       ShaderUtils();
-      PhongShader installPhongShader(const GLchar, const GLchar);
 };
