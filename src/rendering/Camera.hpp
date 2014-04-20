@@ -1,0 +1,29 @@
+#ifdef _WIN32
+#include <glm.hpp>
+#include <gtc/matrix_transform.hpp>
+#include <gtc/type_ptr.hpp>
+#include <GL/glew.h>
+#include "helperFiles/GLSL_helper.h"
+#endif
+#ifdef __unix__
+#include <glm/glm.hpp>
+#include <GLFW/glfw3.h>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include "../helperFiles/GLSL_helper.h"
+#endif
+
+class Camera {
+public:
+   glm::vec3 eye;
+   glm::vec3 lookAt;
+   glm::vec3 upVec;
+   glm::vec3 wVector;
+   glm::vec3 uVector;
+   glm::vec3 vVector;
+
+   Camera();
+   void shake();
+   void setView(GLint);
+   void setProjectionMatrix(GLint, int, int);
+};
