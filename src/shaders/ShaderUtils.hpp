@@ -1,10 +1,6 @@
-#ifdef __APPLE__
-#include "GLUT/glut.h"
-#include <OPENGL/gl.h>
-#endif
-
 #ifdef __unix__
-#include <GL/glut.h>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 #endif
 
 #ifdef _WIN32

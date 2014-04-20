@@ -1,17 +1,12 @@
-#ifdef __APPLE__
-#include "GLUT/glut.h"
-#include <OPENGL/gl.h>
-#endif
-
 #ifdef __unix__
-#include <GL/glut.h>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 #endif
 
 #ifdef _WIN32
-#pragma comment(lib, "glew32.lib")
+//#pragma comment(lib, "glew32.lib")
 
-#include <GL\glew.h>
-#include <GL\glut.h>
+#include <GL/glew.h>
 #endif
 
 #include <iostream>
