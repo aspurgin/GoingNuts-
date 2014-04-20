@@ -12,19 +12,19 @@
 
 #ifdef __unix__
 #include <GL/glut.h>
+#include "glm/glm.hpp"
 #endif
 
 #ifdef _WIN32
 #include <GL/glew.h>
 //#include <GL/glut.h>
-
+#include <glm.hpp>
 //#pragma comment(lib, "glew32.lib")
 //#pragma comment(lib, "OpenGL32.lib")
 //#pragma comment(lib, "glu32.lib")
 //#pragma comment(lib, "freeglut.lib")
 #endif
 
-#include "glm/glm.hpp"
 #include <vector>
 
 

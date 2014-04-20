@@ -7,7 +7,12 @@
  */
 
 #include "MStackHelp.h"
+#ifdef _WIN32
+#include <gtx/transform.hpp>
+#endif
+#ifdef __unix__
 #include "glm/gtx/transform.hpp"
+#endif
 
 RenderingHelper::RenderingHelper() :
         modelViewMatrix(1),
