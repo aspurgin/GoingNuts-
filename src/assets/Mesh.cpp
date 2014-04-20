@@ -24,11 +24,11 @@ void Mesh::genBuffers(){
    
    glGenBuffers(1, &faceHandle);
    glBindBuffer(GL_ARRAY_BUFFER, faceHandle);
-   glBufferData(GL_ARRAY_BUFFER, faces.size() * sizeof(int), &faces.front(), GL_STATIC_DRAW);
+   glBufferData(GL_ARRAY_BUFFER, faces.size() * sizeof(int) * 3, &faces.front(), GL_STATIC_DRAW);
    
    glGenBuffers(1, &uvHandle);
    glBindBuffer(GL_ARRAY_BUFFER, uvHandle);
-   glBufferData(GL_ARRAY_BUFFER, UV.size() * sizeof(float), &UV.front(), GL_STATIC_DRAW);
+   glBufferData(GL_ARRAY_BUFFER, UV.size() * sizeof(float) * 2, &UV.front(), GL_STATIC_DRAW);
 }
 
 Mesh::Mesh(const char* path){
