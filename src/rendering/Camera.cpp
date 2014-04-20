@@ -12,7 +12,11 @@ void Camera::setView(GLint  viewHandle) {
    safe_glUniformMatrix4fv(viewHandle, glm::value_ptr(View));
 }
 
-void SetProjectionMatrix(GLint projectionHandle, int width, int height) {
+void Camera::setProjectionMatrix(GLint projectionHandle, int width, int height) {
    glm::mat4 Projection = glm::perspective(80.0f, (float)width / height, 0.1f, 100.f);
    safe_glUniformMatrix4fv(projectionHandle, glm::value_ptr(Projection));
+}
+
+void Camera::shake() {
+
 }
