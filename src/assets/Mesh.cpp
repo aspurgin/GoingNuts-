@@ -14,8 +14,6 @@ void Mesh::clearData(){
 }
 
 void Mesh::genBuffers(){
-   int bufferlen = verts.size();
-   
    glGenBuffers(1, &posHandle);
    glBindBuffer(GL_ARRAY_BUFFER, posHandle);
    glBufferData(GL_ARRAY_BUFFER, verts.size() * sizeof(float), &verts.front(), GL_STATIC_DRAW);
@@ -27,6 +25,10 @@ void Mesh::genBuffers(){
    glGenBuffers(1, &normHandle);
    glBindBuffer(GL_ARRAY_BUFFER, normHandle);
    glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(float), &normals.front(), GL_STATIC_DRAW);
+   
+   glGenBuffers(1, &uvHandle);
+   glBindBuffer(GL_ARRAY_BUFFER, uvHandle);
+   glBufferData(GL_ARRAY_BUFFER, UV.size() * sizeof(float), &UV.front(), GL_STATIC_DRAW);
 }
 
 Mesh::Mesh(const char* path){
@@ -47,14 +49,6 @@ Mesh::Mesh(){
 }
 
 Mesh::~Mesh(){
-   
-}
-
-int Mesh::VAO(){
-   
-}
-
-int Mesh::VBO(){
    
 }
 

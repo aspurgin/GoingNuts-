@@ -6,6 +6,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <iostream>
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 
@@ -20,15 +21,13 @@ private:
 	void clearData();
 	void genBuffers();
 	
-	int posHandle;
-	int normHandle;
-	int faceHandle;
-	int uvHandle;
 public:
 	Mesh();
 	Mesh(const char* path);
 	~Mesh();
 
-	int VAO();
-	int VBO();
+	GLuint posHandle;
+	GLuint normHandle;
+	GLuint faceHandle;
+	GLuint uvHandle;
 };
