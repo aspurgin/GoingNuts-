@@ -1,7 +1,12 @@
+#pragma once
+
 #include <vector>
 #include <glm/glm.hpp>
-#include <assimp/importer.hpp>
-#include <assimp/scene.hpp>
+#include <assimp/cimport.h>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
+
 
 class Mesh {
 private:
@@ -13,7 +18,7 @@ public:
 	Mesh();
 	Mesh(const char* path);
 	~Mesh();
-	
+
 	int VAO();
 	int VBO();
-}
+};

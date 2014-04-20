@@ -1,4 +1,4 @@
-
+#include "Mesh.hpp"
 
 Mesh::Mesh(const char* path){
 	
@@ -12,10 +12,10 @@ Mesh::~Mesh(){
 	
 }
 
-Mesh::VAO(){
+int Mesh::VAO(){
 	
 }
 
-Mesh::VBO(){
+int Mesh::VBO(){
 	
 }
