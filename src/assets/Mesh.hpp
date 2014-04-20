@@ -12,10 +12,6 @@
 
 class Mesh {
 private:
-	std::vector<glm::vec3> verts;
-	std::vector<glm::ivec3> faces;
-	std::vector<glm::vec3> normals;
-	std::vector<glm::vec2> UV;
 
 	void createDefaultCube();
 	void clearData();
@@ -30,4 +26,10 @@ public:
 	GLuint normHandle;
 	GLuint faceHandle;
 	GLuint uvHandle;
+
+	std::vector<glm::vec3> verts;
+	std::vector<glm::ivec3> faces;
+	std::vector<glm::vec3> normals;
+	std::vector<glm::vec2> UV;
+
 };

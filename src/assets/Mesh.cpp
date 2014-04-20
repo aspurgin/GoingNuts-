@@ -16,15 +16,15 @@ void Mesh::clearData(){
 void Mesh::genBuffers(){
    glGenBuffers(1, &posHandle);
    glBindBuffer(GL_ARRAY_BUFFER, posHandle);
-   glBufferData(GL_ARRAY_BUFFER, verts.size() * sizeof(float), &verts.front(), GL_STATIC_DRAW);
+   glBufferData(GL_ARRAY_BUFFER, verts.size() * sizeof(float) * 3, &verts.front(), GL_STATIC_DRAW);
    
    glGenBuffers(1, &normHandle);
    glBindBuffer(GL_ARRAY_BUFFER, normHandle);
-   glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(float), &normals.front(), GL_STATIC_DRAW);
+   glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(float) * 3, &normals.front(), GL_STATIC_DRAW);
    
-   glGenBuffers(1, &normHandle);
-   glBindBuffer(GL_ARRAY_BUFFER, normHandle);
-   glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(float), &normals.front(), GL_STATIC_DRAW);
+   glGenBuffers(1, &faceHandle);
+   glBindBuffer(GL_ARRAY_BUFFER, faceHandle);
+   glBufferData(GL_ARRAY_BUFFER, faces.size() * sizeof(int), &faces.front(), GL_STATIC_DRAW);
    
    glGenBuffers(1, &uvHandle);
    glBindBuffer(GL_ARRAY_BUFFER, uvHandle);
@@ -154,4 +154,17 @@ void Mesh::createDefaultCube(){
 
    faces.push_back(ivec3(20, 21, 22)); // bottom face verts [20-23]
    faces.push_back(ivec3(22, 23, 20));
+}
+
+
+int main(int argc, char** argv){
+   Mesh m;
+   
+   float* f = &(m.verts.front().x);
+   std::cout << "testing\n";
+   int i=0; 
+   for(; i<20; i++){
+      std::cout << f[i] << "\n";
+   }
+   std::cout << "testing2\n";
 }
