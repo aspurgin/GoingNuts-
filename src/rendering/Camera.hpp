@@ -3,7 +3,7 @@
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 #include <GL/glew.h>
-#include "helperFiles/GLSL_helper.h"
+#include "../helperFiles/GLSL_helper.h"
 #endif
 #ifdef __unix__
 #include <glm/glm.hpp>
