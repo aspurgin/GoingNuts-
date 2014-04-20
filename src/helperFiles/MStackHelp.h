@@ -1,6 +1,6 @@
 /*
  * RenderingHelper.h -> renamed MStack.h (Z.J.W.)
- * A means of replacing openGL matrix stack uses glm 
+ * A means of replacing openGL matrix stack uses glm
  *
  *  Created on: Jul 28, 2011
  *      Author: Wyatt and Evan

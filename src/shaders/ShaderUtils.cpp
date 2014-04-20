@@ -1,5 +1,4 @@
 #include "ShaderUtils.hpp"
-#include "PhongShader.hpp"
 
 /**
 * Default Constructor
@@ -14,7 +13,7 @@ ShaderUtils::ShaderUtils() {
 * @param fShaderName the fragment shader
 * @return PhongShader or NULL if failed
 */
-PhongShader ShaderUtils::InstallPhongShader(const GLchar *vShaderName, const GLchar *fShaderName) {
+PhongShader ShaderUtils::installPhongShader(const GLchar *vShaderName, const GLchar *fShaderName) {
    GLuint VS; //handles to shader object
    GLuint FS; //handles to frag shader object
    GLint vCompiled; //status
@@ -45,7 +44,7 @@ PhongShader ShaderUtils::InstallPhongShader(const GLchar *vShaderName, const GLc
 
    if (!vCompiled || !fCompiled) {
       printf("Error compiling either shader %s or %s", vShaderName, fShaderName);
-      return NULL;
+      throw(1);
    }
 
    //create a program object and attach the compiled shader
@@ -62,7 +61,7 @@ PhongShader ShaderUtils::InstallPhongShader(const GLchar *vShaderName, const GLc
    glUseProgram(ShadeProg);
 
    //Set up PhongShader object
-   PhongShader phongShader();
+   PhongShader phongShader;
 
    /* get handles to attribute data */
    phongShader.h_aPosition = safe_glGetAttribLocation(ShadeProg, "aPosition");

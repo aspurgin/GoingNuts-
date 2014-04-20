@@ -8,10 +8,9 @@
 #endif
 
 #ifdef _WIN32
-#pragma comment(lib, "glew32.lib")
+//#pragma comment(lib, "glew32.lib")
 
-#include <GL\glew.h>
-#include <GL\glut.h>
+#include <GL/glew.h>
 #endif
 
 #include <iostream>
@@ -19,9 +18,10 @@
 #include <cstdlib>
 
 #include "../helperFiles/GLSL_helper.h"
+#include "PhongShader.hpp"
 
 class ShaderUtils {
    public:
       ShaderUtils();
-      int InstallPhongShaders(const GLchar, const GLchar)
+      PhongShader installPhongShader(const GLchar, const GLchar);
 };
