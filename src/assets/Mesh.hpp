@@ -15,13 +15,14 @@ private:
 
 	void createDefaultCube();
 	void clearData();
-	void genBuffers();
+
 	
 public:
 	Mesh();
 	Mesh(const char* path);
 	~Mesh();
    
+   void genBuffers();
    int numFaceElements();
    int numVertexElements();
 

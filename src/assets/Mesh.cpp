@@ -39,13 +39,11 @@ Mesh::Mesh(const char* path){
       std::cerr << "Mesh import from file not supported at this time\n";
       throw 2;
    }
-   genBuffers();
 }
 
 Mesh::Mesh(){
    clearData();
    createDefaultCube();
-   genBuffers();
 }
 
 Mesh::~Mesh(){
@@ -162,17 +160,4 @@ void Mesh::createDefaultCube(){
 
    faces.push_back(ivec3(20, 21, 22)); // bottom face verts [20-23]
    faces.push_back(ivec3(22, 23, 20));
-}
-
-
-int main(int argc, char** argv){
-   Mesh m;
-   
-   float* f = &(m.verts.front().x);
-   std::cout << "testing\n";
-   int i=0; 
-   for(; i<20; i++){
-      std::cout << f[i] << "\n";
-   }
-   std::cout << "testing2\n";
 }
