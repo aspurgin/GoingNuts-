@@ -55,25 +55,25 @@ void Mesh::parse(char* fileName)
    {
       objFile.getline(buffer, MAX_CHARS_PER_LINE);
       
-      result = sscanf_s(buffer, " v %f %f %f ", &vertex.x, &vertex.y, &vertex.z);
+      result = sscanf(buffer, " v %f %f %f ", &vertex.x, &vertex.y, &vertex.z);
       if (result == 3)
       {
          tempVertices.push_back(vertex);
       }
 
-      result = sscanf_s(buffer, " vt %f %f ", &uv.x, &uv.y);
+      result = sscanf(buffer, " vt %f %f ", &uv.x, &uv.y);
       if (result == 2)
       {
          tempUVs.push_back(uv);
       }
 
-      result = sscanf_s(buffer, " vn %f %f %f ", &normal.x, &normal.y, &normal.z);
+      result = sscanf(buffer, " vn %f %f %f ", &normal.x, &normal.y, &normal.z);
       if (result == 3)
       {
          tempNormals.push_back(normal);
       }
       
-      result = sscanf_s(buffer, " f %d/%d/%d %d/%d/%d %d/%d/%d ", &vertexIndex[0], &uvIndex[0], 
+      result = sscanf(buffer, " f %d/%d/%d %d/%d/%d %d/%d/%d ", &vertexIndex[0], &uvIndex[0], 
                       &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], 
                       &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
       if (result == 9)

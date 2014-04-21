@@ -2,8 +2,8 @@
 
 Renderer::Renderer() {
    camera = Camera();
-   pshader = ShaderUtils::installPhongShader(textFileRead((char *) "Phong_Vert.glsl"), 
-                                             textFileRead((char *) "Phong_Frag.glsl"));
+   pshader = ShaderUtils::installPhongShader(textFileRead((char *) "assets/shaders/Phong_Vert.glsl"), 
+                                             textFileRead((char *) "assets/shaders/Phong_Frag.glsl"));
    light = Light();
    block = Mesh("Cube.obj");
    //squirrel = Mesh();
@@ -11,8 +11,8 @@ Renderer::Renderer() {
 
 Renderer::Renderer(int width, int height) {
    camera = Camera();
-   pshader = ShaderUtils::installPhongShader(textFileRead((char *) "Phong_Vert.glsl"),
-                                             textFileRead((char *) "Phong_Frag.glsl"));
+   pshader = ShaderUtils::installPhongShader(textFileRead((char *) "assets/shaders/Phong_Vert.glsl"),
+                                             textFileRead((char *) "assets/shaders/Phong_Frag.glsl"));
    
    light = Light();
    winWidth = width;

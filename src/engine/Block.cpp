@@ -8,6 +8,6 @@ void Block::addToTimesDrilled() {
    timesDrilled--;
 }
 
-BlockType Block::getBlockType() {
+int Block::getBlockType() {
    return blockType;
 }

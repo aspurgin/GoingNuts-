@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MESH_H
+#define MESH_H
 
 #include <vector>
 #include <iostream>
@@ -29,3 +30,5 @@ class Mesh {
    private:   
       void parse(char* fileName);
 };
+
+#endif

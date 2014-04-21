@@ -1,14 +1,17 @@
 #ifndef __PHONG_SHADER_H
 #define __PHONG_SHADER_H
-#ifdef __unix__
+
 #include <GL/glew.h>
+
+#ifdef __unix__
+
 #include <GLFW/glfw3.h>
 #endif
 
 #ifdef _WIN32
 //#pragma comment(lib, "glew32.lib")
 
-#include <GL/glew.h>
+
 #endif
 
 #include <iostream>

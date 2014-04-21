@@ -1,8 +1,7 @@
 #ifndef __BLOCKTYPE_H_
 #define __BLOCKTYPE_H_
 
-enum class BlockType {
-   DIRTBLOCK, EMPTYBLOCK
-};
+#define DIRTBLOCK  0;
+#define EMPTYBLOCK 1;
 
 #endif

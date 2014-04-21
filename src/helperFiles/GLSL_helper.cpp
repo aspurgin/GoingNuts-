@@ -92,7 +92,7 @@ void getGLversion() {
 	major = minor =0;
 	const char *verstr = (const char *)glGetString(GL_VERSION);
 	
-	if ((verstr == NULL) || (sscanf_s(verstr, "%d.%d", &major, &minor) !=2)) {
+	if ((verstr == NULL) || (sscanf(verstr, "%d.%d", &major, &minor) !=2)) {
 		printf("Invalid GL_VERSION format %d %d\n", major, minor);
 	}
 	if( major <2) {

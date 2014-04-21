@@ -11,9 +11,9 @@ class Block: public Movable {
       virtual float getSlowPercentage() = 0;
       int getTimesDrilled();
       void addToTimesDrilled();
-      BlockType getBlockType();
+      int getBlockType();
    protected:
-      BlockType blockType;
+      int blockType;
    private:
       int timesDrilled;
 };
