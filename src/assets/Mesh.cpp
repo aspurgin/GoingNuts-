@@ -52,6 +52,14 @@ Mesh::~Mesh(){
    
 }
 
+int numFaceElements() {
+   return faces.size() * 3;
+}
+
+int numVertexElements() {
+   return verts.size() * 3;
+}
+
 void Mesh::createDefaultCube(){
    verts.push_back(vec3(-0.5, -0.5, -0.5)); // back face verts [0-3]
    verts.push_back(vec3(-0.5,  0.5, -0.5));

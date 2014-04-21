@@ -21,6 +21,9 @@ public:
 	Mesh();
 	Mesh(const char* path);
 	~Mesh();
+   
+   int numFaceElements();
+   int numVertexElements();
 
 	GLuint posHandle;
 	GLuint normHandle;
