@@ -3,7 +3,7 @@
 
 #include <glm/glm.hpp>
 #include "Movable.hpp"
-#include "BlockTypes.cpp";
+#include "BlockTypes.hpp"
 
 class Block: public Movable {
    public:

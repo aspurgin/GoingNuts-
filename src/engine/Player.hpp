@@ -9,7 +9,7 @@ class Player: public Movable {
    public:
       Player();
       Player(glm::vec3 center, float width, float height);
-      static void drillBlock(Block *block);
+      void drillBlock(Block *block);
    private:
       float velocity;
       int lives;

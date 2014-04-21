@@ -2,6 +2,7 @@
 #define __DIRTBLOCK_H__
 
 #include "Block.hpp"
+#include "BlockTypes.hpp"
 
 class DirtBlock: public Block {
    public:

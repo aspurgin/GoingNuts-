@@ -1,6 +1,8 @@
 #ifndef __DRILL_H_
 #define __DRILL_H_
 
+#include "Block.hpp"
+
 class Drill {
    public:
       Drill();

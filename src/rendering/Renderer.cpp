@@ -26,7 +26,7 @@ Renderer::Renderer(int width, int height) {
 
 void Renderer::initialize() {
    // Start Of User Initialization
-   glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+   glClearColor(0.09f, 0.0f, 0.21f, 1.0f);
    // Black Background
    glClearDepth(1.0f);	// Depth Buffer Setup
    glDepthFunc(GL_LEQUAL);	// The Type Of Depth Testing
@@ -40,12 +40,13 @@ void Renderer::setModel() {
    safe_glUniformMatrix4fv(pshader.h_uModelMatrix, glm::value_ptr(modelTrans.modelViewMatrix));
 }
 
-void Renderer::renderCube(glm::vec3 transl, int mat) {
+void Renderer::renderCube(glm::vec3 transl, int mat, float ang) {
    
    pshader.setMaterial(mat);
    modelTrans.loadIdentity();
    modelTrans.pushMatrix();
       modelTrans.translate(transl);
+      modelTrans.rotate(ang, glm::vec3(0, 1, 0));
       setModel();
       safe_glEnableVertexAttribArray(pshader.h_aPosition);
       glBindBuffer(GL_ARRAY_BUFFER, block.objHandle);
@@ -85,8 +86,8 @@ void Renderer::render() {
 
    setModel();
    pshader.setMaterial(2);
-   glm::vec3 pos(0, 0, 0);
-   renderCube(pos, 2);
+   glm::vec3 pos(0, 0, 4);
+   renderCube(pos, 1, 0);
    glUseProgram(0);
 
 }

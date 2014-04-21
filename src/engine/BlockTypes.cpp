@@ -1,3 +1,0 @@
-enum BlockType {
-   DirtBlock, EmptyBlock
-}

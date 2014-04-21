@@ -15,12 +15,12 @@ void Movable::moveTo(glm::vec2 newCenter) {
    moveBoundingBoxTo(newCenter);
 }
 
-void moveHorizontal(float distance) {
+void Movable::moveHorizontal(float distance) {
    center.x += distance;
    moveBoundingBoxHorizontal(distance);
 }
 
-void moveVertical(float distance) {
+void Movable::moveVertical(float distance) {
    center.y += distance;
-   moveBoundingboxVertical(distance);
+   moveBoundingBoxVertical(distance);
 }

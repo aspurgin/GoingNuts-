@@ -13,22 +13,29 @@
 #include "Movable.hpp"
 #include "Player.hpp"
 #include "../rendering/Renderer.hpp"
+#include "DirtBlock.hpp"
 
 class NutGame {
    public:
       NutGame();
-      Movable gameGrid[7][100];
+      Movable *gameGrid[7][100];
       void init();
       glm::vec2 positionLeftOfPlayer();
       glm::vec2 positionRightOfPlayer();
       glm::vec2 positionBellowPlayer();
       glm::vec2 positionAbovePlayer();
       bool isBlockAtPosition(glm::vec2 pos);
-   private:
+      static void keyPressed(GLFWwindow *window, int key, int scancode, int action, int mods);
+      void handleKeyInput();
       Renderer renderer;
+   private:
       glm::vec2 playerPosition;
-      bool drillPressed;
       Player player;
+      static bool drillPressed;
+      static bool left;
+      static bool right;
+      static bool up;
+      static bool down;
 };
 
 #endif
