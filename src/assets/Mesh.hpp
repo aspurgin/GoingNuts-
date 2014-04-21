@@ -10,6 +10,10 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 
+#ifdef _WIN32
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #define MAX_CHARS_PER_LINE 256
 
 class Mesh {
