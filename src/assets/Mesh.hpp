@@ -20,6 +20,7 @@ class Mesh {
       ~Mesh();
 
       void buildBuffers();
+      void debug();
       GLuint objHandle;
       GLuint normHandle;
       GLuint uvHandle;
