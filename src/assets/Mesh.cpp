@@ -50,11 +50,11 @@ Mesh::~Mesh(){
    
 }
 
-int numFaceElements() {
+int Mesh::numFaceElements() {
    return faces.size() * 3;
 }
 
-int numVertexElements() {
+int Mesh::numVertexElements() {
    return verts.size() * 3;
 }
 
