@@ -13,7 +13,8 @@ ShaderUtils::ShaderUtils() {
 * @param fShaderName the fragment shader
 * @return PhongShader or NULL if failed
 */
-static PhongShader ShaderUtils::installPhongShader(const GLchar *vShaderName, const GLchar *fShaderName) {
+
+PhongShader ShaderUtils::installPhongShader(const GLchar *vShaderName, const GLchar *fShaderName) {
    GLuint VS; //handles to shader object
    GLuint FS; //handles to frag shader object
    GLint vCompiled; //status
@@ -75,7 +76,7 @@ static PhongShader ShaderUtils::installPhongShader(const GLchar *vShaderName, co
    phongShader.h_uMatShine = safe_glGetUniformLocation(ShadeProg, "uMat.shine");
    phongShader.h_lightPos = safe_glGetUniformLocation(ShadeProg, "lightPos");
    phongShader.h_cameraPos = safe_glGetUniformLocation(ShadeProg, "cameraPos");
-
+   phongShader.h_lightColor = safe_glGetUniformLocation(ShadeProg, "lightColor");
    phongShader.shadeProg = ShadeProg;
 
    return phongShader;

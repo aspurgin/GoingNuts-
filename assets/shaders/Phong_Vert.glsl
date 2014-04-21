@@ -14,6 +14,7 @@ uniform mat4 uModelMatrix;
 uniform Material uMat;
 uniform vec4 lightPos;
 uniform vec4 cameraPos;
+uniform vec3 lightColor;
 
 varying vec3 vColor;
 varying vec4 normal;
@@ -21,7 +22,6 @@ varying vec4 light;
 varying vec4 spec;
 
 void main() {
-  vec3 lColor = vec3(1, 1, 1);
   vec4 vPosition;
   vec4 vNormal;
   vec3 Refl;

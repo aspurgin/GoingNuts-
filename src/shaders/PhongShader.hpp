@@ -1,3 +1,5 @@
+#ifndef __PHONG_SHADER_H
+#define __PHONG_SHADER_H
 #ifdef __unix__
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -12,6 +14,7 @@
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
+#include "../helperFiles/GLSL_helper.h"
 
 class PhongShader {
    public:
@@ -26,8 +29,11 @@ class PhongShader {
       GLint h_uMatDif;
       GLint h_uMatSpec;
       GLint h_uMatShine;
+      GLint h_lightColor;
       int shadeProg;
 
       PhongShader();
       void setMaterial(int);
 };
+
+#endif

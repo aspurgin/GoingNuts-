@@ -6,6 +6,8 @@
  *  Created by zwood on 2/21/10.
  *
  */
+#ifndef __GLSL_HELPER_H__
+#define __GLSL_HELPER_H__
 
 #ifdef __APPLE__
 #include <GLUT/glut.h>
@@ -141,4 +143,6 @@ public:
     return handle;
   }
 };
+
+#endif
 

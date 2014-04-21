@@ -18,7 +18,7 @@
 #ifdef _WIN32
 #include <GL/glew.h>
 //#include <GL/glut.h>
-#include <glm.hpp>
+#include <glm/glm.hpp>
 //#pragma comment(lib, "glew32.lib")
 //#pragma comment(lib, "OpenGL32.lib")
 //#pragma comment(lib, "glu32.lib")

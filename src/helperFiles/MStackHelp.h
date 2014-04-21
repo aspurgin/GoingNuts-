@@ -10,14 +10,14 @@
 #define RenderingHelper_H_
 
 #ifdef _WIN32
-#include <glm.hpp>
-#include <gtx/vector_angle.hpp>
-#include <gtx/component_wise.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtx/vector_angle.hpp>
+#include <glm/gtx/component_wise.hpp>
 
-#include <gtc/matrix_access.hpp>
-#include <gtc/matrix_integer.hpp>
-#include <gtc/matrix_inverse.hpp>
-#include <gtc/matrix_transform.hpp>
+#include <glm/gtc/matrix_access.hpp>
+#include <glm/gtc/matrix_integer.hpp>
+#include <glm/gtc/matrix_inverse.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #endif
 
 #ifdef __unix__

@@ -1,6 +1,7 @@
 #include "Player.hpp"
 
-Player::Player() {
-   this->velocity = 1;
-   this->lives = 3;
+Player::Player() {}
+
+Player::Player(glm::vec3 center, float width, float height) {
+   setObject(center, width, height);
 }

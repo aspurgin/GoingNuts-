@@ -1,7 +1,7 @@
 #ifndef __2DBOUNDING_BOX_H__
 #define __2DBOUNDING_BOX_H__
 
-#include "glm/glm.hpp"
+#include <glm/glm.hpp>
 
 class BoundingBox2D {
    public:

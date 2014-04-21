@@ -1,7 +1,7 @@
 #ifndef __BLOCK_H__
 #define __BLOCK_H__
 
-#include "glm/glm.hpp"
+#include <glm/glm.hpp>
 #include "Movable.hpp"
 
 class Block: public Movable {

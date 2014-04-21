@@ -1,3 +1,6 @@
+#ifndef __CAMERA_H
+#define __CAMERA_H
+
 #ifdef _WIN32
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -27,3 +30,5 @@ public:
    void setView(GLint);
    void setProjectionMatrix(GLint, int, int);
 };
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef __SHADER_UTILS_H
+#define __SHADER_UTILS_H
+
 #ifdef __unix__
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -18,7 +21,8 @@
 
 class ShaderUtils {
    public:
-      static PhongShader installPhongShader(const GLchar, const GLchar);
+      static PhongShader installPhongShader(const GLchar*, const GLchar*);
    private:
       ShaderUtils();
 };
+#endif
