@@ -2,22 +2,24 @@
 
 Renderer::Renderer() {
    camera = Camera();
-   pshader = ShaderUtils::installPhongShader(textFileRead((char *) "../../assets/shaders/mesh_vert.glsl"), 
-                                             textFileRead((char *) "../../assets/shaders/mesh_frag.glsl"));
+   pshader = ShaderUtils::installPhongShader(textFileRead((char *) "Phong_Vert.glsl"), 
+                                             textFileRead((char *) "Phong_Frag.glsl"));
    light = Light();
-   block = Mesh();
-   squirrel = Mesh();
+   block = Mesh("Cube.obj");
+   //squirrel = Mesh();
 }
 
 Renderer::Renderer(int width, int height) {
    camera = Camera();
-   pshader = ShaderUtils::installPhongShader(textFileRead((char *) "../../assets/shaders/mesh_vert.glsl"),
-                                             textFileRead((char *) "../../assets/shaders/mesh_frag.glsl"));
+   pshader = ShaderUtils::installPhongShader(textFileRead((char *) "Phong_Vert.glsl"),
+                                             textFileRead((char *) "Phong_Frag.glsl"));
+   
    light = Light();
    winWidth = width;
    winHeight = height;
-   squirrel = Mesh();
-   block = Mesh();
+   //squirrel = Mesh();
+   block = Mesh("Squirrel.obj");
+   initialize();
 }
 
 void Renderer::initialize() {
@@ -48,27 +50,35 @@ void Renderer::render() {
    safe_glUniform3f(pshader.h_lightColor, light.color.x, light.color.y, light.color.z);
 
    setModel();
-   pshader.setMaterial(3);
+   pshader.setMaterial(2);
    
-   modelTrans.pushMatrix();
+   //modelTrans.pushMatrix();
       setModel();
       safe_glEnableVertexAttribArray(pshader.h_aPosition);
-      glBindBuffer(GL_ARRAY_BUFFER, block.posHandle);
+      glBindBuffer(GL_ARRAY_BUFFER, block.objHandle);
       //printf("one position: %d\n", exampleCube->PositionHandle);
       safe_glVertexAttribPointer(pshader.h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
       safe_glEnableVertexAttribArray(pshader.h_aNormal);
       glBindBuffer(GL_ARRAY_BUFFER, block.normHandle);
       safe_glVertexAttribPointer(pshader.h_aNormal, 3, GL_FLOAT, GL_FALSE, 0, 0);
-      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, block.faceHandle);
+      
+      //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, block.faceHandle);
+      
       /*safe_glEnableVertexAttribArray(h_taTexCoord);
       glBindBuffer(GL_ARRAY_BUFFER, TexBuffObj);
       safe_glVertexAttribPointer(h_taTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);*/
       // draw!
       //printf("indexLength: %d\n", exampleCube->IndexBufferLength);
-      glDrawElements(GL_TRIANGLES, block.numFaceElements(), GL_UNSIGNED_SHORT, 0);   
-   modelTrans.popMatrix();
       
-   safe_glDisableVertexAttribArray(pshader.h_aPosition);
-   safe_glDisableVertexAttribArray(pshader.h_aNormal);
+      //glDrawElements(GL_TRIANGLES, block.numFaceElements(), GL_UNSIGNED_SHORT, 0);   
+     
+   
+   glDrawArrays(GL_TRIANGLES, 0, block.vertices.size());
+   
+   //modelTrans.popMatrix();
+      
+   //safe_glDisableVertexAttribArray(pshader.h_aPosition);
+   //safe_glDisableVertexAttribArray(pshader.h_aNormal);
+   glUseProgram(0);
 
 }

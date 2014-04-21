@@ -9,9 +9,14 @@ void NutGame::init() {
    }
 }
 
+NutGame::NutGame() {
+   this->renderer = Renderer(640, 480);
+}
+
 int main(void)
 {
    GLFWwindow* window;
+
 
    /* Initialize the library */
    if (!glfwInit())
@@ -28,11 +33,17 @@ int main(void)
    /* Make the window's context current */
    glfwMakeContextCurrent(window);
 
-
+   GLenum err = glewInit();
+   NutGame game;
+   game.renderer.block.buildBuffers();
    /* Loop until the user closes the window */
    while (!glfwWindowShouldClose(window))
    {
       /* Render here */
+      glViewport(0, 0, (GLsizei)640, (GLsizei)480);
+      
+      game.renderer.render();
+
       printf("working!\n");
       /* Swap front and back buffers */
       glfwSwapBuffers(window);
