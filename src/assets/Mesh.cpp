@@ -1,163 +1,118 @@
+/**
+ * Mesh.cpp
+ * 
+ * by Brent Williams
+ *
+ * Notes:
+ */
+
 #include "Mesh.hpp"
 
-using namespace glm;
-
-void Mesh::clearData(){
-   verts.clear();
-   normals.clear();
-   faces.clear();
-   UV.clear();
-   posHandle = 0;
-	normHandle = 0;
-	faceHandle = 0;
-	uvHandle = 0;
+Mesh::Mesh(char* fileName)
+{
+   parse(fileName);
 }
 
-void Mesh::genBuffers(){
-   glGenBuffers(1, &posHandle);
-   glBindBuffer(GL_ARRAY_BUFFER, posHandle);
-   glBufferData(GL_ARRAY_BUFFER, verts.size() * sizeof(float) * 3, &verts.front(), GL_STATIC_DRAW);
-   
-   glGenBuffers(1, &normHandle);
-   glBindBuffer(GL_ARRAY_BUFFER, normHandle);
-   glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(float) * 3, &normals.front(), GL_STATIC_DRAW);
-   
-   glGenBuffers(1, &faceHandle);
-   glBindBuffer(GL_ARRAY_BUFFER, faceHandle);
-   glBufferData(GL_ARRAY_BUFFER, faces.size() * sizeof(int) * 3, &faces.front(), GL_STATIC_DRAW);
-   
-   glGenBuffers(1, &uvHandle);
-   glBindBuffer(GL_ARRAY_BUFFER, uvHandle);
-   glBufferData(GL_ARRAY_BUFFER, UV.size() * sizeof(float) * 2, &UV.front(), GL_STATIC_DRAW);
+Mesh::Mesh()
+{
+
 }
 
-Mesh::Mesh(const char* path){
-   clearData();
-   if (!path) {
-      createDefaultCube();
-   } else {
-      std::cerr << "Mesh import from file not supported at this time\n";
-      throw 2;
+Mesh::~Mesh()
+{
+
+}
+
+void Mesh::parse(char* fileName)
+{
+   std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
+   std::vector<glm::vec3> tempVertices;
+   std::vector<glm::vec2> tempUVs;
+   std::vector<glm::vec3> tempNormals;
+
+   unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
+   unsigned int i, result;
+   glm::vec3 vertex;
+   glm::vec2 uv;
+   glm::vec3 normal;
+   char buffer[MAX_CHARS_PER_LINE];
+   
+   std::ifstream objFile (fileName, std::ifstream::in);
+   
+   if (!(objFile.is_open() && objFile.good()))
+   {
+      std::cerr << "Unable to open file " << fileName << "\n";
+      exit(1);
+   }
+   
+   while (objFile.good())
+   {
+      objFile.getline(buffer, MAX_CHARS_PER_LINE);
+      
+      result = sscanf(buffer, " v %f %f %f ", &vertex.x, &vertex.y, &vertex.z);
+      if (result == 3)
+      {
+         tempVertices.push_back(vertex);
+      }
+
+      result = sscanf(buffer, " vt %f %f ", &uv.x, &uv.y);
+      if (result == 2)
+      {
+         tempUVs.push_back(uv);
+      }
+
+      result = sscanf(buffer, " vn %f %f %f ", &normal.x, &normal.y, &normal.z);
+      if (result == 3)
+      {
+         tempNormals.push_back(normal);
+      }
+      
+      result = sscanf(buffer, " f %d/%d/%d %d/%d/%d %d/%d/%d ", &vertexIndex[0], &uvIndex[0], 
+                      &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], 
+                      &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
+      if (result == 9)
+      {
+         vertexIndices.push_back(vertexIndex[0]);
+         vertexIndices.push_back(vertexIndex[1]);
+         vertexIndices.push_back(vertexIndex[2]);
+         
+         uvIndices.push_back(uvIndex[0]);
+         uvIndices.push_back(uvIndex[1]);
+         uvIndices.push_back(uvIndex[2]);
+         
+         normalIndices.push_back(normalIndex[0]);
+         normalIndices.push_back(normalIndex[1]);
+         normalIndices.push_back(normalIndex[2]);
+      }
+   }
+   
+   for(i = 0; i < vertexIndices.size(); i++)
+   {
+      unsigned int vertexIndex = vertexIndices[i];
+      unsigned int uvIndex = uvIndices[i];
+      unsigned int normalIndex = normalIndices[i];
+      
+      glm::vec3 vertex = tempVertices[vertexIndex-1];
+      glm::vec2 uv = tempUVs[uvIndex-1];
+      glm::vec3 normal = tempNormals[normalIndex-1];
+      
+      vertices.push_back(vertex);
+      uvs.push_back(uv);
+      normals.push_back(normal);
    }
 }
 
-Mesh::Mesh(){
-   clearData();
-   createDefaultCube();
-}
 
-Mesh::~Mesh(){
+void  Mesh::buildBuffers(){
+   glGenBuffers(1, &normHandle);
+   glBindBuffer(GL_ARRAY_BUFFER, normHandle);
+   glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &(normals[0]), GL_STATIC_DRAW);
    
-}
-
-int Mesh::numFaceElements() {
-   return faces.size() * 3;
-}
-
-int Mesh::numVertexElements() {
-   return verts.size() * 3;
-}
-
-void Mesh::createDefaultCube(){
-   verts.push_back(vec3(-0.5, -0.5, -0.5)); // back face verts [0-3]
-   verts.push_back(vec3(-0.5,  0.5, -0.5));
-   verts.push_back(vec3(0.5,  0.5, -0.5));
-   verts.push_back(vec3(0.5, -0.5, -0.5));
-   UV.push_back(vec2(0,0));
-   UV.push_back(vec2(0,1));
-   UV.push_back(vec2(1,1));
-   UV.push_back(vec2(1,0));
-
-   verts.push_back(vec3(-0.5, -0.5,  0.5)); // front face verts [4-7]
-   verts.push_back(vec3(-0.5,  0.5,  0.5));
-   verts.push_back(vec3(0.5,  0.5,  0.5));
-   verts.push_back(vec3(0.5, -0.5,  0.5));
-   UV.push_back(vec2(0,0));
-   UV.push_back(vec2(0,1));
-   UV.push_back(vec2(1,1));
-   UV.push_back(vec2(1,0));
-
-   verts.push_back(vec3(-0.5, -0.5,  0.5)); // left face verts [8-11]
-   verts.push_back(vec3(-0.5, -0.5, -0.5));
-   verts.push_back(vec3(-0.5,  0.5, -0.5));
-   verts.push_back(vec3(-0.5,  0.5,  0.5));
-   UV.push_back(vec2(0,0));
-   UV.push_back(vec2(0,1));
-   UV.push_back(vec2(1,1));
-   UV.push_back(vec2(1,0));
-
-   verts.push_back(vec3(0.5, -0.5,  0.5)); // right face verts [12-15]
-   verts.push_back(vec3(0.5, -0.5, -0.5));
-   verts.push_back(vec3(0.5,  0.5, -0.5));
-   verts.push_back(vec3(0.5,  0.5,  0.5));
-   UV.push_back(vec2(0,0));
-   UV.push_back(vec2(0,1));
-   UV.push_back(vec2(1,1));
-   UV.push_back(vec2(1,0));
-
-   verts.push_back(vec3(-0.5,  0.5,  0.5)); // top face verts [16-19]
-   verts.push_back(vec3(-0.5,  0.5, -0.5));
-   verts.push_back(vec3(0.5,  0.5, -0.5));
-   verts.push_back(vec3(0.5,  0.5,  0.5));
-   UV.push_back(vec2(0,0));
-   UV.push_back(vec2(0,1));
-   UV.push_back(vec2(1,1));
-   UV.push_back(vec2(1,0));
-
-   verts.push_back(vec3(-0.5, -0.5,  0.5)); // bottom face verts [20-23]
-   verts.push_back(vec3(-0.5, -0.5, -0.5));
-   verts.push_back(vec3(0.5, -0.5, -0.5));
-   verts.push_back(vec3(0.5, -0.5,  0.5));
-   UV.push_back(vec2(0,0));
-   UV.push_back(vec2(0,1));
-   UV.push_back(vec2(1,1));
-   UV.push_back(vec2(1,0));
+   glGenBuffers(1, &objHandle);
+   glBindBuffer(GL_ARRAY_BUFFER, objHandle);
+   glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &(vertices[0]), GL_STATIC_DRAW);
    
-   normals.push_back(vec3(0,  0, -1)); // back face verts [0-3]
-   normals.push_back(vec3(0,  0, -1));
-   normals.push_back(vec3(0,  0, -1));
-   normals.push_back(vec3(0,  0, -1));
-
-   normals.push_back(vec3(0,  0,  1)); // front face verts [4-7]
-   normals.push_back(vec3(0,  0,  1));
-   normals.push_back(vec3(0,  0,  1));
-   normals.push_back(vec3(0,  0,  1));
-
-   normals.push_back(vec3(-1,  0,  0)); // left face verts [8-11]
-   normals.push_back(vec3(-1,  0,  0));
-   normals.push_back(vec3(-1,  0,  0));
-   normals.push_back(vec3(-1,  0,  0));
-
-   normals.push_back(vec3(1,  0,  0)); // right face verts [12-15]
-   normals.push_back(vec3(1,  0,  0));
-   normals.push_back(vec3(1,  0,  0));
-   normals.push_back(vec3(1,  0,  0));
-
-   normals.push_back(vec3(0,  1,  0)); // top face verts [16-19]
-   normals.push_back(vec3(0,  1,  0));
-   normals.push_back(vec3(0,  1,  0));
-   normals.push_back(vec3(0,  1,  0));
-
-   normals.push_back(vec3(0, -1,  0)); // bottom face verts [20-23]
-   normals.push_back(vec3(0, -1,  0));
-   normals.push_back(vec3(0, -1,  0));
-   normals.push_back(vec3(0, -1,  0));
-   
-   faces.push_back(ivec3(0,  1,  2)); // back face verts [0-3]
-   faces.push_back(ivec3(2,  3,  0));
-
-   faces.push_back(ivec3(4,  7,  6)); // front face verts [4-7]
-   faces.push_back(ivec3(6,  5,  4));
-
-   faces.push_back(ivec3(8, 11, 10)); // left face verts [8-11]
-   faces.push_back(ivec3(10,  9,  8));
-
-   faces.push_back(ivec3(12, 13, 14)); // right face verts [12-15]
-   faces.push_back(ivec3(14, 15, 12));
-
-   faces.push_back(ivec3(16, 19, 18)); // top face verts [16-19]
-   faces.push_back(ivec3(18, 17, 16));
-
-   faces.push_back(ivec3(20, 21, 22)); // bottom face verts [20-23]
-   faces.push_back(ivec3(22, 23, 20));
+   glGenBuffers(1, &uvHandle);
+   glBindBuffer(GL_ARRAY_BUFFER, objHandle);
+   glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(glm::vec2), &(uvs[0]), GL_STATIC_DRAW);
 }

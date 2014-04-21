@@ -1,39 +1,28 @@
 #pragma once
 
 #include <vector>
-#include <glm/glm.hpp>
-#include <assimp/cimport.h>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
 #include <iostream>
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
+#include <fstream>
+#include <stdlib.h>
+#include <float.h>
+#include <iostream>
 
+#include <glm/glm.hpp>
 
 class Mesh {
-private:
+   public:
+      std::vector<glm::vec3> vertices;
+      std::vector<glm::vec2> uvs;
+      std::vector<glm::vec3> normals;
 
-	void createDefaultCube();
-	void clearData();
+      Mesh(char* fileName);
+      Mesh();
+      ~Mesh();
 
-	
-public:
-	Mesh();
-	Mesh(const char* path);
-	~Mesh();
-   
-   void genBuffers();
-   int numFaceElements();
-   int numVertexElements();
-
-	GLuint posHandle;
-	GLuint normHandle;
-	GLuint faceHandle;
-	GLuint uvHandle;
-
-	std::vector<glm::vec3> verts;
-	std::vector<glm::ivec3> faces;
-	std::vector<glm::vec3> normals;
-	std::vector<glm::vec2> UV;
-
+      void buildBuffers();
+      GLuint objHandle;
+      GLuint normHandle;
+      GLuint uvHandle;
+   private:   
+      void parse(char* fileName);
 };
