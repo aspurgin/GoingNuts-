@@ -162,19 +162,25 @@ void NutGame::keyPressed(GLFWwindow *window, int key, int scancode, int action, 
          drillPressed = false;
       }
    }
+   else if (key == GLFW_KEY_ESCAPE) {
+	   glfwTerminate();
+   }
 }
 
 int main(void)
 {
 
    GLFWwindow* window;
+   int width, height;
+   
+   //glfwGetWindowSize(&width, &height);
 
    //Initialize the library
    if (!glfwInit())
       return -1;
 
    //Create a windowed mode window and its OpenGL context
-   window = glfwCreateWindow(640, 480, "Goint Nuts!", NULL, NULL);
+   window = glfwCreateWindow(800, 600, "Goint Nuts!", NULL, NULL);
    if (!window)
    {
       glfwTerminate();
@@ -197,7 +203,7 @@ int main(void)
    {
       game.handleKeyInput();
       //Render here
-      glViewport(0, 0, (GLsizei)640, (GLsizei)480);
+      glViewport(0, 0, (GLsizei)800, (GLsizei)600);
       
       game.renderer.render();
 
