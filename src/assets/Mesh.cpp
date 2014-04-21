@@ -118,7 +118,7 @@ void  Mesh::buildBuffers(){
    glBindBuffer(GL_ARRAY_BUFFER, objHandle);
    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &(vertices[0]), GL_STATIC_DRAW);
    
-   glGenBuffers(1, &uvHandle);
+   /*glGenBuffers(1, &uvHandle);
    glBindBuffer(GL_ARRAY_BUFFER, objHandle);
-   glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(glm::vec2), &(uvs[0]), GL_STATIC_DRAW);
+   glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(glm::vec2), &(uvs[0]), GL_STATIC_DRAW);*/
 }

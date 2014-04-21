@@ -13,8 +13,7 @@ NutGame::NutGame() {
    this->renderer = Renderer(640, 480);
 }
 
-int main(void)
-{
+int main(void) {
    GLFWwindow* window;
 
 
@@ -44,7 +43,7 @@ int main(void)
       
       game.renderer.render();
 
-      printf("working!\n");
+      //printf("working!\n");
       /* Swap front and back buffers */
       glfwSwapBuffers(window);
 

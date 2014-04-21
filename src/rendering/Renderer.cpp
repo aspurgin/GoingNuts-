@@ -18,7 +18,9 @@ Renderer::Renderer(int width, int height) {
    winWidth = width;
    winHeight = height;
    //squirrel = Mesh();
-   block = Mesh("Squirrel.obj");
+   block = Mesh("Cube.obj");
+   //block.debug();
+   //exit(1);
    initialize();
 }
 
@@ -38,9 +40,41 @@ void Renderer::setModel() {
    safe_glUniformMatrix4fv(pshader.h_uModelMatrix, glm::value_ptr(modelTrans.modelViewMatrix));
 }
 
+void Renderer::renderCube(glm::vec3 transl, int mat) {
+   
+   pshader.setMaterial(mat);
+   modelTrans.loadIdentity();
+   modelTrans.pushMatrix();
+      modelTrans.translate(transl);
+      setModel();
+      safe_glEnableVertexAttribArray(pshader.h_aPosition);
+      glBindBuffer(GL_ARRAY_BUFFER, block.objHandle);
+      //printf("one position: %d\n", exampleCube->PositionHandle);
+      safe_glVertexAttribPointer(pshader.h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
+      safe_glEnableVertexAttribArray(pshader.h_aNormal);
+      glBindBuffer(GL_ARRAY_BUFFER, block.normHandle);
+      safe_glVertexAttribPointer(pshader.h_aNormal, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+      //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, block.faceHandle);
+
+      /*safe_glEnableVertexAttribArray(h_taTexCoord);
+      glBindBuffer(GL_ARRAY_BUFFER, TexBuffObj);
+      safe_glVertexAttribPointer(h_taTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);*/
+      // draw!
+      //printf("indexLength: %d\n", exampleCube->IndexBufferLength);
+
+      //glDrawElements(GL_TRIANGLES, block.numFaceElements(), GL_UNSIGNED_SHORT, 0);   
+      glDrawArrays(GL_TRIANGLES, 0, block.vertices.size());
+   modelTrans.popMatrix();
+
+   safe_glDisableVertexAttribArray(pshader.h_aPosition);
+   safe_glDisableVertexAttribArray(pshader.h_aNormal);
+}
+
 void Renderer::render() {
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    glUseProgram(pshader.shadeProg);
+   modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
 
    camera.setView(pshader.h_uViewMatrix);
@@ -51,34 +85,8 @@ void Renderer::render() {
 
    setModel();
    pshader.setMaterial(2);
-   
-   //modelTrans.pushMatrix();
-      setModel();
-      safe_glEnableVertexAttribArray(pshader.h_aPosition);
-      glBindBuffer(GL_ARRAY_BUFFER, block.objHandle);
-      //printf("one position: %d\n", exampleCube->PositionHandle);
-      safe_glVertexAttribPointer(pshader.h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
-      safe_glEnableVertexAttribArray(pshader.h_aNormal);
-      glBindBuffer(GL_ARRAY_BUFFER, block.normHandle);
-      safe_glVertexAttribPointer(pshader.h_aNormal, 3, GL_FLOAT, GL_FALSE, 0, 0);
-      
-      //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, block.faceHandle);
-      
-      /*safe_glEnableVertexAttribArray(h_taTexCoord);
-      glBindBuffer(GL_ARRAY_BUFFER, TexBuffObj);
-      safe_glVertexAttribPointer(h_taTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);*/
-      // draw!
-      //printf("indexLength: %d\n", exampleCube->IndexBufferLength);
-      
-      //glDrawElements(GL_TRIANGLES, block.numFaceElements(), GL_UNSIGNED_SHORT, 0);   
-     
-   
-   glDrawArrays(GL_TRIANGLES, 0, block.vertices.size());
-   
-   //modelTrans.popMatrix();
-      
-   //safe_glDisableVertexAttribArray(pshader.h_aPosition);
-   //safe_glDisableVertexAttribArray(pshader.h_aNormal);
+   glm::vec3 pos(0, 0, 0);
+   renderCube(pos, 2);
    glUseProgram(0);
 
 }

@@ -9,6 +9,8 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 
+#define MAX_CHARS_PER_LINE 256
+
 class Mesh {
    public:
       std::vector<glm::vec3> vertices;

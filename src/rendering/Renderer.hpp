@@ -24,7 +24,9 @@ class Renderer {
       Renderer(int, int);
       void initialize();
       void setModel();
+      void renderCube(glm::vec3, int);
       void render();
+
 };
 
 #endif
