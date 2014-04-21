@@ -3,14 +3,17 @@
 
 #include <glm/glm.hpp>
 #include "Movable.hpp"
+#include "Drill.hpp"
 
 class Player: public Movable {
    public:
       Player();
       Player(glm::vec3 center, float width, float height);
+      static void drillBlock(Block *block);
    private:
-      float velocity = 1.f;
-      int lives = 3;
+      float velocity;
+      int lives;
+      Drill drill;
 };
 
 #endif

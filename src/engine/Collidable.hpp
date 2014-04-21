@@ -5,9 +5,12 @@
 
 class Collidable {
    public:
-      virtual ~Collidable() {};
-      virtual bool isIntersecting(Collidable &other) = 0;
+      virtual ~Collidable() = 0;
+      bool isIntersecting(Collidable &other);
       BoundingBox2D getBoundingBox();
+      void moveBoundingBoxTo(glm::vec2 newCenter);
+      void moveBoundingBoxVertical(float distance);
+      void moveBoundingBoxHorizontal(float distance);
    protected:
       BoundingBox2D box;
 };

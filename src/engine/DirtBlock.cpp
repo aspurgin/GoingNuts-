@@ -3,10 +3,12 @@
 DirtBlock::DirtBlock() {};
 
 DirtBlock::DirtBlock(glm::vec3 center) {
-   this->center = center;      
+   this->center = center;    
+   this->blockType = BlockType.DirtBlock;  
 }
 
 DirtBlock::DirtBlock(glm::vec3 center, float width, float height) {
+   this->blockType = BlockType.DirtBlock; 
    setObject(center, width, height);
 }
 
