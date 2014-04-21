@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <float.h>
 #include <iostream>
-
+#include <GL/glew.h>
 #include <glm/glm.hpp>
 
 class Mesh {
