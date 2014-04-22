@@ -37,5 +37,17 @@ void PhongShader::setMaterial(int i) {
       safe_glUniform3f(h_uMatSpec, 0.4, 0.4, 0.4);
       safe_glUniform1f(h_uMatShine, 4.0);
       break;
+    case 4:
+      safe_glUniform3f(h_uMatAmb, 0.1, 0.1, 0.1);
+      safe_glUniform3f(h_uMatDif, 0.2, 0.2, 0.2);
+      safe_glUniform3f(h_uMatSpec, 0.4, 0.4, 0.4);
+      safe_glUniform1f(h_uMatShine, 4.0);
+      break;
+    case 5:
+      safe_glUniform3f(h_uMatAmb, 0.3, 0.1, 0.0);
+      safe_glUniform3f(h_uMatDif, 0.2, 0.2, 0.2);
+      safe_glUniform3f(h_uMatSpec, 0.4, 0.4, 0.4);
+      safe_glUniform1f(h_uMatShine, 4.0);
+      break;
   }
 }
