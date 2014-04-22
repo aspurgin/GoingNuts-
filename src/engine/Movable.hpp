@@ -11,6 +11,7 @@ class Movable: public Collidable {
       void moveHorizontal(float distance);
       void moveVertical(float distance);
       glm::vec3 getCenter();
+      virtual int getMovableType() = 0;
    protected:
       void setObject(glm::vec3 center, float width, float height);
       glm::vec3 center;

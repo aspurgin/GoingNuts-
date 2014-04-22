@@ -12,3 +12,7 @@ Player::Player(glm::vec3 center, float width, float height) {
 void Player::drillBlock(Block *block) {
    drill.drillBlock(block);
 }
+
+int Movable::getMovableType() {
+   return PLAYER;
+}

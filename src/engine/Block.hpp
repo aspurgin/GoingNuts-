@@ -4,18 +4,25 @@
 #include <glm/glm.hpp>
 #include "Movable.hpp"
 #include "BlockTypes.hpp"
+#include "MovableTypes.hpp"
 
 class Block: public Movable {
    public:
       virtual int getStrength() = 0;
       virtual float getSlowPercentage() = 0;
       int getTimesDrilled();
+      bool isDead();
       void addToTimesDrilled();
       int getBlockType();
+      bool shouldDestroy();
+      void incrementDeathCounter(double toAdd);
+      int getMovableType();
    protected:
       int blockType;
+      double deathCounter;
    private:
       int timesDrilled;
+      
 };
 
 #endif

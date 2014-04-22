@@ -3,5 +3,6 @@
 
 #define DIRTBLOCK  0;
 #define EMPTYBLOCK 1;
+#define STONEBLOCK 2;
 
 #endif

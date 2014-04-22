@@ -14,6 +14,7 @@
 #include "Player.hpp"
 #include "../rendering/Renderer.hpp"
 #include "DirtBlock.hpp"
+#include "Block.hpp"
 #include <vector>
 
 class NutGame {
@@ -27,7 +28,11 @@ class NutGame {
       glm::vec2 positionAbovePlayer();
       bool isBlockAtPosition(glm::vec2 pos);
       static void keyPressed(GLFWwindow *window, int key, int scancode, int action, int mods);
-      vector<Movable*> getObjectsToDraw();
+      std::vector<Movable*> getObjectsToDraw();
+      bool isDrillingDown();
+      bool isDrillingUp();
+      bool isDrillingLeft();
+      bool isDrillingRight();
       void handleKeyInput();
       Renderer renderer;
    private:
@@ -38,6 +43,8 @@ class NutGame {
       static bool right;
       static bool up;
       static bool down;
+      int currentTime;
+      int lastTime;
 };
 
 #endif
