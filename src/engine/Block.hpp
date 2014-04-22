@@ -21,7 +21,7 @@ class Block: public Movable {
    protected:
       int blockType;
    private:
-      int timesDrilled;
+      int timesDrilled = 0;
       
 };
 

@@ -8,8 +8,8 @@ bool NutGame::down = false;
 
 void NutGame::init() {
    this->drillPressed = false;
-   player = Player(glm::vec3(NUMCOLS/2 + 0.0f, 0.0f, 0.0f), 1.0f, 1.0f);
-   printf("player pos: x: %d, y: %d\n", player.getCenter().x, player.getCenter().y);
+   player = Player(glm::vec3(NUMCOLS/2, 0, 0), 1.0f, 1.0f);
+   printf("player pos: x: %lf, y: %lf\n", player.getCenter().x, player.getCenter().y);
    for (int col = 0; col < NUMCOLS; col++) {
       gameGrid[0][col] = 0;
    }
@@ -26,19 +26,19 @@ void NutGame::init() {
 }
 
 glm::vec2 NutGame::positionLeftOfPlayer() {
-   return glm::vec2(playerPosition.x - 1, playerPosition.y);
+   return glm::vec2(player.getCenter().x - 1, player.getCenter().y);
 }
 
 glm::vec2 NutGame::positionRightOfPlayer() {
-   return glm::vec2(playerPosition.x + 1, playerPosition.y);
+   return glm::vec2(player.getCenter().x + 1, player.getCenter().y);
 }
 
 glm::vec2 NutGame::positionBellowPlayer() {
-   return glm::vec2(playerPosition.x, playerPosition.y - 1);
+   return glm::vec2(player.getCenter().x, player.getCenter().y - 1);
 }
 
 glm::vec2 NutGame::positionAbovePlayer() {
-   return glm::vec2(playerPosition.x, playerPosition.y + 1);
+   return glm::vec2(player.getCenter().x, player.getCenter().y + 1);
 }
 
 NutGame::NutGame() {
@@ -52,9 +52,10 @@ NutGame::NutGame() {
 bool NutGame::isBlockAtPosition(glm::vec2 pos) {
    Movable* movable;
 
-   if (pos.x >= 0 && pos.y >= 0) {
-      if (gameGrid[(int)(pos.x)][(int)(pos.y)] != 0) {
-         movable = gameGrid[(int)(pos.x)][(int)(pos.y)];
+   if (pos.x >= 0 && pos.y <= 0) {
+      if (gameGrid[(int)(-pos.y)][(int)(pos.x)] != 0) {
+         printf("got to block at pos\n");
+         movable = gameGrid[(int)(-pos.y)][(int)(pos.x)];
       }
       else {
          return false;
@@ -81,17 +82,20 @@ bool NutGame::isDrillingRight() {
 }
 
 void NutGame::handleKeyInput() {
+   printf("here!\n");
    glm::vec2 pos;
    bool blockExists;
    Block* block;
 
    if (left) {
+      printf("got here!\n");
       pos = positionLeftOfPlayer();
-      if (pos.x != 0) {
+      if (pos.x >= 0) {
+         printf("made it!\n");
          blockExists = isBlockAtPosition(pos);
          if (drillPressed == true) {
             if (blockExists) {
-               block = (Block *)gameGrid[(int)(pos.x)][(int)(pos.y)];
+               block = (Block *)gameGrid[(int)(-pos.y)][(int)(pos.x)];
                player.drillBlock(block);
                if (block->isDead() && block->deathCounter == -1) {
                   block->deathCounter = 0;
@@ -99,8 +103,11 @@ void NutGame::handleKeyInput() {
             }
          }
          else {
+            printf("hello?\n");
             if (!blockExists) {
+               printf("got here too\n");
                player.moveTo(pos);
+               printf("should move left\n");
             }
             else if (pos.y != 0 && !isBlockAtPosition(glm::vec2(pos.x, pos.y + 1))) {
                player.moveTo(glm::vec2(pos.x, pos.y + 1));
@@ -113,15 +120,18 @@ void NutGame::handleKeyInput() {
       blockExists = isBlockAtPosition(pos);
       if (drillPressed == true) {
          if (blockExists) {
-            block = (Block *)gameGrid[(int)(pos.x)][(int)(pos.y)];
+            block = (Block *)gameGrid[(int)(-pos.y)][(int)(pos.x)];
             player.drillBlock(block);
-            if (block->isDead() && block->deathCounter == -1) {
+            printf("times drilled: %d, strength: %d\n", block->getTimesDrilled(), block->getStrength());
+            if (block->isDead()) { //&& block->deathCounter == -1) {
+               printf("guess I'm dead\n");
                block->deathCounter = 0;
             }
          }
       }
       else {
          if (!blockExists) {
+            printf("no block, moving\n");
             player.moveTo(pos);
          }
       }
@@ -132,7 +142,7 @@ void NutGame::handleKeyInput() {
          blockExists = isBlockAtPosition(pos);
          if (drillPressed == true) {
             if (blockExists) {
-               block = (Block *)gameGrid[(int)(pos.x)][(int)(pos.y)];
+               block = (Block *)gameGrid[(int)(-pos.y)][(int)(pos.x)];
                player.drillBlock(block);
                if (block->isDead() && block->deathCounter == -1) {
                   block->deathCounter = 0;
@@ -143,11 +153,11 @@ void NutGame::handleKeyInput() {
    }
    else if (right) {
       pos = positionRightOfPlayer();
-      if (pos.x < 6) {
+      if (pos.x < NUMCOLS) {
          blockExists = isBlockAtPosition(pos);
          if (drillPressed == true) {
             if (blockExists) {
-               block = (Block *)gameGrid[(int)(pos.x)][(int)(pos.y)];
+               block = (Block *)gameGrid[(int)(-pos.y)][(int)(pos.x)];
                player.drillBlock(block);
                if (block->isDead() && block->deathCounter == -1) {
                   block->deathCounter = 0;
@@ -156,6 +166,7 @@ void NutGame::handleKeyInput() {
          }
          else {
             if (!blockExists) {
+               printf("move right!\n");
                player.moveTo(pos);
             }
             else if (pos.y != 0 && !isBlockAtPosition(glm::vec2(pos.x, pos.y + 1))) {
@@ -187,7 +198,11 @@ std::vector<Movable*> NutGame::getObjectsToDraw() {
    for (int row = 0; row < NUMROWS; row++) {
       for (int col = 0; col < NUMCOLS; col++) {
          if (gameGrid[row][col] != 0) {
+            printf("block %d, %d, pointer: %d\n", row, col, gameGrid[row][col]);
             objects.push_back(gameGrid[row][col]);
+         }
+         else {
+            printf("i'm out of the game\n");
          }
       }
    }

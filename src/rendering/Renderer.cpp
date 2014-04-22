@@ -27,6 +27,8 @@ Renderer::Renderer(int width, int height, NutGame game) {
 }
 
 void Renderer::initialize() {
+   block.buildBuffers();
+   squirrel.buildBuffers();
    // Start Of User Initialization
    glClearColor(0.09f, 0.0f, 0.21f, 1.0f);
    // Black Background
@@ -48,6 +50,7 @@ void Renderer::renderCube(glm::vec3 transl, int mat, float ang) {
    modelTrans.loadIdentity();
    modelTrans.pushMatrix();
       modelTrans.translate(transl);
+      modelTrans.scale(0.5);
       modelTrans.rotate(ang, glm::vec3(0, 1, 0));
       setModel();
       safe_glEnableVertexAttribArray(pshader.h_aPosition);
@@ -121,7 +124,8 @@ void Renderer::render() {
    std::vector<Movable*> currObjs = ngame.getObjectsToDraw();
    //printf("num objs: %d", currObjs.size());
    for (int i = 0; i < currObjs.size(); i++) {
-      Movable * obj = currObjs.at(i);
+      Movable *obj = currObjs.at(i);
+      printf("centerPos: %f\n", obj->getCenter().x);
       switch (obj->getMovableType()) {
          case BLOCK:
             switch (((Block *)obj)->getBlockType()) {
@@ -136,7 +140,7 @@ void Renderer::render() {
             }
             break;
          case PLAYER:
-            //printf("squirrel pos: x: %d, y: %d", obj->getCenter().x, obj->getCenter().y);
+            //printf("squirrel pos: x: %f, y: %f\n", obj->getCenter().x, obj->getCenter().y);
             renderSquirrel(obj->getCenter(), 5, 0);
             break;
          default:
@@ -145,10 +149,10 @@ void Renderer::render() {
       }
    }
    /*pshader.setMaterial(2);
-   glm::vec3 pos(0, 0, 4);
-   renderCube(pos, 1, 0);
+   glm::vec3 pos(0, 0, 0);
+   //renderCube(pos, 1, 0);
    pos.x = 5;
-   renderCube(pos, 2, 0);*/
+   renderSquirrel(pos, 2, 0);*/
    glUseProgram(0);
 
 }

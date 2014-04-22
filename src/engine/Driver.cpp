@@ -9,14 +9,19 @@
 #endif
 #include <GLFW/glfw3.h>
 
+NutGame game;
+
 void keyPressed(GLFWwindow *window, int key, int scancode, int action, int mods) {
 
    if (key == GLFW_KEY_A) {
       if (action == GLFW_PRESS) {
          NutGame::left = true;
+         printf("pressed left!\n");
+         
       }
       else if (action == GLFW_RELEASE) {
          NutGame::left = false;
+         printf("released left!\n");
       }
    }
    else if (key == GLFW_KEY_S) {
@@ -54,6 +59,8 @@ void keyPressed(GLFWwindow *window, int key, int scancode, int action, int mods)
    else if (key == GLFW_KEY_ESCAPE) {
       glfwTerminate();
    }
+   
+   game.handleKeyInput();
 }
 
 int main(void)
@@ -83,11 +90,9 @@ int main(void)
    glfwMakeContextCurrent(window);
 
    GLenum err = glewInit();
-   NutGame game;
    glfwSetKeyCallback(window, keyPressed);
    game.init();
    Renderer renderer(640, 480, game);
-   renderer.block.buildBuffers();
    //Loop until the user closes the window
    while (!glfwWindowShouldClose(window)) {
       currentTime = glfwGetTime();
@@ -98,22 +103,23 @@ int main(void)
          for (int col = 0; col < NUMCOLS; col++) {
             Movable * curObj = game.gameGrid[row][col];
             //printf("pointer1: %d\n", game.gameGrid[row][col]);
-            if (curObj != NULL) {
+            if (curObj != 0) {
                //printf("pointer: %d\n", curObj);
                if (curObj->getMovableType() == BLOCK && ((Block*)curObj)->isDead()) {
 
                   ((Block*)curObj)->incrementDeathCounter(delta);
-
                   if (((Block*)curObj)->shouldDestroy()) {
-                     delete curObj;
-                     curObj = 0;
+                     printf("guess we're killing me\n");
+                     delete[] game.gameGrid[row][col];
+                     game.gameGrid[row][col] = 0;
+                     printf("point: %d, %d, %d\n", row, col, game.gameGrid[row][col]);
                   }
                }
             }
          }
       }
 
-      game.handleKeyInput();
+      printf("time to render\n");
       // Render here
       glViewport(0, 0, (GLsizei)800, (GLsizei)600);
 

@@ -7,7 +7,7 @@ int Block::getTimesDrilled() {
 }
 
 void Block::addToTimesDrilled() {
-   timesDrilled--;
+   timesDrilled++;
 }
 
 int Block::getBlockType() {
