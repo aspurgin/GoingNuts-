@@ -7,12 +7,13 @@
 class Movable: public Collidable {
    public:
       virtual ~Movable() = 0;
-      glm::vec3 center;
       void moveTo(glm::vec2 newCenter);
       void moveHorizontal(float distance);
       void moveVertical(float distance);
+      glm::vec3 getCenter();
    protected:
       void setObject(glm::vec3 center, float width, float height);
+      glm::vec3 center;
    private:
       float width;
       float height;

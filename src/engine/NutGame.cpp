@@ -167,6 +167,23 @@ void NutGame::keyPressed(GLFWwindow *window, int key, int scancode, int action, 
    }
 }
 
+vector<Movable*> getObjectsToDraw() {
+   int count = playerPosition.y - 5;
+   vector<Movable*> objects;
+   
+   if (count < 0) {
+      count = 0;
+   }
+   
+   for (int count2 = 0; count2 < 10; count2++) {
+      for (int count3 = 0; count3 < 7; count3++) {
+         objects.push_back(gameGrid[count3][count++]);
+      }
+   }
+   
+   return objects;
+}
+
 int main(void)
 {
 

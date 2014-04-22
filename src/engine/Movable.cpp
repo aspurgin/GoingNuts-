@@ -24,3 +24,7 @@ void Movable::moveVertical(float distance) {
    center.y += distance;
    moveBoundingBoxVertical(distance);
 }
+
+glm::vec3 Movable::getCenter() {
+   return center;
+}

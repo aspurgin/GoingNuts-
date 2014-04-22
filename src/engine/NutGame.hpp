@@ -14,6 +14,7 @@
 #include "Player.hpp"
 #include "../rendering/Renderer.hpp"
 #include "DirtBlock.hpp"
+#include <vector>
 
 class NutGame {
    public:
@@ -26,6 +27,7 @@ class NutGame {
       glm::vec2 positionAbovePlayer();
       bool isBlockAtPosition(glm::vec2 pos);
       static void keyPressed(GLFWwindow *window, int key, int scancode, int action, int mods);
+      vector<Movable*> getObjectsToDraw();
       void handleKeyInput();
       Renderer renderer;
    private:
