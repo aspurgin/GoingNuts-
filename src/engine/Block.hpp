@@ -17,9 +17,9 @@ class Block: public Movable {
       bool shouldDestroy();
       void incrementDeathCounter(double toAdd);
       int getMovableType();
+      double deathCounter;
    protected:
       int blockType;
-      double deathCounter;
    private:
       int timesDrilled;
       

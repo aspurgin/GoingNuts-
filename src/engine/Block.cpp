@@ -1,6 +1,6 @@
 #include "Block.hpp"
 
-moveableType = BLOCK;
+int moveableType = BLOCK;
 
 int Block::getTimesDrilled() {
    return timesDrilled;
@@ -18,9 +18,9 @@ bool Block::isDead() {
    return timesDrilled >= getStrength();
 }
 
-bool Block::shouldDestroy(int currentTime) {
+bool Block::shouldDestroy() {
    if (isDead()) {
-      return  >= 1.5;
+      return deathCounter >= .5;
    }
    return false;
 }
@@ -29,6 +29,6 @@ void Block::incrementDeathCounter(double toAdd) {
    deathCounter += toAdd;
 }
 
-int Movable::getMovableType() {
+int Block::getMovableType() {
    return BLOCK;
 }

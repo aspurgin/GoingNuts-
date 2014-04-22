@@ -30,6 +30,7 @@ public:
    void shake();
    void setView(GLint);
    void setProjectionMatrix(GLint, int, int);
+   void setEye(glm::vec3);
 };
 
 #endif

@@ -22,6 +22,6 @@ float DirtBlock::getSlowPercentage() {
    return 0;
 }
 
-int Block::getColor() {
+int DirtBlock::getColor() {
    return color;
 }

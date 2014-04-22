@@ -13,6 +13,6 @@ void Player::drillBlock(Block *block) {
    drill.drillBlock(block);
 }
 
-int Movable::getMovableType() {
+int Player::getMovableType() {
    return PLAYER;
 }

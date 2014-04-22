@@ -7,17 +7,20 @@ bool NutGame::up = false;
 bool NutGame::down = false;
 
 void NutGame::init() {
-   this->renderer = Renderer(640, 480);
    this->drillPressed = false;
-   player = Player(glm::vec3(4, 0, 0), 1.0f, 1.0f);
-   for (int count = 0; count < 7; count++) {
-      gameGrid[count][0] = 0;
+   player = Player(glm::vec3(NUMCOLS/2 + 0.0f, 0.0f, 0.0f), 1.0f, 1.0f);
+   printf("player pos: x: %d, y: %d\n", player.getCenter().x, player.getCenter().y);
+   for (int col = 0; col < NUMCOLS; col++) {
+      gameGrid[0][col] = 0;
    }
-   gameGrid[4][0] = &player;
-   playerPosition = glm::vec2(4, 0);
-   for (int count = 0; count < 7; count++) {
-      for (int count2 = 1; count2 < 100; count2++) {
-         gameGrid[count][count2] = new DirtBlock(glm::vec3(count, count2, 0), 1.0f, 1.0f);
+   gameGrid[0][NUMCOLS/2] = &player;
+   playerPosition = glm::vec2(NUMCOLS/2, 0);
+
+   for (int row = 1; row < NUMROWS; row++) {
+      for (int col = 0; col< NUMCOLS; col++) {
+         gameGrid[row][col] = new DirtBlock(glm::vec3(col, -row, 0), 1.0f, 1.0f, row%3);
+
+         //printf("pos at: x:%d, y:%d\n", col, row);
       }
    }
 }
@@ -56,7 +59,7 @@ bool NutGame::isBlockAtPosition(glm::vec2 pos) {
       else {
          return false;
       }
-      return movabel->getMovableType() == BLOCK);
+      return movable->getMovableType() == BLOCK;
    }
    return false;
 }
@@ -88,10 +91,10 @@ void NutGame::handleKeyInput() {
          blockExists = isBlockAtPosition(pos);
          if (drillPressed == true) {
             if (blockExists) {
-               block = (Block *)gameGrid[(int)(pos.x)][(int)(pos.y)]
+               block = (Block *)gameGrid[(int)(pos.x)][(int)(pos.y)];
                player.drillBlock(block);
                if (block->isDead() && block->deathCounter == -1) {
-                  block->deathCounter = glfwGetTime();
+                  block->deathCounter = 0;
                }
             }
          }
@@ -110,10 +113,10 @@ void NutGame::handleKeyInput() {
       blockExists = isBlockAtPosition(pos);
       if (drillPressed == true) {
          if (blockExists) {
-            block = (Block *)gameGrid[(int)(pos.x)][(int)(pos.y)]
+            block = (Block *)gameGrid[(int)(pos.x)][(int)(pos.y)];
             player.drillBlock(block);
             if (block->isDead() && block->deathCounter == -1) {
-               block->deathCounter = glfwGetTime();
+               block->deathCounter = 0;
             }
          }
       }
@@ -129,10 +132,10 @@ void NutGame::handleKeyInput() {
          blockExists = isBlockAtPosition(pos);
          if (drillPressed == true) {
             if (blockExists) {
-               block = (Block *)gameGrid[(int)(pos.x)][(int)(pos.y)]
+               block = (Block *)gameGrid[(int)(pos.x)][(int)(pos.y)];
                player.drillBlock(block);
                if (block->isDead() && block->deathCounter == -1) {
-                  block->deathCounter = glfwGetTime();
+                  block->deathCounter = 0;
                }
             }
          }
@@ -144,10 +147,10 @@ void NutGame::handleKeyInput() {
          blockExists = isBlockAtPosition(pos);
          if (drillPressed == true) {
             if (blockExists) {
-               block = (Block *)gameGrid[(int)(pos.x)][(int)(pos.y)]
+               block = (Block *)gameGrid[(int)(pos.x)][(int)(pos.y)];
                player.drillBlock(block);
                if (block->isDead() && block->deathCounter == -1) {
-                  block->deathCounter = glfwGetTime();
+                  block->deathCounter = 0;
                }
             }
          }
@@ -163,131 +166,34 @@ void NutGame::handleKeyInput() {
    }
 }
 
-void NutGame::keyPressed(GLFWwindow *window, int key, int scancode, int action, int mods) {
-   
-   if (key == GLFW_KEY_A) {
-      if (action == GLFW_PRESS) {
-         left = true;
-      }
-      else if (action == GLFW_RELEASE) {
-         left = false;
-      }
-   }
-   else if (key == GLFW_KEY_S) {
-      if (action == GLFW_PRESS) {
-         down = true;
-      }
-      else if (action == GLFW_RELEASE) {
-         down = false;
-      }
-   }
-   else if (key == GLFW_KEY_W) {
-      if (action == GLFW_PRESS) {
-         up = true;
-      }
-      else if (action == GLFW_RELEASE) {
-         up = false;
-      }
-   }
-   else if (key == GLFW_KEY_D) {
-      if (action == GLFW_PRESS) {
-         right = true;
-      }
-      else if (action == GLFW_RELEASE) {
-         right = false;
-      }
-   }
-   else if (key == GLFW_KEY_J) {
-      if (action == GLFW_PRESS) {
-         drillPressed = true;
-      }
-      else if (action == GLFW_RELEASE) {
-         drillPressed = false;
-      }
-   }
-   else if (key == GLFW_KEY_ESCAPE) {
-	   glfwTerminate();
-   }
-}
-
-vector<Movable*> getObjectsToDraw() {
+std::vector<Movable*> NutGame::getObjectsToDraw() {
    int count = playerPosition.y - 5;
-   currentTime = glfwGetTime();
-   vector<Movable*> objects;
+   std::vector<Movable*> objects;
    
    if (count < 0) {
       count = 0;
    }
    
-   delta = currentTime - lastTime;
    
-   
-   for (int count2 = 0; count2 < 10; count2++) {
+   /*for (int count2 = 0; count2 < 10; count2++) {
       for (int count3 = 0; count3 < 7; count3++) {
-         if (gameGrid[count3][count]->getMovableType() == BLOCK && (Block*)gameGrid[count3][count]->isDead()) {
-            gameGrid[count3][count]->incrementDeathCounter(delta);
-            if (gameGrid[count3][count]->shouldDestroy(currentTime)) {
-               delete gameGrid[count3][count];
-               gameGrid[count3][count] = 0;
-            }
+         if (gameGrid[count3][count2] != 0) {
+            objects.push_back(gameGrid[count3][count2++]);
+            printf("position: %d, %d\n", count3, count2);
          }
-      
-         objects.push_back(gameGrid[count3][count++]);
+      }
+   }*/
+
+   for (int row = 0; row < NUMROWS; row++) {
+      for (int col = 0; col < NUMCOLS; col++) {
+         if (gameGrid[row][col] != 0) {
+            objects.push_back(gameGrid[row][col]);
+         }
       }
    }
+
    lastTime = currentTime;
    return objects;
 }
 
-int main(void)
-{
 
-   GLFWwindow* window;
-   int last = 0, current;
-   vector<Movable*> toBePassed;
-   
-   //glfwGetWindowSize(&width, &height);
-
-   //Initialize the library
-   if (!glfwInit())
-      return -1;
-
-   //Create a windowed mode window and its OpenGL context
-   window = glfwCreateWindow(800, 600, "Goint Nuts!", NULL, NULL);
-   if (!window)
-   {
-      glfwTerminate();
-      return -1;
-   }
-
-   //Make the window's context current
-   glfwMakeContextCurrent(window);
-
-   GLenum err = glewInit();
-   NutGame game = NutGame(); 
-   glfwSetKeyCallback (window, game.keyPressed);
-   game.init();
-   game.renderer.block.buildBuffers();
-   //Loop until the user closes the window
-   while (!glfwWindowShouldClose(window))
-   {
-      for (
-   
-      game.handleKeyInput();
-      //Render here
-      glViewport(0, 0, (GLsizei)800, (GLsizei)600);
-      
-      game.renderer.render();
-
-      //Swap front and back buffers
-
-      glfwSwapBuffers(window);
-
-      //Poll for and process events
-      glfwPollEvents();
-   }
-
-   glfwTerminate();
-   
-   return 0;
-}

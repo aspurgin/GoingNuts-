@@ -5,6 +5,7 @@ Renderer::Renderer() {
    pshader = ShaderUtils::installPhongShader(textFileRead((char *) "assets/shaders/Phong_Vert.glsl"), 
                                              textFileRead((char *) "assets/shaders/Phong_Frag.glsl"));
    light = Light();
+   squirrel = Mesh("Squirrel.obj");
    block = Mesh("Cube.obj");
    //squirrel = Mesh();
 }
@@ -17,7 +18,7 @@ Renderer::Renderer(int width, int height, NutGame game) {
    light = Light();
    winWidth = width;
    winHeight = height;
-   //squirrel = Mesh();
+   squirrel = Mesh("Squirrel.obj");
    block = Mesh("Cube.obj");
    ngame = game;
    //block.debug();
@@ -73,6 +74,37 @@ void Renderer::renderCube(glm::vec3 transl, int mat, float ang) {
    safe_glDisableVertexAttribArray(pshader.h_aNormal);
 }
 
+void Renderer::renderSquirrel(glm::vec3 transl, int mat, float ang) {
+   pshader.setMaterial(mat);
+   modelTrans.loadIdentity();
+   modelTrans.pushMatrix();
+      modelTrans.translate(transl);
+      modelTrans.rotate(ang, glm::vec3(0, 1, 0));
+      setModel();
+      safe_glEnableVertexAttribArray(pshader.h_aPosition);
+      glBindBuffer(GL_ARRAY_BUFFER, squirrel.objHandle);
+      //printf("one position: %d\n", exampleCube->PositionHandle);
+      safe_glVertexAttribPointer(pshader.h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
+      safe_glEnableVertexAttribArray(pshader.h_aNormal);
+      glBindBuffer(GL_ARRAY_BUFFER, squirrel.normHandle);
+      safe_glVertexAttribPointer(pshader.h_aNormal, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+      //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, block.faceHandle);
+
+      /*safe_glEnableVertexAttribArray(h_taTexCoord);
+      glBindBuffer(GL_ARRAY_BUFFER, TexBuffObj);
+      safe_glVertexAttribPointer(h_taTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);*/
+      // draw!
+      //printf("indexLength: %d\n", exampleCube->IndexBufferLength);
+
+      //glDrawElements(GL_TRIANGLES, block.numFaceElements(), GL_UNSIGNED_SHORT, 0);   
+      glDrawArrays(GL_TRIANGLES, 0, squirrel.vertices.size());
+   modelTrans.popMatrix();
+
+   safe_glDisableVertexAttribArray(pshader.h_aPosition);
+   safe_glDisableVertexAttribArray(pshader.h_aNormal);
+}
+
 void Renderer::render() {
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    glUseProgram(pshader.shadeProg);
@@ -86,10 +118,37 @@ void Renderer::render() {
    safe_glUniform3f(pshader.h_lightColor, light.color.x, light.color.y, light.color.z);
 
    setModel();
-   std::vector<Movable> currObjs;
-   pshader.setMaterial(2);
+   std::vector<Movable*> currObjs = ngame.getObjectsToDraw();
+   //printf("num objs: %d", currObjs.size());
+   for (int i = 0; i < currObjs.size(); i++) {
+      Movable * obj = currObjs.at(i);
+      switch (obj->getMovableType()) {
+         case BLOCK:
+            switch (((Block *)obj)->getBlockType()) {
+               case DIRTBLOCK:
+                  //printf("here\n");
+                  renderCube(obj->getCenter(), ((DirtBlock *)obj)->getColor(), 0);
+                  break;
+               case STONEBLOCK:
+                  renderCube(obj->getCenter(), 4, 0);
+                  printf("here\n");
+                  break;
+            }
+            break;
+         case PLAYER:
+            //printf("squirrel pos: x: %d, y: %d", obj->getCenter().x, obj->getCenter().y);
+            renderSquirrel(obj->getCenter(), 5, 0);
+            break;
+         default:
+            break;
+            
+      }
+   }
+   /*pshader.setMaterial(2);
    glm::vec3 pos(0, 0, 4);
    renderCube(pos, 1, 0);
+   pos.x = 5;
+   renderCube(pos, 2, 0);*/
    glUseProgram(0);
 
 }

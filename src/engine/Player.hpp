@@ -8,8 +8,8 @@
 class Player: public Movable {
    public:
       Player();
-      Player(glm::vec3 center, float width, float height);
-      void drillBlock(Block *block);
+      Player(glm::vec3, float, float);
+      void drillBlock(Block *);
       int getMovableType();
    private:
       float velocity;
