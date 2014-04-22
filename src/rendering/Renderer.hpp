@@ -3,6 +3,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <vector>
 #include "Camera.hpp"
 #include "Light.hpp"
 #include "../shaders/PhongShader.hpp"
@@ -10,6 +11,7 @@
 #include "../helperFiles/GLSL_helper.h"
 #include "../helperFiles/MStackHelp.h"
 #include "../assets/Mesh.hpp"
+#include "../engine/NutGame.hpp"
 
 class Renderer {
    public:
@@ -18,10 +20,11 @@ class Renderer {
       PhongShader pshader;
       RenderingHelper modelTrans;
       int winWidth, winHeight;
+      NutGame ngame;
       Mesh squirrel;
       Mesh block;
       Renderer();
-      Renderer(int, int);
+      Renderer(int, int, NutGame);
       void initialize();
       void setModel();
       void renderCube(glm::vec3, int, float);

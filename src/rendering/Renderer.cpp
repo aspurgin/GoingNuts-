@@ -9,7 +9,7 @@ Renderer::Renderer() {
    //squirrel = Mesh();
 }
 
-Renderer::Renderer(int width, int height) {
+Renderer::Renderer(int width, int height, NutGame game) {
    camera = Camera();
    pshader = ShaderUtils::installPhongShader(textFileRead((char *) "assets/shaders/Phong_Vert.glsl"),
                                              textFileRead((char *) "assets/shaders/Phong_Frag.glsl"));
@@ -19,6 +19,7 @@ Renderer::Renderer(int width, int height) {
    winHeight = height;
    //squirrel = Mesh();
    block = Mesh("Cube.obj");
+   ngame = game;
    //block.debug();
    //exit(1);
    initialize();
@@ -85,6 +86,7 @@ void Renderer::render() {
    safe_glUniform3f(pshader.h_lightColor, light.color.x, light.color.y, light.color.z);
 
    setModel();
+   std::vector<Movable> currObjs;
    pshader.setMaterial(2);
    glm::vec3 pos(0, 0, 4);
    renderCube(pos, 1, 0);
