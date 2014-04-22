@@ -15,6 +15,7 @@ int Block::getBlockType() {
 }
 
 bool Block::isDead() {
+   DEBUG("isDead?");
    return timesDrilled >= getStrength();
 }
 

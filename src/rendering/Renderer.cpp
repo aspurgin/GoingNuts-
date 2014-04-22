@@ -18,8 +18,8 @@ Renderer::Renderer(int width, int height, NutGame game) {
    light = Light();
    winWidth = width;
    winHeight = height;
-   squirrel = Mesh("Squirrel.obj");
-   block = Mesh("Cube.obj");
+   squirrel = Mesh("assets/models/Squirrel.obj");
+   block = Mesh("assets/models/Cube.obj");
    ngame = game;
    //block.debug();
    //exit(1);
@@ -125,7 +125,7 @@ void Renderer::render() {
    //printf("num objs: %d", currObjs.size());
    for (int i = 0; i < currObjs.size(); i++) {
       Movable *obj = currObjs.at(i);
-      printf("centerPos: %f\n", obj->getCenter().x);
+      TRACE("centerPos: " << obj->getCenter().x);
       switch (obj->getMovableType()) {
          case BLOCK:
             switch (((Block *)obj)->getBlockType()) {
@@ -135,7 +135,7 @@ void Renderer::render() {
                   break;
                case STONEBLOCK:
                   renderCube(obj->getCenter(), 4, 0);
-                  printf("here\n");
+                  TRACE("here");
                   break;
             }
             break;

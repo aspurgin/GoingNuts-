@@ -106,20 +106,20 @@ int main(void)
             if (curObj != 0) {
                //printf("pointer: %d\n", curObj);
                if (curObj->getMovableType() == BLOCK && ((Block*)curObj)->isDead()) {
-
+                  DEBUG("3");
                   ((Block*)curObj)->incrementDeathCounter(delta);
                   if (((Block*)curObj)->shouldDestroy()) {
-                     printf("guess we're killing me\n");
-                     delete[] game.gameGrid[row][col];
+                     INFO("guess we're killing me");
+                     delete game.gameGrid[row][col];
                      game.gameGrid[row][col] = 0;
-                     printf("point: %d, %d, %d\n", row, col, game.gameGrid[row][col]);
+                     INFO("point: " << row << ", " << col << ", " << game.gameGrid[row][col]);
                   }
                }
             }
          }
       }
 
-      printf("time to render\n");
+      TRACE("time to render");
       // Render here
       glViewport(0, 0, (GLsizei)800, (GLsizei)600);
 
