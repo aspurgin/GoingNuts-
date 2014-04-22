@@ -1,8 +1,8 @@
 struct Material {
-   vec3 aColor;
-   vec3 dColor;
-   vec3 sColor;
-   float shine;
+  vec3 aColor;
+  vec3 dColor;
+  vec3 sColor;
+  float shine;
 };
 
 attribute vec3 aPosition;
@@ -14,20 +14,17 @@ uniform mat4 uViewMatrix;
 uniform mat4 uModelMatrix;
 uniform vec4 lightPos;
 uniform vec4 cameraPos;
-uniform vec3 lightColor;
 
 varying vec4 normal;
 varying vec4 light;
-varying vec4 spec;
-varying vec3 vColor;
+varying vec4 position;
 
 void main() {
    vec4 vPosition;
    vec4 vNormal;
-   vec3 Refl;
-   float tempSpec;
 
    vPosition = uModelMatrix * vec4(aPosition.x, aPosition.y, aPosition.z, 1);
+   position = vPosition;
 
    vNormal = uModelMatrix * vec4(aNormal.x, aNormal.y, aNormal.z, 0);
    vNormal = normalize(vNormal);
@@ -36,7 +33,6 @@ void main() {
    light = normalize(light);
    normal = vNormal;
 
-   spec = normalize(cameraPos - vPosition);
    vPosition = uViewMatrix * vPosition;
    gl_Position = uProjMatrix * vPosition;
 }
