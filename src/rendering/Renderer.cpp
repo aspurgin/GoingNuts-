@@ -10,7 +10,7 @@ Renderer::Renderer() {
    //squirrel = Mesh();
 }
 
-Renderer::Renderer(int width, int height, NutGame game) {
+Renderer::Renderer(int width, int height, NutGame *game) {
    camera = Camera();
    pshader = ShaderUtils::installPhongShader(textFileRead((char *) "assets/shaders/Phong_Vert.glsl"),
                                              textFileRead((char *) "assets/shaders/Phong_Frag.glsl"));
@@ -121,7 +121,7 @@ void Renderer::render() {
    safe_glUniform3f(pshader.h_lightColor, light.color.x, light.color.y, light.color.z);
 
    setModel();
-   std::vector<Movable*> currObjs = ngame.getObjectsToDraw();
+   std::vector<Movable*> currObjs = ngame->getObjectsToDraw();
    //printf("num objs: %d", currObjs.size());
    for (int i = 0; i < currObjs.size(); i++) {
       Movable *obj = currObjs.at(i);

@@ -20,11 +20,11 @@ class Renderer {
       PhongShader pshader;
       RenderingHelper modelTrans;
       int winWidth, winHeight;
-      NutGame ngame;
+      NutGame *ngame;
       Mesh squirrel;
       Mesh block;
       Renderer();
-      Renderer(int, int, NutGame);
+      Renderer(int, int, NutGame*);
       void initialize();
       void setModel();
       void renderCube(glm::vec3, int, float);

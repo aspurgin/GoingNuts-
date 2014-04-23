@@ -2,6 +2,7 @@
 
 int moveableType = BLOCK;
 
+
 int Block::getTimesDrilled() {
    return timesDrilled;
 }
@@ -15,11 +16,11 @@ int Block::getBlockType() {
 }
 
 bool Block::isDead() {
-   DEBUG("isDead?");
    return timesDrilled >= getStrength();
 }
 
 bool Block::shouldDestroy() {
+   DEBUG("" << deathCounter);
    if (isDead()) {
       return deathCounter >= .5;
    }
@@ -29,6 +30,10 @@ bool Block::shouldDestroy() {
 void Block::incrementDeathCounter(double toAdd) {
    deathCounter += toAdd;
 }
+
+// bool Block::willFall() {
+//    return fallCounter != -1;
+// }
 
 int Block::getMovableType() {
    return BLOCK;

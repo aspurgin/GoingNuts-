@@ -17,6 +17,7 @@
 
 class NutGame {
    public:
+      ~NutGame();
       NutGame();
       Movable *gameGrid[NUMROWS][NUMCOLS];
       void init();
@@ -32,6 +33,7 @@ class NutGame {
       bool isDrillingLeft();
       bool isDrillingRight();
       void handleKeyInput();
+      void fallDown();
       static bool drillPressed;
       static bool left;
       static bool right;
