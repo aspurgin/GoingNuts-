@@ -1,5 +1,9 @@
 #include "NutGame.hpp"
 
+#ifdef _WIN32
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 bool NutGame::drillPressed = false;
 bool NutGame::left = false;
 bool NutGame::right = false;
@@ -326,12 +330,12 @@ std::vector<Movable*> NutGame::getObjectsToDraw() {
    for (int row = count; row < count + 12 && row < NUMROWS; row++) {
       for (int col = 0; col < NUMCOLS; col++) {
          if (gameGrid[row][col] != 0) {
-            TRACE("block " << row << ", " << col << ", pointer: " << gameGrid[row][col]);
+            //TRACE("block " << row << ", " << col << ", pointer: " << gameGrid[row][col]);
             objects.push_back(gameGrid[row][col]);
             //DEBUG("row " << row << ", col " << col << ",  " << gameGrid[row][col]);
          }
          else {
-            TRACE("i'm out of the game");
+            //TRACE("i'm out of the game");
          }
       }
    }

@@ -127,7 +127,7 @@ void Renderer::render() {
    //printf("num objs: %d", currObjs.size());
    for (int i = 0; i < currObjs.size(); i++) {
       Movable *obj = currObjs.at(i);
-      TRACE("centerPos: " << obj->getCenter().x);
+      //TRACE("centerPos: " << obj->getCenter().x);
       switch (obj->getMovableType()) {
          case BLOCK:
             switch (((Block *)obj)->getBlockType()) {

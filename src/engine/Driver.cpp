@@ -85,7 +85,7 @@ int main(void)
       return -1;
 
    //Create a windowed mode window and its OpenGL context
-   window = glfwCreateWindow(800, 600, "Going Nuts!", NULL, NULL);
+   window = glfwCreateWindow(1200, 900, "Going Nuts!", NULL, NULL);
    if (!window)
    {
       glfwTerminate();
@@ -99,21 +99,29 @@ int main(void)
    glfwSetKeyCallback(window, keyPressed);
    game.init();
    Renderer renderer(640, 480, &game);
+   float fpsTime = 0;
+   int fpsCount = 0;
+   int curFps = 0;
    //Loop until the user closes the window
    while (!glfwWindowShouldClose(window)) {
       currentTime = glfwGetTime();
       //game.handleKeyInput();
       delta = currentTime - lastTime;
-
+      fpsTime += delta;
       game.checkGrid(delta);
       game.fallDown(delta);
 
-      sprintf(scoreString, "Score: %d", game.player.getScore());
+      if (fpsTime >= 1) {
+         curFps = fpsCount;
+         fpsCount = 0;
+         fpsTime = 0;
+      }
+      sprintf(scoreString, "FPS: %.0f Score: %d", 1.0/delta, game.player.getScore());
       glfwSetWindowTitle(window, scoreString);
 
       lastTime = currentTime;
       // Render here
-      glViewport(0, 0, (GLsizei)800, (GLsizei)600);
+      glViewport(0, 0, (GLsizei)1200, (GLsizei)900);
       renderer.render();
 
       //Swap front and back buffers
@@ -122,6 +130,8 @@ int main(void)
 
       //Poll for and process events
       glfwPollEvents();
+
+      fpsCount++;
    }
 
    glfwTerminate();
