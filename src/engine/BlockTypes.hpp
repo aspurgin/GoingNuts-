@@ -2,7 +2,6 @@
 #define __BLOCKTYPE_H_
 
 #define DIRTBLOCK  0
-#define EMPTYBLOCK 1
-#define STONEBLOCK 2
+#define STONEBLOCK 1
 
 #endif

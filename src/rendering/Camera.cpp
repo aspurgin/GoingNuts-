@@ -24,4 +24,5 @@ void Camera::shake() {
 void Camera::setEye(glm::vec3 pos) {
    eye = pos;
    lookAt.z = pos.z - 5;
+   lookAt.y = pos.y - 1;
 }

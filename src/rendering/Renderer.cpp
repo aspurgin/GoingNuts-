@@ -44,14 +44,14 @@ void Renderer::setModel() {
    safe_glUniformMatrix4fv(pshader.h_uModelMatrix, glm::value_ptr(modelTrans.modelViewMatrix));
 }
 
-void Renderer::renderCube(glm::vec3 transl, int mat, float ang) {
+void Renderer::renderCube(glm::vec3 transl, int mat, float scale) {
    
    pshader.setMaterial(mat);
    modelTrans.loadIdentity();
    modelTrans.pushMatrix();
       modelTrans.translate(transl);
-      modelTrans.scale(0.5);
-      modelTrans.rotate(ang, glm::vec3(0, 1, 0));
+      modelTrans.scale(0.5 - scale);
+      modelTrans.rotate(0, glm::vec3(0, 1, 0));
       setModel();
       safe_glEnableVertexAttribArray(pshader.h_aPosition);
       glBindBuffer(GL_ARRAY_BUFFER, block.objHandle);
@@ -120,6 +120,8 @@ void Renderer::render() {
    safe_glUniform3f(pshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
    safe_glUniform3f(pshader.h_lightColor, light.color.x, light.color.y, light.color.z);
 
+   camera.setEye(glm::vec3(3.0f, ngame->player.getCenter().y + 1, 6.0f));
+
    setModel();
    std::vector<Movable*> currObjs = ngame->getObjectsToDraw();
    //printf("num objs: %d", currObjs.size());
@@ -130,12 +132,41 @@ void Renderer::render() {
          case BLOCK:
             switch (((Block *)obj)->getBlockType()) {
                case DIRTBLOCK:
+                  if(((Block *) obj)->isDead()) {
+                     renderCube(obj->getCenter(), 0, ((Block *) obj)->deathCounter);   
+                  }
+                  else if(((Block *) obj)->willFall()){ 
                   //printf("here\n");
-                  renderCube(obj->getCenter(), ((DirtBlock *)obj)->getColor(), 0);
+                     if(((Block *) obj)->shouldScale) {
+                        ((Block *) obj)->shouldScale = false;
+                        renderCube(obj->getCenter(), ((DirtBlock *)obj)->getColor(), .05);
+                     }
+                     else {
+                        ((Block *) obj)->shouldScale = true;
+                        renderCube(obj->getCenter(), ((DirtBlock *)obj)->getColor(), 0);
+                     }
+                  }
+                  else {
+                     renderCube(obj->getCenter(), ((DirtBlock *)obj)->getColor(), 0);
+                  }
                   break;
                case STONEBLOCK:
-                  renderCube(obj->getCenter(), 4, 0);
-                  TRACE("here");
+                  if(((Block *) obj)->willFall()){ 
+                  //printf("here\n");
+                     if(((Block *) obj)->shouldScale) {
+                        ((Block *) obj)->shouldScale = false;
+                        renderCube(obj->getCenter(), 4, .05);
+                     }
+                     else {
+                        ((Block *) obj)->shouldScale = true;
+                        renderCube(obj->getCenter(), 4, 0);
+                     }
+                  }
+                  else {
+                     renderCube(obj->getCenter(), 4, 0);
+                  }
+                  break;
+               default:
                   break;
             }
             break;
@@ -143,6 +174,8 @@ void Renderer::render() {
             //printf("squirrel pos: x: %f, y: %f\n", obj->getCenter().x, obj->getCenter().y);
             renderSquirrel(obj->getCenter(), 5, 0);
             break;
+         case NUT:
+            renderCube(obj->getCenter(), 5, 0.2);
          default:
             break;
             

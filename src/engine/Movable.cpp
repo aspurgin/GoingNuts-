@@ -28,3 +28,11 @@ void Movable::moveVertical(float distance) {
 glm::vec3 Movable::getCenter() {
    return center;
 }
+
+void Movable::incrementFallCounter(double toAdd) {
+   fallCounter += toAdd;
+}
+
+bool Movable::willFall() {
+   return fallCounter != -1;
+}

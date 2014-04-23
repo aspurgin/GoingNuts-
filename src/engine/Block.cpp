@@ -20,9 +20,8 @@ bool Block::isDead() {
 }
 
 bool Block::shouldDestroy() {
-   DEBUG("" << deathCounter);
    if (isDead()) {
-      return deathCounter >= .5;
+      return deathCounter >= .2;
    }
    return false;
 }
@@ -31,10 +30,20 @@ void Block::incrementDeathCounter(double toAdd) {
    deathCounter += toAdd;
 }
 
-// bool Block::willFall() {
-//    return fallCounter != -1;
-// }
-
 int Block::getMovableType() {
    return BLOCK;
+}
+
+bool Block::fall() {
+   if (fallCounter >= 1.5) {
+      fallCounter = -1;
+      return true;
+   }
+   return false;
+}
+
+void Block::setWillFall() {
+   if (fallCounter < 0) {
+      fallCounter = 0;
+   }
 }

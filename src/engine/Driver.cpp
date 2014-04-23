@@ -1,6 +1,8 @@
 #include "NutGame.hpp"
 #include "../rendering/Renderer.hpp"
 #include "MovableTypes.hpp"
+#include <stdlib.h>
+#include <string>
 #include "Block.hpp"
 
 #include <GL/glew.h>
@@ -16,12 +18,10 @@ void keyPressed(GLFWwindow *window, int key, int scancode, int action, int mods)
    if (key == GLFW_KEY_A) {
       if (action == GLFW_PRESS) {
          NutGame::left = true;
-         printf("pressed left!\n");
          
       }
       else if (action == GLFW_RELEASE) {
          NutGame::left = false;
-         printf("released left!\n");
       }
    }
    else if (key == GLFW_KEY_S) {
@@ -75,6 +75,7 @@ int main(void)
    double delta;
    GLFWwindow* window;
    int last = 0, current;
+   char scoreString[20];
    std::vector<Movable*> toBePassed;
 
    //glfwGetWindowSize(&width, &height);
@@ -101,30 +102,18 @@ int main(void)
    //Loop until the user closes the window
    while (!glfwWindowShouldClose(window)) {
       currentTime = glfwGetTime();
-
       //game.handleKeyInput();
       delta = currentTime - lastTime;
-      for (int row = 0; row < NUMROWS; row++) {
-         for (int col = 0; col < NUMCOLS; col++) {
-            Movable * curObj = game.gameGrid[row][col];
-            //printf("pointer1: %d\n", game.gameGrid[row][col]);
-            if (curObj != 0) {
-               //printf("pointer: %d\n", curObj);
-               if (curObj->getMovableType() == BLOCK && ((Block*)curObj)->isDead()) {
-                  ((Block*)curObj)->incrementDeathCounter(delta);
-                  if (((Block*)curObj)->shouldDestroy()) {
-                     DEBUG("row " << row << ", col " << col);
-                     delete game.gameGrid[row][col];
-                     game.gameGrid[row][col] = 0;
-                  }
-               }
-            }
-         }
-      }
+
+      game.checkGrid(delta);
+      game.fallDown(delta);
+
+      sprintf(scoreString, "Score: %d", game.player.getScore());
+      glfwSetWindowTitle(window, scoreString);
+
       lastTime = currentTime;
       // Render here
       glViewport(0, 0, (GLsizei)800, (GLsizei)600);
-
       renderer.render();
 
       //Swap front and back buffers

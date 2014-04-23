@@ -8,11 +8,14 @@
 #include "Movable.hpp"
 #include "Player.hpp"
 #include "DirtBlock.hpp"
+#include "Nut.hpp"
+#include "StoneBlock.hpp"
 #include "Block.hpp"
 #include "MovableTypes.hpp"
+#include <stdio.h>
 #include <vector>
 
-#define NUMROWS 6
+#define NUMROWS 17
 #define NUMCOLS 7
 
 class NutGame {
@@ -33,15 +36,17 @@ class NutGame {
       bool isDrillingLeft();
       bool isDrillingRight();
       void handleKeyInput();
-      void fallDown();
+      void fallDown(double toAdd);
+      void checkGrid(double toAdd);
       static bool drillPressed;
       static bool left;
       static bool right;
       static bool up;
       static bool down;
-   private:
-      glm::vec2 playerPosition;
       Player player;
+   private:
+      void setFallingMovables(int row, int col);
+      glm::vec2 playerPosition;
       int currentTime;
       int lastTime;
 };

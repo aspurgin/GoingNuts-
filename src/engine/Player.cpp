@@ -16,3 +16,23 @@ void Player::drillBlock(Block *block) {
 int Player::getMovableType() {
    return PLAYER;
 }
+
+bool Player::fall() {
+	if (fallCounter != -1) {
+		fallCounter = -1;
+		return true;
+	}
+	return false;
+}
+
+void Player::setWillFall() {
+	fallCounter = 0;
+}
+
+void Player::addToScore(int num) {
+	score += num;
+}
+
+int Player::getScore() {
+	return score;
+}

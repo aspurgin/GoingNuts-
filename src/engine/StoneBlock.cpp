@@ -4,11 +4,11 @@ StoneBlock::StoneBlock() {};
 
 StoneBlock::StoneBlock(glm::vec3 center) {
    this->center = center;    
-   this->blockType = DIRTBLOCK;
+   this->blockType = STONEBLOCK;
 }
 
 StoneBlock::StoneBlock(glm::vec3 center, float width, float height) {
-   this->blockType = DIRTBLOCK;
+   this->blockType = STONEBLOCK;
    setObject(center, width, height);
 }
 

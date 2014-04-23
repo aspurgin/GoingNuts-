@@ -17,7 +17,10 @@ class Block: public Movable {
       bool shouldDestroy();
       void incrementDeathCounter(double toAdd);
       int getMovableType();
+      bool fall();
+      void setWillFall();
       double deathCounter = -1;
+      bool shouldScale = false;
    protected:
       int blockType;
    private:
