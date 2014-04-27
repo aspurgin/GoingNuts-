@@ -15,31 +15,31 @@
 #define LOG(x, y) std::cerr << "[" << x << "] " << __FILE__ << ":" << __LINE__ << " - " << y << "\n"
 
 #if LOG_LEVEL >= LOG_ERROR
-	#define ERROR(x) LOG("ERROR", x);
+	#define ERROR(x) LOG("ERROR", x)
 #else
 	#define ERROR(x) ((void)0)
 #endif
 
 #if LOG_LEVEL >= LOG_WARN
-	#define WARN(x) LOG("WARN", x);
+	#define WARN(x) LOG("WARN", x)
 #else
 	#define WARN(x) ((void)0)
 #endif
 
 #if LOG_LEVEL >= LOG_INFO
-	#define INFO(x) LOG("INFO", x);
+	#define INFO(x) LOG("INFO", x)
 #else
 	#define INFO(x) ((void)0)
 #endif
 
 #if LOG_LEVEL >= LOG_DEBUG
-	#define DEBUG(x) LOG("DEBUG", x);
+	#define DEBUG(x) LOG("DEBUG", x)
 #else
 	#define DEBUG(x) ((void)0)
 #endif
 
 #if LOG_LEVEL >= LOG_TRACE
-	#define TRACE(x) LOG("TRACE", x);
+	#define TRACE(x) LOG("TRACE", x)
 #else
 	#define TRACE(x) ((void)0)
 #endif
