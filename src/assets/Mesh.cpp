@@ -13,7 +13,9 @@
 
 Mesh::Mesh(char* fileName)
 {
-   parse(fileName);
+   INFO("loading model " << fileName);
+   //parse(fileName);
+   parseAI(fileName);
 }
 
 Mesh::Mesh()
@@ -29,6 +31,40 @@ Mesh::~Mesh()
 void Mesh::debug(){
    for(int i=0; i<vertices.size(); i++){
       std::cout << vertices[i].x << ", " << vertices[i].y << ", " << vertices[i].z << "\n";
+   }
+}
+
+void Mesh::parseAI(const char* path){
+   Assimp::Importer importer;
+   const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_JoinIdenticalVertices);
+
+   if(!scene) {
+      ERROR("Could not import file: " << path);
+      ERROR("Reason: " << importer.GetErrorString());
+      exit(1);
+   }
+
+   for(int sc = 0; sc < scene->mNumMeshes; sc++){
+      const aiMesh* mesh = scene->mMeshes[sc];
+      for(unsigned int f=0; f<mesh->mNumFaces; f++){
+         const aiFace* face = &mesh->mFaces[f];
+         for(int i=0; i<3; i++){
+            glm::vec3 vertex(
+               mesh->mVertices[face->mIndices[i]][0],
+               mesh->mVertices[face->mIndices[i]][1],
+               mesh->mVertices[face->mIndices[i]][2]);
+            glm::vec3 normal(
+               mesh->mNormals[face->mIndices[i]][0],
+               mesh->mNormals[face->mIndices[i]][1],
+               mesh->mNormals[face->mIndices[i]][2]);
+            glm::vec2 uv(
+               mesh->mTextureCoords[0][face->mIndices[i]].x,
+               mesh->mTextureCoords[0][face->mIndices[i]].y);
+            vertices.push_back(vertex);
+            normals.push_back(normal);
+            uvs.push_back(uv);
+         }
+      }
    }
 }
 
