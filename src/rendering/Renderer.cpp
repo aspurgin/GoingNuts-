@@ -1,6 +1,7 @@
 #include "Renderer.hpp"
 
 Renderer::Renderer() {
+   WARN("WRONG ENTRY POINT");
    camera = Camera();
    pshader = ShaderUtils::installPhongShader(textFileRead((char *) "assets/shaders/Phong_Vert.glsl"), 
                                              textFileRead((char *) "assets/shaders/Phong_Frag.glsl"));
@@ -26,7 +27,7 @@ Renderer::Renderer(int width, int height, NutGame *game) {
    light = Light();
    winWidth = width;
    winHeight = height;
-   squirrel = Mesh("assets/models/Squirrel.obj");
+   squirrel = Mesh("assets/models/Squirrel.dae");
    block = Mesh("assets/models/Cube.obj");
    ngame = game;
    //block.debug();
@@ -63,11 +64,11 @@ void Renderer::renderCube(glm::vec3 transl, int mat, float scale) {
       modelTrans.rotate(0, glm::vec3(0, 1, 0));
       setModel();
       safe_glEnableVertexAttribArray(pshader.h_aPosition);
-      glBindBuffer(GL_ARRAY_BUFFER, block.objHandle);
+      glBindBuffer(GL_ARRAY_BUFFER, block.objHandle());
       //printf("one position: %d\n", exampleCube->PositionHandle);
       safe_glVertexAttribPointer(pshader.h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
       safe_glEnableVertexAttribArray(pshader.h_aNormal);
-      glBindBuffer(GL_ARRAY_BUFFER, block.normHandle);
+      glBindBuffer(GL_ARRAY_BUFFER, block.normHandle());
       safe_glVertexAttribPointer(pshader.h_aNormal, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
       //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, block.faceHandle);
@@ -79,7 +80,7 @@ void Renderer::renderCube(glm::vec3 transl, int mat, float scale) {
       //printf("indexLength: %d\n", exampleCube->IndexBufferLength);
 
       //glDrawElements(GL_TRIANGLES, block.numFaceElements(), GL_UNSIGNED_SHORT, 0);   
-      glDrawArrays(GL_TRIANGLES, 0, block.vertices.size());
+      glDrawArrays(GL_TRIANGLES, 0, block.getVertCount());
    modelTrans.popMatrix();
 
    safe_glDisableVertexAttribArray(pshader.h_aPosition);
@@ -95,11 +96,11 @@ void Renderer::renderSquirrel(glm::vec3 transl, int mat, float ang) {
       modelTrans.rotate(ang, glm::vec3(0, 1, 0));
       setModel();
       safe_glEnableVertexAttribArray(pshader.h_aPosition);
-      glBindBuffer(GL_ARRAY_BUFFER, squirrel.objHandle);
+      glBindBuffer(GL_ARRAY_BUFFER, squirrel.objHandle());
       //printf("one position: %d\n", exampleCube->PositionHandle);
       safe_glVertexAttribPointer(pshader.h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
       safe_glEnableVertexAttribArray(pshader.h_aNormal);
-      glBindBuffer(GL_ARRAY_BUFFER, squirrel.normHandle);
+      glBindBuffer(GL_ARRAY_BUFFER, squirrel.normHandle());
       safe_glVertexAttribPointer(pshader.h_aNormal, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
       //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, block.faceHandle);
@@ -111,7 +112,7 @@ void Renderer::renderSquirrel(glm::vec3 transl, int mat, float ang) {
       //printf("indexLength: %d\n", exampleCube->IndexBufferLength);
 
       //glDrawElements(GL_TRIANGLES, block.numFaceElements(), GL_UNSIGNED_SHORT, 0);   
-      glDrawArrays(GL_TRIANGLES, 0, squirrel.vertices.size());
+      glDrawArrays(GL_TRIANGLES, 0, squirrel.getVertCount());
    modelTrans.popMatrix();
 
    safe_glDisableVertexAttribArray(pshader.h_aPosition);
