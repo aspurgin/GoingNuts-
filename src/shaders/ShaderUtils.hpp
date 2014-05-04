@@ -18,10 +18,12 @@
 
 #include "../helperFiles/GLSL_helper.h"
 #include "PhongShader.hpp"
+#include "CellShader.hpp"
 
 class ShaderUtils {
    public:
       static PhongShader installPhongShader(const GLchar*, const GLchar*);
+      static CellShader installCellShader(const GLchar*, const GLchar*);
    private:
       ShaderUtils();
 };

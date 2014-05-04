@@ -1,8 +1,10 @@
+#version 120
+
 struct Material {
-  vec3 aColor;
-  vec3 dColor;
-  vec3 sColor;
-  float shine;
+   vec3 aColor;
+   vec3 dColor;
+   vec3 sColor;
+   float shine;
 };
 
 uniform Material uMat;

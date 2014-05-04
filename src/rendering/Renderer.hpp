@@ -18,6 +18,7 @@ class Renderer {
       Camera camera;
       Light light;
       PhongShader pshader;
+      CellShader cshader;
       RenderingHelper modelTrans;
       int winWidth, winHeight;
       NutGame *ngame;
