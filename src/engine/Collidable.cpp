@@ -2,8 +2,8 @@
 
 Collidable::~Collidable() {}
 
-bool Collidable::isIntersecting(Collidable &other) {
-   return box.isIntersecting(other.getBoundingBox());
+bool Collidable::isIntersecting(Collidable *other) {
+   return box.isIntersecting(other->getBoundingBox());
 }
 
 BoundingBox2D Collidable::getBoundingBox() {

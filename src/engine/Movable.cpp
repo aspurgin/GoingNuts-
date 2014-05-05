@@ -36,3 +36,15 @@ void Movable::incrementFallCounter(double toAdd) {
 bool Movable::willFall() {
    return fallCounter != -1;
 }
+
+void Movable::fall(double toAdd) {
+	moveVertical(7 * -toAdd);
+}
+
+void Movable::stopFalling() {
+	fallCounter = -1;
+}
+
+void Movable::maybeStopFalling() {
+	
+}

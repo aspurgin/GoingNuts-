@@ -11,9 +11,8 @@ int Nut::getMovableType() {
    return NUT;
 }
 
-bool Nut::fall() {
+bool Nut::shouldFall() {
 	if (fallCounter != -1) {
-		fallCounter = -1;
 		return true;
 	}
 	return false;

@@ -11,10 +11,12 @@ class Player: public Movable {
       Player(glm::vec3, float, float);
       void drillBlock(Block *);
       int getMovableType();
-      bool fall();
+      bool shouldFall();
       void setWillFall();
       void addToScore(int num);
       int getScore();
+      int getDepth();
+      float getEnergy();
    private:
    	  int score = 0;
       float velocity;

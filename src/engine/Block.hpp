@@ -5,6 +5,7 @@
 #include "Movable.hpp"
 #include "BlockTypes.hpp"
 #include "MovableTypes.hpp"
+#include <vector>
 
 class Block: public Movable {
    public:
@@ -17,12 +18,14 @@ class Block: public Movable {
       bool shouldDestroy();
       void incrementDeathCounter(double toAdd);
       int getMovableType();
-      bool fall();
+      void attatchTo(Block *block);
+      bool shouldFall();
       void setWillFall();
       double deathCounter = -1;
       bool shouldScale = false;
    protected:
       int blockType;
+      std::vector<Block*> attatchedTo;
    private:
       int timesDrilled = 0;
       

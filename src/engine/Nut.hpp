@@ -10,7 +10,7 @@ class Nut: public Movable {
       Nut();
       Nut(glm::vec3, float, float);
       int getMovableType();
-      bool fall();
+      bool shouldFall();
       void setWillFall();
    private:
       float velocity;

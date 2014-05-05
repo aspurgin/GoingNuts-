@@ -6,7 +6,7 @@
 class Collidable {
    public:
       virtual ~Collidable() = 0;
-      bool isIntersecting(Collidable &other);
+      bool isIntersecting(Collidable *other);
       BoundingBox2D getBoundingBox();
       void moveBoundingBoxTo(glm::vec2 newCenter);
       void moveBoundingBoxVertical(float distance);

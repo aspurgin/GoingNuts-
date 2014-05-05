@@ -34,9 +34,8 @@ int Block::getMovableType() {
    return BLOCK;
 }
 
-bool Block::fall() {
-   if (fallCounter >= 1.5) {
-      fallCounter = -1;
+bool Block::shouldFall() {
+	if (fallCounter >= 1.5) {
       return true;
    }
    return false;
@@ -46,4 +45,8 @@ void Block::setWillFall() {
    if (fallCounter < 0) {
       fallCounter = 0;
    }
+}
+
+void Block::attatchTo(Block *block) {
+	
 }

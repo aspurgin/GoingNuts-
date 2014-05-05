@@ -1,6 +1,6 @@
 SOURCES=$(shell find . -name "*.cpp")
 OBJECTS=$(SOURCES:%.cpp=%.o)
-TARGET=foo
+TARGET=DeezNuts
 LIBS= -lGL -lGLU -lGLEW -lglfw3 -lX11 -lXrandr -lassimp
 
 DEBUG=1

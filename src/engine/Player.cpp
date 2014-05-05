@@ -17,9 +17,8 @@ int Player::getMovableType() {
    return PLAYER;
 }
 
-bool Player::fall() {
+bool Player::shouldFall() {
 	if (fallCounter != -1) {
-		fallCounter = -1;
 		return true;
 	}
 	return false;

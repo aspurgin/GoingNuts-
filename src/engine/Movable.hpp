@@ -12,7 +12,10 @@ class Movable: public Collidable {
       void moveVertical(float distance);
       glm::vec3 getCenter();
       virtual int getMovableType() = 0;
-      virtual bool fall() = 0;
+      void fall(double toAdd);
+      void maybeStopFalling();
+      void stopFalling();
+      virtual bool shouldFall() = 0;
       virtual void setWillFall() = 0;
       bool willFall();
       void incrementFallCounter(double toAdd);

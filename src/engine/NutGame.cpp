@@ -127,23 +127,46 @@ bool NutGame::isDrillingRight() {
 }
 
 void NutGame::fallDown(double toAdd) {
-   //DEBUG("row: " << playerPosition.x << ",  col: " << playerPosition.y);
    for (int row = NUMROWS - 1; row >= 0; row--) {
       for (int col = 0; col < NUMCOLS; col++) {
          if (gameGrid[row][col] != 0) {
             if (gameGrid[row][col]->willFall()) {
                gameGrid[row][col]->incrementFallCounter(toAdd);
             }
-            if (gameGrid[row][col]->fall()) {
-               gameGrid[row][col]->moveTo(glm::vec2(col, -row - 1));
-               if (gameGrid[row][col]->getMovableType() == PLAYER) {
-                  playerPosition.x++;
-                  if (gameGrid[row + 1][col] != 0 && gameGrid[row + 1][col]->getMovableType() == NUT) {
+            if (gameGrid[row][col]->shouldFall()) {
+               gameGrid[row][col]->fall(toAdd);
+               
+               if (gameGrid[row + 1][col] != 0 && gameGrid[row][col]->isIntersecting((Collidable*)gameGrid[row + 1][col])) {
+                  if (gameGrid[row + 1][col]->getMovableType() == NUT && gameGrid[row][col]->getMovableType() == PLAYER) {
                      player.addToScore(5);
+                     gameGrid[row + 1][col] = 0;
                   }
+                  else if (gameGrid[row + 1][col]->getMovableType() == PLAYER) {
+                     if (gameGrid[row][col]->getMovableType() == NUT) {
+                        player.addToScore(5);
+                        gameGrid[row][col] = 0;
+                     }
+                     else {
+                        //you died
+                     }
+                  }
+                  else {
+                     gameGrid[row][col]->stopFalling();
+                     gameGrid[row][col]->moveTo(glm::vec2(col, -row));
+                  }
+               }
+            }
+            if (gameGrid[row][col] != 0 && (int)(-(gameGrid[row][col]->getCenter().y) + .5) > row) {
+               if (gameGrid[row][col]->getMovableType() == PLAYER) {
+                  playerPosition.x += 1;
                }
                gameGrid[row + 1][col] = gameGrid[row][col];
                gameGrid[row][col] = 0;
+               //if (gameGrid[row + 1][col]->getMovableType() == BLOCK) {
+                 // if (((Block*)gameGrid[row + 1][col])->getBlockType() == DIRTBLOCK) {
+                     // if (
+                  //}
+               //}
             }
          }
       }
@@ -293,6 +316,7 @@ void NutGame::handleKeyInput() {
                playerPosition = pos;
                gameGrid[(int)pos.x][(int)pos.y] = gameGrid[(int)pos.x][(int)pos.y - 1];
                gameGrid[(int)pos.x][(int)pos.y - 1] = 0;
+               DEBUG("HERE");
                player.moveTo(glm::vec2(pos.y, -pos.x));
             }
             else if (pos.x != 0 && !isBlockAtPosition(glm::vec2(pos.x - 1, pos.y))) {
