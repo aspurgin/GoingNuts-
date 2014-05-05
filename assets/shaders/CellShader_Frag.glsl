@@ -1,5 +1,3 @@
-#version 120
-
 struct Material {
    vec3 aColor;
    vec3 dColor;
@@ -8,21 +6,30 @@ struct Material {
 };
 
 uniform Material uMat;
-uniform vec4 cameraPos;
+uniform vec3 cameraPos;
 
 varying vec4 normal;
 varying vec4 light;
 varying vec4 position;
 
 void main() {
+   vec4 cameraPoint = vec4(cameraPos, 1);
+
+   vec3 normalVec = vec3(normal.x, normal.y, normal.z);
+   vec3 lightVec = vec3(light.x, light.y, light.z);
+   vec3 positionVec = vec3(position.x, position.y, position.z);
    // Lighting
-   vec3 eyePos = vec3(cameraPos.x, cameraPos.y, cameraPos.z);
+   vec3 eyePos = vec3(-cameraPoint.x, -cameraPoint.y, -cameraPoint.z);
 
-   vec3 eyeVert = normalize(eyePos - position);
-   vec3 eyeLight = normalize(light + eyeVert);
+   vec3 eyeVert = eyePos - positionVec;
+   eyeVert = normalize(eyeVert);
 
+   vec3 eyeLight = lightVec + eyeVert;
+   eyeLight = normalize(eyeLight);
+
+   normalVec = normalize(normalVec);
    // Simple Silhouette
-   if (max(dot(normal, eyeVert), 0.0) < 0.3) {
+   if (max(dot(normalVec, eyeVert), 0.0) < 0.4) {
       // Silhouette Color:
       gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
    }
@@ -31,7 +38,7 @@ void main() {
       gl_FragColor = vec4(uMat.aColor, 1.0);
 
       // Specular part
-      if (pow(max(dot(normal, eyeLight),0.0), uMat.shine) < 0.2) {
+      if (pow(max(dot(normalVec, eyeLight),0.0), 20) < 0.3) {
          gl_FragColor *= 0.8;
       }
       else {
@@ -39,7 +46,7 @@ void main() {
          gl_FragColor = vec4(uMat.sColor, 1.0);
       }
       // Diffuse part
-      if (max(dot(normal, light), 0.0) < 0.5) {
+      if (max(dot(normalVec, lightVec), 0.0) < 0.5) {
          gl_FragColor *= 0.8;
       }
    }

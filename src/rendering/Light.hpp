@@ -8,6 +8,7 @@ class Light {
       glm::vec3 position;
       glm::vec3 color;
       Light();
+      void setPosition(glm::vec3);
 };
 
 #endif

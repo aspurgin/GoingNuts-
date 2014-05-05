@@ -12,14 +12,15 @@ uniform Material uMat;
 uniform mat4 uProjMatrix;
 uniform mat4 uViewMatrix;
 uniform mat4 uModelMatrix;
-uniform vec4 lightPos;
-uniform vec4 cameraPos;
+uniform vec3 lightPos;
+uniform vec3 cameraPos;
 
 varying vec4 normal;
 varying vec4 light;
 varying vec4 position;
 
 void main() {
+   vec4 lightPoint = vec4(lightPos, 1);
    vec4 vPosition;
    vec4 vNormal;
 
@@ -29,7 +30,7 @@ void main() {
    vNormal = uModelMatrix * vec4(aNormal.x, aNormal.y, aNormal.z, 0);
    vNormal = normalize(vNormal);
 
-   light = lightPos - vPosition;
+   light = lightPoint - vPosition;
    light = normalize(light);
    normal = vNormal;
 

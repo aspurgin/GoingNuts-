@@ -6,7 +6,7 @@ struct Material {
 };
 
 uniform Material uMat;
-uniform vec4 cameraPos;
+uniform vec3 cameraPos;
 uniform vec3 lightColor;
 
 varying vec4 normal;
@@ -21,7 +21,7 @@ void main() {
    vec4 fLight = normalize(light);
 
    Refl = lightColor * max(0.0, dot(fLight, fNormal)) * uMat.dColor + lightColor * uMat.aColor;
-   tempSpec = dot(normalize(spec), -fLight + 2.0 * dot(fLight, fNormal) * fNormal);
+   tempSpec = dot(normalize(spec), normalize(-fLight + 2.0 * max(dot(fLight, fNormal), 0.0) * fNormal));
    Refl += lightColor * clamp(pow(tempSpec, uMat.shine), 0.0, 1.0) * uMat.sColor;
    gl_FragColor = vec4(Refl.x, Refl.y, Refl.z, 1.0);
 }

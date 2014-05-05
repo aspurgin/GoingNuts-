@@ -7,8 +7,8 @@ Renderer::Renderer() {
                                              textFileRead((char *) "assets/shaders/Phong_Frag.glsl"));
    
 
-   //pshader = ShaderUtils::installCellShader(textFileRead((char *) "assets/shaders/CellShader_Vert.glsl"),
-                                            //textFileRead((char *) "assets/shaders/CellShader_Frag.glsl"));
+   cshader = ShaderUtils::installCellShader(textFileRead((char *) "assets/shaders/CellShader_Vert.glsl"),
+                                            textFileRead((char *) "assets/shaders/CellShader_Frag.glsl"));
 
    light = Light();
    squirrel = Mesh("Squirrel.obj");
@@ -21,8 +21,8 @@ Renderer::Renderer(int width, int height, NutGame *game) {
    pshader = ShaderUtils::installPhongShader(textFileRead((char *) "assets/shaders/Phong_Vert.glsl"),
                                              textFileRead((char *) "assets/shaders/Phong_Frag.glsl"));
 
-   //pshader = ShaderUtils::installCellShader(textFileRead((char *) "assets/shaders/CellShader_Vert.glsl"),
-                                            //textFileRead((char *) "assets/shaders/CellShader_Frag.glsl"));
+   cshader = ShaderUtils::installCellShader(textFileRead((char *) "assets/shaders/CellShader_Vert.glsl"),
+                                            textFileRead((char *) "assets/shaders/CellShader_Frag.glsl"));
    
    light = Light();
    winWidth = width;
@@ -50,26 +50,26 @@ void Renderer::initialize() {
 }
 
 void Renderer::setModel() {
-   safe_glUniformMatrix4fv(pshader.h_uModelMatrix, glm::value_ptr(modelTrans.modelViewMatrix));
+   safe_glUniformMatrix4fv(cshader.h_uModelMatrix, glm::value_ptr(modelTrans.modelViewMatrix));
 }
 
 void Renderer::renderCube(glm::vec3 transl, int mat, float scale) {
    
-   //pshader.setMaterial(mat);
-   pshader.setMaterial(mat);
+   //cshader.setMaterial(mat);
+   cshader.setMaterial(mat);
    modelTrans.loadIdentity();
    modelTrans.pushMatrix();
       modelTrans.translate(transl);
       modelTrans.scale(0.5 - scale);
       modelTrans.rotate(0, glm::vec3(0, 1, 0));
       setModel();
-      safe_glEnableVertexAttribArray(pshader.h_aPosition);
+      safe_glEnableVertexAttribArray(cshader.h_aPosition);
       glBindBuffer(GL_ARRAY_BUFFER, block.objHandle());
       //printf("one position: %d\n", exampleCube->PositionHandle);
-      safe_glVertexAttribPointer(pshader.h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
-      safe_glEnableVertexAttribArray(pshader.h_aNormal);
+      safe_glVertexAttribPointer(cshader.h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
+      safe_glEnableVertexAttribArray(cshader.h_aNormal);
       glBindBuffer(GL_ARRAY_BUFFER, block.normHandle());
-      safe_glVertexAttribPointer(pshader.h_aNormal, 3, GL_FLOAT, GL_FALSE, 0, 0);
+      safe_glVertexAttribPointer(cshader.h_aNormal, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
       //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, block.faceHandle);
 
@@ -83,25 +83,25 @@ void Renderer::renderCube(glm::vec3 transl, int mat, float scale) {
       glDrawArrays(GL_TRIANGLES, 0, block.getVertCount());
    modelTrans.popMatrix();
 
-   safe_glDisableVertexAttribArray(pshader.h_aPosition);
-   safe_glDisableVertexAttribArray(pshader.h_aNormal);
+   safe_glDisableVertexAttribArray(cshader.h_aPosition);
+   safe_glDisableVertexAttribArray(cshader.h_aNormal);
 }
 
 void Renderer::renderSquirrel(glm::vec3 transl, int mat, float ang) {
-   //pshader.setMaterial(mat);
-   pshader.setMaterial(mat);
+   //cshader.setMaterial(mat);
+   cshader.setMaterial(mat);
    modelTrans.loadIdentity();
    modelTrans.pushMatrix();
       modelTrans.translate(transl);
       modelTrans.rotate(ang, glm::vec3(0, 1, 0));
       setModel();
-      safe_glEnableVertexAttribArray(pshader.h_aPosition);
+      safe_glEnableVertexAttribArray(cshader.h_aPosition);
       glBindBuffer(GL_ARRAY_BUFFER, squirrel.objHandle());
       //printf("one position: %d\n", exampleCube->PositionHandle);
-      safe_glVertexAttribPointer(pshader.h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
-      safe_glEnableVertexAttribArray(pshader.h_aNormal);
+      safe_glVertexAttribPointer(cshader.h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
+      safe_glEnableVertexAttribArray(cshader.h_aNormal);
       glBindBuffer(GL_ARRAY_BUFFER, squirrel.normHandle());
-      safe_glVertexAttribPointer(pshader.h_aNormal, 3, GL_FLOAT, GL_FALSE, 0, 0);
+      safe_glVertexAttribPointer(cshader.h_aNormal, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
       //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, block.faceHandle);
 
@@ -115,23 +115,24 @@ void Renderer::renderSquirrel(glm::vec3 transl, int mat, float ang) {
       glDrawArrays(GL_TRIANGLES, 0, squirrel.getVertCount());
    modelTrans.popMatrix();
 
-   safe_glDisableVertexAttribArray(pshader.h_aPosition);
-   safe_glDisableVertexAttribArray(pshader.h_aNormal);
+   safe_glDisableVertexAttribArray(cshader.h_aPosition);
+   safe_glDisableVertexAttribArray(cshader.h_aNormal);
 }
 
 void Renderer::render() {
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-   glUseProgram(pshader.shadeProg);//pshader.shadeProg);
+   glUseProgram(cshader.shadeProg);//cshader.shadeProg);
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
 
-   camera.setView(pshader.h_uViewMatrix);
-   camera.setProjectionMatrix(pshader.h_uProjMatrix, winWidth, winHeight);
-   safe_glUniform3f(pshader.h_lightPos, light.position.x, light.position.y, light.position.z);
-   safe_glUniform3f(pshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
-   safe_glUniform3f(pshader.h_lightColor, light.color.x, light.color.y, light.color.z);
+   camera.setView(cshader.h_uViewMatrix);
+   camera.setProjectionMatrix(cshader.h_uProjMatrix, winWidth, winHeight);
+   safe_glUniform3f(cshader.h_lightPos, light.position.x, light.position.y, light.position.z);
+   safe_glUniform3f(cshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
+   //safe_glUniform3f(cshader.h_lightColor, light.color.x, light.color.y, light.color.z);
 
    camera.setEye(glm::vec3(3.0f, ngame->player.getCenter().y + 1, 6.0f));
+   light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y - 1, 6.0f));
 
    setModel();
    std::vector<Movable*> currObjs = ngame->getObjectsToDraw();
@@ -192,7 +193,7 @@ void Renderer::render() {
             
       }
    }
-   /*pshader.setMaterial(2);
+   /*cshader.setMaterial(2);
    glm::vec3 pos(0, 0, 0);
    //renderCube(pos, 1, 0);
    pos.x = 5;

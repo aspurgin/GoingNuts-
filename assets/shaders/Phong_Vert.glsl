@@ -12,8 +12,8 @@ uniform Material uMat;
 uniform mat4 uProjMatrix;
 uniform mat4 uViewMatrix;
 uniform mat4 uModelMatrix;
-uniform vec4 lightPos;
-uniform vec4 cameraPos;
+uniform vec3 lightPos;
+uniform vec3 cameraPos;
 uniform vec3 lightColor;
 
 varying vec4 normal;
@@ -25,6 +25,8 @@ void main() {
    vec4 vPosition;
    vec4 vNormal;
    vec3 Refl;
+   vec4 lightPoint = vec4(lightPos, 1);
+   vec4 cameraPoint = vec4(cameraPos, 1);
    float tempSpec;
 
    vPosition = uModelMatrix * vec4(aPosition.x, aPosition.y, aPosition.z, 1);
@@ -32,11 +34,11 @@ void main() {
    vNormal = uModelMatrix * vec4(aNormal.x, aNormal.y, aNormal.z, 0);
    vNormal = normalize(vNormal);
 
-   light = lightPos - vPosition;
+   light = lightPoint - vPosition;
    light = normalize(light);
    normal = vNormal;
 
-   spec = normalize(cameraPos - vPosition);
+   spec = normalize(cameraPoint - vPosition);
    vPosition = uViewMatrix * vPosition;
    gl_Position = uProjMatrix * vPosition;
 }

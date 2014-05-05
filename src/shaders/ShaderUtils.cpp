@@ -78,6 +78,7 @@ PhongShader ShaderUtils::installPhongShader(const GLchar *vShaderName, const GLc
    phongShader.h_lightColor = safe_glGetUniformLocation(ShadeProg, "lightColor");
    phongShader.shadeProg = ShadeProg;
 
+   glUseProgram(0);
    return phongShader;
 }
 
@@ -145,5 +146,6 @@ CellShader ShaderUtils::installCellShader(const GLchar *vShaderName, const GLcha
    cellShader.h_cameraPos = safe_glGetUniformLocation(ShadeProg, "cameraPos");
    cellShader.shadeProg = ShadeProg;
 
+   glUseProgram(0);
    return cellShader;
 }
