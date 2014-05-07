@@ -1,7 +1,7 @@
 #include "Renderer.hpp"
 
 Renderer::Renderer() {
-   WARN("WRONG ENTRY POINT");
+//   WARN("WRONG ENTRY POINT");
    camera = Camera();
    pshader = ShaderUtils::installPhongShader(textFileRead((char *) "assets/shaders/Phong_Vert.glsl"), 
                                              textFileRead((char *) "assets/shaders/Phong_Frag.glsl"));
