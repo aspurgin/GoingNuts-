@@ -5,11 +5,13 @@
 #include <string>
 #include "Block.hpp"
 
+
 #include <GL/glew.h>
 #ifdef _WIN32
 #define GLFW_DLL
 #endif
 #include <GLFW/glfw3.h>
+#include "../assets/Assets.hpp"
 
 NutGame game;
 
@@ -102,6 +104,9 @@ int main(void)
    float fpsTime = 0;
    int fpsCount = 0;
    int curFps = 0;
+
+   Assets::loadAssets();
+   Assets::playMusic(Assets::GAME_M);
    //Loop until the user closes the window
    while (!glfwWindowShouldClose(window)) {
       currentTime = glfwGetTime();

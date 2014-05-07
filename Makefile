@@ -1,7 +1,7 @@
 SOURCES=$(shell find . -name "*.cpp")
 OBJECTS=$(SOURCES:%.cpp=%.o)
 TARGET=DeezNuts
-LIBS= -lGL -lGLU -lGLEW -lglfw3 -lX11 -lXrandr -lassimp
+LIBS= -lGL -lGLU -lGLEW -lglfw3 -lX11 -lXrandr -lassimp -lfmodex-4.44.33
 
 DEBUG=1
 CPPFLAGS+= -include "`pwd`/src/helperFiles/Util.hpp" -DLOG_LEVEL=$(DEBUG) -g
