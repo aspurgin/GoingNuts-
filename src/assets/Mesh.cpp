@@ -11,6 +11,18 @@
 
 #include "Mesh.hpp"
 
+
+void debugNodes(aiNode* node, int level){
+   for(int t = 0; t<level; t++){
+      std::cout << "\t";
+   }
+   std::cout << node->mName.C_Str() << "\n";
+
+   for(int i = 0; i < node->mNumChildren; i++){
+      debugNodes(node->mChildren[i], level+1);
+   }
+}
+
 Mesh::Mesh(char* fileName)
 {
    INFO("loading model " << fileName);
@@ -61,12 +73,13 @@ void Mesh::parseAI(const char* path){
    Assimp::Importer importer;
    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_JoinIdenticalVertices);
 
+
    if(!scene) {
       ERROR("Could not import file: " << path);
       ERROR("Reason: " << importer.GetErrorString());
       exit(1);
    }
-
+   debugNodes(scene->mRootNode, 0);
    for(int sc = 0; sc < scene->mNumMeshes; sc++){
       const aiMesh* mesh = scene->mMeshes[sc];
       for(unsigned int f=0; f<mesh->mNumFaces; f++){

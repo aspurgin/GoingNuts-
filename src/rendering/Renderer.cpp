@@ -27,7 +27,7 @@ Renderer::Renderer(int width, int height, NutGame *game) {
    light = Light();
    winWidth = width;
    winHeight = height;
-   squirrel = Mesh("assets/models/Squirrel.dae");
+   squirrel = Mesh("assets/models/AnimSquirrel.dae");
    block = Mesh("assets/models/Cube.obj");
    ngame = game;
    //block.debug();

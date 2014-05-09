@@ -137,6 +137,7 @@ int main(void)
       glfwPollEvents();
 
       fpsCount++;
+      //Assets::update();
    }
 
    glfwTerminate();
