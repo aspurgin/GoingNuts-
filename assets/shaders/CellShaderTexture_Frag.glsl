@@ -7,10 +7,12 @@ struct Material {
 
 uniform Material uMat;
 uniform vec3 cameraPos;
+uniform sampler2D myTextureSampler;
 
 varying vec4 normal;
 varying vec4 light;
 varying vec4 position;
+varying vec2 UV;
 
 void main() {
    vec4 cameraPoint = vec4(cameraPos, 1);
@@ -35,7 +37,7 @@ void main() {
    }
    else {
       // Base Color
-      gl_FragColor = vec4(uMat.aColor, 1.0);
+      gl_FragColor = texture2D(myTextureSampler, UV);
 
       // ASSUMPTION: Angle between normal and eye > .4
       // If that angle taken to the power of 20
