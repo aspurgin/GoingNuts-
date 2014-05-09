@@ -14,6 +14,7 @@ Player::Player(glm::vec3 center, float width, float height) {
    this->mat = 5;
    this->scale = 1;
    this->modelTrans.useModelViewMatrix();
+   printf("here!\n");
 }
 
 void Player::drillBlock(Block *block) {

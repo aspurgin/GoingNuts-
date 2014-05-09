@@ -6,7 +6,6 @@ DirtBlock::DirtBlock(glm::vec3 center, int color) {
    this->center = center;    
    this->blockType = DIRTBLOCK;
    this->color = color;
-   this->state = M_STATE::ALIVE;
 }
 
 DirtBlock::DirtBlock(glm::vec3 center, float width, float height, int color) {
