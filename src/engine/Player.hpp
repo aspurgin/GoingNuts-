@@ -19,12 +19,16 @@ class Player: public Movable {
       float getEnergy();
       void died();
       bool getIsDead();
+      void render();
+      void setModel();
    private:
       int score;
       float velocity;
       int lives;
       bool isDead;
       Drill drill;
+      Mesh model;
+      CellShader cshader;
 };
 
 #endif

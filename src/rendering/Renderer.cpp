@@ -18,17 +18,15 @@ Renderer::Renderer() {
 
 Renderer::Renderer(int width, int height, NutGame *game) {
    camera = Camera();
-   pshader = ShaderUtils::installPhongShader(textFileRead((char *) "assets/shaders/Phong_Vert.glsl"),
-                                             textFileRead((char *) "assets/shaders/Phong_Frag.glsl"));
+   //pshader = ShaderUtils::installPhongShader(textFileRead((char *) "assets/shaders/Phong_Vert.glsl"),
+     //                                        textFileRead((char *) "assets/shaders/Phong_Frag.glsl"));
 
-   cshader = ShaderUtils::installCellShader(textFileRead((char *) "assets/shaders/CellShader_Vert.glsl"),
-                                            textFileRead((char *) "assets/shaders/CellShader_Frag.glsl"));
-   
+   //cshader = ShaderUtils::installCellShader(textFileRead((char *) "assets/shaders/CellShader_Vert.glsl"),
+     //                                       textFileRead((char *) "assets/shaders/CellShader_Frag.glsl"));
+   cshader = Assets::getCShader();
    light = Light();
    winWidth = width;
    winHeight = height;
-   squirrel = Mesh("assets/models/AnimSquirrel.dae");
-   block = Mesh("assets/models/Cube.obj");
    ngame = game;
    //block.debug();
    //exit(1);
@@ -36,8 +34,8 @@ Renderer::Renderer(int width, int height, NutGame *game) {
 }
 
 void Renderer::initialize() {
-   block.buildBuffers();
-   squirrel.buildBuffers();
+   //block.buildBuffers();
+   //squirrel.buildBuffers();
    // Start Of User Initialization
    glClearColor(0.09f, 0.0f, 0.21f, 1.0f);
    // Black Background
@@ -53,7 +51,7 @@ void Renderer::setModel() {
    safe_glUniformMatrix4fv(cshader.h_uModelMatrix, glm::value_ptr(modelTrans.modelViewMatrix));
 }
 
-void Renderer::renderCube(glm::vec3 transl, int mat, float scale) {
+/*void Renderer::renderCube(glm::vec3 transl, int mat, float scale) {
    
    //cshader.setMaterial(mat);
    cshader.setMaterial(mat);
@@ -75,7 +73,8 @@ void Renderer::renderCube(glm::vec3 transl, int mat, float scale) {
 
       /*safe_glEnableVertexAttribArray(h_taTexCoord);
       glBindBuffer(GL_ARRAY_BUFFER, TexBuffObj);
-      safe_glVertexAttribPointer(h_taTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);*/
+      safe_glVertexAttribPointer(h_taTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
+      
       // draw!
       //printf("indexLength: %d\n", exampleCube->IndexBufferLength);
 
@@ -107,7 +106,7 @@ void Renderer::renderSquirrel(glm::vec3 transl, int mat, float ang) {
 
       /*safe_glEnableVertexAttribArray(h_taTexCoord);
       glBindBuffer(GL_ARRAY_BUFFER, TexBuffObj);
-      safe_glVertexAttribPointer(h_taTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);*/
+      safe_glVertexAttribPointer(h_taTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
       // draw!
       //printf("indexLength: %d\n", exampleCube->IndexBufferLength);
 
@@ -117,7 +116,7 @@ void Renderer::renderSquirrel(glm::vec3 transl, int mat, float ang) {
 
    safe_glDisableVertexAttribArray(cshader.h_aPosition);
    safe_glDisableVertexAttribArray(cshader.h_aNormal);
-}
+}*/
 
 void Renderer::render() {
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -136,8 +135,11 @@ void Renderer::render() {
 
    setModel();
    std::vector<Movable*> currObjs = ngame->getObjectsToDraw();
+   for (Movable * m : currObjs) {
+      m->render();
+   }
    //printf("num objs: %d", currObjs.size());
-   for (int i = 0; i < currObjs.size(); i++) {
+   /*for (int i = 0; i < currObjs.size(); i++) {
       Movable *obj = currObjs.at(i);
       //TRACE("centerPos: " << obj->getCenter().x);
       switch (obj->getMovableType()) {
@@ -192,7 +194,7 @@ void Renderer::render() {
             break;
             
       }
-   }
+   }*/
    /*cshader.setMaterial(2);
    glm::vec3 pos(0, 0, 0);
    //renderCube(pos, 1, 0);

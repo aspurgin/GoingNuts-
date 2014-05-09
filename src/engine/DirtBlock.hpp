@@ -3,6 +3,7 @@
 
 #include "Block.hpp"
 #include "BlockTypes.hpp"
+#include "../shaders/CellShader.hpp"
 
 class DirtBlock: public Block {
    public:

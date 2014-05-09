@@ -7,6 +7,10 @@ namespace Assets {
       FMOD::System *soundSystem;
       FMOD_RESULT result;
       std::map<int, FMOD::Sound*> sounds, music;
+      Mesh squirrel, block, nut;
+      std::map<int, Mesh> meshes;
+      CellShader cshader;
+      PhongShader pshader;
   
       //code found from tutorial: http://katyscode.wordpress.com/2012/10/05/cutting-your-teeth-on-fmod-part-1-build-environment-initialization-and-playing-sounds/
       void FMODErrorCheck(FMOD_RESULT res) {
@@ -22,7 +26,28 @@ namespace Assets {
       }
 
       void loadMeshes() {
+         squirrel = Mesh("assets/models/AnimSquirrel.dae");
+         block = Mesh("assets/models/Cube.obj");
+         nut = Mesh("assets/models/Acorn.obj");
+         block.buildBuffers();
+         squirrel.buildBuffers();
+         nut.buildBuffers();
+         printf("num verts: %d\n", squirrel.getVertCount());
 
+         meshes[SQUIRREL_M] = squirrel;
+         printf("num verts: %d\n", meshes[SQUIRREL_M].getVertCount());
+         //printf("%d\n", meshes[SQUIRREL_M]);
+         meshes[BLOCK_M] = block;
+         meshes[NUT_M] = nut;
+      }
+
+      void initShaders() {
+         pshader = ShaderUtils::installPhongShader(textFileRead((char *) "assets/shaders/Phong_Vert.glsl"),
+            textFileRead((char *) "assets/shaders/Phong_Frag.glsl"));
+
+
+         cshader = ShaderUtils::installCellShader(textFileRead((char *) "assets/shaders/CellShader_Vert.glsl"),
+            textFileRead((char *) "assets/shaders/CellShader_Frag.glsl"));
       }
 
       void loadSound(const char *filename, int type) {
@@ -79,6 +104,7 @@ namespace Assets {
    void loadAssets() {
       loadTextures();
       loadMeshes();
+      initShaders();
       loadSoundsAndMusic();
    }
 
@@ -105,8 +131,19 @@ namespace Assets {
       }
    }
 
-   void getMesh(int type) {
+   Mesh& getMesh(int type) {
+      if (type == SQUIRREL_M) {
+         printf("num verts: %d\n", meshes[type].getVertCount());
+      }
+      return meshes[type];
+   }
 
+   CellShader& getCShader() {
+      return cshader;
+   }
+
+   PhongShader& getPShader() {
+      return pshader;
    }
    
    void releaseAll() {

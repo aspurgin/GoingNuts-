@@ -3,10 +3,14 @@
 
 #include "Collidable.hpp"
 #include "BoundingBox2D.hpp"
+#include "../rendering/Renderable.hpp"
+#include "../assets/Assets.hpp"
 
 #define FALL_RATE 7
 
-class Movable: public Collidable {
+enum M_STATE {ALIVE, DEAD};
+
+class Movable: public Collidable, public Renderable {
    public:
       Movable();
       virtual ~Movable() = 0;
@@ -29,9 +33,12 @@ class Movable: public Collidable {
       glm::vec3 center;
       double fallCounter;
       bool canFall;
+      int mat;
+      int state;
    private:
       float width;
       float height;
+      
 };
 
 #endif
