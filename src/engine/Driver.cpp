@@ -99,13 +99,14 @@ int main(void)
 
    GLenum err = glewInit();
    glfwSetKeyCallback(window, keyPressed);
+   Assets::loadAssets();
    game.init();
    Renderer renderer(640, 480, &game);
    float fpsTime = 0;
    int fpsCount = 0;
    int curFps = 0;
 
-   Assets::loadAssets();
+   
    Assets::playMusic(Assets::GAME_M);
    //Loop until the user closes the window
    while (!glfwWindowShouldClose(window)) {

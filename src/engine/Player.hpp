@@ -17,11 +17,15 @@ class Player: public Movable {
       int getScore();
       int getDepth();
       float getEnergy();
+      void render();
+      void setModel();
    private:
    	  int score = 0;
       float velocity;
       int lives;
       Drill drill;
+      Mesh model;
+      CellShader cshader;
 };
 
 #endif

@@ -12,8 +12,12 @@ class Nut: public Movable {
       int getMovableType();
       bool shouldFall();
       void setWillFall();
+      void render();
+      void setModel();
    private:
       float velocity;
+      Mesh model;
+      CellShader cshader;
 };
 
 #endif

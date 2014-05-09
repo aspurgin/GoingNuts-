@@ -3,8 +3,12 @@
 
 #include "Collidable.hpp"
 #include "BoundingBox2D.hpp"
+#include "../rendering/Renderable.hpp"
+#include "../assets/Assets.hpp"
 
-class Movable: public Collidable {
+enum M_STATE {ALIVE, DEAD};
+
+class Movable: public Collidable, public Renderable {
    public:
       virtual ~Movable() = 0;
       void moveTo(glm::vec2 newCenter);
@@ -19,13 +23,18 @@ class Movable: public Collidable {
       virtual void setWillFall() = 0;
       bool willFall();
       void incrementFallCounter(double toAdd);
+      //virtual void render();
+      //virtual void setModel();
    protected:
       void setObject(glm::vec3 center, float width, float height);
       glm::vec3 center;
       double fallCounter = -1;
+      int mat;
+      int state;
    private:
       float width;
       float height;
+      
 };
 
 #endif

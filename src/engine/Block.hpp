@@ -5,10 +5,12 @@
 #include "Movable.hpp"
 #include "BlockTypes.hpp"
 #include "MovableTypes.hpp"
+#include "../shaders/CellShader.hpp"
 #include <vector>
 
 class Block: public Movable {
    public:
+      Block();
       virtual int getStrength() = 0;
       virtual float getSlowPercentage() = 0;
       int getTimesDrilled();
@@ -23,9 +25,14 @@ class Block: public Movable {
       void setWillFall();
       double deathCounter = -1;
       bool shouldScale = false;
+      void render();
+      void setModel();
+      void setScale();
    protected:
       int blockType;
       std::vector<Block*> attatchedTo;
+      Mesh model;
+      CellShader cshader;
    private:
       int timesDrilled = 0;
       
