@@ -137,8 +137,10 @@ void Renderer::render() {
 
    setModel();
    std::vector<Movable*> currObjs = ngame->getObjectsToDraw();
-   for (Movable * m : currObjs) {
-      m->render();
+   
+   int i;
+   for (i = 0; i < currObjs.size(); i++) {
+      currObjs[i]->render();
    }
    //printf("num objs: %d", currObjs.size());
    /*for (int i = 0; i < currObjs.size(); i++) {

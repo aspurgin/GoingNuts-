@@ -32,10 +32,10 @@ namespace Assets {
          block.buildBuffers();
          squirrel.buildBuffers();
          nut.buildBuffers();
-         printf("num verts: %d\n", squirrel.getVertCount());
+         //rintf("num verts: %d\n", squirrel.getVertCount());
 
          meshes[SQUIRREL_M] = squirrel;
-         printf("num verts: %d\n", meshes[SQUIRREL_M].getVertCount());
+         //printf("num verts: %d\n", meshes[SQUIRREL_M].getVertCount());
          //printf("%d\n", meshes[SQUIRREL_M]);
          meshes[BLOCK_M] = block;
          meshes[NUT_M] = nut;
@@ -132,9 +132,10 @@ namespace Assets {
    }
 
    Mesh& getMesh(int type) {
-      if (type == SQUIRREL_M) {
+      /*if (type == SQUIRREL_M) {
          printf("num verts: %d\n", meshes[type].getVertCount());
-      }
+      }*/
+      
       return meshes[type];
    }
 

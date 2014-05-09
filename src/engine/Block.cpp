@@ -16,7 +16,6 @@ int Block::getTimesDrilled() {
 void Block::addToTimesDrilled() {
    timesDrilled++;
    if (timesDrilled >= getStrength()) {
-      state = M_STATE::DEAD;
       mat = 0;
    }
 }
