@@ -4,9 +4,11 @@ Player::Player() {}
 
 Player::Player(glm::vec3 center, float width, float height) {
    setObject(center, width, height);
-   drill = Drill();
+   this->drill = Drill();
    this->velocity = 1.f;
    this->lives = 3;
+   this->score = 0;
+   this->isDead = false;
 }
 
 void Player::drillBlock(Block *block) {
@@ -34,4 +36,12 @@ void Player::addToScore(int num) {
 
 int Player::getScore() {
 	return score;
+}
+
+void Player::died() {
+   isDead = true;
+}
+
+bool Player::getIsDead() {
+   return isDead;
 }

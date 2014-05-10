@@ -1,7 +1,11 @@
 #include "Block.hpp"
 
-int moveableType = BLOCK;
-
+Block::Block() {
+   deathCounter = -1;
+   shouldScale = false;
+   timesDrilled = 0;
+   groupIn = 0;
+}
 
 int Block::getTimesDrilled() {
    return timesDrilled;
@@ -9,6 +13,12 @@ int Block::getTimesDrilled() {
 
 void Block::addToTimesDrilled() {
    timesDrilled++;
+   if (timesDrilled >= getStrength()) {
+      if (isInAGroup()) {
+         groupIn->destroy();
+         delete groupIn;
+      }
+   }
 }
 
 int Block::getBlockType() {
@@ -35,7 +45,7 @@ int Block::getMovableType() {
 }
 
 bool Block::shouldFall() {
-	if (fallCounter >= 1.5) {
+	if (fallCounter >= HANG_TIME) {
       return true;
    }
    return false;
@@ -47,6 +57,19 @@ void Block::setWillFall() {
    }
 }
 
-void Block::attatchTo(Block *block) {
-	
+void Block::makeDead() {
+	timesDrilled = getStrength();
 }
+
+bool Block::isInAGroup() {
+   return groupIn != 0;
+}
+
+BlockGroup* Block::getGroupIn() {
+   return groupIn;
+}
+
+void Block::putInGroup(BlockGroup* group) {
+   groupIn = group;
+}
+

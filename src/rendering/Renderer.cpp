@@ -147,7 +147,7 @@ void Renderer::render() {
                   if(((Block *) obj)->isDead()) {
                      renderCube(obj->getCenter(), 0, ((Block *) obj)->deathCounter);   
                   }
-                  else if(((Block *) obj)->willFall()){ 
+                  else if(((Block *) obj)->willFall() && !((Block*) obj)->shouldFall()){ 
                   //printf("here\n");
                      if(((Block *) obj)->shouldScale) {
                         ((Block *) obj)->shouldScale = false;
@@ -163,7 +163,7 @@ void Renderer::render() {
                   }
                   break;
                case STONEBLOCK:
-                  if(((Block *) obj)->willFall()){ 
+                  if(((Block *) obj)->willFall() && !((Block*) obj)->shouldFall()){ 
                   //printf("here\n");
                      if(((Block *) obj)->shouldScale) {
                         ((Block *) obj)->shouldScale = false;

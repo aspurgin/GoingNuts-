@@ -5,10 +5,15 @@
 #include "Movable.hpp"
 #include "BlockTypes.hpp"
 #include "MovableTypes.hpp"
+#include "BlockGroup.hpp"
 #include <vector>
 
+#define HANG_TIME 2
+
+class BlockGroup;
 class Block: public Movable {
    public:
+      Block();
       virtual int getStrength() = 0;
       virtual float getSlowPercentage() = 0;
       int getTimesDrilled();
@@ -18,16 +23,19 @@ class Block: public Movable {
       bool shouldDestroy();
       void incrementDeathCounter(double toAdd);
       int getMovableType();
-      void attatchTo(Block *block);
       bool shouldFall();
       void setWillFall();
-      double deathCounter = -1;
-      bool shouldScale = false;
+      void makeDead();
+      bool isInAGroup();
+      BlockGroup* getGroupIn();
+      void putInGroup(BlockGroup* group);
+      double deathCounter;
+      bool shouldScale;
    protected:
+      BlockGroup *groupIn;
       int blockType;
-      std::vector<Block*> attatchedTo;
    private:
-      int timesDrilled = 0;
+      int timesDrilled;
       
 };
 

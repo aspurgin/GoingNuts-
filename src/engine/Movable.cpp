@@ -2,6 +2,11 @@
 
 Movable::~Movable() {};
 
+Movable::Movable() {
+	fallCounter = -1;
+   canFall = false;
+}
+
 void Movable::setObject(glm::vec3 center, float width, float height) {
    this->center = center;
    this->width = width;
@@ -38,13 +43,21 @@ bool Movable::willFall() {
 }
 
 void Movable::fall(double toAdd) {
-	moveVertical(7 * -toAdd);
+	moveVertical(FALL_RATE * -toAdd);
 }
 
 void Movable::stopFalling() {
 	fallCounter = -1;
 }
 
-void Movable::maybeStopFalling() {
-	
+bool Movable::getCanFall() {
+   return canFall;
+}
+
+void Movable::setCanFall() {
+   canFall = true;
+}
+
+void Movable::setCanNotFall() {
+   canFall = false;
 }

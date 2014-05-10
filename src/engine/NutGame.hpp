@@ -20,6 +20,8 @@
 
 #define NUMROWS 17
 #define NUMCOLS 7
+#define NUM_BLOCKS_VISIBLE_ABOVE_PLAYER 6
+#define NUM_TOTAL_BLOCKS_VISIBLE 17
 
 class NutGame {
    public:
@@ -32,7 +34,6 @@ class NutGame {
       glm::vec2 positionBellowPlayer();
       glm::vec2 positionAbovePlayer();
       bool isBlockAtPosition(glm::vec2 pos);
-      //static void keyPressed(GLFWwindow *window, int key, int scancode, int action, int mods);
       std::vector<Movable*> getObjectsToDraw();
       bool isDrillingDown();
       bool isDrillingUp();
@@ -41,17 +42,25 @@ class NutGame {
       void handleKeyInput();
       void fallDown(double toAdd);
       void checkGrid(double toAdd);
-      static bool drillPressed;
-      static bool left;
-      static bool right;
-      static bool up;
-      static bool down;
+      bool drillPressed;
+      bool left;
+      bool right;
+      bool up;
+      bool down;
       Player player;
    private:
       void setFallingMovables(int row, int col);
+      void addToGroup(Block* thisBlock, Block* otherBlock);
+      void connectBlocks();
+      void maybeAddToGroupLeft(int row, int col);
+      void maybeAddToGroupRight(int row, int col);
+      void maybeAddToGroupDown(int row, int col);
+      void finishSettingFallingMovables();
+      void checkGroupForOtherAdds(BlockGroup* group);
+      bool checkingGroupForOtherAdds;
       glm::vec2 playerPosition;
-      int currentTime;
-      int lastTime;
+      std::vector<BlockGroup*> mightFallGroupList;
+      std::vector<Movable*> mightFallBlockList;
 };
 
 #endif

@@ -19,43 +19,43 @@ void keyPressed(GLFWwindow *window, int key, int scancode, int action, int mods)
 
    if (key == GLFW_KEY_A) {
       if (action == GLFW_PRESS) {
-         NutGame::left = true;
+         game.left = true;
          
       }
       else if (action == GLFW_RELEASE) {
-         NutGame::left = false;
+         game.left = false;
       }
    }
    else if (key == GLFW_KEY_S) {
       if (action == GLFW_PRESS) {
-         NutGame::down = true;
+         game.down = true;
       }
       else if (action == GLFW_RELEASE) {
-         NutGame::down = false;
+         game.down = false;
       }
    }
    else if (key == GLFW_KEY_W) {
       if (action == GLFW_PRESS) {
-         NutGame::up = true;
+         game.up = true;
       }
       else if (action == GLFW_RELEASE) {
-         NutGame::up = false;
+         game.up = false;
       }
    }
    else if (key == GLFW_KEY_D) {
       if (action == GLFW_PRESS) {
-         NutGame::right = true;
+         game.right = true;
       }
       else if (action == GLFW_RELEASE) {
-         NutGame::right = false;
+         game.right = false;
       }
    }
    else if (key == GLFW_KEY_J) {
       if (action == GLFW_PRESS) {
-         NutGame::drillPressed = true;
+         game.drillPressed = true;
       }
       else if (action == GLFW_RELEASE) {
-         NutGame::drillPressed = false;
+         game.drillPressed = false;
       }
    }
    else if (key == GLFW_KEY_ESCAPE) {
@@ -113,6 +113,7 @@ int main(void)
       //game.handleKeyInput();
       delta = currentTime - lastTime;
       fpsTime += delta;
+      
       game.checkGrid(delta);
       game.fallDown(delta);
 
@@ -121,7 +122,7 @@ int main(void)
          fpsCount = 0;
          fpsTime = 0;
       }
-      sprintf(scoreString, "FPS: %.0f Score: %d", 1.0/delta, game.player.getScore());
+      sprintf(scoreString, "FPS: %.0f Score: %d  %s", 1.0/delta, game.player.getScore(), game.player.getIsDead() ? "You are Dead" : "");
       glfwSetWindowTitle(window, scoreString);
 
       lastTime = currentTime;

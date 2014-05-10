@@ -17,10 +17,13 @@ class Player: public Movable {
       int getScore();
       int getDepth();
       float getEnergy();
+      void died();
+      bool getIsDead();
    private:
-   	  int score = 0;
+      int score;
       float velocity;
       int lives;
+      bool isDead;
       Drill drill;
 };
 
