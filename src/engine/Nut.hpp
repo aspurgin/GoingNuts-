@@ -18,6 +18,9 @@ class Nut: public Movable {
       float velocity;
       Mesh model;
       CellShader cshader;
+      glm::vec3 offset;
+      bool floatingUp;
+      void updateOffset();
 };
 
 #endif

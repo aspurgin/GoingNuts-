@@ -10,6 +10,8 @@ Nut::Nut(glm::vec3 center, float width, float height) {
    this->scale = 0.8f;
    this->mat = 5;
    this->modelTrans.useModelViewMatrix();
+   this->offset = glm::vec3(0.0f,0.0f,0.0f);
+   this->floatingUp = true;
 }
 
 int Nut::getMovableType() {
@@ -27,11 +29,34 @@ void Nut::setWillFall() {
 	fallCounter = 0;
 }
 
+void Nut::updateOffset() {
+   float height = offset.y;
+   if(floatingUp) {
+      height += 0.002;
+   }
+   else {
+      height -= 0.002;
+   }
+
+   if(height > 0.1) {
+      floatingUp = false;
+      height -= 0.002;
+   }
+   else if(height < -0.1) {
+      floatingUp = true;
+      height += 0.002;
+   }
+
+   offset.y = height;
+}
+
 void Nut::render() {
+   updateOffset();
    cshader.setMaterial(mat);
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
    modelTrans.pushMatrix();
+   modelTrans.translate(offset);
    modelTrans.translate(center);
    modelTrans.scale(scale);
    modelTrans.rotate(90, glm::vec3(0, 1, 0));
