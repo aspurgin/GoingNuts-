@@ -16,7 +16,7 @@ Renderer::Renderer() {
    //squirrel = Mesh();
 }
 
-Renderer::Renderer(int width, int height, NutGame *game) {
+Renderer::Renderer(int width, int height, NutGame *game, Hud* hud) {
    camera = Camera();
    //pshader = ShaderUtils::installPhongShader(textFileRead((char *) "assets/shaders/Phong_Vert.glsl"),
      //                                        textFileRead((char *) "assets/shaders/Phong_Frag.glsl"));
@@ -24,10 +24,12 @@ Renderer::Renderer(int width, int height, NutGame *game) {
    //cshader = ShaderUtils::installCellShader(textFileRead((char *) "assets/shaders/CellShader_Vert.glsl"),
      //                                       textFileRead((char *) "assets/shaders/CellShader_Frag.glsl"));
    cshader = Assets::getCShader();
+   ctshader = Assets::getCShaderTexture();
    light = Light();
    winWidth = width;
    winHeight = height;
    ngame = game;
+   this->hud = hud;
    //block.debug();
    //exit(1);
    initialize();
@@ -140,6 +142,23 @@ void Renderer::render() {
    for (i = 0; i < currObjs.size(); i++) {
       currObjs[i]->render();
    }
+
+   //*** Render the hud ***/
+   glUseProgram(ctshader.shadeProg);//ctshader.shadeProg);
+   modelTrans.useModelViewMatrix();
+   modelTrans.loadIdentity();
+
+   camera.setView(ctshader.h_uViewMatrix);
+   camera.setProjectionMatrix(ctshader.h_uProjMatrix, winWidth, winHeight);
+   safe_glUniform3f(ctshader.h_lightPos, light.position.x, light.position.y, light.position.z);
+   safe_glUniform3f(ctshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
+   //safe_glUniform3f(ctshader.h_lightColor, light.color.x, light.color.y, light.color.z);
+
+   camera.setEye(glm::vec3(3.0f, ngame->player.getCenter().y + 1, 6.0f));
+   light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y - 1, 6.0f));
+
+   hud->render();
+
    //printf("num objs: %d", currObjs.size());
    /*for (int i = 0; i < currObjs.size(); i++) {
       Movable *obj = currObjs.at(i);

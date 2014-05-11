@@ -28,16 +28,19 @@ void main() {
 
    normalVec = normalize(normalVec);
    float angleBetween = dot(normalVec, eyeVert);
+   //Needed to flip v coordinate because SOIL inverts the texture
+   vec4 texColor = texture2D(myTextureSampler, vec2(UV.x, 1.0f-UV.y));
    
    // Simple Silhouette
    // If angle is too drastic, color black
    if (max(angleBetween, 0.0) < 0.4) {
       // Silhouette Color:
-      gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+      //gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+      gl_FragColor = texColor * 0.4f;
    }
    else {
       // Base Color
-      gl_FragColor = texture2D(myTextureSampler, UV);
+      gl_FragColor = texColor; 
 
       // ASSUMPTION: Angle between normal and eye > .4
       // If that angle taken to the power of 20
@@ -50,13 +53,13 @@ void main() {
       // is close enough to the acceptable center angle
       // that the color is going to just be the specular color
       else {
-         gl_FragColor = vec4(uMat.sColor, 1.0);
+         //just the glFragColor
       }
       // This adds color to based on if the angle
       // is not close enough to be the center and not far enough
       // to be the black outline
       if (max(angleBetween, 0.0) < 0.2) {
-         gl_FragColor *= 0.8;
+         gl_FragColor *= 0.6;
       }
    }
 }

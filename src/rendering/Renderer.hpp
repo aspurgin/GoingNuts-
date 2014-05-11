@@ -7,11 +7,13 @@
 #include "Camera.hpp"
 #include "Light.hpp"
 #include "../shaders/PhongShader.hpp"
+#include "../shaders/CellShaderTexture.hpp"
 #include "../shaders/ShaderUtils.hpp"
 #include "../helperFiles/GLSL_helper.h"
 #include "../helperFiles/MStackHelp.h"
 #include "../assets/Mesh.hpp"
 #include "../engine/NutGame.hpp"
+#include "../hud/Hud.hpp"
 
 class Renderer {
    public:
@@ -19,13 +21,15 @@ class Renderer {
       Light light;
       PhongShader pshader;
       CellShader cshader;
+      CellShaderTexture ctshader;
       RenderingHelper modelTrans;
       int winWidth, winHeight;
       NutGame *ngame;
+      Hud* hud;
       Mesh squirrel;
       Mesh block;
       Renderer();
-      Renderer(int, int, NutGame*);
+      Renderer(int, int, NutGame*, Hud*);
       void initialize();
       void setModel();
       void renderCube(glm::vec3, int, float);

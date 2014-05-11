@@ -198,24 +198,87 @@ CellShaderTexture ShaderUtils::installCellShaderTexture(const GLchar *vShaderNam
    glUseProgram(ShadeProg);
 
    //Set up PhongShader object
-   CellShaderTexture cellShader;
+   CellShaderTexture cellShaderTexture;
 
    /* get handles to attribute data */
-   cellShader.h_aPosition = safe_glGetAttribLocation(ShadeProg, "aPosition");
-   cellShader.h_aNormal = safe_glGetAttribLocation(ShadeProg, "aNormal");
-   cellShader.h_uProjMatrix = safe_glGetUniformLocation(ShadeProg, "uProjMatrix");
-   cellShader.h_uViewMatrix = safe_glGetUniformLocation(ShadeProg, "uViewMatrix");
-   cellShader.h_uModelMatrix = safe_glGetUniformLocation(ShadeProg, "uModelMatrix");
-   cellShader.h_uMatAmb = safe_glGetUniformLocation(ShadeProg, "uMat.aColor");
-   cellShader.h_uMatDif = safe_glGetUniformLocation(ShadeProg, "uMat.dColor");
-   cellShader.h_uMatSpec = safe_glGetUniformLocation(ShadeProg, "uMat.sColor");
-   cellShader.h_uMatShine = safe_glGetUniformLocation(ShadeProg, "uMat.shine");
-   cellShader.h_lightPos = safe_glGetUniformLocation(ShadeProg, "lightPos");
-   cellShader.h_cameraPos = safe_glGetUniformLocation(ShadeProg, "cameraPos");
-   cellShader.h_vertexUV = safe_glGetAttribLocation(ShadeProg, "vertexUV");
-   cellShader.h_myTextureSampler = safe_glGetUniformLocation(ShadeProg, "myTextureSampler");
-   cellShader.shadeProg = ShadeProg;
+   cellShaderTexture.h_aPosition = safe_glGetAttribLocation(ShadeProg, "aPosition");
+   cellShaderTexture.h_aNormal = safe_glGetAttribLocation(ShadeProg, "aNormal");
+   cellShaderTexture.h_uProjMatrix = safe_glGetUniformLocation(ShadeProg, "uProjMatrix");
+   cellShaderTexture.h_uViewMatrix = safe_glGetUniformLocation(ShadeProg, "uViewMatrix");
+   cellShaderTexture.h_uModelMatrix = safe_glGetUniformLocation(ShadeProg, "uModelMatrix");
+   cellShaderTexture.h_uMatAmb = safe_glGetUniformLocation(ShadeProg, "uMat.aColor");
+   cellShaderTexture.h_uMatDif = safe_glGetUniformLocation(ShadeProg, "uMat.dColor");
+   cellShaderTexture.h_uMatSpec = safe_glGetUniformLocation(ShadeProg, "uMat.sColor");
+   cellShaderTexture.h_uMatShine = safe_glGetUniformLocation(ShadeProg, "uMat.shine");
+   cellShaderTexture.h_lightPos = safe_glGetUniformLocation(ShadeProg, "lightPos");
+   cellShaderTexture.h_cameraPos = safe_glGetUniformLocation(ShadeProg, "cameraPos");
+   cellShaderTexture.h_myTextureSampler  = glGetUniformLocation(ShadeProg, "myTextureSampler");
+   cellShaderTexture.h_vertexUV = glGetAttribLocation(ShadeProg, "vertexUV");
+   cellShaderTexture.shadeProg = ShadeProg;
 
    glUseProgram(0);
-   return cellShader;
+   return cellShaderTexture;
+}
+
+FlatTextureShader ShaderUtils::installFlatTextureShader(const GLchar *vShaderName, const GLchar *fShaderName) {
+   GLuint VS; //handles to shader object
+   GLuint FS; //handles to frag shader object
+   GLint vCompiled; //status
+   GLint fCompiled;
+   GLint linked;
+   int ShadeProg; //Shade prog num
+
+   VS = glCreateShader(GL_VERTEX_SHADER);
+   FS = glCreateShader(GL_FRAGMENT_SHADER);
+
+   //load the source
+   glShaderSource(VS, 1, &vShaderName, NULL);
+   glShaderSource(FS, 1, &fShaderName, NULL);
+
+   //compile shader and print log
+   glCompileShader(VS);
+   /* check shader status requires helper functions */
+   printOpenGLError();
+   glGetShaderiv(VS, GL_COMPILE_STATUS, &vCompiled);
+   printShaderInfoLog(VS);
+
+   //compile shader and print log
+   glCompileShader(FS);
+   /* check shader status requires helper functions */
+   printOpenGLError();
+   glGetShaderiv(FS, GL_COMPILE_STATUS, &fCompiled);
+   printShaderInfoLog(FS);
+
+   if (!vCompiled || !fCompiled) {
+      printf("Error compiling either shader %s or %s", vShaderName, fShaderName);
+      throw(1);
+   }
+
+   //create a program object and attach the compiled shader
+   ShadeProg = glCreateProgram();
+   glAttachShader(ShadeProg, VS);
+   glAttachShader(ShadeProg, FS);
+
+   glLinkProgram(ShadeProg);
+   /* check shader status requires helper functions */
+   printOpenGLError();
+   glGetProgramiv(ShadeProg, GL_LINK_STATUS, &linked);
+   printProgramInfoLog(ShadeProg);
+
+   glUseProgram(ShadeProg);
+
+   //Set up PhongShader object
+   FlatTextureShader flatTextureShader;
+
+   /* get handles to attribute data */
+   flatTextureShader.h_aPosition = safe_glGetAttribLocation(ShadeProg, "aPosition");
+   flatTextureShader.h_uProjMatrix = safe_glGetUniformLocation(ShadeProg, "uProjMatrix");
+   flatTextureShader.h_uViewMatrix = safe_glGetUniformLocation(ShadeProg, "uViewMatrix");
+   flatTextureShader.h_uModelMatrix = safe_glGetUniformLocation(ShadeProg, "uModelMatrix");
+   flatTextureShader.h_myTextureSampler  = glGetUniformLocation(ShadeProg, "myTextureSampler");
+   flatTextureShader.h_vertexUV = glGetAttribLocation(ShadeProg, "vertexUV");
+   flatTextureShader.shadeProg = ShadeProg;
+
+   glUseProgram(0);
+   return flatTextureShader;
 }

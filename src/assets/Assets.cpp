@@ -7,9 +7,13 @@ namespace Assets {
       FMOD::System *soundSystem;
       FMOD_RESULT result;
       std::map<int, FMOD::Sound*> sounds, music;
-      Mesh squirrel, block, nut;
+      Mesh squirrel, block, nut, depthWheel, background;
+      Texture whiteDepthWheel, blackDepthWheel, hudElements;
       std::map<int, Mesh> meshes;
+      std::map<int, Texture> textures;
       CellShader cshader;
+      CellShaderTexture ctshader;
+      FlatTextureShader ftshader;
       PhongShader pshader;
   
       //code found from tutorial: http://katyscode.wordpress.com/2012/10/05/cutting-your-teeth-on-fmod-part-1-build-environment-initialization-and-playing-sounds/
@@ -22,23 +26,33 @@ namespace Assets {
       }
 
       void loadTextures() {
+         whiteDepthWheel = Texture("assets/textures/MileageCounterWhite.jpg");
+         blackDepthWheel = Texture("assets/textures/MileageCounterBlack.jpg");
+         //hudElements = Texture("assets/textures/HUDElements.png");
 
+         textures[WHITE_DEPTH_WHEEL_T] = whiteDepthWheel;
+         textures[BLACK_DEPTH_WHEEL_T] = blackDepthWheel;
+         //textures[HUD_ELEMENTS_T] = hudElements;
       }
 
       void loadMeshes() {
          squirrel = Mesh("assets/models/AnimSquirrel.dae");
          block = Mesh("assets/models/Cube.obj");
          nut = Mesh("assets/models/Acorn.obj");
+         depthWheel = Mesh("assets/models/DepthWheel.obj");
+         background = Mesh("assets/models/Background.obj");
+
          block.buildBuffers();
          squirrel.buildBuffers();
          nut.buildBuffers();
-         //rintf("num verts: %d\n", squirrel.getVertCount());
+         depthWheel.buildBuffers();
+         background.buildBuffers();
 
          meshes[SQUIRREL_M] = squirrel;
-         //printf("num verts: %d\n", meshes[SQUIRREL_M].getVertCount());
-         //printf("%d\n", meshes[SQUIRREL_M]);
          meshes[BLOCK_M] = block;
          meshes[NUT_M] = nut;
+         meshes[DEPTH_WHEEL_M] = depthWheel;
+         meshes[BACKGROUND_M] = background;
       }
 
       void initShaders() {
@@ -48,6 +62,12 @@ namespace Assets {
 
          cshader = ShaderUtils::installCellShader(textFileRead((char *) "assets/shaders/CellShader_Vert.glsl"),
             textFileRead((char *) "assets/shaders/CellShader_Frag.glsl"));
+
+         ctshader = ShaderUtils::installCellShaderTexture(textFileRead((char *) "assets/shaders/CellShaderTexture_Vert.glsl"),
+            textFileRead((char *) "assets/shaders/CellShaderTexture_Frag.glsl"));
+
+         ftshader = ShaderUtils::installFlatTextureShader(textFileRead((char *) "assets/shaders/FlatTextureShader_Vert.glsl"),
+            textFileRead((char *) "assets/shaders/FlatTextureShader_Frag.glsl"));
       }
 
       void loadSound(const char *filename, int type) {
@@ -139,8 +159,20 @@ namespace Assets {
       return meshes[type];
    }
 
+   Texture& getTexture(int type){
+      return textures[type];
+   }
+
    CellShader& getCShader() {
       return cshader;
+   }
+
+   CellShaderTexture& getCShaderTexture() {
+      return ctshader;
+   }
+
+   FlatTextureShader& getFlatTextureShader() {
+      return ftshader;
    }
 
    PhongShader& getPShader() {

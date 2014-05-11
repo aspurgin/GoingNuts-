@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string>
 #include "Block.hpp"
+#include "../hud/Hud.hpp"
 
 
 #include <GL/glew.h>
@@ -87,7 +88,7 @@ int main(void)
       return -1;
 
    //Create a windowed mode window and its OpenGL context
-   window = glfwCreateWindow(1200, 900, "Going Nuts!", NULL, NULL);
+   window = glfwCreateWindow(1280, 720, "Going Nuts!", NULL, NULL);
    if (!window)
    {
       glfwTerminate();
@@ -101,7 +102,9 @@ int main(void)
    glfwSetKeyCallback(window, keyPressed);
    Assets::loadAssets();
    game.init();
-   Renderer renderer(640, 480, &game);
+   Hud hud(&game);
+   Renderer renderer(640, 480, &game, &hud);
+   
    float fpsTime = 0;
    int fpsCount = 0;
    int curFps = 0;
