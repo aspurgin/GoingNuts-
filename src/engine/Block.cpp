@@ -24,7 +24,7 @@ void Block::addToTimesDrilled() {
          groupIn->destroy();
          delete groupIn;
       }
-      state = M_STATE::DEAD;
+      state = DEAD;
       mat = 0;
    }
 }
@@ -69,7 +69,7 @@ void Block::setWillFall() {
 
 void Block::makeDead() {
 	timesDrilled = getStrength();
-   state = M_STATE::DEAD;
+   state = DEAD;
    mat = 0;
 }
 
