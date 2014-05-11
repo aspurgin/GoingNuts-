@@ -126,9 +126,12 @@ int main(void)
          fpsCount = 0;
          fpsTime = 0;
       }
-      sprintf(scoreString, "FPS: %.0f Score: %d  %s", 1.0/delta, game.player.getScore(), game.player.getIsDead() ? "You are Dead" : "");
+      sprintf(scoreString, "FPS: %.0f Score: %d  %s", 1.0/delta, game.getScore(), game.player.getIsDead() ? "You are Dead" : "");
       if (game.player.getIsDead()) {
          break;
+      }
+      if (game.getNutsLeft() == 0) {
+         sprintf(scoreString, "FPS: %.0f Score: %d  %s", 1.0/delta, game.getScore(), "You won!!!");
       }
       glfwSetWindowTitle(window, scoreString);
 

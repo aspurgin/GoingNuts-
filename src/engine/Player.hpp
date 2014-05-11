@@ -13,8 +13,6 @@ class Player: public Movable {
       int getMovableType();
       bool shouldFall();
       void setWillFall();
-      void addToScore(int num);
-      int getScore();
       int getDepth();
       float getEnergy();
       void died();
@@ -28,7 +26,6 @@ class Player: public Movable {
       void setIsNotJumping();
       bool getIsJumping();
    private:
-      int score;
       float velocity;
       int lives;
       bool isDead;

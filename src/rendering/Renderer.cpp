@@ -136,11 +136,11 @@ void Renderer::render() {
    light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y - 1, 6.0f));
 
    setModel();
-   std::vector<Movable*> currObjs = ngame->getObjectsToDraw();
+   std::list<Renderable*> currObjs = ngame->getObjectsToDraw();
    
    int i;
-   for (i = 0; i < currObjs.size(); i++) {
-      currObjs[i]->render();
+   for (std::list<Renderable*>::iterator it = currObjs.begin(); it != currObjs.end(); ++it) {
+      (*it)->render();
    }
 
    //*** Render the hud ***/

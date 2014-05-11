@@ -11,6 +11,8 @@ NutGame::NutGame() {
    this->up = false;
    this->down = false;
    this->checkingGroupForOtherAdds = false;
+   this->nutsLeft = 0;
+   this->score = 0;
 }
 
 NutGame::~NutGame() {
@@ -55,6 +57,7 @@ void NutGame::init() {
          }
          else if (c == 'N') {
             gameGrid[row][col] = new Nut(glm::vec3(col, -row, 0), 0.99f, 0.99f);
+            nutsLeft++;
          }
          fgetc(file);
       }
@@ -186,12 +189,16 @@ void NutGame::fallDown(double toAdd) {
                gameGrid[row][col]->fall(toAdd);
                if (gameGrid[row + 1][col] != 0 && gameGrid[row][col]->isIntersecting((Collidable*)gameGrid[row + 1][col])) {
                   if (gameGrid[row + 1][col]->getMovableType() == NUT && gameGrid[row][col]->getMovableType() == PLAYER) {
-                     player.addToScore(5);
+                     nutsLeft--;
+                     addToScore(5);
+                     delete gameGrid[row + 1][col];
                      gameGrid[row + 1][col] = 0;
                   }
                   else if (gameGrid[row + 1][col]->getMovableType() == PLAYER) {
                      if (gameGrid[row][col]->getMovableType() == NUT) {
-                        player.addToScore(5);
+                        nutsLeft--;
+                        addToScore(5);
+                        delete gameGrid[row][col];
                         gameGrid[row][col] = 0;
                      }
                      else {
@@ -219,6 +226,7 @@ void NutGame::fallDown(double toAdd) {
                   if (gameGrid[row][col]->getMovableType() == PLAYER) {
                      //playerPosition.x += 1;
                   }
+                  delete gameGrid[row + 1][col];
                   gameGrid[row + 1][col] = gameGrid[row][col];
                   gameGrid[row][col] = 0;
                }
@@ -402,24 +410,31 @@ void NutGame::handleKeyInput() {
          pos.y *= -1;
          if (pos.x >= 1) {
  
-            if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)] != 0 && drillPressed == true) {
+            if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)] != 0 && drillPressed) {
                if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)]->getMovableType() == BLOCK) {
                   block = (Block *)gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)];
                   player.drillBlock(block);
                   if (block->isDead() && block->deathCounter == -1) {
-                     player.addToScore(1);
+                     addToScore(1);
                      block->deathCounter = 0;
                   }
                }
             }
-            else if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)] == 0 && drillPressed != true) {
+            else if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)] == 0 && !drillPressed) {
                gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)] = gameGrid[(int)(pos.y + .5)][(int)pos.x];
                gameGrid[(int)(pos.y + .5)][(int)pos.x] = 0;
 
                player.moveTo(glm::vec2(pos.x - 1, -pos.y));
             }
-            else if (drillPressed != true) {
-               
+            else if (!drillPressed) {
+               if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)] != 0 && gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)]->getMovableType() == NUT) {
+                  delete gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)];
+                  gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)] = gameGrid[(int)(pos.y + .5)][(int)pos.x];
+                  nutsLeft--;
+                  gameGrid[(int)(pos.y + .5)][(int)pos.x] = 0;
+                  addToScore(5);
+                  player.moveTo(glm::vec2(pos.x - 1, -pos.y));
+               }
             }
          }
       }
@@ -427,24 +442,31 @@ void NutGame::handleKeyInput() {
          pos = glm::vec2(player.getCenter());
          pos.y *= -1;
          if (pos.x <= NUMROWS - 1) {
-            if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)] != 0 && drillPressed == true) {
+            if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)] != 0 && drillPressed) {
                if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)]->getMovableType() == BLOCK) {
                   block = (Block *)gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)];
                   player.drillBlock(block);
                   if (block->isDead() && block->deathCounter == -1) {
-                     player.addToScore(1);
+                     addToScore(1);
                      block->deathCounter = 0;
                   }
                }
             }
-            else if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)] == 0 && drillPressed != true) {
+            else if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)] == 0 && !drillPressed) {
                gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)] = gameGrid[(int)(pos.y + .5)][(int)pos.x];
                gameGrid[(int)(pos.y + .5)][(int)pos.x] = 0;
                
                player.moveTo(glm::vec2(pos.x + 1, -pos.y));
             }
-            else if (drillPressed != true) {
-               
+            else if (!drillPressed) {
+               if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)] != 0 && gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)]->getMovableType() == NUT) {
+                  delete gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)];
+                  gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)] = gameGrid[(int)(pos.y + .5)][(int)pos.x];
+                  gameGrid[(int)(pos.y + .5)][(int)pos.x] = 0;
+                  nutsLeft--;
+                  addToScore(5);
+                  player.moveTo(glm::vec2(pos.x + 1, -pos.y));
+               }
             }
          }
       }
@@ -456,7 +478,7 @@ void NutGame::handleKeyInput() {
                block = (Block *)gameGrid[(int)(pos.y + 1.5)][(int)(pos.x)];
                player.drillBlock(block);
                if (block->isDead() && block->deathCounter == -1) {
-                  player.addToScore(1);
+                  addToScore(1);
                   block->deathCounter = 0;
                }
             }
@@ -471,7 +493,7 @@ void NutGame::handleKeyInput() {
                   block = (Block *)gameGrid[(int)(pos.y - 0.5)][(int)(pos.x)];
                   player.drillBlock(block);
                   if (block->isDead() && block->deathCounter == -1) {
-                     player.addToScore(1);
+                     addToScore(1);
                      block->deathCounter = 0;
                   }
                }
@@ -482,9 +504,9 @@ void NutGame::handleKeyInput() {
    }
 }
 
-std::vector<Movable*> NutGame::getObjectsToDraw() {
+std::list<Renderable*> NutGame::getObjectsToDraw() {
    int count = player.getCenter().y - NUM_BLOCKS_VISIBLE_ABOVE_PLAYER;
-   std::vector<Movable*> objects;
+   std::list<Renderable*> objects;
    
    if (count < 0) {
       count = 0;
@@ -493,15 +515,39 @@ std::vector<Movable*> NutGame::getObjectsToDraw() {
    for (int row = count; row < count + NUM_TOTAL_BLOCKS_VISIBLE && row < NUMROWS; row++) {
       for (int col = 0; col < NUMCOLS; col++) {
          if (gameGrid[row][col] != 0) {
-            objects.push_back(gameGrid[row][col]);
-         }
-         else {
-
+            /*if (gameGrid[row][col]->getMovableType() == BLOCK) {
+               if (((Block*)gameGrid[row][col])->isInAGroup()) {
+                  objects.push_back(((Block*)gameGrid[row][col])->getGroupIn());
+               }
+               else {
+                  objects.push_back(gameGrid[row][col]);
+               }
+            }*/
+            //else {
+               objects.push_back(gameGrid[row][col]);
+            //}
          }
       }
    }
-
+   objects.unique();
    return objects;
+}
+
+int NutGame::getNutsLeft() {
+   return nutsLeft;
+}
+
+
+void NutGame::addToScore(int num) {
+	score += num;
+}
+
+int NutGame::getScore() {
+	return score;
+}
+
+int NutGame::getDepth() {
+   return (int)(player.getCenter().y) * -1;
 }
 
 

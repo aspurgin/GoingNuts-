@@ -20,7 +20,7 @@ DepthGuage::~DepthGuage() {
 
 void DepthGuage::render() {
    //Update the state
-   int score = nutGame->player.getScore();
+   int score = nutGame->getScore();
    int onesDigit, tensDigit, hundredsDigit, thousandsDigit, tenThousandsDigit;
 
    onesDigit = score % 10;

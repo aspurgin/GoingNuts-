@@ -2,10 +2,11 @@
 #define __BLOCKGROUP_H__
 
 #include "Block.hpp"
+#include "../rendering/Renderable.hpp"
 #include <list>
 
 class Block;
-class BlockGroup {
+class BlockGroup: public Renderable {
    public:
       BlockGroup();
       ~BlockGroup();
@@ -20,6 +21,8 @@ class BlockGroup {
       void adjustGroupPosition();
       std::list<Block*>::iterator getListBeginIt();
       std::list<Block*>::iterator getListEndIt();
+      void render();
+      void setModel();
    private:
       std::list<Block*> blocks;
       Block* topRight;

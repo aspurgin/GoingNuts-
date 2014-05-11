@@ -7,7 +7,6 @@ Player::Player(glm::vec3 center, float width, float height) {
    this->drill = Drill();
    this->velocity = 1.f;
    this->lives = 3;
-   this->score = 0;
    this->isDead = false;
    model = Assets::getMesh(Assets::SQUIRREL_M);
    this->cshader = Assets::getCShader();
@@ -35,14 +34,6 @@ bool Player::shouldFall() {
 
 void Player::setWillFall() {
 	fallCounter = 0;
-}
-
-void Player::addToScore(int num) {
-	score += num;
-}
-
-int Player::getScore() {
-	return score;
 }
 
 void Player::died() {

@@ -86,3 +86,13 @@ std::list<Block*>::iterator BlockGroup::getListBeginIt() {
 std::list<Block*>::iterator BlockGroup::getListEndIt() {
    return blocks.end();
 }
+
+void BlockGroup::render() {
+   for (std::list<Block*>::iterator it = blocks.begin(); it != blocks.end(); ++it) {
+      (*it)->render();
+   }
+}
+
+void BlockGroup::setModel() {
+   
+}
