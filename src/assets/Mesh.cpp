@@ -81,7 +81,7 @@ void Mesh::parseAnimIdx(const char* fileName){
 
 void Mesh::parseAI(const char* path){
    Assimp::Importer importer;
-   const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_FlipWindingOrder);
+   const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_JoinIdenticalVertices);
 
 
    if(!scene) {
