@@ -34,8 +34,10 @@ class Mesh {
       void debug();
 
       size_t getVertCount();
+      size_t getIdxCount();
 
-      GLuint objHandle() {return objHandle_;};
+      GLuint vertHandle() {return vertHandle_;};
+      GLuint idxHandle() {return idxHandle_;};
       GLuint normHandle() {return normHandle_;};
       GLuint uvHandle() {return uvHandle_;};
 
@@ -44,7 +46,8 @@ class Mesh {
       void parseAI(const char* path);
       void parseAnimIdx(const char* filename);
 
-      GLuint objHandle_;
+      GLuint vertHandle_;
+      GLuint idxHandle_;
       GLuint normHandle_;
       GLuint uvHandle_;
 
@@ -59,6 +62,7 @@ class Mesh {
        * base model information, only to be written to at load-time
        */
       std::vector<glm::vec3> vertices;
+      std::vector<glm::uvec3> indeces;
       std::vector<glm::vec2> uvs;
       std::vector<glm::vec3> normals;
 };

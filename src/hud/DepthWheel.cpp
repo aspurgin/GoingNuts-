@@ -32,7 +32,7 @@ void DepthWheel::render() {
    setModel();
    
    safe_glEnableVertexAttribArray(cshader.h_aPosition);
-   glBindBuffer(GL_ARRAY_BUFFER, model.objHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, model.vertHandle());
    safe_glVertexAttribPointer(cshader.h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
    
    safe_glEnableVertexAttribArray(cshader.h_aNormal);
@@ -44,14 +44,18 @@ void DepthWheel::render() {
    glBindBuffer(GL_ARRAY_BUFFER, model.uvHandle());
    safe_glVertexAttribPointer(cshader.h_vertexUV, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
+
+
    // Bind our texture in Texture Unit 0
    glActiveTexture(GL_TEXTURE0);
    glBindTexture(GL_TEXTURE_2D, texture.textureID);
    // Set our "myTextureSampler" sampler to user Texture Unit 0
    glUniform1i(cshader.h_myTextureSampler, 0);
 
-   glDrawArrays(GL_TRIANGLES, 0, model.getVertCount());
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.idxHandle());
+   glDrawElements(GL_TRIANGLES, model.getIdxCount(), GL_UNSIGNED_INT, 0);
    modelTrans.popMatrix();
+
 
    safe_glDisableVertexAttribArray(cshader.h_aPosition);
    safe_glDisableVertexAttribArray(cshader.h_aNormal);

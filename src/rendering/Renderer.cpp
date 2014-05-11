@@ -138,7 +138,7 @@ void Renderer::render() {
    setModel();
    std::list<Renderable*> currObjs = ngame->getObjectsToDraw();
    
-   int i;
+   //int i;
    for (std::list<Renderable*>::iterator it = currObjs.begin(); it != currObjs.end(); ++it) {
       (*it)->render();
    }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <assimp/anim.h>
 #include <assimp/scene.h>
@@ -17,6 +18,7 @@ private:
 	std::map<float, glm::quat> rot;
 
 	glm::mat4 currentTransform;
+	glm::mat4 offsetTransform;
 
 public:
 	glm::mat4 getTotalTransform();
@@ -24,7 +26,8 @@ public:
 
 	void setAt(float frame);
 
-	Bone(aiScene* scene, aiString name);
+	Bone(aiBone* bone, aiNodeAnim* anim);
+	void setParent(Bone* parent);
 
 	float& operator[] (int x){
 		return weight[x];

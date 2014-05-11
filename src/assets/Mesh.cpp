@@ -44,10 +44,20 @@ size_t Mesh::getVertCount(){
    return vertices.size();
 }
 
+size_t Mesh::getIdxCount(){
+   return indeces.size() * 3;
+}
+
 void Mesh::debug(){
+   DEBUG("_-----------------_");
    for(int i=0; i<vertices.size(); i++){
-      std::cout << vertices[i].x << ", " << vertices[i].y << ", " << vertices[i].z << "\n";
+      DEBUG(vertices[i].x << ", " << vertices[i].y << ", " << vertices[i].z);
    }
+   DEBUG("_-----------------_");
+   for(int i=0; i<indeces.size(); i++){
+      DEBUG(indeces[i].x << ", " << indeces[i].y << ", " << indeces[i].z);
+   }
+   DEBUG("_-----------------_");
 }
 
 void Mesh::parseAnimIdx(const char* fileName){
@@ -71,7 +81,7 @@ void Mesh::parseAnimIdx(const char* fileName){
 
 void Mesh::parseAI(const char* path){
    Assimp::Importer importer;
-   const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_JoinIdenticalVertices);
+   const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_FlipWindingOrder);
 
 
    if(!scene) {
@@ -80,27 +90,35 @@ void Mesh::parseAI(const char* path){
       exit(1);
    }
    debugNodes(scene->mRootNode, 0);
-   for(int sc = 0; sc < scene->mNumMeshes; sc++){
-      const aiMesh* mesh = scene->mMeshes[sc];
-      for(unsigned int f=0; f<mesh->mNumFaces; f++){
-         const aiFace* face = &mesh->mFaces[f];
-         for(int i=0; i<3; i++){
-            glm::vec3 vertex(
-               mesh->mVertices[face->mIndices[i]][0],
-               mesh->mVertices[face->mIndices[i]][1],
-               mesh->mVertices[face->mIndices[i]][2]);
-            glm::vec3 normal(
-               mesh->mNormals[face->mIndices[i]][0],
-               mesh->mNormals[face->mIndices[i]][1],
-               mesh->mNormals[face->mIndices[i]][2]);
-            glm::vec2 uv(
-               mesh->mTextureCoords[0][face->mIndices[i]].x,
-               mesh->mTextureCoords[0][face->mIndices[i]].y);
-            vertices.push_back(vertex);
-            normals.push_back(normal);
-            uvs.push_back(uv);
-         }
+   const aiMesh* mesh = scene->mMeshes[0];
+
+   for(unsigned int v=0; v<mesh->mNumVertices; v++){
+      vertices.push_back(glm::vec3(mesh->mVertices[v][0],
+                                   mesh->mVertices[v][1],
+                                   mesh->mVertices[v][2]));
+   }
+
+   for(unsigned int n=0; n<mesh->mNumVertices; n++){
+      normals.push_back(glm::vec3(mesh->mNormals[n][0],
+                                   mesh->mNormals[n][1],
+                                   mesh->mNormals[n][2]));
+   }
+
+   for(unsigned int f=0; f<mesh->mNumFaces; f++){
+      aiFace face = mesh->mFaces[f];
+      if(face.mNumIndices != 3) {
+         ERROR("NON-TRIANGULAR POLY");
       }
+      indeces.push_back(glm::uvec3(face.mIndices[0],
+                                   face.mIndices[1],
+                                   face.mIndices[2]));
+   }
+
+   if(mesh->mNumUVComponents[2] != 2){
+      ERROR("Texture component count should be 2, is actually: " << mesh->mNumUVComponents);
+   }
+   for(unsigned int u=0; u<mesh->mNumVertices; u++){
+      uvs.push_back(glm::vec2(mesh->mTextureCoords[0][u].x, mesh->mTextureCoords[0][u].y));
    }
 }
 
@@ -116,12 +134,20 @@ void  Mesh::buildBuffers(){
    glGenBuffers(1, &normHandle_);
    glBindBuffer(GL_ARRAY_BUFFER, normHandle_);
    glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &(normals[0]), GL_STATIC_DRAW);
+   //glBindBuffer(GL_ARRAY_BUFFER, 0);
    
-   glGenBuffers(1, &objHandle_);
-   glBindBuffer(GL_ARRAY_BUFFER, objHandle_);
+   glGenBuffers(1, &vertHandle_);
+   glBindBuffer(GL_ARRAY_BUFFER, vertHandle_);
    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &(vertices[0]), GL_STATIC_DRAW);
-   
+   //glBindBuffer(GL_ARRAY_BUFFER, 0);
+
    glGenBuffers(1, &uvHandle_);
    glBindBuffer(GL_ARRAY_BUFFER, uvHandle_);
    glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(glm::vec2), &(uvs[0]), GL_STATIC_DRAW);
+   //glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+   glGenBuffers(1, &idxHandle_);
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, idxHandle_);
+   glBufferData(GL_ELEMENT_ARRAY_BUFFER, indeces.size() * sizeof(glm::uvec3), &(indeces[0]), GL_STATIC_DRAW);
+   //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }

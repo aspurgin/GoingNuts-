@@ -62,23 +62,15 @@ void Nut::render() {
    modelTrans.rotate(90, glm::vec3(0, 1, 0));
    setModel();
    safe_glEnableVertexAttribArray(cshader.h_aPosition);
-   glBindBuffer(GL_ARRAY_BUFFER, model.objHandle());
-   //printf("one position: %d\n", exampleCube->PositionHandle);
+   glBindBuffer(GL_ARRAY_BUFFER, model.vertHandle());
    safe_glVertexAttribPointer(cshader.h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
    safe_glEnableVertexAttribArray(cshader.h_aNormal);
    glBindBuffer(GL_ARRAY_BUFFER, model.normHandle());
    safe_glVertexAttribPointer(cshader.h_aNormal, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-   //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, block.faceHandle);
-
-   /*safe_glEnableVertexAttribArray(h_taTexCoord);
-   glBindBuffer(GL_ARRAY_BUFFER, TexBuffObj);
-   safe_glVertexAttribPointer(h_taTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);*/
-   // draw!
-   //printf("indexLength: %d\n", exampleCube->IndexBufferLength);
-
-   //glDrawElements(GL_TRIANGLES, block.numFaceElements(), GL_UNSIGNED_SHORT, 0);   
-   glDrawArrays(GL_TRIANGLES, 0, model.getVertCount());
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.idxHandle());
+   glDrawElements(GL_TRIANGLES, model.getIdxCount(), GL_UNSIGNED_INT, 0);
    modelTrans.popMatrix();
 
    safe_glDisableVertexAttribArray(cshader.h_aPosition);
