@@ -124,6 +124,9 @@ int main(void)
          fpsTime = 0;
       }
       sprintf(scoreString, "FPS: %.0f Score: %d  %s", 1.0/delta, game.player.getScore(), game.player.getIsDead() ? "You are Dead" : "");
+      if (game.player.getIsDead()) {
+         break;
+      }
       glfwSetWindowTitle(window, scoreString);
 
       lastTime = currentTime;

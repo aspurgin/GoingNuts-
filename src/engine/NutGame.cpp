@@ -25,13 +25,6 @@ NutGame::~NutGame() {
 
 void NutGame::init() {
    this->drillPressed = false;
-   //player = Player(glm::vec3(NUMCOLS/2, 0, 0), 1.0f, 1.0f);
-
-   //for (int col = 0; col < NUMCOLS; col++) {
-   //   gameGrid[0][col] = 0;
-   //}
-   //gameGrid[0][NUMCOLS/2] = &player;
-   //playerPosition = glm::vec2(0, NUMCOLS/2);
 
    std::FILE *file = fopen("levels/level25per.txt", "r");
    //std::FILE *file = fopen("levels/test.txt", "r");
@@ -39,30 +32,29 @@ void NutGame::init() {
 
    for (int row = 0; row < NUMROWS; row++) {
       for (int col = 0; col< NUMCOLS; col++) {
-         //gameGrid[row][col] = new DirtBlock(glm::vec3(col, -row, 0), 1.0f, 1.0f, row%3);
          c = fgetc(file);
+         //They are all .99 because there is somerounding errors with collision detection if they are 1
          if (c == 'X') {
-            gameGrid[row][col] = new StoneBlock(glm::vec3(col, -row, 0), 1.0f, 1.0f);
+            gameGrid[row][col] = new StoneBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f);
          }
          else if (c == 'R') {
-            gameGrid[row][col] = new DirtBlock(glm::vec3(col, -row, 0), 1.0f, 1.0f, 1);
+            gameGrid[row][col] = new DirtBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, 1);
          }
          else if (c == 'G') {
-            gameGrid[row][col] = new DirtBlock(glm::vec3(col, -row, 0), 1.0f, 1.0f, 3);
+            gameGrid[row][col] = new DirtBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, 3);
          }
          else if (c == 'B') {
-            gameGrid[row][col] = new DirtBlock(glm::vec3(col, -row, 0), 1.0f, 1.0f, 2);
+            gameGrid[row][col] = new DirtBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, 2);
          }
          else if (c == 'S') {
-            player = Player(glm::vec3(col, -row, 0), 1.0f, 1.0f);
+            player = Player(glm::vec3(col, -row, 0), 0.99f, 0.99f);
             gameGrid[row][col] = &player;
-            playerPosition = glm::vec2(row, col);
          }
          else if (c == '0') {
             gameGrid[row][col] = 0;
          }
          else if (c == 'N') {
-            gameGrid[row][col] = new Nut(glm::vec3(col, -row, 0), 1.0f, 1.0f);
+            gameGrid[row][col] = new Nut(glm::vec3(col, -row, 0), 0.99f, 0.99f);
          }
          fgetc(file);
       }
@@ -97,12 +89,10 @@ void NutGame::maybeAddToGroupLeft(int row, int col) {
          if (thisBlock->getBlockType() == DIRTBLOCK) {
             if (((DirtBlock*)thisBlock)->getColor() == ((DirtBlock*)left)->getColor()) {
                addToGroup(thisBlock, left);
-               gameGrid[row][col]->moveTo(glm::vec2(col, -row));
             }
          }
          else {
             addToGroup(thisBlock, left);
-            gameGrid[row][col]->moveTo(glm::vec2(col, -row));
          }
       }
    }
@@ -122,12 +112,10 @@ void NutGame::maybeAddToGroupRight(int row, int col) {
          if (thisBlock->getBlockType() == DIRTBLOCK) {
             if (((DirtBlock*)thisBlock)->getColor() == ((DirtBlock*)right)->getColor()) {
                addToGroup(thisBlock, right);
-               gameGrid[row][col]->moveTo(glm::vec2(col, -row));
             }
          }
          else {
             addToGroup(thisBlock, right);
-            gameGrid[row][col]->moveTo(glm::vec2(col, -row));
          }
       }
    }
@@ -146,31 +134,13 @@ void NutGame::maybeAddToGroupDown(int row, int col) {
          if (thisBlock->getBlockType() == DIRTBLOCK) {
             if (((DirtBlock*)thisBlock)->getColor() == ((DirtBlock*)down)->getColor()) {
                addToGroup(thisBlock, down);
-               gameGrid[row][col]->moveTo(glm::vec2(col, -row));
             }
          }
          else {
             addToGroup(thisBlock, down);
-            gameGrid[row][col]->moveTo(glm::vec2(col, -row));
          }
       }
    }
-}
-
-glm::vec2 NutGame::positionLeftOfPlayer() {
-   return glm::vec2(playerPosition.x, playerPosition.y - 1);
-}
-
-glm::vec2 NutGame::positionRightOfPlayer() {
-   return glm::vec2(playerPosition.x, playerPosition.y + 1);
-}
-
-glm::vec2 NutGame::positionBellowPlayer() {
-   return glm::vec2(playerPosition.x + 1, playerPosition.y);
-}
-
-glm::vec2 NutGame::positionAbovePlayer() {
-   return glm::vec2(playerPosition.x - 1, playerPosition.y);
 }
 
 bool NutGame::isBlockAtPosition(glm::vec2 pos) {
@@ -243,21 +213,22 @@ void NutGame::fallDown(double toAdd) {
                         gameGrid[row][col]->moveTo(glm::vec2(col, -row));
                      }
                   }
-                  if (gameGrid[row][col] != 0) {
-                     double place = gameGrid[row][col]->getCenter().y;
-                     int closestWhole = (int)place;
-                     if (place - closestWhole < -.9 || place - closestWhole > -.1) {
-                        maybeAddToGroupLeft(row, col);
-                        maybeAddToGroupRight(row, col);
-                     }
-                  }
+                  
                }
                if (gameGrid[row][col] != 0 && (int)(-(gameGrid[row][col]->getCenter().y) + .5) > row) {
                   if (gameGrid[row][col]->getMovableType() == PLAYER) {
-                     playerPosition.x += 1;
+                     //playerPosition.x += 1;
                   }
                   gameGrid[row + 1][col] = gameGrid[row][col];
                   gameGrid[row][col] = 0;
+               }
+               else if (gameGrid[row][col] != 0) {
+                  double place = gameGrid[row][col]->getCenter().y;
+                  int closestWhole = (int)place;
+                  if (place - closestWhole < -.9 || place - closestWhole > -.1) {
+                     maybeAddToGroupLeft(row, col);
+                     maybeAddToGroupRight(row, col);
+                  }
                }
             }
          }
@@ -421,21 +392,19 @@ void NutGame::finishSettingFallingMovables() {
 }
 
 void NutGame::handleKeyInput() {
-
    glm::vec2 pos;
-   bool blockExists;
    Block* block;
 
    if (!player.getIsDead()) {
       if (left) {
 
-         pos = positionLeftOfPlayer();
-         if (pos.y >= 0) {
-
-            blockExists = isBlockAtPosition(pos);
-            if (drillPressed == true) {
-               if (blockExists && drillPressed == true) {
-                  block = (Block *)gameGrid[(int)(pos.x)][(int)(pos.y)];
+         pos = glm::vec2(player.getCenter());
+         pos.y *= -1;
+         if (pos.x >= 1) {
+ 
+            if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)] != 0 && drillPressed == true) {
+               if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)]->getMovableType() == BLOCK) {
+                  block = (Block *)gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)];
                   player.drillBlock(block);
                   if (block->isDead() && block->deathCounter == -1) {
                      player.addToScore(1);
@@ -443,34 +412,48 @@ void NutGame::handleKeyInput() {
                   }
                }
             }
-            else {
-               if (!blockExists && drillPressed != true) {
-                  if (gameGrid[(int)pos.x][(int)pos.y] != 0 && gameGrid[(int)pos.x][(int)pos.y]->getMovableType() == NUT) {
-                     player.addToScore(5);
+            else if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)] == 0 && drillPressed != true) {
+               gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)] = gameGrid[(int)(pos.y + .5)][(int)pos.x];
+               gameGrid[(int)(pos.y + .5)][(int)pos.x] = 0;
+
+               player.moveTo(glm::vec2(pos.x - 1, -pos.y));
+            }
+            else if (drillPressed != true) {
+               
+            }
+         }
+      }
+      else if (right) {
+         pos = glm::vec2(player.getCenter());
+         pos.y *= -1;
+         if (pos.x <= NUMROWS - 1) {
+            if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)] != 0 && drillPressed == true) {
+               if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)]->getMovableType() == BLOCK) {
+                  block = (Block *)gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)];
+                  player.drillBlock(block);
+                  if (block->isDead() && block->deathCounter == -1) {
+                     player.addToScore(1);
+                     block->deathCounter = 0;
                   }
-                  playerPosition = pos;
-                  gameGrid[(int)pos.x][(int)pos.y] = gameGrid[(int)pos.x][(int)pos.y + 1];
-                  gameGrid[(int)pos.x][(int)pos.y + 1] = 0;
-                  player.moveTo(glm::vec2(pos.y, -pos.x));
                }
-               else if (pos.x != 0 && !isBlockAtPosition(glm::vec2(pos.x - 1, pos.y))) {
-                  if (gameGrid[(int)pos.x - 1][(int)pos.y] != 0 && gameGrid[(int)pos.x - 1][(int)pos.y]->getMovableType() == NUT) {
-                     player.addToScore(5);
-                  }
-                  playerPosition = glm::vec2(pos.x - 1, pos.y);
-                  gameGrid[(int)pos.x - 1][(int)pos.y] = gameGrid[(int)pos.x][(int)pos.y + 1];
-                  gameGrid[(int)pos.x][(int)pos.y + 1] = 0;
-                  player.moveTo(glm::vec2(pos.y, -pos.x + 1));
-               }
+            }
+            else if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)] == 0 && drillPressed != true) {
+               gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)] = gameGrid[(int)(pos.y + .5)][(int)pos.x];
+               gameGrid[(int)(pos.y + .5)][(int)pos.x] = 0;
+               
+               player.moveTo(glm::vec2(pos.x + 1, -pos.y));
+            }
+            else if (drillPressed != true) {
+               
             }
          }
       }
       else if (down) {
-         pos = positionBellowPlayer();
-         blockExists = isBlockAtPosition(pos);
+         pos = glm::vec2(player.getCenter());
+         pos.y *= -1;
          if (drillPressed == true) {
-            if (blockExists) {
-               block = (Block *)gameGrid[(int)(pos.x)][(int)(pos.y)];
+            if (gameGrid[(int)(pos.y + 1.5)][(int)pos.x]->getMovableType() == BLOCK) {
+               block = (Block *)gameGrid[(int)(pos.y + 1.5)][(int)(pos.x)];
                player.drillBlock(block);
                if (block->isDead() && block->deathCounter == -1) {
                   player.addToScore(1);
@@ -478,27 +461,14 @@ void NutGame::handleKeyInput() {
                }
             }
          }
-         /*
-         else {
-            if (!blockExists) {
-               if (gameGrid[(int)pos.x][(int)pos.y] != 0 && gameGrid[(int)pos.x][(int)pos.y]->getMovableType() == NUT) {
-                  player.addToScore(5);
-               }
-               playerPosition = pos;
-               gameGrid[(int)pos.x][(int)pos.y] = gameGrid[(int)pos.x - 1][(int)pos.y];
-               gameGrid[(int)pos.x - 1][(int)pos.y] = 0;
-               player.moveTo(glm::vec2(pos.y, -pos.x));
-            }
-         }
-         */
       }
       else if (up) {
-         pos = positionAbovePlayer();
-         if (pos.x != 0) {
-            blockExists = isBlockAtPosition(pos);
+         pos = glm::vec2(player.getCenter());
+         pos.y *= -1;
+         if (pos.y >= .5) {
             if (drillPressed == true) {
-               if (blockExists) {
-                  block = (Block *)gameGrid[(int)(pos.x)][(int)(pos.y)];
+               if (gameGrid[(int)(pos.y - 0.5)][(int)pos.x]->getMovableType() == BLOCK) {
+                  block = (Block *)gameGrid[(int)(pos.y - 0.5)][(int)(pos.x)];
                   player.drillBlock(block);
                   if (block->isDead() && block->deathCounter == -1) {
                      player.addToScore(1);
@@ -507,48 +477,13 @@ void NutGame::handleKeyInput() {
                }
             }
          }
-      }
-      else if (right) {
-         pos = positionRightOfPlayer();
-         if (pos.y < NUMCOLS) {
-            blockExists = isBlockAtPosition(pos);
-            if (drillPressed == true) {
-               if (blockExists) {
-                  block = (Block *)gameGrid[(int)(pos.x)][(int)(pos.y)];
-                  player.drillBlock(block);
-                  if (block->isDead() && block->deathCounter == -1) {
-                     player.addToScore(1);
-                     block->deathCounter = 0;
-                  }
-               }
-            }
-            else {
-               if (!blockExists) {
-                  if (gameGrid[(int)pos.x][(int)pos.y] != 0 && gameGrid[(int)pos.x][(int)pos.y]->getMovableType() == NUT) {
-                     player.addToScore(5);
-                  }
-                  playerPosition = pos;
-                  gameGrid[(int)pos.x][(int)pos.y] = gameGrid[(int)pos.x][(int)pos.y - 1];
-                  gameGrid[(int)pos.x][(int)pos.y - 1] = 0;
-                  player.moveTo(glm::vec2(pos.y, -pos.x));
-               }
-               else if (pos.x != 0 && !isBlockAtPosition(glm::vec2(pos.x - 1, pos.y))) {
-                  if (gameGrid[(int)pos.x - 1][(int)pos.y] != 0 && gameGrid[(int)pos.x - 1][(int)pos.y]->getMovableType() == NUT) {
-                     player.addToScore(5);
-                  }
-                  playerPosition = glm::vec2(pos.x - 1, pos.y);
-                  gameGrid[(int)pos.x - 1][(int)pos.y] = gameGrid[(int)pos.x][(int)pos.y - 1];
-                  gameGrid[(int)pos.x][(int)pos.y - 1] = 0;
-                  player.moveTo(glm::vec2(pos.y, -pos.x + 1));
-               }
-            }
-         }
+         player.setShouldJump();
       }
    }
 }
 
 std::vector<Movable*> NutGame::getObjectsToDraw() {
-   int count = playerPosition.x - NUM_BLOCKS_VISIBLE_ABOVE_PLAYER;
+   int count = player.getCenter().y - NUM_BLOCKS_VISIBLE_ABOVE_PLAYER;
    std::vector<Movable*> objects;
    
    if (count < 0) {
@@ -558,12 +493,10 @@ std::vector<Movable*> NutGame::getObjectsToDraw() {
    for (int row = count; row < count + NUM_TOTAL_BLOCKS_VISIBLE && row < NUMROWS; row++) {
       for (int col = 0; col < NUMCOLS; col++) {
          if (gameGrid[row][col] != 0) {
-            //TRACE("block " << row << ", " << col << ", pointer: " << gameGrid[row][col]);
             objects.push_back(gameGrid[row][col]);
-            //DEBUG("row " << row << ", col " << col << ",  " << gameGrid[row][col]);
          }
          else {
-            //TRACE("i'm out of the game");
+
          }
       }
    }

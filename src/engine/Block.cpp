@@ -71,6 +71,7 @@ void Block::makeDead() {
 	timesDrilled = getStrength();
    state = DEAD;
    mat = 0;
+   deathCounter = 0;
 }
 
 bool Block::isInAGroup() {

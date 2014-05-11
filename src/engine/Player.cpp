@@ -14,7 +14,8 @@ Player::Player(glm::vec3 center, float width, float height) {
    this->mat = 5;
    this->scale = 1;
    this->modelTrans.useModelViewMatrix();
-   printf("here!\n");
+   this->shouldJump = false;
+   this->isJumping = false;
 }
 
 void Player::drillBlock(Block *block) {
@@ -86,4 +87,28 @@ void Player::render() {
 
 void Player::setModel() {
    safe_glUniformMatrix4fv(cshader.h_uModelMatrix, glm::value_ptr(modelTrans.modelViewMatrix));
+}
+
+void Player::setShouldJump() {
+   shouldJump = true;
+}
+
+void Player::setShouldNotJump() {
+   shouldJump = false;
+}
+
+bool Player::getShouldJump() {
+   return shouldJump;
+}
+
+void Player::setIsJumping() {
+   isJumping = true;
+}
+
+void Player::setIsNotJumping() {
+   isJumping = false;
+}
+
+bool Player::getIsJumping() {
+   return isJumping;
 }

@@ -21,6 +21,12 @@ class Player: public Movable {
       bool getIsDead();
       void render();
       void setModel();
+      void setShouldJump();
+      void setShouldNotJump();
+      bool getShouldJump();
+      void setIsJumping();
+      void setIsNotJumping();
+      bool getIsJumping();
    private:
       int score;
       float velocity;
@@ -29,6 +35,8 @@ class Player: public Movable {
       Drill drill;
       Mesh model;
       CellShader cshader;
+      bool shouldJump;
+      bool isJumping;
 };
 
 #endif

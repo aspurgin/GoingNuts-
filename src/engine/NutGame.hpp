@@ -29,10 +29,10 @@ class NutGame {
       NutGame();
       Movable *gameGrid[NUMROWS][NUMCOLS];
       void init();
-      glm::vec2 positionLeftOfPlayer();
-      glm::vec2 positionRightOfPlayer();
-      glm::vec2 positionBellowPlayer();
-      glm::vec2 positionAbovePlayer();
+      //glm::vec2 positionLeftOfPlayer();
+      //glm::vec2 positionRightOfPlayer();
+      //glm::vec2 positionBellowPlayer();
+      //glm::vec2 positionAbovePlayer();
       bool isBlockAtPosition(glm::vec2 pos);
       std::vector<Movable*> getObjectsToDraw();
       bool isDrillingDown();
@@ -58,7 +58,7 @@ class NutGame {
       void finishSettingFallingMovables();
       void checkGroupForOtherAdds(BlockGroup* group);
       bool checkingGroupForOtherAdds;
-      glm::vec2 playerPosition;
+      //glm::vec2 playerPosition;
       std::vector<BlockGroup*> mightFallGroupList;
       std::vector<Movable*> mightFallBlockList;
 };
