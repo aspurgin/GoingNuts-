@@ -148,8 +148,10 @@ void Renderer::render() {
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
 
-   camera.setView(ctshader.h_uViewMatrix);
-   camera.setProjectionMatrix(ctshader.h_uProjMatrix, winWidth, winHeight);
+   //camera.setView(ctshader.h_uViewMatrix);
+   orthographicCamera.setView(ctshader.h_uViewMatrix);
+   //camera.setProjectionMatrix(ctshader.h_uProjMatrix, winWidth, winHeight);
+   orthographicCamera.setProjectionMatrix(ctshader.h_uProjMatrix);
    safe_glUniform3f(ctshader.h_lightPos, light.position.x, light.position.y, light.position.z);
    safe_glUniform3f(ctshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
    //safe_glUniform3f(ctshader.h_lightColor, light.color.x, light.color.y, light.color.z);

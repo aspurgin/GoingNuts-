@@ -5,6 +5,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
 #include "Camera.hpp"
+#include "OrthographicCamera.hpp"
 #include "Light.hpp"
 #include "../shaders/PhongShader.hpp"
 #include "../shaders/CellShaderTexture.hpp"
@@ -18,6 +19,7 @@
 class Renderer {
    public:
       Camera camera;
+      OrthographicCamera orthographicCamera;
       Light light;
       PhongShader pshader;
       CellShader cshader;
