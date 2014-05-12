@@ -25,6 +25,7 @@ NutGame::~NutGame() {
    for (int row = 0; row < NUMROWS; row++) {
       for (int col = 0; col < NUMCOLS; col++) {
          if (gameGrid[row][col] != 0 && gameGrid[row][col]->getMovableType() != PLAYER) {
+            //DEBUG("Deleted Here 1");
             delete gameGrid[row][col];
          }
       }
@@ -39,7 +40,7 @@ void NutGame::init() {
    for (int row = 0; row < NUMROWS; row++) {
       for (int col = 0; col< NUMCOLS; col++) {
          c = fgetc(file);
-         //They are all .99 because there is somerounding errors with collision detection if they are 1
+         //They are all .99 because there  is somerounding errors with collision detection if they are 1
          if (c == 'X') {
             gameGrid[row][col] = new StoneBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f);
          }
@@ -228,6 +229,7 @@ void NutGame::fallDown(double toAdd) {
                      nutsLeft--;
                      Assets::playSound(Assets::NUT_S);
                      addToScore(5);
+                     //DEBUG("Deleted Here 2");
                      delete gameGrid[row + 1][col];
                      gameGrid[row + 1][col] = 0;
                   }
@@ -236,6 +238,7 @@ void NutGame::fallDown(double toAdd) {
                         nutsLeft--;
                         Assets::playSound(Assets::NUT_S);
                         addToScore(5);
+                        //DEBUG("Deleted Here 3");
                         delete gameGrid[row][col];
                         gameGrid[row][col] = 0;
                      }
@@ -261,7 +264,10 @@ void NutGame::fallDown(double toAdd) {
                   
                }
                if (gameGrid[row][col] != 0 && (int)(-(gameGrid[row][col]->getCenter().y) + .5) > row) {
-                  delete gameGrid[row + 1][col];
+                  //DEBUG("Deleted Here 4");
+                  if (gameGrid[row + 1][col] != 0 && gameGrid[row + 1][col]->getMovableType() != PLAYER) {
+                     delete gameGrid[row + 1][col];
+                  }
                   gameGrid[row + 1][col] = gameGrid[row][col];
                   gameGrid[row][col] = 0;
                }
@@ -288,6 +294,7 @@ void NutGame::addToGroup(Block* thisBlock, Block* otherBlock) {
          if (thisBlock->getGroupIn() != otherBlock->getGroupIn()) {
             temp = otherBlock->getGroupIn();
             otherBlock->getGroupIn()->moveGroupTo(thisBlock->getGroupIn());
+            //DEBUG("Deleted Here 5");
             delete temp;
             wasAdded = true;
          }
@@ -342,6 +349,7 @@ void NutGame::checkGrid(double toAdd) {
             if (curObj->getMovableType() == BLOCK && ((Block*)curObj)->isDead()) {
                ((Block*)curObj)->incrementDeathCounter(toAdd);
                if (((Block*)curObj)->shouldDestroy()) {
+                  //DEBUG("Deleted Here 6");
                   delete gameGrid[row][col];
                   gameGrid[row][col] = 0;
                }
@@ -391,7 +399,7 @@ void NutGame::setFallingMovables(int row, int col) {
       gameGrid[row][col]->setWillFall();
    }
 }
-//Note: Zach, I edited this a tiny bit because there were seg fault issues. It still does the same thing, fixed it. -Drew
+//Note: Zach, I edited this a tiny bit because there  were seg fault issues. It still does the same thing, fixed it. -Drew
 void NutGame::finishSettingFallingMovables() {
    bool somethingWasUpdated = true;
    int row, col;
@@ -457,7 +465,7 @@ void NutGame::handleKeyInput() {
    glm::vec2 pos;
    Block* block;
 
-   if (!player.getIsDead()) {
+   if (!isGameOver() && !isGameWon()) {
       if (drillLeftPressed && releasedSinceLeftPress) {
          releasedSinceLeftPress = false;
          pos = glm::vec2(player.getCenter());
@@ -536,6 +544,7 @@ void NutGame::handleKeyInput() {
             }
             else {
                if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)] != 0 && gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)]->getMovableType() == NUT) {
+                  //DEBUG("Deleted Here 6");
                   delete gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)];
                   gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)] = 0;
                   player.setMovingToColumn((int)(player.getCenter().x - .00001));
@@ -557,6 +566,7 @@ void NutGame::handleKeyInput() {
             }
             else {
                if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)] != 0 && gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)]->getMovableType() == NUT) {
+                  //DEBUG("Deleted Here 7");
                   delete gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)];
                   gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)] = 0;
                   player.setMovingToColumn((int)(player.getCenter().x + .00001 + 1));
@@ -618,6 +628,14 @@ int NutGame::getScore() {
 
 int NutGame::getDepth() {
    return (int)(player.getCenter().y) * -1;
+}
+
+bool NutGame::isGameOver() {
+   return player.getIsDead();
+}
+
+bool NutGame::isGameWon() {
+   return nutsLeft == 0;
 }
 
 

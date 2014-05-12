@@ -42,6 +42,8 @@ class NutGame {
       void addToScore(int num);
       int getScore();
       int getDepth();
+      bool isGameOver();
+      bool isGameWon();
       bool drillDownPressed;
       bool drillLeftPressed;
       bool drillUpPressed;
