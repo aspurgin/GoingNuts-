@@ -5,6 +5,7 @@
 #include <string>
 #include "Block.hpp"
 #include "../hud/Hud.hpp"
+#include <stdio.h>
 
 
 #include <GL/glew.h>
@@ -21,18 +22,9 @@ void keyPressed(GLFWwindow *window, int key, int scancode, int action, int mods)
    if (key == GLFW_KEY_A) {
       if (action == GLFW_PRESS) {
          game.left = true;
-         
       }
       else if (action == GLFW_RELEASE) {
          game.left = false;
-      }
-   }
-   else if (key == GLFW_KEY_S) {
-      if (action == GLFW_PRESS) {
-         game.down = true;
-      }
-      else if (action == GLFW_RELEASE) {
-         game.down = false;
       }
    }
    else if (key == GLFW_KEY_W) {
@@ -51,12 +43,36 @@ void keyPressed(GLFWwindow *window, int key, int scancode, int action, int mods)
          game.right = false;
       }
    }
-   else if (key == GLFW_KEY_J) {
+   else if (key == GLFW_KEY_DOWN) {
       if (action == GLFW_PRESS) {
-         game.drillPressed = true;
+         game.drillDownPressed = true;
       }
       else if (action == GLFW_RELEASE) {
-         game.drillPressed = false;
+         game.drillDownPressed = false;
+      }
+   }
+   else if (key == GLFW_KEY_LEFT) {
+      if (action == GLFW_PRESS) {
+         game.drillLeftPressed = true;
+      }
+      else if (action == GLFW_RELEASE) {
+         game.drillLeftPressed = false;
+      }
+   }
+   else if (key == GLFW_KEY_UP) {
+      if (action == GLFW_PRESS) {
+         game.drillUpPressed = true;
+      }
+      else if (action == GLFW_RELEASE) {
+         game.drillUpPressed = false;
+      }
+   }
+   else if (key == GLFW_KEY_RIGHT) {
+      if (action == GLFW_PRESS) {
+         game.drillRightPressed = true;
+      }
+      else if (action == GLFW_RELEASE) {
+         game.drillRightPressed = false;
       }
    }
    else if (key == GLFW_KEY_ESCAPE) {
@@ -121,12 +137,16 @@ int main(void)
          fpsCount = 0;
          fpsTime = 0;
       }
-      sprintf(scoreString, "FPS: %.0f Score: %d  %s", 1.0/delta, game.getScore(), game.player.getIsDead() ? "You are Dead" : "");
+      sprintf(scoreString, "FPS: %.0f Score: %d", 1.0/delta, game.getScore());
       if (game.player.getIsDead()) {
+         sprintf(scoreString, "FPS: %.0f Score: %d  You are Dead", 1.0/delta, game.getScore());
+         printf("YOU ARE DEAD\n");
          break;
       }
       if (game.getNutsLeft() == 0) {
          sprintf(scoreString, "FPS: %.0f Score: %d  %s", 1.0/delta, game.getScore(), "You won!!!");
+         printf("YOU WON!!!!!!!!\n");
+         break;
       }
       glfwSetWindowTitle(window, scoreString);
 
