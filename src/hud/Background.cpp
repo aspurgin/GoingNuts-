@@ -5,7 +5,7 @@ Background::Background() {
    this->model = Assets::getMesh(Assets::BACKGROUND_M);
    this->cshader = Assets::getCShaderTexture();
    //this->cshader = Assets::getFlatTextureShader();
-   this->scale = 3.0f;
+   //this->scale = 2.085f;
    this->mat = 1;
    this->modelTrans.useModelViewMatrix();
    this->position = glm::vec3(0.0,0.0,-7.0);
@@ -20,7 +20,7 @@ void Background::render() {
    modelTrans.pushMatrix();
 
    modelTrans.translate(position);
-   modelTrans.scale(scale);
+   modelTrans.scale(2.085f,2.8f,1.0);
    //modelTrans.rotate(ang, glm::vec3(1.0, 0.0, 0.0));
    setModel();
    

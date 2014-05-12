@@ -8,7 +8,7 @@ DepthWheel::DepthWheel(int type, glm::vec3 position) {
    this->scale = 0.4f;
    this->mat = 1;
    this->modelTrans.useModelViewMatrix();
-   this->position = position + glm::vec3(-11.5, 0.0, 0.0);
+   this->position = position + glm::vec3(-12.5, 2.75, 0.0);
 
    if (type == Assets::WHITE_DEPTH_WHEEL_T)
    {
