@@ -19,7 +19,7 @@ namespace Assets {
    enum Sound { ITEM_S, NUT_S, BLOCK_FALL_S };
    enum Meshes { SQUIRREL_M, BLOCK_M, NUT_M, DEPTH_WHEEL_M, BACKGROUND_M, DEPTH_GUAGE_MASK_1_M, DEPTH_GUAGE_MASK_2_M, 
                   SCORE_GUAGE_MASK_1_M, SCORE_GUAGE_MASK_2_M,  YOU_WON_M, YOU_LOST_M };
-   enum Textures { WHITE_DEPTH_WHEEL_T, BLACK_DEPTH_WHEEL_T, HUD_ELEMENTS_T };
+   enum Textures { WHITE_DEPTH_WHEEL_T, BLACK_DEPTH_WHEEL_T, HUD_ELEMENTS_T, SQUIRREL_T};
 
    void loadAssets();
    void playSound(int);

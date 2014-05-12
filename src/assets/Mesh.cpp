@@ -98,6 +98,7 @@ void Mesh::parseAI(const char* path){
                                    mesh->mVertices[v][1],
                                    mesh->mVertices[v][2]));
    }
+   DEBUG("NumVerts: " << mesh->mNumVertices);
 
    for(unsigned int n=0; n<mesh->mNumVertices; n++){
       normals.push_back(glm::vec3(mesh->mNormals[n][0],

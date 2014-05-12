@@ -14,20 +14,17 @@ namespace boneHelpers{
 
 Bone::Bone(aiBone* bone, aiNodeAnim* anim){
 	parent = (Bone*)0;
-	DEBUG("BoneInit");
-	weight.resize(bone->mNumWeights);
+
 	for(int w = 0; w < bone->mNumWeights; w++){
-		DEBUG(w);
 		weight[bone->mWeights[w].mVertexId] = bone->mWeights[w].mWeight;
 	}
-	DEBUG("weights done");
+
 	aiMatrix4x4 mat = bone->mOffsetMatrix;
 	offsetTransform = glm::mat4(mat.a1, mat.a2, mat.a3, mat.a4,
 				 			    mat.b1, mat.b2, mat.b3, mat.b4,
 				 			    mat.c1, mat.c2, mat.c3, mat.c4,
 	   			 			    mat.d1, mat.d2, mat.d3, mat.d4);
 	if(anim != 0){
-		DEBUG("doing Anims");
 		for(int p=0; p<anim->mNumPositionKeys; p++){
 			aiVectorKey k = anim->mPositionKeys[p];
 			pos[k.mTime] = glm::vec3(k.mValue.x, k.mValue.y, k.mValue.z);
@@ -41,9 +38,7 @@ Bone::Bone(aiBone* bone, aiNodeAnim* anim){
 		for(int r=0; r<anim->mNumRotationKeys; r++){
 			aiQuatKey k = anim->mRotationKeys[r];
 			rot[k.mTime] = glm::quat(k.mValue.w, k.mValue.x, k.mValue.y, k.mValue.z);
-		}			
-	} else {
-		DEBUG("not doing Anims");
+		}
 	}
 }
 
@@ -117,7 +112,6 @@ void Bone::setAt(double frame){
 	glm::vec3 endPos = glm::mix(leftPosFrame, rightPosFrame, boneHelpers::getMix(p1, p2, frame));
 	glm::vec3 endScale = glm::mix(leftScaleFrame, rightScaleFrame, boneHelpers::getMix(s1, s2, frame));
 	glm::quat endRot = glm::mix(leftRotFrame, rightRotFrame, boneHelpers::getMix(r1, r2, frame));
-	//glm::quat  endRot = glm::quat(2,3,4,5);
 
 	currentTransform = glm::mat4(); 
 	currentTransform = glm::mat4_cast(endRot) * currentTransform;

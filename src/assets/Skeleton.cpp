@@ -46,6 +46,7 @@ void Skeleton::setAt(float frame){
 
 Skeleton::Skeleton (const aiScene* scene) {
 	aiMesh* mesh = scene->mMeshes[0];
+	DEBUG("NumVerts: " << mesh->mNumVertices);
 
 	std::map<string, Bone*> boneMap;
 
@@ -63,7 +64,7 @@ Skeleton::Skeleton (const aiScene* scene) {
 		aiString parentFor = skHelpers::parentOf(scene->mRootNode, bone->mName);
 
 		if(boneMap.find(string(parentFor.C_Str())) != boneMap.end()){
-			DEBUG("parent relation: " << bone->mName << " is child of " << parentFor);
+			DEBUG("parent relation: " << bone->mName.C_Str() << " is child of " << parentFor.C_Str());
 			boneMap[string(bone->mName.C_Str())]->setParent(boneMap[string(parentFor.C_Str())]);
 		}
 	}
