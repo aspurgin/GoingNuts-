@@ -12,15 +12,14 @@
 class Hud: public Renderable
 {
    public:
-	
-       Hud(NutGame* nutGame);
-	   ~Hud();
-       void render();
-       void setModel();
+      Hud(NutGame* nutGame);
+      ~Hud();
+      void render();
+      void setModel();
 
-	private:
-        NutGame* nutGame;
-        std::vector<Renderable*> components;
+   private:
+      NutGame* nutGame;
+      std::vector<Renderable*> components;
 };
 
 

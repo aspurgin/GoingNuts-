@@ -121,7 +121,7 @@ int main(void)
    Assets::loadAssets();
    game.init();
    Hud hud(&game);
-   Renderer renderer(640, 480, &game, &hud);
+   Renderer renderer(1280, 720, &game, &hud);
    
    Assets::playMusic(Assets::GAME_M);
    //Loop until the user closes the window
@@ -156,7 +156,7 @@ int main(void)
 
       lastTime = currentTime;
       // Render here
-      glViewport(0, 0, (GLsizei)1200, (GLsizei)900);
+      glViewport(0, 0, (GLsizei)1280, (GLsizei)720);
       renderer.render();
 
       //Swap front and back buffers

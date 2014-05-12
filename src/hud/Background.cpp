@@ -5,10 +5,10 @@ Background::Background() {
    this->model = Assets::getMesh(Assets::BACKGROUND_M);
    this->cshader = Assets::getCShaderTexture();
    //this->cshader = Assets::getFlatTextureShader();
-   //this->scale = 3.0f;
+   this->scale = 3.0f;
    this->mat = 1;
    this->modelTrans.useModelViewMatrix();
-   this->position = glm::vec3(0.0,0.0,0.0);
+   this->position = glm::vec3(0.0,0.0,-7.0);
 
    this->texture = Assets::getTexture(Assets::HUD_ELEMENTS_T);
 }
@@ -20,7 +20,7 @@ void Background::render() {
    modelTrans.pushMatrix();
 
    modelTrans.translate(position);
-   modelTrans.scale(1.0);
+   modelTrans.scale(scale);
    //modelTrans.rotate(ang, glm::vec3(1.0, 0.0, 0.0));
    setModel();
    
