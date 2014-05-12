@@ -46,6 +46,7 @@ class Block: public Movable {
       ParticleSystem psystem;
    private:
       int timesDrilled;
+      float curScale;
       
 };
 

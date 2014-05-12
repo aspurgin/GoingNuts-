@@ -9,7 +9,8 @@ Block::Block() {
    groupIn = 0;
    model = Assets::getMesh(Assets::BLOCK_M);
    cshader = Assets::getCShader();
-   scale = 0.5f;
+   scale = 0.48f;
+   curScale = 0.48f;
    this->modelTrans.useModelViewMatrix();
    model.debug();
 }
@@ -57,7 +58,7 @@ bool Block::shouldFall() {
 	if (fallCounter >= HANG_TIME) {
       return true;
    }
-   scale = 0.5;
+   scale = curScale;
    return false;
 }
 
@@ -83,6 +84,8 @@ BlockGroup* Block::getGroupIn() {
 
 void Block::putInGroup(BlockGroup* group) {
    groupIn = group;
+   curScale = 0.5f;
+   scale = curScale;
 }
 
 void Block::setScale() {
@@ -93,11 +96,11 @@ void Block::setScale() {
       }
       else {
          shouldScale = true;
-         scale = 0.5;
+         scale = curScale;
       }
    }
    else if (isDead()) {
-      scale = 0.5 - deathCounter;
+      scale = curScale - deathCounter;
    }
 }
 
