@@ -15,8 +15,13 @@
 #include "../assets/Mesh.hpp"
 #include "../engine/NutGame.hpp"
 #include "../hud/Hud.hpp"
+#include "Wall.hpp"
 
 class Renderer {
+   private:
+      void renderWalls();
+      Wall left;
+      Wall right;
    public:
       Camera camera;
       OrthographicCamera orthographicCamera;
@@ -37,6 +42,7 @@ class Renderer {
       void renderCube(glm::vec3, int, float);
       void renderSquirrel(glm::vec3, int, float);
       void render();
+
 
 };
 

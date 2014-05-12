@@ -12,6 +12,7 @@ class Renderable {
    protected:
       int mat;
       float scale;
+      float scaleX, scaleY, scaleZ;
       float ang;
       RenderingHelper modelTrans;
    public:

@@ -1,8 +1,8 @@
 #include "Camera.hpp"
 
 Camera::Camera() {
-   eye = glm::vec3(3.0f, 1.0f, 6.0f);
-   lookAt = glm::vec3(3.0f, 0.0f, 0.0f);
+   eye = glm::vec3(3.0f, 1.0f, 10.0f);
+   lookAt = glm::vec3(3.0f, 0.0f, 5.0f);
    upVec = glm::vec3(0, 1, 0);
 }
 

@@ -32,6 +32,9 @@ Renderer::Renderer(int width, int height, NutGame *game, Hud* hud) {
    this->hud = hud;
    //block.debug();
    //exit(1);
+   left = Wall(glm::vec3(-1.5, -10, 0));
+   right = Wall(glm::vec3(7.5, -10, 0));
+
    initialize();
 }
 
@@ -54,72 +57,10 @@ void Renderer::setModel() {
    safe_glUniformMatrix4fv(cshader.h_uModelMatrix, glm::value_ptr(modelTrans.modelViewMatrix));
 }
 
-/*void Renderer::renderCube(glm::vec3 transl, int mat, float scale) {
-   
-   //cshader.setMaterial(mat);
-   cshader.setMaterial(mat);
-   modelTrans.loadIdentity();
-   modelTrans.pushMatrix();
-      modelTrans.translate(transl);
-      modelTrans.scale(0.5 - scale);
-      modelTrans.rotate(0, glm::vec3(0, 1, 0));
-      setModel();
-      safe_glEnableVertexAttribArray(cshader.h_aPosition);
-      glBindBuffer(GL_ARRAY_BUFFER, block.objHandle());
-      //printf("one position: %d\n", exampleCube->PositionHandle);
-      safe_glVertexAttribPointer(cshader.h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
-      safe_glEnableVertexAttribArray(cshader.h_aNormal);
-      glBindBuffer(GL_ARRAY_BUFFER, block.normHandle());
-      safe_glVertexAttribPointer(cshader.h_aNormal, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-      //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, block.faceHandle);
-
-      /*safe_glEnableVertexAttribArray(h_taTexCoord);
-      glBindBuffer(GL_ARRAY_BUFFER, TexBuffObj);
-      safe_glVertexAttribPointer(h_taTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
-      
-      // draw!
-      //printf("indexLength: %d\n", exampleCube->IndexBufferLength);
-
-      //glDrawElements(GL_TRIANGLES, block.numFaceElements(), GL_UNSIGNED_SHORT, 0);   
-      glDrawArrays(GL_TRIANGLES, 0, block.getVertCount());
-   modelTrans.popMatrix();
-
-   safe_glDisableVertexAttribArray(cshader.h_aPosition);
-   safe_glDisableVertexAttribArray(cshader.h_aNormal);
+void Renderer::renderWalls() {
+   left.render();
+   right.render();
 }
-
-void Renderer::renderSquirrel(glm::vec3 transl, int mat, float ang) {
-   //cshader.setMaterial(mat);
-   cshader.setMaterial(mat);
-   modelTrans.loadIdentity();
-   modelTrans.pushMatrix();
-      modelTrans.translate(transl);
-      modelTrans.rotate(ang, glm::vec3(0, 1, 0));
-      setModel();
-      safe_glEnableVertexAttribArray(cshader.h_aPosition);
-      glBindBuffer(GL_ARRAY_BUFFER, squirrel.objHandle());
-      //printf("one position: %d\n", exampleCube->PositionHandle);
-      safe_glVertexAttribPointer(cshader.h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
-      safe_glEnableVertexAttribArray(cshader.h_aNormal);
-      glBindBuffer(GL_ARRAY_BUFFER, squirrel.normHandle());
-      safe_glVertexAttribPointer(cshader.h_aNormal, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-      //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, block.faceHandle);
-
-      /*safe_glEnableVertexAttribArray(h_taTexCoord);
-      glBindBuffer(GL_ARRAY_BUFFER, TexBuffObj);
-      safe_glVertexAttribPointer(h_taTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
-      // draw!
-      //printf("indexLength: %d\n", exampleCube->IndexBufferLength);
-
-      //glDrawElements(GL_TRIANGLES, block.numFaceElements(), GL_UNSIGNED_SHORT, 0);   
-      glDrawArrays(GL_TRIANGLES, 0, squirrel.getVertCount());
-   modelTrans.popMatrix();
-
-   safe_glDisableVertexAttribArray(cshader.h_aPosition);
-   safe_glDisableVertexAttribArray(cshader.h_aNormal);
-}*/
 
 void Renderer::render() {
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -149,16 +90,19 @@ void Renderer::render() {
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
 
+
+   camera.setEye(glm::vec3(3.0f, ngame->player.getCenter().y + 1, 8.0f));
+   light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y + 2, 6.0f));
+
    camera.setView(cshader.h_uViewMatrix);
    camera.setProjectionMatrix(cshader.h_uProjMatrix, winWidth, winHeight);
    safe_glUniform3f(cshader.h_lightPos, light.position.x, light.position.y, light.position.z);
    safe_glUniform3f(cshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
    //safe_glUniform3f(cshader.h_lightColor, light.color.x, light.color.y, light.color.z);
 
-   camera.setEye(glm::vec3(3.0f, ngame->player.getCenter().y + 1, 6.0f));
-   light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y + 2, 6.0f));
 
    setModel();
+   renderWalls();
    std::list<Renderable*> currObjs = ngame->getObjectsToDraw();
 
    for (std::list<Renderable*>::iterator it = currObjs.begin(); it != currObjs.end(); ++it) {
