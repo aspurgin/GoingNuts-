@@ -137,24 +137,20 @@ void Renderer::render() {
 
    setModel();
    std::list<Renderable*> currObjs = ngame->getObjectsToDraw();
-   
-   //int i;
+
    for (std::list<Renderable*>::iterator it = currObjs.begin(); it != currObjs.end(); ++it) {
       (*it)->render();
    }
 
    //*** Render the hud ***/
-   glUseProgram(ctshader.shadeProg);//ctshader.shadeProg);
+   glUseProgram(ctshader.shadeProg);
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
 
-   //camera.setView(ctshader.h_uViewMatrix);
    orthographicCamera.setView(ctshader.h_uViewMatrix);
-   //camera.setProjectionMatrix(ctshader.h_uProjMatrix, winWidth, winHeight);
    orthographicCamera.setProjectionMatrix(ctshader.h_uProjMatrix);
    safe_glUniform3f(ctshader.h_lightPos, light.position.x, light.position.y, light.position.z);
    safe_glUniform3f(ctshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
-   //safe_glUniform3f(ctshader.h_lightColor, light.color.x, light.color.y, light.color.z);
 
    camera.setEye(glm::vec3(3.0f, ngame->player.getCenter().y + 1, 6.0f));
    light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y - 1, 6.0f));

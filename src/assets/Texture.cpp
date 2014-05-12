@@ -24,7 +24,7 @@ GLuint Texture::loadTexture(const char* fileName)
    glBindTexture(GL_TEXTURE_2D, textureID);
 
    // Put the texture on the GPU
-   glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, image);
+   glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 
    // Make the texture wrap around
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);

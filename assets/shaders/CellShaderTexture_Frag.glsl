@@ -62,4 +62,5 @@ void main() {
          gl_FragColor *= 0.6;
       }
    }
+   gl_FragColor = texColor;
 }

@@ -28,11 +28,11 @@ namespace Assets {
       void loadTextures() {
          whiteDepthWheel = Texture("assets/textures/MileageCounterWhite.jpg");
          blackDepthWheel = Texture("assets/textures/MileageCounterBlack.jpg");
-         //hudElements = Texture("assets/textures/HUDElements.png");
+         hudElements = Texture("assets/textures/HUDElements.jpg");
 
          textures[WHITE_DEPTH_WHEEL_T] = whiteDepthWheel;
          textures[BLACK_DEPTH_WHEEL_T] = blackDepthWheel;
-         //textures[HUD_ELEMENTS_T] = hudElements;
+         textures[HUD_ELEMENTS_T] = hudElements;
       }
 
       void loadMeshes() {
