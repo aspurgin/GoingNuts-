@@ -438,6 +438,7 @@ void NutGame::handleKeyInput() {
 
    if (!player.getIsDead()) {
       if (drillLeftPressed && releasedSinceLeftPress) {
+         releasedSinceLeftPress = false;
          pos = glm::vec2(player.getCenter());
          pos.y *= -1;
          if (pos.x >= 1) {
@@ -454,6 +455,7 @@ void NutGame::handleKeyInput() {
          }
       }
       else if (drillRightPressed && releasedSinceRightPress) {
+         releasedSinceRightPress = false;
          pos = glm::vec2(player.getCenter());
          pos.y *= -1;
          if (pos.x < NUMCOLS - 1) {
@@ -470,6 +472,7 @@ void NutGame::handleKeyInput() {
          }
       }
       else if (drillDownPressed && releasedSinceDownPress) {
+         releasedSinceDownPress = false;
          pos = glm::vec2(player.getCenter());
          pos.y *= -1;
          if (gameGrid[(int)(pos.y + 1.5)][(int)pos.x] != 0) {
@@ -484,6 +487,7 @@ void NutGame::handleKeyInput() {
          }
       }
       else if (drillUpPressed && releasedSinceUpPress) {
+         releasedSinceUpPress = false;
          pos = glm::vec2(player.getCenter());
          pos.y *= -1;
          if (pos.y >= .5) {
