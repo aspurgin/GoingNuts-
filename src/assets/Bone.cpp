@@ -13,6 +13,7 @@ namespace boneHelpers{
 }
 
 Bone::Bone(aiBone* bone, aiNodeAnim* anim){
+	parent = (Bone*)0;
 	DEBUG("BoneInit");
 	weight.resize(bone->mNumWeights);
 	for(int w = 0; w < bone->mNumWeights; w++){

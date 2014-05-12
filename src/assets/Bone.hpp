@@ -16,7 +16,7 @@
 
 class Bone {
 private:
-	Bone* parent = (Bone*)0;
+	Bone* parent;
 	std::vector<float> weight;
 
 	std::map<double, glm::vec3> pos;
