@@ -7,7 +7,7 @@ Hud::Hud(NutGame* nutGame) : Renderable()
 	Background* background = new Background();
 	
 	components.push_back(background);
-	//components.push_back(depthGuage);
+	components.push_back(depthGuage);
 }
 
 Hud::~Hud()

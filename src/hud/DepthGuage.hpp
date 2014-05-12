@@ -7,15 +7,17 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "DepthWheel.hpp"
+#include "DepthGuageMask.hpp"
 
 class DepthGuage : public Renderable {
    private:
-   	  NutGame* nutGame;
+   	NutGame* nutGame;
       DepthWheel* ones;
       DepthWheel* tens;
       DepthWheel* hundreds;
       DepthWheel* thousands;
       DepthWheel* tenThousands; 
+      DepthGuageMask* depthGuageMask;
 
    public:
       DepthGuage(NutGame* nutGame);

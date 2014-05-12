@@ -7,7 +7,7 @@ namespace Assets {
       FMOD::System *soundSystem;
       FMOD_RESULT result;
       std::map<int, FMOD::Sound*> sounds, music;
-      Mesh squirrel, block, nut, depthWheel, background;
+      Mesh squirrel, block, nut, depthWheel, background, guageMask1, guageMask2;
       Texture whiteDepthWheel, blackDepthWheel, hudElements;
       std::map<int, Mesh> meshes;
       std::map<int, Texture> textures;
@@ -41,18 +41,24 @@ namespace Assets {
          nut = Mesh("assets/models/Acorn.obj");
          depthWheel = Mesh("assets/models/DepthWheel.obj");
          background = Mesh("assets/models/Background.obj");
+         guageMask1 = Mesh("assets/models/GuageMask1.obj");
+         guageMask2 = Mesh("assets/models/GuageMask2.obj");
 
          block.buildBuffers();
          squirrel.buildBuffers();
          nut.buildBuffers();
          depthWheel.buildBuffers();
          background.buildBuffers();
+         guageMask1.buildBuffers();
+         guageMask2.buildBuffers();
 
          meshes[SQUIRREL_M] = squirrel;
          meshes[BLOCK_M] = block;
          meshes[NUT_M] = nut;
          meshes[DEPTH_WHEEL_M] = depthWheel;
          meshes[BACKGROUND_M] = background;
+         meshes[DEPTH_GUAGE_MASK_1_M] = guageMask1;
+         meshes[DEPTH_GUAGE_MASK_2_M] = guageMask2;
       }
 
       void initShaders() {

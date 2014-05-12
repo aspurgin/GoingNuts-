@@ -8,6 +8,7 @@ DepthGuage::DepthGuage(NutGame* nutGame) {
    hundreds = new DepthWheel(Assets::BLACK_DEPTH_WHEEL_T, glm::vec3(1.2, 0.0, 0.0));
    thousands = new DepthWheel(Assets::BLACK_DEPTH_WHEEL_T, glm::vec3(0.6, 0.0, 0.0));
    tenThousands = new DepthWheel(Assets::BLACK_DEPTH_WHEEL_T, glm::vec3(0.0, 0.0, 0.0));
+   depthGuageMask = new DepthGuageMask();
 }
 
 DepthGuage::~DepthGuage() {
@@ -16,11 +17,12 @@ DepthGuage::~DepthGuage() {
    delete hundreds;
    delete thousands;
    delete tenThousands;
+   delete depthGuageMask;
 }
 
 void DepthGuage::render() {
    //Update the state
-   int score = nutGame->getScore();
+   int score = nutGame->getDepth();
    int onesDigit, tensDigit, hundredsDigit, thousandsDigit, tenThousandsDigit;
 
    onesDigit = score % 10;
@@ -49,6 +51,7 @@ void DepthGuage::render() {
    hundreds->render();
    thousands->render();
    tenThousands->render();
+   depthGuageMask->render();
 }
 
 void DepthGuage::setModel() {
