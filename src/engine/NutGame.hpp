@@ -46,6 +46,10 @@ class NutGame {
       bool drillLeftPressed;
       bool drillUpPressed;
       bool drillRightPressed;
+      bool releasedSinceDownPress;
+      bool releasedSinceLeftPress;
+      bool releasedSinceUpPress;
+      bool releasedSinceRightPress;
       bool left;
       bool right;
       bool up;

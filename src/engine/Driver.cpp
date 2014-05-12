@@ -46,33 +46,41 @@ void keyPressed(GLFWwindow *window, int key, int scancode, int action, int mods)
    else if (key == GLFW_KEY_DOWN) {
       if (action == GLFW_PRESS) {
          game.drillDownPressed = true;
+         game.releasedSinceDownPress = false;
       }
       else if (action == GLFW_RELEASE) {
          game.drillDownPressed = false;
+         game.releasedSinceDownPress = true;
       }
    }
    else if (key == GLFW_KEY_LEFT) {
       if (action == GLFW_PRESS) {
          game.drillLeftPressed = true;
+         game.releasedSinceLeftPress = false;
       }
       else if (action == GLFW_RELEASE) {
          game.drillLeftPressed = false;
+         game.releasedSinceLeftPress = true;
       }
    }
    else if (key == GLFW_KEY_UP) {
       if (action == GLFW_PRESS) {
          game.drillUpPressed = true;
+         game.releasedSinceUpPress = false;
       }
       else if (action == GLFW_RELEASE) {
          game.drillUpPressed = false;
+         game.releasedSinceUpPress = true;
       }
    }
    else if (key == GLFW_KEY_RIGHT) {
       if (action == GLFW_PRESS) {
          game.drillRightPressed = true;
+         game.releasedSinceRightPress = false;
       }
       else if (action == GLFW_RELEASE) {
          game.drillRightPressed = false;
+         game.releasedSinceRightPress = true;
       }
    }
    else if (key == GLFW_KEY_ESCAPE) {
