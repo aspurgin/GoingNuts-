@@ -4,8 +4,12 @@
 #include <GL/glew.h>
 
 #include <GLFW/glfw3.h>
+#ifdef __unix__
 #include <SOIL/SOIL.h>
-
+#endif
+#ifdef _WIN32
+#include <SOIL/src/SOIL.h>
+#endif
 
 class Texture
 {

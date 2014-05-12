@@ -391,38 +391,54 @@ void NutGame::setFallingMovables(int row, int col) {
       gameGrid[row][col]->setWillFall();
    }
 }
-
+//Note: Zach, I edited this a tiny bit because there were seg fault issues. It still does the same thing, fixed it. -Drew
 void NutGame::finishSettingFallingMovables() {
    bool somethingWasUpdated = true;
    int row, col;
+   bool removedItem = false;
    
    while(somethingWasUpdated) {
       somethingWasUpdated = false;
-      for (std::vector<BlockGroup*>::iterator it = mightFallGroupList.begin(); it != mightFallGroupList.end(); ++it) {
+      for (std::vector<BlockGroup*>::iterator it = mightFallGroupList.begin(); it != mightFallGroupList.end(); ) {//++it) {
          for (std::list<Block*>::iterator it2 = (*it)->getListBeginIt(); it2 != (*it)->getListEndIt(); ++it2) {
             row = (*it2)->getCenter().y * -1 + .5;
             col = (*it2)->getCenter().x + .5;
-            if (!(row < NUMROWS - 2 && (gameGrid[row + 1][col] == 0 || 
-                     gameGrid[row + 1][col]->getMovableType() == PLAYER ||
-                     gameGrid[row + 1][col]->willFall() || gameGrid[row + 1][col]->getCanFall()))){
+            if (!(row < NUMROWS - 2 && (gameGrid[row + 1][col] == 0 ||
+               gameGrid[row + 1][col]->getMovableType() == PLAYER ||
+               gameGrid[row + 1][col]->willFall() || gameGrid[row + 1][col]->getCanFall()))){
                ((Block*)gameGrid[row][col])->getGroupIn()->setGroupCanNotFall();
-               mightFallGroupList.erase(it);
-               --it;
+
+               it = mightFallGroupList.erase(it);
+               //--it;
+               removedItem = true;
                somethingWasUpdated = true;
                break;
             }
+            
+           
+         }
+         if (!removedItem) {
+            ++it;
+         }
+         else {
+            removedItem = false;
          }
       }
-      for (std::vector<Movable*>::iterator it = mightFallBlockList.begin(); it != mightFallBlockList.end(); ++it) {
+      for (std::vector<Movable*>::iterator it = mightFallBlockList.begin(); it != mightFallBlockList.end(); ) {//++it) {
          row = (*it)->getCenter().y * -1 + .5;
          col = (*it)->getCenter().x + .5;
          if (!(row < NUMROWS - 2 && (gameGrid[row + 1][col] == 0 || 
              gameGrid[row + 1][col]->getMovableType() == PLAYER ||
              gameGrid[row + 1][col]->willFall() || gameGrid[row][col]->getCanFall()))) {
             gameGrid[row][col]->setCanNotFall();
-            mightFallBlockList.erase(it);
-            --it;
+            
+            //--it;
+            
+            it = mightFallBlockList.erase(it+1);
             somethingWasUpdated = true;
+         }
+         else {
+            ++it;
          }
       }
    }
