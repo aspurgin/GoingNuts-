@@ -18,6 +18,6 @@ void OrthographicCamera::setView(GLint viewHandle) {
 
 void OrthographicCamera::setProjectionMatrix(GLint projectionHandle) {
    //glm::mat4 Projection = glm::perspective(80.0f, (float)width / height, 0.1f, 100.f);
-   glm::mat4 Projection = glm::ortho(-4.0f/3.0f, 4.0f/3.0f, -1.0f, 1.0f, -1.0f, 1.0f);
+   glm::mat4 Projection = glm::ortho(-40.0f/3.0f, 40.0f/3.0f, -10.0f, 10.0f, -10.0f, 10.0f);
    safe_glUniformMatrix4fv(projectionHandle, glm::value_ptr(Projection));
 }
