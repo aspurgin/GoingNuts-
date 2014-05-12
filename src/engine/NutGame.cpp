@@ -5,12 +5,18 @@
 #endif
 
 NutGame::NutGame() {
-   this->drillPressed = false;
+   this->drillDownPressed = false;
+   this->drillLeftPressed = false;
+   this->drillUpPressed = false;
+   this->drillRightPressed = false;
    this->left = false;
    this->right = false;
    this->up = false;
-   this->down = false;
    this->checkingGroupForOtherAdds = false;
+   releasedSinceDownPress = true;
+   releasedSinceLeftPress = true;
+   releasedSinceUpPress = true;
+   releasedSinceRightPress = true;
    this->nutsLeft = 0;
    this->score = 0;
 }
@@ -26,8 +32,6 @@ NutGame::~NutGame() {
 }
 
 void NutGame::init() {
-   this->drillPressed = false;
-
    std::FILE *file = fopen("levels/level25per.txt", "r");
    //std::FILE *file = fopen("levels/test.txt", "r");
    char c;
@@ -162,19 +166,19 @@ bool NutGame::isBlockAtPosition(glm::vec2 pos) {
 }
 
 bool NutGame::isDrillingDown() {
-   return down && drillPressed;
+   return drillDownPressed;
 }
 
 bool NutGame::isDrillingUp() {
-   return up && drillPressed;
+   return drillUpPressed;
 }
 
 bool NutGame::isDrillingLeft() {
-   return left && drillPressed;
+   return drillLeftPressed;
 }
 
 bool NutGame::isDrillingRight() {
-   return right && drillPressed;
+   return drillRightPressed;
 }
 
 void NutGame::fallDown(double toAdd) {
@@ -222,6 +226,7 @@ void NutGame::fallDown(double toAdd) {
                if (gameGrid[row + 1][col] != 0 && gameGrid[row][col]->isIntersecting((Collidable*)gameGrid[row + 1][col])) {
                   if (gameGrid[row + 1][col]->getMovableType() == NUT && gameGrid[row][col]->getMovableType() == PLAYER) {
                      nutsLeft--;
+                     Assets::playSound(Assets::NUT_S);
                      addToScore(5);
                      delete gameGrid[row + 1][col];
                      gameGrid[row + 1][col] = 0;
@@ -229,6 +234,7 @@ void NutGame::fallDown(double toAdd) {
                   else if (gameGrid[row + 1][col]->getMovableType() == PLAYER) {
                      if (gameGrid[row][col]->getMovableType() == NUT) {
                         nutsLeft--;
+                        Assets::playSound(Assets::NUT_S);
                         addToScore(5);
                         delete gameGrid[row][col];
                         gameGrid[row][col] = 0;
@@ -330,6 +336,9 @@ void NutGame::checkGrid(double toAdd) {
          Movable * curObj = gameGrid[row][col];
          if (curObj != 0) {
             setFallingMovables(row, col);
+            if (curObj->getMovableType() == BLOCK) {
+               ((Block *)curObj)->updatePSystem(toAdd);
+            }
             if (curObj->getMovableType() == BLOCK && ((Block*)curObj)->isDead()) {
                ((Block*)curObj)->incrementDeathCounter(toAdd);
                if (((Block*)curObj)->shouldDestroy()) {
@@ -433,13 +442,12 @@ void NutGame::handleKeyInput() {
    Block* block;
 
    if (!player.getIsDead()) {
-      if (left) {
-
+      if (drillLeftPressed && releasedSinceLeftPress) {
+         releasedSinceLeftPress = false;
          pos = glm::vec2(player.getCenter());
          pos.y *= -1;
          if (pos.x >= 1) {
- 
-            if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + .5 - 1)] != 0 && drillPressed) {
+            if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + .5 - 1)] != 0) {
                if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + .5 - 1)]->getMovableType() == BLOCK) {
                   block = (Block *)gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + .5 - 1)];
                   player.drillBlock(block);
@@ -449,56 +457,30 @@ void NutGame::handleKeyInput() {
                   }
                }
             }
-            else if ((gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - .00001)] == 0 || gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - .00001)]->getMovableType() == PLAYER) && !drillPressed) {
-               player.setMovingToColumn((int)(player.getCenter().x - .00001));
-               player.setMoveHorizontal(LEFT);
-            }
-            else if (!drillPressed) {
-               if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)] != 0 && gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)]->getMovableType() == NUT) {
-                  delete gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)];
-                  gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)] = 0;
-                  player.setMovingToColumn((int)(player.getCenter().x - .00001));
-                  player.setMoveHorizontal(LEFT);
-                  nutsLeft--;
-                  addToScore(5);
-               }
-            }
          }
       }
-      else if (right) {
+      else if (drillRightPressed && releasedSinceRightPress) {
+         releasedSinceRightPress = false;
          pos = glm::vec2(player.getCenter());
          pos.y *= -1;
          if (pos.x < NUMCOLS - 1) {
-            if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)] != 0 && drillPressed) {
+            if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)] != 0) {
                if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)]->getMovableType() == BLOCK) {
                   block = (Block *)gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)];
                   player.drillBlock(block);
                   if (block->isDead() && block->deathCounter == -1) {
-                     addToScore(1);
+                      addToScore(1);
                      block->deathCounter = 0;
                   }
                }
             }
-            else if ((gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)] == 0 || gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)]->getMovableType() == PLAYER) && !drillPressed) {
-               player.setMovingToColumn((int)(player.getCenter().x + .00001 + 1));
-               player.setMoveHorizontal(RIGHT);
-            }
-            else if (!drillPressed) {
-               if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)] != 0 && gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)]->getMovableType() == NUT) {
-                  delete gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)];
-                  gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)] = 0;
-                  player.setMovingToColumn((int)(player.getCenter().x + .00001 + 1));
-                  player.setMoveHorizontal(RIGHT);
-                  nutsLeft--;
-                  addToScore(5);
-               }
-            }
          }
       }
-      else if (down) {
+      else if (drillDownPressed && releasedSinceDownPress) {
+         releasedSinceDownPress = false;
          pos = glm::vec2(player.getCenter());
          pos.y *= -1;
-         if (gameGrid[(int)(pos.y + 1.5)][(int)pos.x] != 0 && drillPressed == true) {
+         if (gameGrid[(int)(pos.y + 1.5)][(int)pos.x] != 0) {
             if (gameGrid[(int)(pos.y + 1.5)][(int)pos.x]->getMovableType() == BLOCK) {
                block = (Block *)gameGrid[(int)(pos.y + 1.5)][(int)(pos.x)];
                player.drillBlock(block);
@@ -509,11 +491,12 @@ void NutGame::handleKeyInput() {
             }
          }
       }
-      else if (up) {
+      else if (drillUpPressed && releasedSinceUpPress) {
+         releasedSinceUpPress = false;
          pos = glm::vec2(player.getCenter());
          pos.y *= -1;
          if (pos.y >= .5) {
-            if (gameGrid[(int)(pos.y - 0.5)][(int)pos.x] != 0 && drillPressed == true) {
+            if (gameGrid[(int)(pos.y - 0.5)][(int)pos.x] != 0) {
                if (gameGrid[(int)(pos.y - 0.5)][(int)pos.x]->getMovableType() == BLOCK) {
                   block = (Block *)gameGrid[(int)(pos.y - 0.5)][(int)(pos.x)];
                   player.drillBlock(block);
@@ -524,6 +507,52 @@ void NutGame::handleKeyInput() {
                }
             }
          }
+      }
+      
+      
+      if (left) {
+         pos = glm::vec2(player.getCenter());
+         pos.y *= -1;
+         if (pos.x >= 1) {
+            if ((gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - .00001)] == 0 || gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - .00001)]->getMovableType() == PLAYER)) {
+               player.setMovingToColumn((int)(player.getCenter().x - .00001));
+               player.setMoveHorizontal(LEFT);
+            }
+            else {
+               if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)] != 0 && gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)]->getMovableType() == NUT) {
+                  delete gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)];
+                  gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)] = 0;
+                  player.setMovingToColumn((int)(player.getCenter().x - .00001));
+                  player.setMoveHorizontal(LEFT);
+                  nutsLeft--;
+                  Assets::playSound(Assets::NUT_S);
+                  addToScore(5);
+               }
+            }
+         }
+      }
+      else if (right) {
+         pos = glm::vec2(player.getCenter());
+         pos.y *= -1;
+         if (pos.x < NUMCOLS - 1) {
+            if ((gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)] == 0 || gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)]->getMovableType() == PLAYER)) {
+               player.setMovingToColumn((int)(player.getCenter().x + .00001 + 1));
+               player.setMoveHorizontal(RIGHT);
+            }
+            else {
+               if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)] != 0 && gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)]->getMovableType() == NUT) {
+                  delete gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)];
+                  gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)] = 0;
+                  player.setMovingToColumn((int)(player.getCenter().x + .00001 + 1));
+                  player.setMoveHorizontal(RIGHT);
+                  nutsLeft--;
+                  Assets::playSound(Assets::NUT_S);
+                  addToScore(5);
+               }
+            }
+         }
+      }
+      else if (up) {
          player.setShouldJump();
       }
    }

@@ -44,6 +44,7 @@ class Player: public Movable {
       bool isJumping;
       Direction horDirection;
       int movingToColumn;
+      void checkMoveState();
 };
 
 #endif

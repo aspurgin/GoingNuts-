@@ -46,12 +46,28 @@ bool Player::getIsDead() {
    return isDead;
 }
 
+void Player::checkMoveState() {
+   switch(horDirection) {
+      case LEFT:
+         ang = -90;
+         break;
+      case RIGHT:
+         ang = 90;
+         break;
+      case STOPPED:
+         ang = 0;
+         break;
+   }
+}
+
 void Player::render() {
+   checkMoveState();
    cshader.setMaterial(mat);
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
    modelTrans.pushMatrix();
    modelTrans.translate(center);
+   modelTrans.scale(scale);
    modelTrans.rotate(ang, glm::vec3(0, 1, 0));
    setModel();
    

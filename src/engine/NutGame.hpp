@@ -42,11 +42,17 @@ class NutGame {
       void addToScore(int num);
       int getScore();
       int getDepth();
-      bool drillPressed;
+      bool drillDownPressed;
+      bool drillLeftPressed;
+      bool drillUpPressed;
+      bool drillRightPressed;
+      bool releasedSinceDownPress;
+      bool releasedSinceLeftPress;
+      bool releasedSinceUpPress;
+      bool releasedSinceRightPress;
       bool left;
       bool right;
       bool up;
-      bool down;
       Player player;
    private:
       void setFallingMovables(int row, int col);

@@ -44,7 +44,8 @@ void Renderer::initialize() {
    glClearDepth(1.0f);	// Depth Buffer Setup
    glDepthFunc(GL_LEQUAL);	// The Type Of Depth Testing
    glEnable(GL_DEPTH_TEST);// Enable Depth Testing
-
+   glEnable(GL_CULL_FACE);
+   glCullFace(GL_BACK);
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
 }
@@ -133,7 +134,7 @@ void Renderer::render() {
    //safe_glUniform3f(cshader.h_lightColor, light.color.x, light.color.y, light.color.z);
 
    camera.setEye(glm::vec3(3.0f, ngame->player.getCenter().y + 1, 6.0f));
-   light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y - 1, 6.0f));
+   light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y + 2, 6.0f));
 
    setModel();
    std::list<Renderable*> currObjs = ngame->getObjectsToDraw();
