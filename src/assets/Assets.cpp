@@ -132,7 +132,7 @@ namespace Assets {
       if (Settings::soundEnabled()) {
          result = soundSystem->playSound(FMOD_CHANNEL_FREE, sounds[type], false, 0);
          FMODErrorCheck(result);
-
+         soundSystem->update();
       }
    }
 

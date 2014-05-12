@@ -226,6 +226,7 @@ void NutGame::fallDown(double toAdd) {
                if (gameGrid[row + 1][col] != 0 && gameGrid[row][col]->isIntersecting((Collidable*)gameGrid[row + 1][col])) {
                   if (gameGrid[row + 1][col]->getMovableType() == NUT && gameGrid[row][col]->getMovableType() == PLAYER) {
                      nutsLeft--;
+                     Assets::playSound(Assets::NUT_S);
                      addToScore(5);
                      delete gameGrid[row + 1][col];
                      gameGrid[row + 1][col] = 0;
@@ -233,6 +234,7 @@ void NutGame::fallDown(double toAdd) {
                   else if (gameGrid[row + 1][col]->getMovableType() == PLAYER) {
                      if (gameGrid[row][col]->getMovableType() == NUT) {
                         nutsLeft--;
+                        Assets::playSound(Assets::NUT_S);
                         addToScore(5);
                         delete gameGrid[row][col];
                         gameGrid[row][col] = 0;
@@ -523,6 +525,7 @@ void NutGame::handleKeyInput() {
                   player.setMovingToColumn((int)(player.getCenter().x - .00001));
                   player.setMoveHorizontal(LEFT);
                   nutsLeft--;
+                  Assets::playSound(Assets::NUT_S);
                   addToScore(5);
                }
             }
@@ -543,6 +546,7 @@ void NutGame::handleKeyInput() {
                   player.setMovingToColumn((int)(player.getCenter().x + .00001 + 1));
                   player.setMoveHorizontal(RIGHT);
                   nutsLeft--;
+                  Assets::playSound(Assets::NUT_S);
                   addToScore(5);
                }
             }
