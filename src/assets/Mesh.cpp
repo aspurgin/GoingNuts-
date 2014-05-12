@@ -83,6 +83,7 @@ void Mesh::parseAI(const char* path){
    Assimp::Importer importer;
    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_JoinIdenticalVertices);
 
+   Skeleton test(scene);
 
    if(!scene) {
       ERROR("Could not import file: " << path);
@@ -114,9 +115,6 @@ void Mesh::parseAI(const char* path){
                                    face.mIndices[2]));
    }
 
-   if(mesh->mNumUVComponents[2] != 2){
-      ERROR("Texture component count should be 2, is actually: " << mesh->mNumUVComponents);
-   }
    for(unsigned int u=0; u<mesh->mNumVertices; u++){
       uvs.push_back(glm::vec2(mesh->mTextureCoords[0][u].x, mesh->mTextureCoords[0][u].y));
    }

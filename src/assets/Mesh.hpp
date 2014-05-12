@@ -14,6 +14,7 @@
 #include <assimp/Importer.hpp>      // C++ importer interface
 #include <assimp/scene.h>           // Output data structure
 #include <assimp/postprocess.h>     // Post processing flags
+#include "Skeleton.hpp"
 
 #ifdef _WIN32
 #define _CRT_SECURE_NO_WARNINGS
