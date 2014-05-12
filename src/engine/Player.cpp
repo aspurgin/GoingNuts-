@@ -15,6 +15,8 @@ Player::Player(glm::vec3 center, float width, float height) {
    this->modelTrans.useModelViewMatrix();
    this->shouldJump = false;
    this->isJumping = false;
+   this->horDirection = STOPPED;
+   this->movingToColumn = 3;
 }
 
 void Player::drillBlock(Block *block) {
@@ -96,4 +98,20 @@ void Player::setIsNotJumping() {
 
 bool Player::getIsJumping() {
    return isJumping;
+}
+
+Direction Player::movingHorizontal() {
+   return horDirection;
+}
+
+void Player::setMoveHorizontal(Direction dir) {
+   horDirection = dir;
+}
+
+void Player::setMovingToColumn(int column) {
+   movingToColumn = column;
+}
+
+int Player::getMovingToColumn() {
+   return movingToColumn;
 }

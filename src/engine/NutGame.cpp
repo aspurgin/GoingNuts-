@@ -63,7 +63,7 @@ void NutGame::init() {
       }
    }
    fclose(file);
-   
+
    connectBlocks();
 }
 
@@ -178,7 +178,39 @@ bool NutGame::isDrillingRight() {
 }
 
 void NutGame::fallDown(double toAdd) {
+   double before, after;
    
+   if (player.movingHorizontal() == LEFT) {
+      if (player.getCenter().x > player.getMovingToColumn()) {
+         before = player.getCenter().x;
+         player.moveHorizontal(HOR_MOVE_RATE * toAdd * -1);
+         after = player.getCenter().x;
+         if (before > (int)(player.getCenter().x) + .5 && after < (int)(player.getCenter().x) + .5) {
+            gameGrid[(int)(player.getCenter().y - .5) * -1][(int)player.getCenter().x] = &player;
+            gameGrid[(int)(player.getCenter().y - .5) * -1][(int)player.getCenter().x + 1] = 0;
+         }
+      }
+      else /*if (!left)*/ {
+         player.setMoveHorizontal(STOPPED);
+         player.moveTo(glm::vec2(player.getMovingToColumn(), player.getCenter().y));
+      }
+   }
+   else if (player.movingHorizontal() == RIGHT) {
+      if (player.getCenter().x < player.getMovingToColumn()) {
+         before = player.getCenter().x;
+         player.moveHorizontal(HOR_MOVE_RATE * toAdd);
+         after = player.getCenter().x;
+         if (before < (int)(player.getCenter().x) + .5 && after > (int)(player.getCenter().x) + .5) {
+            gameGrid[(int)(player.getCenter().y - .5) * -1][(int)(player.getCenter().x + .5)] = &player;
+            gameGrid[(int)(player.getCenter().y - .5) * -1][(int)player.getCenter().x] = 0;
+         }
+      }
+      else /*if (!right)*/ {
+         player.setMoveHorizontal(STOPPED);
+         player.moveTo(glm::vec2(player.getMovingToColumn(), player.getCenter().y));
+      }
+   }
+      
    for (int row = NUMROWS - 1; row >= 0; row--) {
       for (int col = 0; col < NUMCOLS; col++) {
          if (gameGrid[row][col] != 0) {
@@ -217,15 +249,12 @@ void NutGame::fallDown(double toAdd) {
                      else {
                         gameGrid[row][col]->stopFalling();
                         gameGrid[row][col]->setCanNotFall();
-                        gameGrid[row][col]->moveTo(glm::vec2(col, -row));
+                        gameGrid[row][col]->moveTo(glm::vec2(gameGrid[row][col]->getCenter().x, -row));
                      }
                   }
                   
                }
                if (gameGrid[row][col] != 0 && (int)(-(gameGrid[row][col]->getCenter().y) + .5) > row) {
-                  if (gameGrid[row][col]->getMovableType() == PLAYER) {
-                     //playerPosition.x += 1;
-                  }
                   delete gameGrid[row + 1][col];
                   gameGrid[row + 1][col] = gameGrid[row][col];
                   gameGrid[row][col] = 0;
@@ -410,9 +439,9 @@ void NutGame::handleKeyInput() {
          pos.y *= -1;
          if (pos.x >= 1) {
  
-            if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)] != 0 && drillPressed) {
-               if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)]->getMovableType() == BLOCK) {
-                  block = (Block *)gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)];
+            if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + .5 - 1)] != 0 && drillPressed) {
+               if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + .5 - 1)]->getMovableType() == BLOCK) {
+                  block = (Block *)gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + .5 - 1)];
                   player.drillBlock(block);
                   if (block->isDead() && block->deathCounter == -1) {
                      addToScore(1);
@@ -420,20 +449,18 @@ void NutGame::handleKeyInput() {
                   }
                }
             }
-            else if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)] == 0 && !drillPressed) {
-               gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)] = gameGrid[(int)(pos.y + .5)][(int)pos.x];
-               gameGrid[(int)(pos.y + .5)][(int)pos.x] = 0;
-
-               player.moveTo(glm::vec2(pos.x - 1, -pos.y));
+            else if ((gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - .00001)] == 0 || gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - .00001)]->getMovableType() == PLAYER) && !drillPressed) {
+               player.setMovingToColumn((int)(player.getCenter().x - .00001));
+               player.setMoveHorizontal(LEFT);
             }
             else if (!drillPressed) {
                if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)] != 0 && gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)]->getMovableType() == NUT) {
                   delete gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)];
-                  gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)] = gameGrid[(int)(pos.y + .5)][(int)pos.x];
+                  gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - 1)] = 0;
+                  player.setMovingToColumn((int)(player.getCenter().x - .00001));
+                  player.setMoveHorizontal(LEFT);
                   nutsLeft--;
-                  gameGrid[(int)(pos.y + .5)][(int)pos.x] = 0;
                   addToScore(5);
-                  player.moveTo(glm::vec2(pos.x - 1, -pos.y));
                }
             }
          }
@@ -441,7 +468,7 @@ void NutGame::handleKeyInput() {
       else if (right) {
          pos = glm::vec2(player.getCenter());
          pos.y *= -1;
-         if (pos.x <= NUMROWS - 1) {
+         if (pos.x < NUMCOLS - 1) {
             if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)] != 0 && drillPressed) {
                if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)]->getMovableType() == BLOCK) {
                   block = (Block *)gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)];
@@ -452,20 +479,18 @@ void NutGame::handleKeyInput() {
                   }
                }
             }
-            else if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)] == 0 && !drillPressed) {
-               gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)] = gameGrid[(int)(pos.y + .5)][(int)pos.x];
-               gameGrid[(int)(pos.y + .5)][(int)pos.x] = 0;
-               
-               player.moveTo(glm::vec2(pos.x + 1, -pos.y));
+            else if ((gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)] == 0 || gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)]->getMovableType() == PLAYER) && !drillPressed) {
+               player.setMovingToColumn((int)(player.getCenter().x + .00001 + 1));
+               player.setMoveHorizontal(RIGHT);
             }
             else if (!drillPressed) {
                if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)] != 0 && gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)]->getMovableType() == NUT) {
                   delete gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)];
-                  gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)] = gameGrid[(int)(pos.y + .5)][(int)pos.x];
-                  gameGrid[(int)(pos.y + .5)][(int)pos.x] = 0;
+                  gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)] = 0;
+                  player.setMovingToColumn((int)(player.getCenter().x + .00001 + 1));
+                  player.setMoveHorizontal(RIGHT);
                   nutsLeft--;
                   addToScore(5);
-                  player.moveTo(glm::vec2(pos.x + 1, -pos.y));
                }
             }
          }
@@ -473,7 +498,7 @@ void NutGame::handleKeyInput() {
       else if (down) {
          pos = glm::vec2(player.getCenter());
          pos.y *= -1;
-         if (drillPressed == true) {
+         if (gameGrid[(int)(pos.y + 1.5)][(int)pos.x] != 0 && drillPressed == true) {
             if (gameGrid[(int)(pos.y + 1.5)][(int)pos.x]->getMovableType() == BLOCK) {
                block = (Block *)gameGrid[(int)(pos.y + 1.5)][(int)(pos.x)];
                player.drillBlock(block);
@@ -488,7 +513,7 @@ void NutGame::handleKeyInput() {
          pos = glm::vec2(player.getCenter());
          pos.y *= -1;
          if (pos.y >= .5) {
-            if (drillPressed == true) {
+            if (gameGrid[(int)(pos.y - 0.5)][(int)pos.x] != 0 && drillPressed == true) {
                if (gameGrid[(int)(pos.y - 0.5)][(int)pos.x]->getMovableType() == BLOCK) {
                   block = (Block *)gameGrid[(int)(pos.y - 0.5)][(int)(pos.x)];
                   player.drillBlock(block);

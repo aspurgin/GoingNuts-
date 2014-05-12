@@ -62,13 +62,8 @@ void keyPressed(GLFWwindow *window, int key, int scancode, int action, int mods)
    else if (key == GLFW_KEY_ESCAPE) {
       glfwTerminate();
 
-
-
-
       exit(0);
    }
-   
-   game.handleKeyInput();
 }
 
 int main(void)
@@ -80,6 +75,9 @@ int main(void)
    int last = 0, current;
    char scoreString[20];
    std::vector<Movable*> toBePassed;
+   float fpsTime = 0;
+   int fpsCount = 0;
+   int curFps = 0;
 
    //glfwGetWindowSize(&width, &height);
 
@@ -105,14 +103,11 @@ int main(void)
    Hud hud(&game);
    Renderer renderer(640, 480, &game, &hud);
    
-   float fpsTime = 0;
-   int fpsCount = 0;
-   int curFps = 0;
-
-   
    Assets::playMusic(Assets::GAME_M);
    //Loop until the user closes the window
    while (!glfwWindowShouldClose(window)) {
+      game.handleKeyInput();
+      
       currentTime = glfwGetTime();
       //game.handleKeyInput();
       delta = currentTime - lastTime;
@@ -152,6 +147,6 @@ int main(void)
    }
 
    glfwTerminate();
-
+   
    return 0;
 }

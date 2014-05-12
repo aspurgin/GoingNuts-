@@ -5,6 +5,10 @@
 #include "Movable.hpp"
 #include "Drill.hpp"
 
+#define HOR_MOVE_RATE 3
+
+enum Direction {LEFT, RIGHT, STOPPED};
+
 class Player: public Movable {
    public:
       Player();
@@ -25,6 +29,10 @@ class Player: public Movable {
       void setIsJumping();
       void setIsNotJumping();
       bool getIsJumping();
+      Direction movingHorizontal();
+      void setMoveHorizontal(Direction dir);
+      void setMovingToColumn(int column);
+      int getMovingToColumn();
    private:
       float velocity;
       int lives;
@@ -34,6 +42,8 @@ class Player: public Movable {
       CellShader cshader;
       bool shouldJump;
       bool isJumping;
+      Direction horDirection;
+      int movingToColumn;
 };
 
 #endif
