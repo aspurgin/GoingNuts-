@@ -7,6 +7,7 @@
 #include "MovableTypes.hpp"
 #include "BlockGroup.hpp"
 #include "../shaders/CellShader.hpp"
+#include "../particles/Particles.hpp"
 #include <vector>
 
 #define HANG_TIME 2
@@ -35,12 +36,14 @@ class Block: public Movable {
       void render();
       void setModel();
       void setScale();
+      void updatePSystem(double dt);
    protected:
       BlockGroup *groupIn;
       int blockType;
       std::vector<Block*> attatchedTo;
       Mesh model;
       CellShader cshader;
+      ParticleSystem psystem;
    private:
       int timesDrilled;
       

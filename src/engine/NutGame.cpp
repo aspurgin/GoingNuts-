@@ -334,6 +334,9 @@ void NutGame::checkGrid(double toAdd) {
          Movable * curObj = gameGrid[row][col];
          if (curObj != 0) {
             setFallingMovables(row, col);
+            if (curObj->getMovableType() == BLOCK) {
+               ((Block *)curObj)->updatePSystem(toAdd);
+            }
             if (curObj->getMovableType() == BLOCK && ((Block*)curObj)->isDead()) {
                ((Block*)curObj)->incrementDeathCounter(toAdd);
                if (((Block*)curObj)->shouldDestroy()) {
