@@ -7,6 +7,7 @@
 #include "../rendering/Renderable.hpp"
 #include "../assets/Assets.hpp"
 #include "DepthGuage.hpp"
+#include "ScoreGuage.hpp"
 #include "Background.hpp"
 
 class Hud: public Renderable

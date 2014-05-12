@@ -7,7 +7,7 @@ namespace Assets {
       FMOD::System *soundSystem;
       FMOD_RESULT result;
       std::map<int, FMOD::Sound*> sounds, music;
-      Mesh squirrel, block, nut, depthWheel, background, guageMask1, guageMask2;
+      Mesh squirrel, block, nut, depthWheel, background, guageMask1, guageMask2, scoreMask1, scoreMask2;
       Texture whiteDepthWheel, blackDepthWheel, hudElements;
       std::map<int, Mesh> meshes;
       std::map<int, Texture> textures;
@@ -43,6 +43,8 @@ namespace Assets {
          background = Mesh("assets/models/Background.obj");
          guageMask1 = Mesh("assets/models/GuageMask1.obj");
          guageMask2 = Mesh("assets/models/GuageMask2.obj");
+         scoreMask1 = Mesh("assets/models/ScoreMask1.obj");
+         scoreMask2 = Mesh("assets/models/ScoreMask2.obj");
 
          block.buildBuffers();
          squirrel.buildBuffers();
@@ -51,6 +53,8 @@ namespace Assets {
          background.buildBuffers();
          guageMask1.buildBuffers();
          guageMask2.buildBuffers();
+         scoreMask1.buildBuffers();
+         scoreMask2.buildBuffers();
 
          meshes[SQUIRREL_M] = squirrel;
          meshes[BLOCK_M] = block;
@@ -59,6 +63,8 @@ namespace Assets {
          meshes[BACKGROUND_M] = background;
          meshes[DEPTH_GUAGE_MASK_1_M] = guageMask1;
          meshes[DEPTH_GUAGE_MASK_2_M] = guageMask2;
+         meshes[SCORE_GUAGE_MASK_1_M] = scoreMask1;
+         meshes[SCORE_GUAGE_MASK_2_M] = scoreMask2;
       }
 
       void initShaders() {
