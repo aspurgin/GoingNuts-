@@ -138,6 +138,8 @@ void Block::setModel() {
 }
 
 void Block::updatePSystem(double dt) {
-   
+   if(isDead()) {
+      psystem.start();
+   }
    psystem.timeStep((float)dt);
 }
