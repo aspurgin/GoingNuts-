@@ -8,8 +8,12 @@ Player::Player(glm::vec3 center, float width, float height) {
    this->velocity = 1.f;
    this->lives = 3;
    this->isDead = false;
+<<<<<<< HEAD
    model = Assets::getMesh(Assets::SQUIRREL_M);
    this->hasHardHat = false;
+=======
+   this->model = Assets::getMesh(Assets::SQUIRREL_M);
+>>>>>>> Revert to old shader, that was a failure...
    this->cshader = Assets::getCShader();
    this->mat = 5;
    this->scale = 1;
@@ -85,16 +89,6 @@ void Player::render() {
    glBindBuffer(GL_ARRAY_BUFFER, model.normHandle());
    safe_glVertexAttribPointer(cshader.h_aNormal, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-   safe_glEnableVertexAttribArray(cshader.h_vertexUV);
-   glBindBuffer(GL_ARRAY_BUFFER, model.uvHandle());
-   safe_glVertexAttribPointer(cshader.h_vertexUV, 2, GL_FLOAT, GL_FALSE, 0, 0);
-
-   // Bind our texture in Texture Unit 0
-   glActiveTexture(GL_TEXTURE0);
-   glBindTexture(GL_TEXTURE_2D, texture.textureID);
-   // Set our "myTextureSampler" sampler to user Texture Unit 0
-   glUniform1i(cshader.h_myTextureSampler, 0);
-
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.idxHandle());
    glDrawElements(GL_TRIANGLES, model.getIdxCount(), GL_UNSIGNED_INT, 0);
    
@@ -102,7 +96,6 @@ void Player::render() {
    //printf("num verts: %d\n", model.getVertCount());
    safe_glDisableVertexAttribArray(cshader.h_aPosition);
    safe_glDisableVertexAttribArray(cshader.h_aNormal);
-   safe_glDisableVertexAttribArray(cshader.h_vertexUV);
 }
 
 void Player::setModel() {
