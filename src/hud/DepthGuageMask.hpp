@@ -16,8 +16,8 @@
 class DepthGuageMask : public Renderable {
    private:
       Mesh mask1, mask2;
-      CellShaderTexture cshader;
-      //FlatTextureShader cshader;
+      //CellShaderTexture cshader;
+      FlatTextureShader cshader;
       Texture texture;
       unsigned int count;
       glm::vec3 position;

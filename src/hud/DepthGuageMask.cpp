@@ -4,8 +4,8 @@
 DepthGuageMask::DepthGuageMask() {
    this->mask1 = Assets::getMesh(Assets::DEPTH_GUAGE_MASK_1_M);
    this->mask2 = Assets::getMesh(Assets::DEPTH_GUAGE_MASK_2_M);
-   this->cshader = Assets::getCShaderTexture();
-   //this->cshader = Assets::getFlatTextureShader();
+   //this->cshader = Assets::getCShaderTexture();
+   this->cshader = Assets::getFlatTextureShader();
    //this->scale = 2.085f;
    this->mat = 1;
    //this->modelTrans.useModelViewMatrix();

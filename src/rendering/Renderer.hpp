@@ -9,6 +9,7 @@
 #include "Light.hpp"
 #include "../shaders/PhongShader.hpp"
 #include "../shaders/CellShaderTexture.hpp"
+#include "../shaders/FlatTextureShader.hpp"
 #include "../shaders/ShaderUtils.hpp"
 #include "../helperFiles/GLSL_helper.h"
 #include "../helperFiles/MStackHelp.h"
@@ -28,7 +29,7 @@ class Renderer {
       Light light;
       PhongShader pshader;
       CellShader cshader;
-      CellShaderTexture ctshader;
+      FlatTextureShader ctshader;
       RenderingHelper modelTrans;
       int winWidth, winHeight;
       NutGame *ngame;

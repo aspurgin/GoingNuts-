@@ -19,8 +19,8 @@
 class DepthWheel : public Renderable {
    private:
       Mesh model;
-      CellShaderTexture cshader;
-      //FlatTextureShader cshader;
+      //CellShaderTexture cshader;
+      FlatTextureShader cshader;
       Texture texture;
       unsigned int count;
       glm::vec3 position;

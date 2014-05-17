@@ -3,8 +3,8 @@
 
 DepthWheel::DepthWheel(int type, glm::vec3 position) {
    this->model = Assets::getMesh(Assets::DEPTH_WHEEL_M);
-   this->cshader = Assets::getCShaderTexture();
-   //this->cshader = Assets::getFlatTextureShader();
+   //this->cshader = Assets::getCShaderTexture();
+   this->cshader = Assets::getFlatTextureShader();
    this->scale = 0.4f;
    this->mat = 1;
    this->modelTrans.useModelViewMatrix();

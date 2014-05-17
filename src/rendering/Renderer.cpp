@@ -24,7 +24,7 @@ Renderer::Renderer(int width, int height, NutGame *game, Hud* hud) {
    //cshader = ShaderUtils::installCellShader(textFileRead((char *) "assets/shaders/CellShader_Vert.glsl"),
      //                                       textFileRead((char *) "assets/shaders/CellShader_Frag.glsl"));
    cshader = Assets::getCShader();
-   ctshader = Assets::getCShaderTexture();
+   ctshader = Assets::getFlatTextureShader();
    light = Light();
    winWidth = width;
    winHeight = height;

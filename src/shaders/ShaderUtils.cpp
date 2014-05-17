@@ -272,9 +272,12 @@ FlatTextureShader ShaderUtils::installFlatTextureShader(const GLchar *vShaderNam
 
    /* get handles to attribute data */
    flatTextureShader.h_aPosition = safe_glGetAttribLocation(ShadeProg, "aPosition");
+   flatTextureShader.h_aNormal = safe_glGetAttribLocation(ShadeProg, "aNormal");
    flatTextureShader.h_uProjMatrix = safe_glGetUniformLocation(ShadeProg, "uProjMatrix");
    flatTextureShader.h_uViewMatrix = safe_glGetUniformLocation(ShadeProg, "uViewMatrix");
    flatTextureShader.h_uModelMatrix = safe_glGetUniformLocation(ShadeProg, "uModelMatrix");
+   flatTextureShader.h_lightPos = safe_glGetUniformLocation(ShadeProg, "lightPos");
+   flatTextureShader.h_cameraPos = safe_glGetUniformLocation(ShadeProg, "cameraPos");
    flatTextureShader.h_myTextureSampler  = glGetUniformLocation(ShadeProg, "myTextureSampler");
    flatTextureShader.h_vertexUV = glGetAttribLocation(ShadeProg, "vertexUV");
    flatTextureShader.shadeProg = ShadeProg;

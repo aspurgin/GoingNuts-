@@ -3,8 +3,8 @@
 
 Background::Background() {
    this->model = Assets::getMesh(Assets::BACKGROUND_M);
-   this->cshader = Assets::getCShaderTexture();
-   //this->cshader = Assets::getFlatTextureShader();
+   //this->cshader = Assets::getCShaderTexture();
+   this->cshader = Assets::getFlatTextureShader();
    //this->scale = 2.085f;
    this->mat = 1;
    this->modelTrans.useModelViewMatrix();
