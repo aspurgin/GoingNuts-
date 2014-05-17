@@ -9,6 +9,8 @@ DepthWheel::DepthWheel(int type, glm::vec3 position) {
    this->mat = 1;
    this->modelTrans.useModelViewMatrix();
    this->position = position + glm::vec3(-12.5, 2.68, 0.0);
+   desiredAngle = 0.0f;
+   ang = 0.0f;
 
    if (type == Assets::WHITE_DEPTH_WHEEL_T)
    {
@@ -28,7 +30,22 @@ void DepthWheel::render() {
 
    modelTrans.translate(position);
    modelTrans.scale(scale);
+
+   // If the current angle is not within the the error margin of the desired angle, 
+   // rotate the wheel
+   if (!(ang >= desiredAngle - ERROR_MARGIN && ang <= desiredAngle + ERROR_MARGIN))
+   {
+      ang += ANGLE_BETWEEN_NUMBERS/10.0f;
+
+      //Make sure the angle stays between 0 and 360
+      if (ang >= 360.0f)
+       {
+          ang -= 360;
+       } 
+   }
+
    modelTrans.rotate(ang, glm::vec3(1.0, 0.0, 0.0));
+
    setModel();
    
    safe_glEnableVertexAttribArray(cshader.h_aPosition);
@@ -49,6 +66,7 @@ void DepthWheel::render() {
    // Bind our texture in Texture Unit 0
    glActiveTexture(GL_TEXTURE0);
    glBindTexture(GL_TEXTURE_2D, texture.textureID);
+
    // Set our "myTextureSampler" sampler to user Texture Unit 0
    glUniform1i(cshader.h_myTextureSampler, 0);
 
@@ -68,5 +86,5 @@ void DepthWheel::setModel() {
 
 void DepthWheel::set(int number)
 {
-   ang = number * 36.0f;
+   desiredAngle = number * ANGLE_BETWEEN_NUMBERS;
 }

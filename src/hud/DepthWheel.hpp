@@ -13,6 +13,9 @@
 #include "../shaders/FlatTextureShader.hpp"
 #include "../assets/Texture.hpp"
 
+#define ANGLE_BETWEEN_NUMBERS 36.0f
+#define ERROR_MARGIN 1.0f
+
 class DepthWheel : public Renderable {
    private:
       Mesh model;
@@ -21,6 +24,7 @@ class DepthWheel : public Renderable {
       Texture texture;
       unsigned int count;
       glm::vec3 position;
+      float desiredAngle;
 
    public:
       DepthWheel(int type, glm::vec3 position);

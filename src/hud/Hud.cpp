@@ -14,6 +14,10 @@ Hud::Hud(NutGame* nutGame) : Renderable()
 
 Hud::~Hud()
 {
+	for (int i = 0; i < components.size(); ++i)
+	{
+		delete components[i];
+	}
 }
 
 void Hud::setModel()
