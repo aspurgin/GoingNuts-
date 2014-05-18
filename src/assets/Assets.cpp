@@ -28,7 +28,8 @@ namespace Assets {
       void loadTextures() {
          whiteDepthWheel = Texture("assets/textures/MileageCounterWhite.jpg");
          blackDepthWheel = Texture("assets/textures/MileageCounterBlack.jpg");
-         hudElements = Texture("assets/textures/HUDElements.jpg");
+         //hudElements = Texture("assets/textures/HUDElements.jpg");
+         hudElements = Texture("assets/textures/HUDElements.png", RGBA_TEX);
 
          textures[WHITE_DEPTH_WHEEL_T] = whiteDepthWheel;
          textures[BLACK_DEPTH_WHEEL_T] = blackDepthWheel;

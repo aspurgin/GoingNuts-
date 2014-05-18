@@ -2,6 +2,7 @@
 #define HUD_HPP 
 
 #include <vector>
+#include <stdio.h>
 
 #include "../engine/NutGame.hpp"
 #include "../rendering/Renderable.hpp"
@@ -9,6 +10,8 @@
 #include "DepthGuage.hpp"
 #include "ScoreGuage.hpp"
 #include "Background.hpp"
+#include "YouWon.hpp"
+#include "YouLost.hpp"
 
 class Hud: public Renderable
 {
@@ -17,9 +20,12 @@ class Hud: public Renderable
       ~Hud();
       void render();
       void setModel();
+      void renderWinLoss();
 
    private:
       NutGame* nutGame;
+      YouWon* youWon;
+      YouLost* youLost;
       std::vector<Renderable*> components;
 };
 

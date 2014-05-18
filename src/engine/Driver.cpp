@@ -145,13 +145,13 @@ int main(void)
       
       if (game.player.getIsDead()) {
          sprintf(scoreString, "FPS: %.0f Score: %d  You are Dead", 1.0/delta, game.getScore());
-         printf("YOU ARE DEAD\n");
-         break;
+         //printf("YOU ARE DEAD\n");
+         //break;
       }
       if (game.getNutsLeft() == 0) {
          sprintf(scoreString, "FPS: %.0f Score: %d  %s", 1.0/delta, game.getScore(), "You won!!!");
-         printf("YOU WON!!!!!!!!\n");
-         break;
+         //printf("YOU WON!!!!!!!!\n");
+         //break;
       }
       
       glfwSetWindowTitle(window, scoreString);

@@ -66,6 +66,10 @@ void Renderer::render() {
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    
    //*** Render the hud ***/
+   glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+   glEnable (GL_BLEND);
+   glDisable (GL_DEPTH_TEST);
+
    glUseProgram(ctshader.shadeProg);
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
@@ -81,6 +85,9 @@ void Renderer::render() {
    hud->render();
 
    glUseProgram(0);
+   glDisable (GL_BLEND);
+   glEnable(GL_DEPTH_TEST);
+
    //Clear the depth buffer to make the game draw over the HUD
    glClear(GL_DEPTH_BUFFER_BIT);
 
@@ -108,6 +115,32 @@ void Renderer::render() {
    for (std::list<Renderable*>::iterator it = currObjs.begin(); it != currObjs.end(); ++it) {
       (*it)->render();
    }
+
+   //*** Render Win Loss ***/
+   glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+   glEnable (GL_BLEND);
+   glDisable (GL_DEPTH_TEST);
+
+   glUseProgram(ctshader.shadeProg);
+   modelTrans.useModelViewMatrix();
+   modelTrans.loadIdentity();
+
+   orthographicCamera.setView(ctshader.h_uViewMatrix);
+   orthographicCamera.setProjectionMatrix(ctshader.h_uProjMatrix);
+   safe_glUniform3f(ctshader.h_lightPos, light.position.x, light.position.y, light.position.z);
+   safe_glUniform3f(ctshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
+
+   camera.setEye(glm::vec3(3.0f, ngame->player.getCenter().y + 1, 6.0f));
+   light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y - 1, 6.0f));
+
+   hud->renderWinLoss();
+
+   glUseProgram(0);
+   glDisable (GL_BLEND);
+   glEnable(GL_DEPTH_TEST);
+
+   //Clear the depth buffer to make the game draw over the HUD
+   glClear(GL_DEPTH_BUFFER_BIT);
 
    //printf("num objs: %d", currObjs.size());
    /*for (int i = 0; i < currObjs.size(); i++) {
