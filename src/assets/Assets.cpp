@@ -7,13 +7,8 @@ namespace Assets {
       FMOD::System *soundSystem;
       FMOD_RESULT result;
       std::map<int, FMOD::Sound*> sounds, music;
-<<<<<<< HEAD
       Mesh squirrel, block, nut, depthWheel, background, guageMask1, guageMask2, scoreMask1, scoreMask2, youWon, youLost;
-      Texture whiteDepthWheel, blackDepthWheel, hudElements;
-=======
-      Mesh squirrel, block, nut, depthWheel, background, guageMask1, guageMask2, scoreMask1, scoreMask2;
       Texture whiteDepthWheel, blackDepthWheel, hudElements, squirrelTex;
->>>>>>> tmp commit, textures on squirrel, but flat projection
       std::map<int, Mesh> meshes;
       std::map<int, Texture> textures;
       CellShader cshader;
