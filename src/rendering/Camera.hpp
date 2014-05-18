@@ -25,8 +25,8 @@ public:
    glm::vec3 wVector;
    glm::vec3 uVector;
    glm::vec3 vVector;
-
    Camera();
+   Camera(glm::vec3, glm::vec3, glm::vec3);
    void shake();
    void setView(GLint);
    void setProjectionMatrix(GLint, int, int);

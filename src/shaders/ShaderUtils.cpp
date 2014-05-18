@@ -285,3 +285,63 @@ FlatTextureShader ShaderUtils::installFlatTextureShader(const GLchar *vShaderNam
    glUseProgram(0);
    return flatTextureShader;
 }
+
+
+DebugShadowShader ShaderUtils::installDebugShadowShader(const GLchar* vShaderName, const GLchar* fShaderName) {
+   GLuint VS; //handles to shader object
+   GLuint FS; //handles to frag shader object
+   GLint vCompiled; //status
+   GLint fCompiled;
+   GLint linked;
+   int ShadeProg; //Shade prog num
+
+   VS = glCreateShader(GL_VERTEX_SHADER);
+   FS = glCreateShader(GL_FRAGMENT_SHADER);
+
+   //load the source
+   glShaderSource(VS, 1, &vShaderName, NULL);
+   glShaderSource(FS, 1, &fShaderName, NULL);
+
+   //compile shader and print log
+   glCompileShader(VS);
+   /* check shader status requires helper functions */
+   printOpenGLError();
+   glGetShaderiv(VS, GL_COMPILE_STATUS, &vCompiled);
+   printShaderInfoLog(VS);
+
+   //compile shader and print log
+   glCompileShader(FS);
+   /* check shader status requires helper functions */
+   printOpenGLError();
+   glGetShaderiv(FS, GL_COMPILE_STATUS, &fCompiled);
+   printShaderInfoLog(FS);
+
+   if (!vCompiled || !fCompiled) {
+      printf("Error compiling either shader %s or %s", vShaderName, fShaderName);
+      throw(1);
+   }
+
+   //create a program object and attach the compiled shader
+   ShadeProg = glCreateProgram();
+   glAttachShader(ShadeProg, VS);
+   glAttachShader(ShadeProg, FS);
+
+   glLinkProgram(ShadeProg);
+   /* check shader status requires helper functions */
+   printOpenGLError();
+   glGetProgramiv(ShadeProg, GL_LINK_STATUS, &linked);
+   printProgramInfoLog(ShadeProg);
+
+   glUseProgram(ShadeProg);
+
+   //Set up PhongShader object
+   DebugShadowShader debugShadowShader;
+
+   /* get handles to attribute data */
+   debugShadowShader.h_aPosition = safe_glGetAttribLocation(ShadeProg, "vp");
+   debugShadowShader.h_tPos = safe_glGetAttribLocation(ShadeProg, "vt");
+   debugShadowShader.shadeProg = ShadeProg;
+
+   glUseProgram(0);
+   return debugShadowShader;
+}

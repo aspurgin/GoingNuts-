@@ -1,9 +1,13 @@
 #include "Camera.hpp"
 
 Camera::Camera() {
-   eye = glm::vec3(3.0f, 1.0f, 10.0f);
-   lookAt = glm::vec3(3.0f, 0.0f, 5.0f);
-   upVec = glm::vec3(0, 1, 0);
+
+}
+
+Camera::Camera(glm::vec3 e, glm::vec3 lA, glm::vec3 up) {
+   eye = e;//glm::vec3(3.0f, 1.0f, 10.0f);
+   lookAt = lA;//glm::vec3(3.0f, 0.0f, 5.0f);
+   upVec = up;//glm::vec3(0, 1, 0);
 }
 
 void Camera::setView(GLint  viewHandle) {
@@ -13,7 +17,7 @@ void Camera::setView(GLint  viewHandle) {
 }
 
 void Camera::setProjectionMatrix(GLint projectionHandle, int width, int height) {
-   glm::mat4 Projection = glm::perspective(80.0f, (float)width / height, 0.1f, 100.f);
+   glm::mat4 Projection = glm::perspective(50.0f, (float)width / height, 0.1f, 100.f);
    safe_glUniformMatrix4fv(projectionHandle, glm::value_ptr(Projection));
 }
 
@@ -24,5 +28,5 @@ void Camera::shake() {
 void Camera::setEye(glm::vec3 pos) {
    eye = pos;
    lookAt.z = pos.z - 5;
-   lookAt.y = pos.y - 1;
+   lookAt.y = pos.y;// - 1;
 }

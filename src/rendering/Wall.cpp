@@ -13,6 +13,12 @@ Wall::Wall(glm::vec3 pos) {
    this->pos = pos;
 }
 
+void Wall::setScale(glm::vec3 scale) {
+   scaleX = scale.x;
+   scaleY = scale.y;
+   scaleZ = scale.z;
+}
+
 void Wall::render() {
    cshader.setMaterial(mat);
    modelTrans.useModelViewMatrix();

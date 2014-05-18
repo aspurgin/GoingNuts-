@@ -16,6 +16,7 @@
 #include "../assets/Assets.hpp"
 
 NutGame game;
+bool tog = false;
 
 void keyPressed(GLFWwindow *window, int key, int scancode, int action, int mods) {
 
@@ -26,6 +27,11 @@ void keyPressed(GLFWwindow *window, int key, int scancode, int action, int mods)
       else if (action == GLFW_RELEASE) {
          game.left = false;
       }
+   }
+   else if (key == GLFW_KEY_E) {
+      if (action == GLFW_RELEASE) {
+         tog = !tog;
+      }   
    }
    else if (key == GLFW_KEY_W) {
       if (action == GLFW_PRESS) {
@@ -159,6 +165,7 @@ int main(void)
       lastTime = currentTime;
       // Render here
       glViewport(0, 0, (GLsizei)1280, (GLsizei)720);
+      renderer.toggle = tog;
       renderer.render();
 
       //Swap front and back buffers

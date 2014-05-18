@@ -9,6 +9,7 @@ class Wall : public Renderable {
       Wall(glm::vec3);
       void render();
       void setModel();
+      void setScale(glm::vec3);
    private:
       Mesh model;
       glm::vec3 pos;

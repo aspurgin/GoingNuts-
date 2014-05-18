@@ -9,6 +9,7 @@
 #include "Light.hpp"
 #include "../shaders/PhongShader.hpp"
 #include "../shaders/CellShaderTexture.hpp"
+#include "../shaders/DebugShadowShader.hpp"
 #include "../shaders/FlatTextureShader.hpp"
 #include "../shaders/ShaderUtils.hpp"
 #include "../helperFiles/GLSL_helper.h"
@@ -21,10 +22,15 @@
 class Renderer {
    private:
       void renderWalls();
+      void initDebugLightMap();
       Wall left;
       Wall right;
+      Wall back;
+      GLuint lmDebugPosHandle, lmDebugTHandle;
+      DebugShadowShader dSS;
    public:
       Camera camera;
+      bool toggle;
       OrthographicCamera orthographicCamera;
       Light light;
       PhongShader pshader;

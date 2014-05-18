@@ -21,6 +21,7 @@
 #include "CellShader.hpp"
 #include "CellShaderTexture.hpp"
 #include "FlatTextureShader.hpp"
+#include "DebugShadowShader.hpp"
 
 class ShaderUtils {
    public:
@@ -28,6 +29,7 @@ class ShaderUtils {
       static CellShader installCellShader(const GLchar*, const GLchar*);
       static CellShaderTexture installCellShaderTexture(const GLchar*, const GLchar*);
       static FlatTextureShader installFlatTextureShader(const GLchar*, const GLchar*);
+      static DebugShadowShader installDebugShadowShader(const GLchar*, const GLchar*);
    private:
       ShaderUtils();
 };
