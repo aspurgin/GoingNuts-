@@ -121,8 +121,17 @@ void Mesh::parseAI(const char* path){
    }
 }
 
+
+/*
+ * This is the part used to animate the mesh. It
+ * does not currently do anything.
+ * 
+ * anim: character string for the animation cycle to use
+ *
+ * interp: 0.f - 1.f value determining the progress through the cycle
+ */
 void Mesh::setAt(const char* anim, float interp){
-   setAt(animIds[std::string(anim)], interp);
+   WARN("NOT YET MIPLEMENTED");
 }
 
 void Mesh::setAt(int anim, float interp){
