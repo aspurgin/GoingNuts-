@@ -38,6 +38,7 @@ class Block: public Movable {
       void setModel();
       void setScale();
       //void updatePSystem(double dt);
+      void genParticles();
    protected:
       BlockGroup *groupIn;
       int blockType;

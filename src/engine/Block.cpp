@@ -27,9 +27,7 @@ void Block::addToTimesDrilled() {
          delete groupIn;
       }
       else {
-         psystem->moveTo(center);
-         psystem->setMatID(this->mat);
-         psystem->burst(25);
+         genParticles();
       }
       state = DEAD;
    }
@@ -77,9 +75,7 @@ void Block::makeDead() {
 	timesDrilled = getStrength();
    state = DEAD;
    deathCounter = 0;
-   psystem->moveTo(center);
-   psystem->setMatID(this->mat);
-   psystem->burst(25);
+   genParticles();
 }
 
 bool Block::isInAGroup() {
@@ -145,4 +141,10 @@ void Block::render() {
 
 void Block::setModel() {
    safe_glUniformMatrix4fv(cshader.h_uModelMatrix, glm::value_ptr(modelTrans.modelViewMatrix));
+}
+
+void Block::genParticles() {
+   psystem->moveTo(center);
+   psystem->setMatID(this->mat);
+   psystem->burst(25);
 }
