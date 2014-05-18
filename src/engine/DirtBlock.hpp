@@ -9,7 +9,7 @@ class DirtBlock: public Block {
    public:
       DirtBlock();
       DirtBlock(glm::vec3 center, int color);
-      DirtBlock(glm::vec3 center, float width, float height, int color);
+      DirtBlock(glm::vec3 center, float width, float height, int color, ParticleSystem *psystem);
       int getStrength();
       float getSlowPercentage();
       int getColor();

@@ -19,6 +19,7 @@ NutGame::NutGame() {
    releasedSinceRightPress = true;
    this->nutsLeft = 0;
    this->score = 0;
+   this->psystem = ParticleSystem();
 }
 
 NutGame::~NutGame() {
@@ -42,16 +43,16 @@ void NutGame::init() {
          c = fgetc(file);
          //They are all .99 because there  is somerounding errors with collision detection if they are 1
          if (c == 'X') {
-            gameGrid[row][col] = new StoneBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f);
+            gameGrid[row][col] = new StoneBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, &psystem);
          }
          else if (c == 'R') {
-            gameGrid[row][col] = new DirtBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, 1);
+            gameGrid[row][col] = new DirtBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, 1, &psystem);
          }
          else if (c == 'G') {
-            gameGrid[row][col] = new DirtBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, 3);
+            gameGrid[row][col] = new DirtBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, 3, &psystem);
          }
          else if (c == 'B') {
-            gameGrid[row][col] = new DirtBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, 2);
+            gameGrid[row][col] = new DirtBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, 2, &psystem);
          }
          else if (c == 'S') {
             player = Player(glm::vec3(col, -row, 0), 0.99f, 0.99f);
@@ -343,9 +344,9 @@ void NutGame::checkGrid(double toAdd) {
          Movable * curObj = gameGrid[row][col];
          if (curObj != 0) {
             setFallingMovables(row, col);
-            if (curObj->getMovableType() == BLOCK) {
+            /*if (curObj->getMovableType() == BLOCK) {
                ((Block *)curObj)->updatePSystem(toAdd);
-            }
+            }*/
             if (curObj->getMovableType() == BLOCK && ((Block*)curObj)->isDead()) {
                ((Block*)curObj)->incrementDeathCounter(toAdd);
                if (((Block*)curObj)->shouldDestroy()) {
@@ -609,6 +610,7 @@ std::list<Renderable*> NutGame::getObjectsToDraw() {
          }
       }
    }
+   objects.push_back(&psystem);
    objects.unique();
    return objects;
 }
@@ -638,4 +640,6 @@ bool NutGame::isGameWon() {
    return nutsLeft == 0;
 }
 
-
+void NutGame::updatePSystem(double dt) {
+   psystem.timeStep((float)dt);
+}

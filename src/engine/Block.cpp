@@ -26,6 +26,11 @@ void Block::addToTimesDrilled() {
          groupIn->destroy();
          delete groupIn;
       }
+      else {
+         psystem->moveTo(center);
+         psystem->setMatID(this->mat);
+         psystem->burst(25);
+      }
       state = DEAD;
    }
 }
@@ -72,6 +77,9 @@ void Block::makeDead() {
 	timesDrilled = getStrength();
    state = DEAD;
    deathCounter = 0;
+   psystem->moveTo(center);
+   psystem->setMatID(this->mat);
+   psystem->burst(25);
 }
 
 bool Block::isInAGroup() {
@@ -106,7 +114,6 @@ void Block::setScale() {
 
 void Block::render() {
    setScale();
-   psystem.render();
    cshader.setMaterial(mat);
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
@@ -138,11 +145,4 @@ void Block::render() {
 
 void Block::setModel() {
    safe_glUniformMatrix4fv(cshader.h_uModelMatrix, glm::value_ptr(modelTrans.modelViewMatrix));
-}
-
-void Block::updatePSystem(double dt) {
-   if(isDead()) {
-      psystem.start();
-   }
-   psystem.timeStep((float)dt);
 }

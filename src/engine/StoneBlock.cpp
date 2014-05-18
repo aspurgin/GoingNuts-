@@ -6,14 +6,13 @@ StoneBlock::StoneBlock(glm::vec3 center) {
    this->center = center;    
    this->blockType = STONEBLOCK;
    this->mat = 4;
-   this->psystem = ParticleSystem(this->center, mat);
 }
 
-StoneBlock::StoneBlock(glm::vec3 center, float width, float height) {
+StoneBlock::StoneBlock(glm::vec3 center, float width, float height, ParticleSystem *psystem) {
    this->blockType = STONEBLOCK;
    this->mat = 4;
    setObject(center, width, height);
-   this->psystem = ParticleSystem(center, mat);
+   this->psystem = psystem;
 }
 
 int StoneBlock::getStrength() {

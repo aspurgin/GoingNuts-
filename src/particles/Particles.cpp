@@ -11,9 +11,9 @@ Particle::Particle(float mass, float ttl, glm::vec3 pos, glm::vec3 vel, int mat)
    this->vel = vel;
    this->model = Assets::getMesh(Assets::BLOCK_M);
    cshader = Assets::getCShader();
-   this->scale = 0.1;
-   this->mat = 0;
+   this->scale = .05;
    this->ang = 0;
+   this->front = glm::vec3(0, 0, 1);
    this->modelTrans.useModelViewMatrix();
    this->modelTrans.loadIdentity();
    this->mat = mat;
@@ -25,14 +25,18 @@ Particle::~Particle() {}
 
 
 void Particle::render() {
-   /* TODO: Make a god damned render function */
+   glm::vec3 camVec = glm::normalize(glm::vec3(3, 1, 8) - pos);
+   glm::vec3 right = glm::cross(camVec, glm::vec3(0, 1, 0));
+   glm::vec3 axis = glm::cross(camVec, right);
+   float angle = glm::dot(camVec, front) * TO_DEGREES;
+
    cshader.setMaterial(mat);
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
    modelTrans.pushMatrix();
    modelTrans.translate(pos);
    modelTrans.scale(scale);
-   modelTrans.rotate(0, glm::vec3(0, 1, 0));
+   modelTrans.rotate(angle, axis);
    setModel();
 
    safe_glEnableVertexAttribArray(cshader.h_aPosition);
@@ -59,7 +63,16 @@ void Particle::setModel() {
 }
 
 ParticleSystem::ParticleSystem() {
-
+   pos = glm::vec3();
+   on = false;
+   perSec = 50; // CHANGE THIS BACK TO 50
+   mass = 0.05;
+   time = 0;
+   ttl = 5;  //CHANGE THIS BACK TO 5
+   spread = glm::vec3(4, 4, 4);
+   vel = glm::vec3(0, 4.5, 0);
+   numParticles = 0;
+   mat = 0;
 }
 
 ParticleSystem::~ParticleSystem() {
@@ -69,10 +82,10 @@ ParticleSystem::~ParticleSystem() {
 ParticleSystem::ParticleSystem(glm::vec3 pos, int mat) {
    this->pos = pos;
    on = false;
-   perSec = 50;
+   perSec = 20; // CHANGE THIS BACK TO 50
    mass = 0.05;
    time = 0;
-   ttl = 5;
+   ttl = 3;  //CHANGE THIS BACK TO 5
    spread = glm::vec3(4, 4, 4);
    vel = glm::vec3(0, 4.5, 0);
    numParticles = 0;
@@ -137,6 +150,11 @@ void ParticleSystem::setMass(float newMass) {
 }
 
 
+void ParticleSystem::setMatID(int matID) {
+   mat = matID;
+}
+
+
 void ParticleSystem::setPerSec(int n) {
    perSec = n;
 }
@@ -154,19 +172,18 @@ void ParticleSystem::setTTL(float newTTL) {
 
 void ParticleSystem::start() {
    on = true;
-   time = numParticles = 0;
 }
 
 
 void ParticleSystem::stop() {
    on = false;
+   time = numParticles = 0;
 }
 
 
 void ParticleSystem::timeStep(float dt) {
-
    float perParticle = 1.0f / perSec;
-   float toGenerate;
+   float toGenerate = 0;
    std::vector<Particle>::iterator it;
 
    // Here we need to generate particles according to the time
@@ -175,14 +192,15 @@ void ParticleSystem::timeStep(float dt) {
          add();
          numParticles++;
       }
-   }
 
+      time += dt;
+   }
    computeForces(); // Somehow get all forces affecting all Particles
 
    it = p.begin();
    while (it != p.end()) {
       it->pos += dt * it->vel;
-      it->vel += dt * it->netForce;
+      it->vel += dt * it->netForce / it->mass;
       it->ttl -= dt;
       if (it->ttl <= 0) {
          it = p.erase(it);
@@ -192,13 +210,13 @@ void ParticleSystem::timeStep(float dt) {
       }
    }
 
-   time += dt;
    DEBUG("finished Timestep");
 }
 
+
 void ParticleSystem::computeForces() {
    for (std::vector<Particle>::iterator it = p.begin(); it != p.end(); ++it) {
-      it->netForce = glm::vec3(0, GRAVITY, 0);
+      it->netForce = glm::vec3(0, GRAVITY * it->mass, 0);
    }
 }
 
@@ -209,15 +227,18 @@ float ParticleSystem::percentOf(float of) {
 
 
 float ParticleSystem::percentRange(float of) {
-   return ((float)rand() / (float)RAND_MAX) * of;
+   return ((float)rand() / (float)RAND_MAX) * of * 2 - of;
 }
+
 
 void ParticleSystem::render() {
    int i;
+
    for (std::vector<Particle>::iterator it = p.begin(); it != p.end(); ++it) {
-      (*it).render();
+      it->render();
    }
 }
+
 
 void ParticleSystem::setModel() {
 

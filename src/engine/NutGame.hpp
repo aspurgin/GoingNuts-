@@ -56,6 +56,9 @@ class NutGame {
       bool right;
       bool up;
       Player player;
+      //Added these to have a single particle system in the game instead of per block
+      ParticleSystem psystem;
+      void updatePSystem(double dt);
    private:
       void setFallingMovables(int row, int col);
       void addToGroup(Block* thisBlock, Block* otherBlock);

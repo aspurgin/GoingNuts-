@@ -13,6 +13,7 @@
 #define HANG_TIME 2
 
 class BlockGroup;
+
 class Block: public Movable {
    public:
       Block();
@@ -36,14 +37,14 @@ class Block: public Movable {
       void render();
       void setModel();
       void setScale();
-      void updatePSystem(double dt);
+      //void updatePSystem(double dt);
    protected:
       BlockGroup *groupIn;
       int blockType;
       std::vector<Block*> attatchedTo;
       Mesh model;
       CellShader cshader;
-      ParticleSystem psystem;
+      ParticleSystem *psystem;
    private:
       int timesDrilled;
       float curScale;
