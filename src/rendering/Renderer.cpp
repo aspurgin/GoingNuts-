@@ -188,9 +188,9 @@ void Renderer::render() {
    camera.setEye(glm::vec3(3.0f, ngame->player.getCenter().y, 8.0f));
    light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y, 6.0f));
    light.getLightCam().setView(lmShader.h_uViewMatrix);
-   light.getLightCam().setProjectionMatrix(lmShader.h_uProjMatrix, winWidth, winHeight, 0.1f, 3.0f);
+   light.getLightCam().setProjectionMatrix(lmShader.h_uProjMatrix, 1, 1.0f, 20.0f);
    // model matrix does nothing for the monkey - make it an identity matrix
-   safe_glUniformMatrix4fv (lmShader.h_uModelMatrix, glm::value_ptr(glm::mat4(0)));
+   //safe_glUniformMatrix4fv (lmShader.h_uModelMatrix, glm::value_ptr(glm::mat4(0)));
 
    std::list<Renderable*> currObjs = ngame->getObjectsToDraw();
    for (std::list<Renderable*>::iterator it = currObjs.begin(); it != currObjs.end(); ++it) {
@@ -199,7 +199,7 @@ void Renderer::render() {
    glBindFramebuffer (GL_FRAMEBUFFER, 0);
    glUseProgram(0);
    
-
+   glClear (GL_DEPTH_BUFFER_BIT);
    //*** Render the Game ***/
    glUseProgram(cshader.shadeProg);//cshader.shadeProg);
    glViewport(0, 0, (GLsizei)1280, (GLsizei)720);
@@ -212,11 +212,11 @@ void Renderer::render() {
    
    if(toggle) {
       light.getLightCam().setView(cshader.h_uViewMatrix);
-      light.getLightCam().setProjectionMatrix(cshader.h_uProjMatrix, winWidth, winHeight, 0.1f, 100.0f);
+      light.getLightCam().setProjectionMatrix(cshader.h_uProjMatrix, (float)winWidth/winHeight, 0.1f, 100.0f);
    }
    else {
       camera.setView(cshader.h_uViewMatrix);
-      camera.setProjectionMatrix(cshader.h_uProjMatrix, winWidth, winHeight, 0.1f, 100.0f);
+      camera.setProjectionMatrix(cshader.h_uProjMatrix, (float)winWidth/winHeight, 0.1f, 100.0f);
    }
    safe_glUniform3f(cshader.h_lightPos, light.position.x, light.position.y, light.position.z);
    safe_glUniform3f(cshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
@@ -257,71 +257,11 @@ void Renderer::render() {
    //Clear the depth buffer to make the game draw over the HUD
    glClear(GL_DEPTH_BUFFER_BIT);
 
-   //printf("num objs: %d", currObjs.size());
-   /*for (int i = 0; i < currObjs.size(); i++) {
-      Movable *obj = currObjs.at(i);
-      //TRACE("centerPos: " << obj->getCenter().x);
-      switch (obj->getMovableType()) {
-         case BLOCK:
-            switch (((Block *)obj)->getBlockType()) {
-               case DIRTBLOCK:
-                  if(((Block *) obj)->isDead()) {
-                     renderCube(obj->getCenter(), 0, ((Block *) obj)->deathCounter);   
-                  }
-                  else if(((Block *) obj)->willFall() && !((Block*) obj)->shouldFall()){ 
-                  //printf("here\n");
-                     if(((Block *) obj)->shouldScale) {
-                        ((Block *) obj)->shouldScale = false;
-                        renderCube(obj->getCenter(), ((DirtBlock *)obj)->getColor(), .05);
-                     }
-                     else {
-                        ((Block *) obj)->shouldScale = true;
-                        renderCube(obj->getCenter(), ((DirtBlock *)obj)->getColor(), 0);
-                     }
-                  }
-                  else {
-                     renderCube(obj->getCenter(), ((DirtBlock *)obj)->getColor(), 0);
-                  }
-                  break;
-               case STONEBLOCK:
-                  if(((Block *) obj)->willFall() && !((Block*) obj)->shouldFall()){ 
-                  //printf("here\n");
-                     if(((Block *) obj)->shouldScale) {
-                        ((Block *) obj)->shouldScale = false;
-                        renderCube(obj->getCenter(), 4, .05);
-                     }
-                     else {
-                        ((Block *) obj)->shouldScale = true;
-                        renderCube(obj->getCenter(), 4, 0);
-                     }
-                  }
-                  else {
-                     renderCube(obj->getCenter(), 4, 0);
-                  }
-                  break;
-               default:
-                  break;
-            }
-            break;
-         case PLAYER:
-            //printf("squirrel pos: x: %f, y: %f\n", obj->getCenter().x, obj->getCenter().y);
-            renderSquirrel(obj->getCenter(), 5, 0);
-            break;
-         case NUT:
-            renderCube(obj->getCenter(), 5, 0.2);
-         default:
-            break;
-            
-      }
-   }*/
-   /*cshader.setMaterial(2);
-   glm::vec3 pos(0, 0, 0);
-   //renderCube(pos, 1, 0);
-   pos.x = 5;
-   renderSquirrel(pos, 2, 0);*/
    glUseProgram(0);
-   glUseProgram(dSS.shadeProg);
-   glEnable(GL_TEXTURE_2D);
+   
+
+   /*glUseProgram(dSS.shadeProg);
+   //glEnable(GL_TEXTURE_2D);
    glActiveTexture (GL_TEXTURE0);
    glBindTexture (GL_TEXTURE_2D, fb_tex);
 
@@ -334,5 +274,5 @@ void Renderer::render() {
    safe_glVertexAttribPointer(dSS.h_tPos, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
    glDrawArrays(GL_TRIANGLES, 0, 6);
-   glUseProgram(0);
+   glUseProgram(0);*/
 }

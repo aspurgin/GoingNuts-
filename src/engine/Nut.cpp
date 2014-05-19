@@ -55,7 +55,7 @@ void Nut::updateOffset() {
 
 void Nut::render() {
    updateOffset();
-   position = center;
+   position = center + offset;
    cshader.setMaterial(mat);
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();

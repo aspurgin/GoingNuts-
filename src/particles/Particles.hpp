@@ -80,6 +80,7 @@ class ParticleSystem: public Renderable {
       /* Need to implement for Renderable template */
       void render();
       void setModel();
+      void renderLightMap();
 
    private:
       std::vector<Particle> p;

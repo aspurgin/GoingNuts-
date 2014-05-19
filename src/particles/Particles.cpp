@@ -12,6 +12,9 @@ Particle::Particle(float mass, float ttl, glm::vec3 pos, glm::vec3 vel, int mat)
    this->model = Assets::getMesh(Assets::BLOCK_M);
    cshader = Assets::getCShader();
    this->scale = .05;
+   scaleX = 0.05;
+   scaleY = 0.05;
+   scaleZ = 0.05;
    this->ang = 0;
    this->front = glm::vec3(0, 0, 1);
    this->modelTrans.useModelViewMatrix();
@@ -29,7 +32,7 @@ void Particle::render() {
    glm::vec3 right = glm::cross(camVec, glm::vec3(0, 1, 0));
    glm::vec3 axis = glm::cross(camVec, right);
    float angle = glm::dot(camVec, front) * TO_DEGREES;
-
+   position = pos;
    cshader.setMaterial(mat);
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
@@ -239,6 +242,11 @@ void ParticleSystem::render() {
    }
 }
 
+void ParticleSystem::renderLightMap() {
+   for (std::vector<Particle>::iterator it = p.begin(); it != p.end(); ++it) {
+      it->renderLightMap();
+   }
+}
 
 void ParticleSystem::setModel() {
 
