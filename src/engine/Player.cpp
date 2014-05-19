@@ -8,12 +8,8 @@ Player::Player(glm::vec3 center, float width, float height) {
    this->velocity = 1.f;
    this->lives = 3;
    this->isDead = false;
-<<<<<<< HEAD
    model = Assets::getMesh(Assets::SQUIRREL_M);
    this->hasHardHat = false;
-=======
-   this->model = Assets::getMesh(Assets::SQUIRREL_M);
->>>>>>> Revert to old shader, that was a failure...
    this->cshader = Assets::getCShader();
    this->mat = 5;
    this->scale = 1;
