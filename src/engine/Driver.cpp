@@ -139,8 +139,10 @@ int main(void)
       delta = currentTime - lastTime;
       fpsTime += delta;
       
-      game.checkGrid(delta);
-      game.fallDown(delta);
+      if (/*!game.player.getIsDead() &&*/ game.getNutsLeft() != 0) {
+         game.checkGrid(delta);
+         game.fallDown(delta);
+      }
 
       if (fpsTime >= 1) {
          curFps = fpsCount;

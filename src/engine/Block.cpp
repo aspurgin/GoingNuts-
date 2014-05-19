@@ -120,17 +120,17 @@ void Block::render() {
    safe_glEnableVertexAttribArray(cshader.h_aPosition);
    glBindBuffer(GL_ARRAY_BUFFER, model.vertHandle());
    safe_glVertexAttribPointer(cshader.h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
-   DEBUG("positions: " << glGetError());
+   //DEBUG("positions: " << glGetError());
 
    safe_glEnableVertexAttribArray(cshader.h_aNormal);
    glBindBuffer(GL_ARRAY_BUFFER, model.normHandle());
    safe_glVertexAttribPointer(cshader.h_aNormal, 3, GL_FLOAT, GL_FALSE, 0, 0);
-   DEBUG("normals: " << glGetError());
+   //DEBUG("normals: " << glGetError());
 
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.idxHandle());
    glDrawElements(GL_TRIANGLES, model.getIdxCount(), GL_UNSIGNED_INT, 0);
    modelTrans.popMatrix();
-   DEBUG("idxs: " << glGetError());
+   //DEBUG("idxs: " << glGetError());
 
    safe_glDisableVertexAttribArray(cshader.h_aPosition);
    safe_glDisableVertexAttribArray(cshader.h_aNormal);

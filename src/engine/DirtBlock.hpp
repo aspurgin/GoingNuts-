@@ -11,7 +11,7 @@ class DirtBlock: public Block {
       DirtBlock(glm::vec3 center, int color);
       DirtBlock(glm::vec3 center, float width, float height, int color);
       int getStrength();
-      float getSlowPercentage();
+      float getMoveSpeedPercentage();
       int getColor();
    private:
       int color; //red 1 blue 2 green 3

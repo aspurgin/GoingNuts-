@@ -4,11 +4,12 @@ Player::Player() {}
 
 Player::Player(glm::vec3 center, float width, float height) {
    setObject(center, width, height);
-   this->drill = Drill();
+   this->drill = new NormalDrill();
    this->velocity = 1.f;
    this->lives = 3;
    this->isDead = false;
    model = Assets::getMesh(Assets::SQUIRREL_M);
+   this->hasHardHat = false;
    this->cshader = Assets::getCShader();
    this->mat = 5;
    this->scale = 1;
@@ -20,7 +21,7 @@ Player::Player(glm::vec3 center, float width, float height) {
 }
 
 void Player::drillBlock(Block *block) {
-   drill.drillBlock(block);
+   drill->drillBlock(block);
 }
 
 int Player::getMovableType() {
@@ -130,4 +131,16 @@ void Player::setMovingToColumn(int column) {
 
 int Player::getMovingToColumn() {
    return movingToColumn;
+}
+
+bool Player::getHasHardHat() {
+   return hasHardHat;
+}
+
+void Player::giveHardHat() {
+   hasHardHat = true;
+}
+
+void Player::takeAwayHardHat() {
+   hasHardHat = false;
 }

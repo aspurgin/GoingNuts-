@@ -14,9 +14,3 @@ Drill::Drill(int strength, int durability) {
    this->strength = strength;
    this->durability = durability;
 }
-
-void Drill::drillBlock(Block *block) {
-   if (!block->isDead()) {
-      block->addToTimesDrilled();
-   }
-}

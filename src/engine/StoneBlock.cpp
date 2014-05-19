@@ -20,6 +20,6 @@ int StoneBlock::getStrength() {
    return 99999999;
 }
 
-float StoneBlock::getSlowPercentage() {
-   return 0;
+float StoneBlock::getMoveSpeedPercentage() {
+   return 100;
 }

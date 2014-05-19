@@ -3,7 +3,8 @@
 
 #include <glm/glm.hpp>
 #include "Movable.hpp"
-#include "Drill.hpp"
+#include "NormalDrill.hpp"
+#include "HardHat.hpp"
 
 #define HOR_MOVE_RATE 3
 
@@ -33,17 +34,21 @@ class Player: public Movable {
       void setMoveHorizontal(Direction dir);
       void setMovingToColumn(int column);
       int getMovingToColumn();
+      bool getHasHardHat();
+      void giveHardHat();
+      void takeAwayHardHat();
    private:
       float velocity;
       int lives;
       bool isDead;
-      Drill drill;
+      Drill* drill;
       Mesh model;
       CellShader cshader;
       bool shouldJump;
       bool isJumping;
       Direction horDirection;
       int movingToColumn;
+      bool hasHardHat;
       void checkMoveState();
 };
 

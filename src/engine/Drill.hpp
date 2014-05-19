@@ -8,7 +8,7 @@ class Drill {
       Drill();
       Drill(int strength);
       Drill(int strength, int durability);
-      void drillBlock(Block *block);
+      virtual void drillBlock(Block *block) = 0;
    private:
       int strength;
       int durability;

@@ -17,7 +17,7 @@ class Block: public Movable {
    public:
       Block();
       virtual int getStrength() = 0;
-      virtual float getSlowPercentage() = 0;
+      virtual float getMoveSpeedPercentage() = 0;
       int getTimesDrilled();
       bool isDead();
       void addToTimesDrilled();

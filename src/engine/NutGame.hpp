@@ -13,7 +13,10 @@
 #include "DirtBlock.hpp"
 #include "Nut.hpp"
 #include "StoneBlock.hpp"
+#include "SandBlock.hpp"
 #include "Block.hpp"
+#include "CrystalBlock.hpp"
+#include "LavaBlock.hpp"
 #include "MovableTypes.hpp"
 #include <stdio.h>
 #include <vector>

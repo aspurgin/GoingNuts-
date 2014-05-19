@@ -3,7 +3,7 @@
 
 #include <glm/glm.hpp>
 #include "Movable.hpp"
-#include "Drill.hpp"
+#include "MovableTypes.hpp"
 
 class Nut: public Movable {
    public:

@@ -10,7 +10,7 @@ class StoneBlock: public Block {
       StoneBlock(glm::vec3 center);
       StoneBlock(glm::vec3 center, float width, float height);
       int getStrength();
-      float getSlowPercentage();
+      float getMoveSpeedPercentage();
    private:
       
 };

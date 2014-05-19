@@ -19,11 +19,11 @@ DirtBlock::DirtBlock(glm::vec3 center, float width, float height, int color) {
 }
 
 int DirtBlock::getStrength() {
-   return 1;
+   return 2;
 }
 
-float DirtBlock::getSlowPercentage() {
-   return 0;
+float DirtBlock::getMoveSpeedPercentage() {
+   return 100;
 }
 
 int DirtBlock::getColor() {
