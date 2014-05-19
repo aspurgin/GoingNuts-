@@ -28,6 +28,9 @@ class Renderer {
       Wall back;
       GLuint lmDebugPosHandle, lmDebugTHandle;
       DebugShadowShader dSS;
+      GLuint fb_tex;
+      GLuint fb;
+      int shadow_size;
    public:
       Camera camera;
       bool toggle;
@@ -36,6 +39,7 @@ class Renderer {
       PhongShader pshader;
       CellShader cshader;
       FlatTextureShader ctshader;
+      LightMapShader lmShader;
       RenderingHelper modelTrans;
       int winWidth, winHeight;
       NutGame *ngame;

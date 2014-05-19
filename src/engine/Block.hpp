@@ -43,7 +43,7 @@ class Block: public Movable {
       BlockGroup *groupIn;
       int blockType;
       std::vector<Block*> attatchedTo;
-      Mesh model;
+      //Mesh model;
       CellShader cshader;
       ParticleSystem *psystem;
    private:

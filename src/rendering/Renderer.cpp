@@ -57,6 +57,7 @@ Renderer::Renderer(int width, int height, NutGame *game, Hud* hud) {
                                                textFileRead((char *) "assets/shaders/DebugShadow_Frag.glsl"));
    cshader = Assets::getCShader();
    ctshader = Assets::getFlatTextureShader();
+   lmShader = Assets::getLightMapShader();
    light = Light();
    winWidth = width;
    winHeight = height;
@@ -85,17 +86,18 @@ void Renderer::initialize() {
    glEnable(GL_CULL_FACE);
    glCullFace(GL_BACK);
    glEnable(GL_TEXTURE_2D);
+   
    //Note: found from tutorial: http://antongerdelan.net/opengl/texture_shadows.html
       // dimensions of depth map
-   int shadow_size = 256;
+   shadow_size = 256;
 
    // create framebuffer
-   GLuint fb = 0;
+   fb = 0;
    glGenFramebuffers (1, &fb);
    glBindFramebuffer (GL_FRAMEBUFFER, fb);
 
    // create texture for framebuffer
-   GLuint fb_tex = 0;
+   fb_tex = 0;
    glGenTextures (1, &fb_tex);
    glActiveTexture (GL_TEXTURE0);
    glBindTexture (GL_TEXTURE_2D, fb_tex);
@@ -117,13 +119,20 @@ void Renderer::initialize() {
    // clamp to edge. clamp to border may reduce artifacts outside light frustum
    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+   // attach depth texture to framebuffer
+   glFramebufferTexture2D (GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, fb_tex, 0);
+
+   // tell framebuffer not to use any colour drawing outputs
+   GLenum draw_bufs[] = { GL_NONE };
+   glDrawBuffers (1, draw_bufs);
+
    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
    //End tutorial code
 
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
-   //initDebugLightMap();
+   initDebugLightMap();
 
 }
 
@@ -166,23 +175,48 @@ void Renderer::render() {
    //Clear the depth buffer to make the game draw over the HUD
    glClear(GL_DEPTH_BUFFER_BIT);
 
+   //***** Shadow pass ****/
+   glBindFramebuffer (GL_FRAMEBUFFER, fb);
+   // set the viewport to the size of the shadow map
+   glViewport (0, 0, shadow_size, shadow_size);
+   // clear the shadow map to black (or white)
+   glClearColor (0.0, 0.0, 0.0, 1.0);
+   // no need to clear the colour buffer
+   glClear (GL_DEPTH_BUFFER_BIT);
+
+   glUseProgram(lmShader.shadeProg);
+   camera.setEye(glm::vec3(3.0f, ngame->player.getCenter().y, 8.0f));
+   light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y, 6.0f));
+   light.getLightCam().setView(lmShader.h_uViewMatrix);
+   light.getLightCam().setProjectionMatrix(lmShader.h_uProjMatrix, winWidth, winHeight, 0.1f, 3.0f);
+   // model matrix does nothing for the monkey - make it an identity matrix
+   safe_glUniformMatrix4fv (lmShader.h_uModelMatrix, glm::value_ptr(glm::mat4(0)));
+
+   std::list<Renderable*> currObjs = ngame->getObjectsToDraw();
+   for (std::list<Renderable*>::iterator it = currObjs.begin(); it != currObjs.end(); ++it) {
+      (*it)->renderLightMap();
+   }
+   glBindFramebuffer (GL_FRAMEBUFFER, 0);
+   glUseProgram(0);
+   
 
    //*** Render the Game ***/
    glUseProgram(cshader.shadeProg);//cshader.shadeProg);
+   glViewport(0, 0, (GLsizei)1280, (GLsizei)720);
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
 
 
    camera.setEye(glm::vec3(3.0f, ngame->player.getCenter().y, 8.0f));
-   light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y + 2, 6.0f));
+   light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y, 6.0f));
    
    if(toggle) {
       light.getLightCam().setView(cshader.h_uViewMatrix);
-      light.getLightCam().setProjectionMatrix(cshader.h_uProjMatrix, winWidth, winHeight);
+      light.getLightCam().setProjectionMatrix(cshader.h_uProjMatrix, winWidth, winHeight, 0.1f, 100.0f);
    }
    else {
       camera.setView(cshader.h_uViewMatrix);
-      camera.setProjectionMatrix(cshader.h_uProjMatrix, winWidth, winHeight);
+      camera.setProjectionMatrix(cshader.h_uProjMatrix, winWidth, winHeight, 0.1f, 100.0f);
    }
    safe_glUniform3f(cshader.h_lightPos, light.position.x, light.position.y, light.position.z);
    safe_glUniform3f(cshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
@@ -191,7 +225,7 @@ void Renderer::render() {
 
    setModel();
    renderWalls();
-   std::list<Renderable*> currObjs = ngame->getObjectsToDraw();
+   //std::list<Renderable*> currObjs = ngame->getObjectsToDraw();
 
    for (std::list<Renderable*>::iterator it = currObjs.begin(); it != currObjs.end(); ++it) {
       (*it)->render();
@@ -286,8 +320,10 @@ void Renderer::render() {
    pos.x = 5;
    renderSquirrel(pos, 2, 0);*/
    glUseProgram(0);
-   /*glUseProgram(dSS.shadeProg);
+   glUseProgram(dSS.shadeProg);
    glEnable(GL_TEXTURE_2D);
+   glActiveTexture (GL_TEXTURE0);
+   glBindTexture (GL_TEXTURE_2D, fb_tex);
 
    safe_glEnableVertexAttribArray(dSS.h_aPosition);
    glBindBuffer(GL_ARRAY_BUFFER, lmDebugPosHandle);
@@ -298,5 +334,5 @@ void Renderer::render() {
    safe_glVertexAttribPointer(dSS.h_tPos, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
    glDrawArrays(GL_TRIANGLES, 0, 6);
-   glUseProgram(0);*/
+   glUseProgram(0);
 }

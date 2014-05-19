@@ -12,6 +12,6 @@ class Wall : public Renderable {
       void setScale(glm::vec3);
    private:
       Mesh model;
-      glm::vec3 pos;
+      //glm::vec3 pos;
       CellShader cshader;
 };

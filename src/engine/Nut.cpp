@@ -8,6 +8,9 @@ Nut::Nut(glm::vec3 center, float width, float height) {
    this->model = Assets::getMesh(Assets::NUT_M);
    this->cshader = Assets::getCShader();
    this->scale = 0.8f;
+   scaleX = 0.8f;
+   scaleY = 0.8f;
+   scaleZ = 0.8f;
    this->mat = 5;
    this->modelTrans.useModelViewMatrix();
    this->offset = glm::vec3(0.0f,0.0f,0.0f);
@@ -52,6 +55,7 @@ void Nut::updateOffset() {
 
 void Nut::render() {
    updateOffset();
+   position = center;
    cshader.setMaterial(mat);
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();

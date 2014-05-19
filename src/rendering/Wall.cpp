@@ -10,7 +10,7 @@ Wall::Wall(glm::vec3 pos) {
    mat = 4;
    cshader = Assets::getCShader();
    model = Assets::getMesh(Assets::BLOCK_M);
-   this->pos = pos;
+   this->position = pos;
 }
 
 void Wall::setScale(glm::vec3 scale) {
@@ -25,7 +25,7 @@ void Wall::render() {
    modelTrans.loadIdentity();
    modelTrans.pushMatrix();
    modelTrans.translate(glm::vec3(0, 0, -1));
-   modelTrans.translate(pos);
+   modelTrans.translate(position);
    modelTrans.scale(scaleX, scaleY, scaleZ);
    modelTrans.rotate(0, glm::vec3(0, 1, 0));
    setModel();

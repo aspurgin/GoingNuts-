@@ -14,6 +14,7 @@ namespace Assets {
       CellShader cshader;
       CellShaderTexture ctshader;
       FlatTextureShader ftshader;
+      LightMapShader lmshader;
       PhongShader pshader;
   
       //code found from tutorial: http://katyscode.wordpress.com/2012/10/05/cutting-your-teeth-on-fmod-part-1-build-environment-initialization-and-playing-sounds/
@@ -87,6 +88,9 @@ namespace Assets {
 
          ftshader = ShaderUtils::installFlatTextureShader(textFileRead((char *) "assets/shaders/FlatTextureShader_Vert.glsl"),
             textFileRead((char *) "assets/shaders/FlatTextureShader_Frag.glsl"));
+
+         lmshader = ShaderUtils::installLightMapShader(textFileRead((char *) "assets/shaders/LightMap_Vert.glsl"), 
+            textFileRead((char *) "assets/shaders/LightMap_Frag.glsl"));
       }
 
       void loadSound(const char *filename, int type) {
@@ -196,6 +200,10 @@ namespace Assets {
 
    PhongShader& getPShader() {
       return pshader;
+   }
+
+   LightMapShader& getLightMapShader() {
+      return lmshader;
    }
    
    void releaseAll() {

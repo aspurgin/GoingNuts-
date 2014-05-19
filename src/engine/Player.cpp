@@ -13,6 +13,9 @@ Player::Player(glm::vec3 center, float width, float height) {
    this->cshader = Assets::getCShader();
    this->mat = 5;
    this->scale = 1;
+   scaleX = 1;
+   scaleY = 1;
+   scaleZ = 1;
    this->modelTrans.useModelViewMatrix();
    this->shouldJump = false;
    this->isJumping = false;
@@ -63,6 +66,7 @@ void Player::checkMoveState() {
 
 void Player::render() {
    checkMoveState();
+   position = center;
    cshader.setMaterial(mat);
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();

@@ -29,7 +29,7 @@ public:
    Camera(glm::vec3, glm::vec3, glm::vec3);
    void shake();
    void setView(GLint);
-   void setProjectionMatrix(GLint, int, int);
+   void setProjectionMatrix(GLint, int, int, float, float);
    void setEye(glm::vec3);
 };
 

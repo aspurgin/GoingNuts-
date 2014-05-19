@@ -10,6 +10,9 @@ Block::Block() {
    model = Assets::getMesh(Assets::BLOCK_M);
    cshader = Assets::getCShader();
    scale = 0.48f;
+   scaleX = 0.48f;
+   scaleY = 0.48f;
+   scaleZ = 0.48f;
    curScale = 0.48f;
    this->modelTrans.useModelViewMatrix();
    model.debug();
@@ -110,6 +113,7 @@ void Block::setScale() {
 
 void Block::render() {
    setScale();
+   position = center;
    cshader.setMaterial(mat);
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();

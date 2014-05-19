@@ -42,7 +42,7 @@ class Player: public Movable {
       int lives;
       bool isDead;
       Drill* drill;
-      Mesh model;
+      //Mesh model;
       CellShader cshader;
       bool shouldJump;
       bool isJumping;

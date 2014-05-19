@@ -30,6 +30,7 @@ namespace Assets {
    CellShaderTexture& getCShaderTexture();
    FlatTextureShader& getFlatTextureShader();
    PhongShader& getPShader();
+   LightMapShader& getLightMapShader();
    void releaseAll();
    void update();
 };
