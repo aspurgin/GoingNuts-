@@ -8,7 +8,7 @@ class StoneBlock: public Block {
    public:
       StoneBlock();
       StoneBlock(glm::vec3 center);
-      StoneBlock(glm::vec3 center, float width, float height);
+      StoneBlock(glm::vec3 center, float width, float height, ParticleSystem *psystem);
       int getStrength();
       float getMoveSpeedPercentage();
    private:

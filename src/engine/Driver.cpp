@@ -143,6 +143,7 @@ int main(void)
          game.checkGrid(delta);
          game.fallDown(delta);
       }
+      game.updatePSystem(delta);
 
       if (fpsTime >= 1) {
          curFps = fpsCount;

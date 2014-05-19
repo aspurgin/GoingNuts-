@@ -5,6 +5,8 @@
 #define PARTICLES_H_
 
 #define GRAVITY -9.8
+#define PI 3.14159
+#define TO_DEGREES 57.2957795
 
 #include <vector>
 #include <cstdlib>
@@ -24,6 +26,10 @@ class Particle: public Renderable {
       glm::vec3 vel;
       glm::vec3 newVelocity; // not sure what this is for
       glm::vec3 netForce;
+      
+      //Used for billboarding
+      glm::vec3 front;
+      glm::vec3 axis;
       // Need list of things that are applying forces
       // Need textureID field
 
@@ -56,6 +62,8 @@ class ParticleSystem: public Renderable {
       void setInitialVelocity(glm::vec3 newVel);
       /* changes the mass, in kilograms, of generated Particles */
       void setMass(float newMass);
+      /* sets the material ID of generated particles */
+      void setMatID(int matID);
       /* set the number of Particles automatically generated per second */
       void setPerSec(int n);
       /* sets the new spread for generated Particles */
@@ -76,7 +84,7 @@ class ParticleSystem: public Renderable {
    private:
       std::vector<Particle> p;
       bool on;
-      int perSec;
+      float perSec;
       int numParticles;
       float mass;
       float time;

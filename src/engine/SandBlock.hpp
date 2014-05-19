@@ -9,7 +9,7 @@ class SandBlock: public Block {
    public:
       SandBlock();
       SandBlock(glm::vec3 center, int color);
-      SandBlock(glm::vec3 center, float width, float height);
+      SandBlock(glm::vec3 center, float width, float height, ParticleSystem* psystem);
       int getStrength();
       float getMoveSpeedPercentage();
    private:
