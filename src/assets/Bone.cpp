@@ -1,5 +1,7 @@
 #include "Bone.hpp"
 
+float Bone::noWeight = 0.f;
+
 namespace boneHelpers{
 	inline float getMix(double start, double end, double goal){
 		if(goal <= start) {
@@ -63,58 +65,126 @@ void Bone::setAt(double frame){
 	std::map<double, glm::vec3>::iterator scaleIter;
 	std::map<double, glm::quat>::iterator rotIter;
 
-	double p1, p2;
+	double p1 = 0, p2 = 0;
 	glm::vec3 leftPosFrame = glm::vec3(0);
 	glm::vec3 rightPosFrame = glm::vec3(0);
+	glm::vec3 endPos;
 
-	for(posIter = pos.begin(); posIter != pos.end(); posIter++){
-		if(posIter->first <= frame) {
-			p1 = p2 = posIter->first;
-			leftPosFrame = rightPosFrame = posIter->second;
-		} else if (posIter->first > frame){
-			p2 = posIter->first;
-			rightPosFrame = posIter->second;
-			break;
+	if(pos.size() == 0){
+		DEBUG("no pos info, using default <0,0,0>");
+		endPos = glm::vec3(0,0,0);
+	} else {
+		for(posIter = pos.begin(); posIter != pos.end(); posIter++){
+			DEBUG("pos iter at: " << posIter->first << ",\t" << posIter->second.x << ", " << posIter->second.y << ", " << posIter->second.z);
+			if(posIter->first <= frame || p1 == 0 && p2 == 0) {
+				p1 = p2 = posIter->first;
+				leftPosFrame = rightPosFrame = posIter->second;
+			} else if (posIter->first > frame){
+				p2 = posIter->first;
+				rightPosFrame = posIter->second;
+				break;
+			}
 		}
+		endPos = glm::mix(leftPosFrame, rightPosFrame, boneHelpers::getMix(p1, p2, frame));
 	}
+	DEBUG("pos framed between: " << p1 << " - " << p2);
+	DEBUG("    with transformation: " << endPos.x << ", " << endPos.y << ", " << endPos.z);
 
 
-	double s1, s2;
+	double s1 = 0, s2 = 0;
 	glm::vec3 leftScaleFrame = glm::vec3(0);
 	glm::vec3 rightScaleFrame = glm::vec3(0);
-
-	for(scaleIter = pos.begin(); scaleIter != pos.end(); scaleIter++){
-		if(posIter->first <= frame) {
-			s1 = s2 = scaleIter->first;
-			leftScaleFrame = rightScaleFrame = scaleIter->second;
-		} else if (scaleIter->first > frame){
-			s2 = scaleIter->first;
-			rightScaleFrame = scaleIter->second;
-			break;
+	glm::vec3 endScale;
+	if(scale.size() == 0){
+		DEBUG("no scale info, using default <1,1,1>");
+		endScale = glm::vec3(1,1,1);
+	} else {
+		for(scaleIter = scale.begin(); scaleIter != scale.end(); scaleIter++){
+			DEBUG("sca iter at: " << scaleIter->first << ",\t" << scaleIter->second.x << ", " << scaleIter->second.y << ", " << scaleIter->second.z);
+			if(scaleIter->first <= frame || s1 == 0 && s2 == 0) {
+				s1 = s2 = scaleIter->first;
+				leftScaleFrame = rightScaleFrame = scaleIter->second;
+			} else if (scaleIter->first > frame){
+				s2 = scaleIter->first;
+				rightScaleFrame = scaleIter->second;
+				break;
+			}
 		}
+		endScale = glm::mix(leftScaleFrame, rightScaleFrame, boneHelpers::getMix(s1, s2, frame));
 	}
+	DEBUG("sca framed between: " << s1 << " - " << s2);
+	DEBUG("    with transformation: " << endScale.x << ", " << endScale.y << ", " << endScale.z);
 
-	double r1, r2;
+	double r1 = 0, r2 = 0;
 	glm::quat leftRotFrame = glm::quat();
 	glm::quat rightRotFrame = glm::quat();
-
-	for(rotIter = rot.begin(); rotIter != rot.end(); rotIter++){
-		if(rotIter->first <= frame) {
-			r1 = r2 = scaleIter->first;
-			leftRotFrame = rightRotFrame = rotIter->second;
-		} else if (rotIter->first > frame){
-			r2 = scaleIter->first;
-			rightRotFrame = rotIter->second;
-			break;
+	glm::quat endRot;
+	if(rot.size() == 0){
+		DEBUG("no scale info, using default quat");
+		endRot = glm::quat();
+	} else {
+		for(rotIter = rot.begin(); rotIter != rot.end(); rotIter++){
+			DEBUG("rot iter at: " << rotIter->first);		
+			if(rotIter->first <= frame || r1 == 0 && r2 == 0) {
+				r1 = r2 = rotIter->first;
+				leftRotFrame = rightRotFrame = rotIter->second;
+			} else if (rotIter->first > frame){
+				r2 = rotIter->first;
+				rightRotFrame = rotIter->second;
+				break;
+			}
+		}
+		if(leftRotFrame == rightRotFrame) {
+			endRot = leftRotFrame;
+		} else {
+			endRot = glm::mix(leftRotFrame, rightRotFrame, boneHelpers::getMix(r1, r2, frame));				
+		}
+    	if(isnan(endRot.x)){
+			ERROR("!!!!!!!!!!!!!!!!!");
+			ERROR("r1: " << r1);
+			ERROR("r2: " << r2);
+			ERROR("l: " << leftRotFrame.x << ", " << leftRotFrame.y << ", " << leftRotFrame.z << ", " << leftRotFrame.w);
+			ERROR("r: " << rightRotFrame.x << ", " << rightRotFrame.y << ", " << rightRotFrame.z << ", " << rightRotFrame.w);
+			ERROR("end: " << endRot.x << ", " << endRot.y << ", " << endRot.z << ", " << endRot.w);
 		}
 	}
-
-	glm::vec3 endPos = glm::mix(leftPosFrame, rightPosFrame, boneHelpers::getMix(p1, p2, frame));
-	glm::vec3 endScale = glm::mix(leftScaleFrame, rightScaleFrame, boneHelpers::getMix(s1, s2, frame));
-	glm::quat endRot = glm::mix(leftRotFrame, rightRotFrame, boneHelpers::getMix(r1, r2, frame));
+	DEBUG("rot framed between: " << r1 << " - " << r2);
+	DEBUG("    with transformation: " << endRot.x << ", " << endRot.y << ", " << endRot.z << ", " << endRot.w);
 
 	currentTransform = glm::mat4(); 
-	currentTransform = glm::mat4_cast(endRot) * currentTransform;
+	currentTransform = currentTransform * glm::mat4_cast(endRot);
 	currentTransform = glm::scale(currentTransform, endScale);
 	currentTransform = glm::translate(currentTransform, endPos);
+}
+
+void Bone::setNameDebug(const char* name){
+	this->name = std::string(name);
+}
+
+
+void Bone::printChain(){
+	if(parent){
+		printf("%s -> ", name.c_str());
+		parent->printChain();
+	} else {
+		printf("%s\n", name.c_str());
+	}
+}
+
+std::ostream &operator<< (std::ostream &out, const glm::mat4 &mat) {
+    out << "{"
+    	<< "[" <<  mat[0][0] << " " << mat[0][1] << " " << mat[0][2] << " " << mat[0][3] << "]"
+    	<< "[" <<  mat[1][0] << " " << mat[1][1] << " " << mat[1][2] << " " << mat[1][3] << "]"
+    	<< "[" <<  mat[2][0] << " " << mat[2][1] << " " << mat[2][2] << " " << mat[2][3] << "]"
+    	<< "[" <<  mat[3][0] << " " << mat[3][1] << " " << mat[3][2] << " " << mat[3][3] << "]"
+        << "}";
+
+    return out;
+}
+
+
+void Bone::debug(){
+	DEBUG("Current transforms: " << name);
+	DEBUG("\t" << this->getTransform());
+	DEBUG("\t" << this->getTotalTransform());
 }

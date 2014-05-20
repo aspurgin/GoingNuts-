@@ -8,15 +8,20 @@
 #include <glm/gtx/quaternion.hpp>
 #include <vector>
 #include <map>
+#include <string>
+#include <cmath>
 
 #include <glm/gtx/compatibility.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/euler_angles.hpp>
 #include <glm/gtx/norm.hpp>
 
+
 class Bone {
 private:
+	static float noWeight;
 	Bone* parent;
+	std::string name;
 	std::map<int, float> weight;
 
 	std::map<double, glm::vec3> pos;
@@ -34,9 +39,15 @@ public:
 
 	Bone(aiBone* bone, aiNodeAnim* anim);
 	void setParent(Bone* parent);
+	void setNameDebug(const char*);
+	void printChain();
 	void debug();
 
-	float& operator[] (int x){
-		return weight[x];
-	};
+	float getWeightForVertex(int x){
+		if(weight.find(x) != weight.end()){
+			return weight[x];			
+		} else {
+			return noWeight;
+		}
+	}
 };

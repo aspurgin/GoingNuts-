@@ -4,17 +4,7 @@ using namespace std;
 
 namespace skHelpers{
 	aiNode* findNodeByName(aiNode* root, aiString name){
-		if(root->mName == name) {
-			return root;
-		} else {
-			for(int i=0; i<root->mNumChildren; i++){
-				aiNode* child = findNodeByName(root->mChildren[i], name);
-				if(child != 0){
-					return child;
-				}
-			}
-			return 0;
-		}
+		return root->FindNode(name);
 	}
 
 	aiString parentOf(aiNode* root, aiString node){
@@ -22,7 +12,10 @@ namespace skHelpers{
 			if(node == root->mChildren[i]->mName) {
 				return root->mName;
 			} else {
-				return parentOf(root->mChildren[i], node);
+				aiString rval = parentOf(root->mChildren[i], node);
+				if(rval != aiString()){
+					return rval;
+				}
 			}
 		}
 		return aiString();
@@ -40,19 +33,25 @@ namespace skHelpers{
 
 void Skeleton::setAt(float frame){
 	for(int i=0; i<bones.size(); i++){
-		bones[i]->setAt(frame);
+		bones[i]->setAt(frame / 24.0);
 	}
 }
 
+Skeleton::Skeleton(){
+	hasBones = false;
+}
+
 Skeleton::Skeleton (const aiScene* scene) {
+	hasBones = true;
 	aiMesh* mesh = scene->mMeshes[0];
-	DEBUG("NumVerts: " << mesh->mNumVertices);
 
 	std::map<string, Bone*> boneMap;
 
 	for(int b = 0; b < mesh->mNumBones; b++){
 		aiBone* bone = mesh->mBones[b];
+
 		Bone* newBone = new Bone(bone, skHelpers::animForName(scene->mAnimations[0], bone->mName));
+		newBone->setNameDebug(bone->mName.C_Str());
 
 		boneMap[string(bone->mName.C_Str())] = newBone;
 		bones.push_back(newBone);
@@ -60,20 +59,31 @@ Skeleton::Skeleton (const aiScene* scene) {
 
 	for(int b = 0; b < mesh->mNumBones; b++){
 		aiBone* bone = mesh->mBones[b];
-		
 		aiString parentFor = skHelpers::parentOf(scene->mRootNode, bone->mName);
-
 		if(boneMap.find(string(parentFor.C_Str())) != boneMap.end()){
-			DEBUG("parent relation: " << bone->mName.C_Str() << " is child of " << parentFor.C_Str());
 			boneMap[string(bone->mName.C_Str())]->setParent(boneMap[string(parentFor.C_Str())]);
 		}
 	}
 
-}
-
-Skeleton::~Skeleton(){
+	this->setAt(40);
 	for(int i=0; i<bones.size(); i++){
-		delete bones[i];
+		bones[i]->debug();
 	}
 }
 
+Skeleton::~Skeleton(){
+}
+
+
+glm::vec3 Skeleton::transform(int v, glm::vec3 vertex){
+	glm::vec3 accum(0,0,0);
+	for(int b=0; b<bones.size(); b++){
+		Bone* bone = bones[b];
+		float weight = bone->getWeightForVertex(v);
+		if(weight){
+			glm::vec4 inc = glm::vec4(vertex, 1) * bone->getTotalTransform();
+			accum += glm::vec3(inc.x, inc.y, inc.z) * weight;
+		}
+	}
+	return accum;
+}

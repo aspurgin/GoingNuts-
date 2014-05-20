@@ -9,10 +9,13 @@
 class Skeleton{
 private:
 	std::vector<Bone*> bones;
+	bool hasBones;
 
 public:
 	void setAt(float);
 
 	Skeleton (const aiScene* scene);
+	Skeleton ();
 	~Skeleton ();
+	glm::vec3 transform(int, glm::vec3);
 };

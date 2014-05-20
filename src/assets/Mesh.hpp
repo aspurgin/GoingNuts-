@@ -1,5 +1,4 @@
-#ifndef MESH_H
-#define MESH_H
+#pragma once
 
 #include <map>
 #include <string>
@@ -47,11 +46,12 @@ class Mesh {
       void parseAI(const char* path);
       void parseAnimIdx(const char* filename);
 
+      Skeleton skeleton;
+
       GLuint vertHandle_;
       GLuint idxHandle_;
       GLuint normHandle_;
       GLuint uvHandle_;
-
 
       /**
        * holds animation framing info
@@ -67,5 +67,3 @@ class Mesh {
       std::vector<glm::vec2> uvs;
       std::vector<glm::vec3> normals;
 };
-
-#endif

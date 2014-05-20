@@ -83,15 +83,22 @@ void Mesh::parseAI(const char* path){
    Assimp::Importer importer;
    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_JoinIdenticalVertices);
 
-   Skeleton test(scene);
+
 
    if(!scene) {
       ERROR("Could not import file: " << path);
-      ERROR("Reason: " << importer.GetErrorString());
+      FATAL("Reason: " << importer.GetErrorString());
       exit(1);
    }
    debugNodes(scene->mRootNode, 0);
    const aiMesh* mesh = scene->mMeshes[0];
+
+   if(mesh->HasBones()){
+      INFO("importing skeleton for: " << path);
+      this->skeleton = Skeleton(scene);
+   } else {
+      INFO("no skeleton for: " << path);
+   }
 
    for(unsigned int v=0; v<mesh->mNumVertices; v++){
       vertices.push_back(glm::vec3(mesh->mVertices[v][0],

@@ -14,6 +14,8 @@
 
 #define LOG(x, y) std::cerr << "[" << x << "] " << __FILE__ << ":" << __LINE__ << " - " << y << "\n"
 
+#define FATAL(x) LOG("FATAL", x); exit(1)
+
 #if LOG_LEVEL >= LOG_ERROR
 	#define ERROR(x) LOG("ERROR", x)
 #else
