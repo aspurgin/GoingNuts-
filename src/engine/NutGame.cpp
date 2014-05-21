@@ -443,11 +443,13 @@ void NutGame::setFallingMovables(int row, int col) {
          }
       }
    }
+   //Zach, I had to comment out the extra conditional because I wasn't even able to go under blocks.
+   //Also, gameGrid[row + 1][col] will always be a player in that case .... --Drew
    else if (row < NUMROWS - 2 && (gameGrid[row + 1][col] == 0 || 
             gameGrid[row + 1][col]->getMovableType() == PLAYER ||
             gameGrid[row + 1][col]->willFall())) {
       if (gameGrid[row + 1][col] != 0 && gameGrid[row + 1][col]->getMovableType() == PLAYER) {
-         if (gameGrid[row][col]->getMovableType() == BLOCK && !((Block*)gameGrid[row + 1][col])->isDead()) {
+         if (gameGrid[row][col]->getMovableType() == BLOCK) { //&& !((Block*)gameGrid[row + 1][col])->isDead()) {
             gameGrid[row][col]->setCanFall();
             gameGrid[row][col]->setWillFall();
          }
