@@ -34,6 +34,12 @@ class NutGame {
       void init();
       bool isBlockAtPosition(glm::vec2 pos);
       std::list<Renderable*> getObjectsToDraw();
+      std::list<Renderable*> getBlocksToDraw();
+      std::list<Renderable*> getPlayerToDraw();
+      std::list<Renderable*> getNutsToDraw();
+      std::list<Renderable*> getHardHatsToDraw();
+      //std::list<Renderable*> getSuperDrillToDraw();
+      //std::list<Renderable*> getDynamiteToDraw();
       bool isDrillingDown();
       bool isDrillingUp();
       bool isDrillingLeft();
@@ -63,6 +69,7 @@ class NutGame {
       ParticleSystem psystem;
       void updatePSystem(double dt);
    private:
+      std::list<Renderable*> getCertainObjectsToDraw(int type);
       void setFallingMovables(int row, int col);
       void addToGroup(Block* thisBlock, Block* otherBlock);
       void connectBlocks();

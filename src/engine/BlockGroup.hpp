@@ -6,7 +6,7 @@
 #include <list>
 
 class Block;
-class BlockGroup: public Renderable {
+class BlockGroup {
    public:
       BlockGroup();
       ~BlockGroup();
@@ -21,8 +21,6 @@ class BlockGroup: public Renderable {
       void adjustGroupPosition();
       std::list<Block*>::iterator getListBeginIt();
       std::list<Block*>::iterator getListEndIt();
-      void render();
-      void setModel();
    private:
       std::list<Block*> blocks;
       Block* topRight;

@@ -443,13 +443,11 @@ void NutGame::setFallingMovables(int row, int col) {
          }
       }
    }
-   //Zach, I had to comment out the extra conditional because I wasn't even able to go under blocks.
-   //Also, gameGrid[row + 1][col] will always be a player in that case .... --Drew
    else if (row < NUMROWS - 2 && (gameGrid[row + 1][col] == 0 || 
             gameGrid[row + 1][col]->getMovableType() == PLAYER ||
             gameGrid[row + 1][col]->willFall())) {
       if (gameGrid[row + 1][col] != 0 && gameGrid[row + 1][col]->getMovableType() == PLAYER) {
-         if (gameGrid[row][col]->getMovableType() == BLOCK) { //&& !((Block*)gameGrid[row + 1][col])->isDead()) {
+         if (gameGrid[row][col]->getMovableType() == BLOCK && !((Block*)gameGrid[row][col])->isDead()) {
             gameGrid[row][col]->setCanFall();
             gameGrid[row][col]->setWillFall();
          }
@@ -678,21 +676,59 @@ std::list<Renderable*> NutGame::getObjectsToDraw() {
    for (int row = count; row < count + NUM_TOTAL_BLOCKS_VISIBLE && row < NUMROWS; row++) {
       for (int col = 0; col < NUMCOLS; col++) {
          if (gameGrid[row][col] != 0) {
-            /*if (gameGrid[row][col]->getMovableType() == BLOCK) {
-               if (((Block*)gameGrid[row][col])->isInAGroup()) {
-                  objects.push_back(((Block*)gameGrid[row][col])->getGroupIn());
-               }
-               else {
-                  objects.push_back(gameGrid[row][col]);
-               }
-            }*/
-            //else {
-               objects.push_back(gameGrid[row][col]);
-            //}
+            objects.push_back(gameGrid[row][col]);
          }
       }
    }
    objects.push_back(&psystem);
+   objects.unique();
+   return objects;
+}
+
+std::list<Renderable*> NutGame::getBlocksToDraw() {
+   return getCertainObjectsToDraw(BLOCK);
+}
+
+std::list<Renderable*> NutGame::getPlayerToDraw() {
+   return getCertainObjectsToDraw(PLAYER);
+}
+
+std::list<Renderable*> NutGame::getNutsToDraw() {
+   return getCertainObjectsToDraw(NUT);
+}
+
+std::list<Renderable*> NutGame::getHardHatsToDraw() {
+   return getCertainObjectsToDraw(HARDHAT);
+}
+
+/*
+std::list<Renderable*> NutGame::getSuperDrillToDraw() {
+   return getCertainObjectsToDraw(SUPERDRILL);
+}
+
+std::list<Renderable*> NutGame::getDynamiteToDraw() {
+   return getCertainObjectsToDraw(DYNAMITE);
+}
+*/
+
+std::list<Renderable*> NutGame::getCertainObjectsToDraw(int type) {
+   int count = player.getCenter().y - NUM_BLOCKS_VISIBLE_ABOVE_PLAYER;
+   std::list<Renderable*> objects;
+   
+   if (count < 0) {
+      count = 0;
+   }
+
+   for (int row = count; row < count + NUM_TOTAL_BLOCKS_VISIBLE && row < NUMROWS; row++) {
+      for (int col = 0; col < NUMCOLS; col++) {
+         if (gameGrid[row][col] != 0 && gameGrid[row][col]->getMovableType() == type) {
+            objects.push_back(gameGrid[row][col]);
+         }
+      }
+   }
+   if (type == BLOCK) {
+      objects.push_back(&psystem);
+   }
    objects.unique();
    return objects;
 }
