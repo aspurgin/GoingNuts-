@@ -39,7 +39,6 @@ namespace skHelpers{
 }
 
 void Skeleton::setAt(float frame){
-	//DEBUG(frame);
 	for(int i=0; i<bones.size(); i++){
 		bones[i]->setAt(frame / 24.0);
 	}
@@ -50,7 +49,6 @@ Skeleton::Skeleton(){
 }
 
 Skeleton::Skeleton (const aiScene* scene) {
-	//FATAL("num anims " << scene->mNumAnimations);
 	hasBones = true;
 	aiMesh* mesh = scene->mMeshes[0];
 
@@ -73,15 +71,6 @@ Skeleton::Skeleton (const aiScene* scene) {
 			boneMap[string(bone->mName.C_Str())]->setParent(boneMap[string(parentFor.C_Str())]);
 		}
 	}
-
-	this->setAt(40);
-	for(int i=0; i<bones.size(); i++){
-		bones[i]->printChain();
-	}
-	for(int i=0; i<bones.size(); i++){
-		bones[i]->debug();
-	}
-	//FATAL("end");
 }
 
 Skeleton::~Skeleton(){
@@ -95,7 +84,6 @@ glm::vec3 Skeleton::transform(int v, glm::vec3 vertex){
 		float weight = bone->getWeightForVertex(v);
 		if(weight){
 			glm::vec4 inc = bone->getCompleteTransform() * glm::vec4(vertex, 1);
-			//glm::vec4 inc =  glm::vec4(vertex, 1) * bone->getTotalTransform();
 			accum += glm::vec3(inc) * weight;
 		}
 	}

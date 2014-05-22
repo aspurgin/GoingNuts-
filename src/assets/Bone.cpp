@@ -89,11 +89,11 @@ void Bone::setAt(double frame){
 	glm::vec3 endPos;
 
 	if(pos.size() == 0){
-		DEBUG("no pos info, using default <0,0,0>");
+		TRACE("no pos info, using default <0,0,0>");
 		endPos = glm::vec3(0,0,0);
 	} else {
 		for(posIter = pos.begin(); posIter != pos.end(); posIter++){
-			DEBUG("pos iter at: " << posIter->first << ",\t" << posIter->second.x << ", " << posIter->second.y << ", " << posIter->second.z);
+			TRACE("pos iter at: " << posIter->first << ",\t" << posIter->second.x << ", " << posIter->second.y << ", " << posIter->second.z);
 			if(posIter->first <= frame || p1 == 0 && p2 == 0) {
 				p1 = p2 = posIter->first;
 				leftPosFrame = rightPosFrame = posIter->second;
@@ -105,8 +105,8 @@ void Bone::setAt(double frame){
 		}
 		endPos = glm::mix(leftPosFrame, rightPosFrame, boneHelpers::getMix(p1, p2, frame));
 	}
-	DEBUG("pos framed between: " << p1 << " - " << p2);
-	DEBUG("    with transformation: " << endPos.x << ", " << endPos.y << ", " << endPos.z);
+	TRACE("pos framed between: " << p1 << " - " << p2);
+	TRACE("    with transformation: " << endPos.x << ", " << endPos.y << ", " << endPos.z);
 
 
 	double s1 = 0, s2 = 0;
@@ -114,11 +114,11 @@ void Bone::setAt(double frame){
 	glm::vec3 rightScaleFrame = glm::vec3(0);
 	glm::vec3 endScale;
 	if(scale.size() == 0){
-		DEBUG("no scale info, using default <1,1,1>");
+		TRACE("no scale info, using default <1,1,1>");
 		endScale = glm::vec3(1,1,1);
 	} else {
 		for(scaleIter = scale.begin(); scaleIter != scale.end(); scaleIter++){
-			DEBUG("sca iter at: " << scaleIter->first << ",\t" << scaleIter->second.x << ", " << scaleIter->second.y << ", " << scaleIter->second.z);
+			TRACE("sca iter at: " << scaleIter->first << ",\t" << scaleIter->second.x << ", " << scaleIter->second.y << ", " << scaleIter->second.z);
 			if(scaleIter->first <= frame || s1 == 0 && s2 == 0) {
 				s1 = s2 = scaleIter->first;
 				leftScaleFrame = rightScaleFrame = scaleIter->second;
@@ -130,19 +130,19 @@ void Bone::setAt(double frame){
 		}
 		endScale = glm::mix(leftScaleFrame, rightScaleFrame, boneHelpers::getMix(s1, s2, frame));
 	}
-	DEBUG("sca framed between: " << s1 << " - " << s2);
-	DEBUG("    with transformation: " << endScale.x << ", " << endScale.y << ", " << endScale.z);
+	TRACE("sca framed between: " << s1 << " - " << s2);
+	TRACE("    with transformation: " << endScale.x << ", " << endScale.y << ", " << endScale.z);
 
 	double r1 = 0, r2 = 0;
 	glm::quat leftRotFrame = glm::quat();
 	glm::quat rightRotFrame = glm::quat();
 	glm::quat endRot;
 	if(rot.size() == 0){
-		DEBUG("no scale info, using default quat");
+		TRACE("no scale info, using default quat");
 		endRot = glm::quat();
 	} else {
 		for(rotIter = rot.begin(); rotIter != rot.end(); rotIter++){
-			DEBUG("rot iter at: " << rotIter->first);		
+			TRACE("rot iter at: " << rotIter->first);		
 			if(rotIter->first <= frame || r1 == 0 && r2 == 0) {
 				r1 = r2 = rotIter->first;
 				leftRotFrame = rightRotFrame = rotIter->second;
@@ -155,6 +155,9 @@ void Bone::setAt(double frame){
 		if(sin(acos(glm::dot(leftRotFrame, rightRotFrame))) == 0 || leftRotFrame == rightRotFrame) {
 			endRot = leftRotFrame;
 		} else {
+			if(glm::dot(leftRotFrame, rightRotFrame) < 0){
+				leftRotFrame *= -1.f;
+			}
 			endRot = glm::mix(leftRotFrame, rightRotFrame, boneHelpers::getMix(r1, r2, frame));				
 		}
 		if(isnan(endRot.x)){
@@ -162,19 +165,13 @@ void Bone::setAt(double frame){
 			//FATAL("Is a nan");
 		}
  	}
-	DEBUG("rot framed between: " << r1 << " - " << r2);
-	DEBUG("    with transformation: " << endRot.x << ", " << endRot.y << ", " << endRot.z << ", " << endRot.w);
+	TRACE("rot framed between: " << r1 << " - " << r2);
+	TRACE("    with transformation: " << endRot.x << ", " << endRot.y << ", " << endRot.z << ", " << endRot.w);
 
-	//currentTransform = glm::mat4(1.f);
 	glm::mat4 r = glm::mat4_cast(endRot);
-	//currentTransform = glm::mat4_cast(endRot) * currentTransform;
-	//currentTransform = currentTransform * glm::mat4_cast(endRot);
-	//currentTransform = glm::scale(currentTransform, endScale);
-	//currentTransform = glm::scale(glm::mat4(1.f), endScale) * currentTransform;
 	glm::mat4 s = glm::scale(glm::mat4(1.f), endScale);
-	//currentTransform = glm::translate(currentTransform, endPos);
-	//currentTransform = glm::translate(glm::mat4(1.f), endPos) * currentTransform;
 	glm::mat4 t = glm::translate(glm::mat4(1.f), endPos);
+
 	currentTransform = t * s * r * glm::mat4(1);
 }
 
@@ -199,7 +196,6 @@ std::ostream &operator<< (std::ostream &out, const glm::mat4 &mat) {
     	<< "[" <<  mat[2][0] << " " << mat[2][1] << " " << mat[2][2] << " " << mat[2][3] << "]"
     	<< "[" <<  mat[3][0] << " " << mat[3][1] << " " << mat[3][2] << " " << mat[3][3] << "]"
         << "}";
-
     return out;
 }
 

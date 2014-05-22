@@ -141,19 +141,33 @@ void Mesh::parseAI(const char* path){
  * interp: 0.f - 1.f value determining the progress through the cycle
  */
 void Mesh::setAt(const char* anim, float interp){
-   setAtRaw(interp);
+   string animName(anim);
+   if(interp < 0 || animIds.find(animName) != animIds.end()){
+      setAt(animIds[animName], interp);
+   } else {
+      WARN("Animation not found: " << anim);
+   }
 }
 
 void Mesh::setAt(int anim, float interp){
-   setAtRaw(interp);
+   if(interp < 0){
+      setAtRaw(0);
+      return;
+   }
+   glm::vec2 bounds = anims[anim];
+   float range = bounds[1] - bounds[0];
+   float rescoped = fmodf(interp * range, range) + bounds[0];
+   setAtRaw(rescoped);
 }
 
 void Mesh::setAtRaw(float interp){
    skeleton.setAt(interp);
    for(int i=0; i<vertices.size(); i++){
       tmpVertices[i] = skeleton.transform(i, vertices[i]);
+      tmpNormals[i] = skeleton.transform(i, normals[i]);
    }
    bindPositionBuffer();
+   bindNormalBuffer();
 }
 
 void Mesh::reset(){
