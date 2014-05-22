@@ -8,6 +8,7 @@
 #include "OrthographicCamera.hpp"
 #include "Light.hpp"
 #include "../shaders/PhongShader.hpp"
+#include "../shaders/PhongTextureShader.hpp"
 #include "../shaders/CellShaderTexture.hpp"
 #include "../shaders/DebugShadowShader.hpp"
 #include "../shaders/FlatTextureShader.hpp"
@@ -18,6 +19,7 @@
 #include "../engine/NutGame.hpp"
 #include "../hud/Hud.hpp"
 #include "Wall.hpp"
+#include "../hud/Cylinder.hpp"
 
 class Renderer {
    private:
@@ -26,6 +28,7 @@ class Renderer {
       Wall left;
       Wall right;
       Wall back;
+      Cylinder* cylinder;
       GLuint lmDebugPosHandle, lmDebugTHandle;
       DebugShadowShader dSS;
       GLuint fb_tex;
@@ -37,12 +40,15 @@ class Renderer {
       void renderGame();
       void renderWinLoss();
       void renderDebugShadowMapText();
+      void renderNormalMappedCylinder();
+
    public:
       Camera camera;
       bool toggle, antiAlias;
       OrthographicCamera orthographicCamera;
       Light light;
       PhongShader pshader;
+      PhongTextureShader ptshader;
       CellShader cshader;
       FlatTextureShader ctshader;
       LightMapShader lmShader;

@@ -122,6 +122,55 @@ void Mesh::parseAI(const char* path){
    }
 }
 
+void Mesh::calculateTangentsAndBitangents() {
+
+   for (unsigned int i = 0; i < vertices.size(); i++)
+   {
+      tangents.push_back(glm::vec3(0.0f,0.0f,0.0f));
+      bitangents.push_back(glm::vec3(0.0f,0.0f,0.0f));
+   }   
+
+   for (unsigned int i = 0; i < indeces.size(); i++)
+   {
+      glm::vec3 v0 = vertices[ indeces[i].x ];
+      glm::vec3 v1 = vertices[ indeces[i].y ];
+      glm::vec3 v2 = vertices[ indeces[i].z ];
+
+      glm::vec2 uv0 = uvs[ indeces[i].x ];
+      glm::vec2 uv1 = uvs[ indeces[i].y ];
+      glm::vec2 uv2 = uvs[ indeces[i].z ];
+
+      //Calculate the basis vectors for the given triangle
+      glm::vec3 deltaPosition1 = v1 - v0;
+      glm::vec3 deltaPosition2 = v2 - v0;
+
+      glm::vec2 deltaUV1 = uv1 - uv0;
+      glm::vec2 deltaUV2 = uv2 - uv0;
+
+      float oneOverDivisor = 1.0f / ( (deltaUV1.x * deltaUV2.y) - (deltaUV1.y * deltaUV2.x) );
+      glm::vec3 tangent = ( (deltaPosition1 * deltaUV2.y)   - (deltaPosition2 * deltaUV1.y) ) * oneOverDivisor;
+      glm::vec3 bitangent = ( (deltaPosition2 * deltaUV1.x)   - (deltaPosition1 * deltaUV2.x) ) * oneOverDivisor;
+
+      // Add up all the tangent vectors to be averaged/normalized later
+      tangents[ indeces[i].x ] += tangent;
+      tangents[ indeces[i].y ] += tangent;
+      tangents[ indeces[i].z ] += tangent;
+
+      bitangents[ indeces[i].x ] += bitangent;
+      bitangents[ indeces[i].y ] += bitangent;
+      bitangents[ indeces[i].z ] += bitangent;
+   }
+
+   // Force the normal map basis to be othogonal
+   for (unsigned int i = 0; i < normals.size(); i++)
+   {
+      glm::vec3 normal = normals[i];
+      glm::vec3& tangent = tangents[i];
+
+      tangent = glm::normalize(tangent - normal * glm::dot(normal, tangent));
+   }
+}
+
 void Mesh::setAt(const char* anim, float interp){
    setAt(animIds[std::string(anim)], interp);
 }
@@ -131,6 +180,8 @@ void Mesh::setAt(int anim, float interp){
 }
 
 void  Mesh::buildBuffers(){
+   calculateTangentsAndBitangents();
+
    glGenBuffers(1, &normHandle_);
    glBindBuffer(GL_ARRAY_BUFFER, normHandle_);
    glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &(normals[0]), GL_STATIC_DRAW);
@@ -150,4 +201,12 @@ void  Mesh::buildBuffers(){
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, idxHandle_);
    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indeces.size() * sizeof(glm::uvec3), &(indeces[0]), GL_STATIC_DRAW);
    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+   glGenBuffers(1, &tangentsHandle_);
+   glBindBuffer(GL_ARRAY_BUFFER, tangentsHandle_);
+   glBufferData(GL_ARRAY_BUFFER, tangents.size() * sizeof(glm::vec3), &(tangents[0]), GL_STATIC_DRAW);
+
+   glGenBuffers(1, &bitangentsHandle_);
+   glBindBuffer(GL_ARRAY_BUFFER, bitangentsHandle_);
+   glBufferData(GL_ARRAY_BUFFER, bitangents.size() * sizeof(glm::vec3), &(bitangents[0]), GL_STATIC_DRAW);
 }

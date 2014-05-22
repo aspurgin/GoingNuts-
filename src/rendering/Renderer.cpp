@@ -3,8 +3,8 @@
 Renderer::Renderer() {
 //   WARN("WRONG ENTRY POINT");
    //camera = Camera();
-   pshader = ShaderUtils::installPhongShader(textFileRead((char *) "assets/shaders/Phong_Vert.glsl"), 
-                                             textFileRead((char *) "assets/shaders/Phong_Frag.glsl"));
+   ptshader = ShaderUtils::installPhongTextureShader(textFileRead((char *) "assets/shaders/PhongTextureShader_Vert.glsl"),
+            textFileRead((char *) "assets/shaders/PhongTextureShader_Frag.glsl"));
    
 
    cshader = ShaderUtils::installCellShader(textFileRead((char *) "assets/shaders/CellShader_Vert.glsl"),
@@ -49,8 +49,7 @@ void Renderer::initDebugLightMap() {
 
 Renderer::Renderer(int width, int height, NutGame *game, Hud* hud) {
    camera = Camera(glm::vec3(3.0f, 1.0f, 10.0f), glm::vec3(3.0f, 0.0f, 5.0f), glm::vec3(0, 1, 0));
-   //pshader = ShaderUtils::installPhongShader(textFileRead((char *) "assets/shaders/Phong_Vert.glsl"),
-     //                                        textFileRead((char *) "assets/shaders/Phong_Frag.glsl"));
+   ptshader = Assets::getPhongTextureShader();
 
    //cshader = ShaderUtils::installCellShader(textFileRead((char *) "assets/shaders/CellShader_Vert.glsl"),
      //                                       textFileRead((char *) "assets/shaders/CellShader_Frag.glsl"));
@@ -141,6 +140,7 @@ void Renderer::initialize() {
    modelTrans.loadIdentity();
    initDebugLightMap();
 
+   cylinder = new Cylinder();
 }
 
 void Renderer::setModel() {
@@ -285,6 +285,27 @@ void Renderer::renderWinLoss() {
    glUseProgram(0);
 }
 
+void Renderer::renderNormalMappedCylinder()
+{
+   /************************************ Render the Normal mapped Cylinder ************************************/
+   glUseProgram(ptshader.shadeProg);//ptshader.shadeProg);
+   modelTrans.useModelViewMatrix();
+   modelTrans.loadIdentity();
+
+
+   camera.setEye(glm::vec3(3.0f, ngame->player.getCenter().y, 8.0f));
+   light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y + 2, 6.0f));
+
+   camera.setView(ptshader.h_uViewMatrix);
+   camera.setProjectionMatrix(ptshader.h_uProjMatrix, (float)winWidth / winHeight, 0.1f, 100.0f);
+
+   safe_glUniform3f(ptshader.h_lightPos, light.position.x, light.position.y, light.position.z);
+   safe_glUniform3f(ptshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
+   safe_glUniform3f(ptshader.h_lightColor, light.color.x, light.color.y, light.color.z);
+
+   cylinder->render();
+}
+
 void Renderer::renderDebugShadowMapText() {
    //render our debug light shadow map
    glUseProgram(dSS.shadeProg);
@@ -317,5 +338,6 @@ void Renderer::render() {
    renderGame();
    renderWinLoss();
    //renderDebugShadowMapText();
+   //renderNormalMappedCylinder();
 
 }

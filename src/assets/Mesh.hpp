@@ -40,16 +40,21 @@ class Mesh {
       GLuint idxHandle() {return idxHandle_;};
       GLuint normHandle() {return normHandle_;};
       GLuint uvHandle() {return uvHandle_;};
+      GLuint tangentHandle() {return tangentsHandle_;};
+      GLuint bitangentHandle() {return bitangentsHandle_;};
 
    private:
       void parse(char* fileName);
       void parseAI(const char* path);
       void parseAnimIdx(const char* filename);
+      void calculateTangentsAndBitangents();
 
       GLuint vertHandle_;
       GLuint idxHandle_;
       GLuint normHandle_;
       GLuint uvHandle_;
+      GLuint tangentsHandle_;
+      GLuint bitangentsHandle_;
 
 
       /**
@@ -65,6 +70,8 @@ class Mesh {
       std::vector<glm::uvec3> indeces;
       std::vector<glm::vec2> uvs;
       std::vector<glm::vec3> normals;
+      std::vector<glm::vec3> tangents;
+      std::vector<glm::vec3> bitangents;
 };
 
 #endif

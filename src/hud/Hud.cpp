@@ -8,10 +8,13 @@ Hud::Hud(NutGame* nutGame) : Renderable()
 	Background* background = new Background();
 	youWon = new YouWon();
 	youLost = new YouLost();
+
+	Cylinder* cylinder = new Cylinder();
 	
 	components.push_back(background);
 	components.push_back(depthGuage);
 	components.push_back(scoreGuage);
+	components.push_back(cylinder);
 }
 
 Hud::~Hud()

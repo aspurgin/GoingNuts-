@@ -407,3 +407,77 @@ LightMapShader ShaderUtils::installLightMapShader(const GLchar* vShaderName, con
    glUseProgram(0);
    return lightMapShader;
 }
+
+PhongTextureShader ShaderUtils::installPhongTextureShader(const GLchar *vShaderName, const GLchar *fShaderName) {
+   GLuint VS; //handles to shader object
+   GLuint FS; //handles to frag shader object
+   GLint vCompiled; //status
+   GLint fCompiled;
+   GLint linked;
+   int ShadeProg; //Shade prog num
+
+   VS = glCreateShader(GL_VERTEX_SHADER);
+   FS = glCreateShader(GL_FRAGMENT_SHADER);
+
+   //load the source
+   glShaderSource(VS, 1, &vShaderName, NULL);
+   glShaderSource(FS, 1, &fShaderName, NULL);
+
+   //compile shader and print log
+   glCompileShader(VS);
+   /* check shader status requires helper functions */
+   printOpenGLError();
+   glGetShaderiv(VS, GL_COMPILE_STATUS, &vCompiled);
+   printShaderInfoLog(VS);
+
+   //compile shader and print log
+   glCompileShader(FS);
+   /* check shader status requires helper functions */
+   printOpenGLError();
+   glGetShaderiv(FS, GL_COMPILE_STATUS, &fCompiled);
+   printShaderInfoLog(FS);
+
+   if (!vCompiled || !fCompiled) {
+      printf("Error compiling either shader %s or %s", vShaderName, fShaderName);
+      throw(1);
+   }
+
+   //create a program object and attach the compiled shader
+   ShadeProg = glCreateProgram();
+   glAttachShader(ShadeProg, VS);
+   glAttachShader(ShadeProg, FS);
+
+   glLinkProgram(ShadeProg);
+   /* check shader status requires helper functions */
+   printOpenGLError();
+   glGetProgramiv(ShadeProg, GL_LINK_STATUS, &linked);
+   printProgramInfoLog(ShadeProg);
+
+   glUseProgram(ShadeProg);
+
+   //Set up PhongShader object
+   PhongTextureShader phongTextureShader;
+
+   /* get handles to attribute data */
+   phongTextureShader.h_aPosition = safe_glGetAttribLocation(ShadeProg, "aPosition");
+   phongTextureShader.h_aNormal = safe_glGetAttribLocation(ShadeProg, "aNormal");
+   phongTextureShader.h_aTangent = safe_glGetAttribLocation(ShadeProg, "aTangent");
+   phongTextureShader.h_aBitangent = safe_glGetAttribLocation(ShadeProg, "aBitangent");
+   phongTextureShader.h_uProjMatrix = safe_glGetUniformLocation(ShadeProg, "uProjMatrix");
+   phongTextureShader.h_uViewMatrix = safe_glGetUniformLocation(ShadeProg, "uViewMatrix");
+   phongTextureShader.h_uModelMatrix = safe_glGetUniformLocation(ShadeProg, "uModelMatrix");
+   phongTextureShader.h_uMatAmb = safe_glGetUniformLocation(ShadeProg, "uMat.aColor");
+   phongTextureShader.h_uMatDif = safe_glGetUniformLocation(ShadeProg, "uMat.dColor");
+   phongTextureShader.h_uMatSpec = safe_glGetUniformLocation(ShadeProg, "uMat.sColor");
+   phongTextureShader.h_uMatShine = safe_glGetUniformLocation(ShadeProg, "uMat.shine");
+   phongTextureShader.h_lightPos = safe_glGetUniformLocation(ShadeProg, "lightPos");
+   phongTextureShader.h_cameraPos = safe_glGetUniformLocation(ShadeProg, "cameraPos");
+   phongTextureShader.h_lightColor = safe_glGetUniformLocation(ShadeProg, "lightColor");
+   phongTextureShader.h_vertexUV = glGetAttribLocation(ShadeProg, "vertexUV");
+   phongTextureShader.h_colorTextureSampler  = glGetUniformLocation(ShadeProg, "colorTextureSampler");
+   phongTextureShader.h_normalTextureSampler  = glGetUniformLocation(ShadeProg, "normalTextureSampler");
+   phongTextureShader.shadeProg = ShadeProg;
+
+   glUseProgram(0);
+   return phongTextureShader;
+}

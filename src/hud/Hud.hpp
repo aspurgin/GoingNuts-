@@ -12,6 +12,7 @@
 #include "Background.hpp"
 #include "YouWon.hpp"
 #include "YouLost.hpp"
+#include "Cylinder.hpp"
 
 class Hud: public Renderable
 {

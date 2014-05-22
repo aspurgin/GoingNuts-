@@ -11,14 +11,15 @@ namespace Assets {
       //create a map for sounds and music
       std::map<int, FMOD::Sound*> sounds, music;
 
-      Mesh squirrel, block, nut, depthWheel, background, guageMask1, guageMask2, scoreMask1, scoreMask2, youWon, youLost;
-      Texture whiteDepthWheel, blackDepthWheel, hudElements;
+      Mesh squirrel, block, nut, depthWheel, background, guageMask1, guageMask2, scoreMask1, scoreMask2, youWon, youLost, cylinder;
+      Texture whiteDepthWheel, blackDepthWheel, hudElements, cylinderNormal, cylinderColor;
       std::map<int, Mesh> meshes;
       std::map<int, Texture> textures;
       CellShader cshader;
       CellShaderTexture ctshader;
       FlatTextureShader ftshader;
       LightMapShader lmshader;
+      PhongTextureShader ptshader;
       PhongShader pshader;
   
       //code found from tutorial: http://katyscode.wordpress.com/2012/10/05/cutting-your-teeth-on-fmod-part-1-build-environment-initialization-and-playing-sounds/
@@ -33,12 +34,18 @@ namespace Assets {
       void loadTextures() {
          whiteDepthWheel = Texture("assets/textures/MileageCounterWhite.jpg");
          blackDepthWheel = Texture("assets/textures/MileageCounterBlack.jpg");
-         //hudElements = Texture("assets/textures/HUDElements.jpg");
          hudElements = Texture("assets/textures/HUDElements.png", RGBA_TEX);
+         
+         cylinderColor = Texture("assets/textures/Cylinder_Color.png", RGB_TEX);
+         cylinderNormal = Texture("assets/textures/Cylinder_Normal.png", RGB_TEX);
+
 
          textures[WHITE_DEPTH_WHEEL_T] = whiteDepthWheel;
          textures[BLACK_DEPTH_WHEEL_T] = blackDepthWheel;
          textures[HUD_ELEMENTS_T] = hudElements;
+
+         textures[CYLINDER_COLOR_T] = cylinderColor;
+         textures[CYLINDER_NORMAL_T] = cylinderNormal;
       }
 
       void loadMeshes() {
@@ -53,6 +60,7 @@ namespace Assets {
          scoreMask2 = Mesh("assets/models/ScoreMask2.obj");
          youWon = Mesh("assets/models/YouWon.obj");
          youLost = Mesh("assets/models/YouLost.obj");
+         cylinder = Mesh("assets/models/Cylinder.obj");
 
          block.buildBuffers();
          squirrel.buildBuffers();
@@ -65,6 +73,7 @@ namespace Assets {
          scoreMask2.buildBuffers();
          youWon.buildBuffers();
          youLost.buildBuffers();
+         cylinder.buildBuffers();
 
          meshes[SQUIRREL_M] = squirrel;
          meshes[BLOCK_M] = block;
@@ -77,6 +86,7 @@ namespace Assets {
          meshes[SCORE_GUAGE_MASK_2_M] = scoreMask2;
          meshes[YOU_WON_M] = youWon;
          meshes[YOU_LOST_M] = youLost;
+         meshes[CYLINDER_M] = cylinder;
       }
 
       void initShaders() {
@@ -89,6 +99,9 @@ namespace Assets {
 
          ctshader = ShaderUtils::installCellShaderTexture(textFileRead((char *) "assets/shaders/CellShaderTexture_Vert.glsl"),
             textFileRead((char *) "assets/shaders/CellShaderTexture_Frag.glsl"));
+
+         ptshader = ShaderUtils::installPhongTextureShader(textFileRead((char *) "assets/shaders/PhongTextureShader_Vert.glsl"),
+            textFileRead((char *) "assets/shaders/PhongTextureShader_Frag.glsl"));
 
          ftshader = ShaderUtils::installFlatTextureShader(textFileRead((char *) "assets/shaders/FlatTextureShader_Vert.glsl"),
             textFileRead((char *) "assets/shaders/FlatTextureShader_Frag.glsl"));
@@ -211,6 +224,10 @@ namespace Assets {
 
    FlatTextureShader& getFlatTextureShader() {
       return ftshader;
+   }
+
+   PhongTextureShader& getPhongTextureShader() {
+      return ptshader;
    }
 
    PhongShader& getPShader() {

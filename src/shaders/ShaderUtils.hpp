@@ -21,6 +21,7 @@
 #include "CellShader.hpp"
 #include "CellShaderTexture.hpp"
 #include "FlatTextureShader.hpp"
+#include "PhongTextureShader.hpp"
 #include "DebugShadowShader.hpp"
 #include "LightMapShader.hpp"
 
@@ -30,6 +31,7 @@ class ShaderUtils {
       static CellShader installCellShader(const GLchar*, const GLchar*);
       static CellShaderTexture installCellShaderTexture(const GLchar*, const GLchar*);
       static FlatTextureShader installFlatTextureShader(const GLchar*, const GLchar*);
+      static PhongTextureShader installPhongTextureShader(const GLchar*, const GLchar*);
       static DebugShadowShader installDebugShadowShader(const GLchar*, const GLchar*);
       static LightMapShader installLightMapShader(const GLchar*, const GLchar*);
    private:
