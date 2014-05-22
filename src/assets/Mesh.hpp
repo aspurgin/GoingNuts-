@@ -45,6 +45,13 @@ class Mesh {
       void parse(char* fileName);
       void parseAI(const char* path);
       void parseAnimIdx(const char* filename);
+      void setAtRaw(float interp);
+      void reset();
+
+      void bindPositionBuffer();
+      void bindNormalBuffer();
+      void bindUvBuffer();
+      void bindIdxBuffer();
 
       Skeleton skeleton;
 
@@ -66,4 +73,12 @@ class Mesh {
       std::vector<glm::uvec3> indeces;
       std::vector<glm::vec2> uvs;
       std::vector<glm::vec3> normals;
+
+      /**
+       * base model information, only to be written to at load-time
+       */
+      std::vector<glm::vec3> tmpVertices;
+      std::vector<glm::uvec3> tmpIndeces;
+      std::vector<glm::vec2> tmpUvs;
+      std::vector<glm::vec3> tmpNormals;
 };

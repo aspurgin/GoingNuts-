@@ -21,17 +21,25 @@ namespace skHelpers{
 		return aiString();
 	}
 
-	aiNodeAnim* animForName(aiAnimation* anim, aiString name){
-		for(int c = 0; c<anim->mNumChannels; c++){
-			if(name == anim->mChannels[c]->mNodeName){
-				return anim->mChannels[c];
+	aiNodeAnim* animForName(const aiScene* scene, aiString name){
+		DEBUG("looking for " << name.C_Str());
+		for(int a = 0; a<scene->mNumAnimations; a++) {
+			aiAnimation* anim = scene->mAnimations[a];
+			for(int c = 0; c<anim->mNumChannels; c++){
+				DEBUG("\tChecking: " << anim->mChannels[c]->mNodeName.C_Str());
+				if(string(name.C_Str()) == string(anim->mChannels[c]->mNodeName.C_Str())){
+					DEBUG("\tfound it!");
+					return anim->mChannels[c];
+				}
 			}
 		}
+		DEBUG("\tdid not find it!");
 		return 0;
 	}
 }
 
 void Skeleton::setAt(float frame){
+	//DEBUG(frame);
 	for(int i=0; i<bones.size(); i++){
 		bones[i]->setAt(frame / 24.0);
 	}
@@ -42,6 +50,7 @@ Skeleton::Skeleton(){
 }
 
 Skeleton::Skeleton (const aiScene* scene) {
+	//FATAL("num anims " << scene->mNumAnimations);
 	hasBones = true;
 	aiMesh* mesh = scene->mMeshes[0];
 
@@ -50,7 +59,7 @@ Skeleton::Skeleton (const aiScene* scene) {
 	for(int b = 0; b < mesh->mNumBones; b++){
 		aiBone* bone = mesh->mBones[b];
 
-		Bone* newBone = new Bone(bone, skHelpers::animForName(scene->mAnimations[0], bone->mName));
+		Bone* newBone = new Bone(scene->mRootNode, bone, skHelpers::animForName(scene, bone->mName));
 		newBone->setNameDebug(bone->mName.C_Str());
 
 		boneMap[string(bone->mName.C_Str())] = newBone;
@@ -67,8 +76,12 @@ Skeleton::Skeleton (const aiScene* scene) {
 
 	this->setAt(40);
 	for(int i=0; i<bones.size(); i++){
+		bones[i]->printChain();
+	}
+	for(int i=0; i<bones.size(); i++){
 		bones[i]->debug();
 	}
+	//FATAL("end");
 }
 
 Skeleton::~Skeleton(){
@@ -81,8 +94,9 @@ glm::vec3 Skeleton::transform(int v, glm::vec3 vertex){
 		Bone* bone = bones[b];
 		float weight = bone->getWeightForVertex(v);
 		if(weight){
-			glm::vec4 inc = glm::vec4(vertex, 1) * bone->getTotalTransform();
-			accum += glm::vec3(inc.x, inc.y, inc.z) * weight;
+			glm::vec4 inc = bone->getCompleteTransform() * glm::vec4(vertex, 1);
+			//glm::vec4 inc =  glm::vec4(vertex, 1) * bone->getTotalTransform();
+			accum += glm::vec3(inc) * weight;
 		}
 	}
 	return accum;

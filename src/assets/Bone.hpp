@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include <assimp/mesh.h>
 #include <assimp/anim.h>
+#include <assimp/scene.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
@@ -30,14 +31,16 @@ private:
 
 	glm::mat4 currentTransform;
 	glm::mat4 offsetTransform;
+	glm::mat4 rootTransform;
 
 public:
+	glm::mat4 getCompleteTransform();
 	glm::mat4 getTotalTransform();
 	glm::mat4 getTransform();
 
 	void setAt(double frame);
 
-	Bone(aiBone* bone, aiNodeAnim* anim);
+	Bone(aiNode*, aiBone*, aiNodeAnim*);
 	void setParent(Bone* parent);
 	void setNameDebug(const char*);
 	void printChain();

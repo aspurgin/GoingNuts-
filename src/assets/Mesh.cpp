@@ -11,6 +11,8 @@
 
 #include "Mesh.hpp"
 
+using namespace std;
+
 
 void debugNodes(aiNode* node, int level){
    for(int t = 0; t<level; t++){
@@ -49,7 +51,7 @@ size_t Mesh::getIdxCount(){
 }
 
 void Mesh::debug(){
-   DEBUG("_-----------------_");
+  /* DEBUG("_-----------------_");
    for(int i=0; i<vertices.size(); i++){
       DEBUG(vertices[i].x << ", " << vertices[i].y << ", " << vertices[i].z);
    }
@@ -57,7 +59,7 @@ void Mesh::debug(){
    for(int i=0; i<indeces.size(); i++){
       DEBUG(indeces[i].x << ", " << indeces[i].y << ", " << indeces[i].z);
    }
-   DEBUG("_-----------------_");
+   DEBUG("_-----------------_");*/
 }
 
 void Mesh::parseAnimIdx(const char* fileName){
@@ -126,6 +128,7 @@ void Mesh::parseAI(const char* path){
    for(unsigned int u=0; u<mesh->mNumVertices; u++){
       uvs.push_back(glm::vec2(mesh->mTextureCoords[0][u].x, mesh->mTextureCoords[0][u].y));
    }
+   reset();
 }
 
 
@@ -138,31 +141,65 @@ void Mesh::parseAI(const char* path){
  * interp: 0.f - 1.f value determining the progress through the cycle
  */
 void Mesh::setAt(const char* anim, float interp){
-   WARN("NOT YET MIPLEMENTED");
+   setAtRaw(interp);
 }
 
 void Mesh::setAt(int anim, float interp){
-   WARN("NOT YET MIPLEMENTED");
+   setAtRaw(interp);
+}
+
+void Mesh::setAtRaw(float interp){
+   skeleton.setAt(interp);
+   for(int i=0; i<vertices.size(); i++){
+      tmpVertices[i] = skeleton.transform(i, vertices[i]);
+   }
+   bindPositionBuffer();
+}
+
+void Mesh::reset(){
+   tmpVertices.clear();
+   tmpIndeces.clear();
+   tmpUvs.clear();
+   tmpNormals.clear();
+
+   tmpVertices = vector<glm::vec3>(vertices);
+   tmpIndeces = vector<glm::uvec3>(indeces);
+   tmpUvs = vector<glm::vec2>(uvs);
+   tmpNormals = vector<glm::vec3>(normals);
 }
 
 void  Mesh::buildBuffers(){
-   glGenBuffers(1, &normHandle_);
-   glBindBuffer(GL_ARRAY_BUFFER, normHandle_);
-   glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &(normals[0]), GL_STATIC_DRAW);
-   //glBindBuffer(GL_ARRAY_BUFFER, 0);
-   
+   bindPositionBuffer();
+   bindIdxBuffer();
+   bindNormalBuffer();
+   bindUvBuffer();
+}
+
+
+void Mesh::bindPositionBuffer(){
    glGenBuffers(1, &vertHandle_);
    glBindBuffer(GL_ARRAY_BUFFER, vertHandle_);
-   glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &(vertices[0]), GL_STATIC_DRAW);
+   glBufferData(GL_ARRAY_BUFFER, tmpVertices.size() * sizeof(glm::vec3), &(tmpVertices[0]), GL_STREAM_DRAW);
    //glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
 
+void Mesh::bindNormalBuffer(){
+   glGenBuffers(1, &normHandle_);
+   glBindBuffer(GL_ARRAY_BUFFER, normHandle_);
+   glBufferData(GL_ARRAY_BUFFER, tmpNormals.size() * sizeof(glm::vec3), &(tmpNormals[0]), GL_STATIC_DRAW);
+   //glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void Mesh::bindUvBuffer(){
    glGenBuffers(1, &uvHandle_);
    glBindBuffer(GL_ARRAY_BUFFER, uvHandle_);
-   glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(glm::vec2), &(uvs[0]), GL_STATIC_DRAW);
+   glBufferData(GL_ARRAY_BUFFER, tmpUvs.size() * sizeof(glm::vec2), &(tmpUvs[0]), GL_STATIC_DRAW);
    //glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
 
+void Mesh::bindIdxBuffer(){
    glGenBuffers(1, &idxHandle_);
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, idxHandle_);
-   glBufferData(GL_ELEMENT_ARRAY_BUFFER, indeces.size() * sizeof(glm::uvec3), &(indeces[0]), GL_STATIC_DRAW);
+   glBufferData(GL_ELEMENT_ARRAY_BUFFER, tmpIndeces.size() * sizeof(glm::uvec3), &(tmpIndeces[0]), GL_STATIC_DRAW);
    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }

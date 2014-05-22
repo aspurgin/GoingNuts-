@@ -14,7 +14,7 @@ namespace boneHelpers{
 	}
 }
 
-Bone::Bone(aiBone* bone, aiNodeAnim* anim){
+Bone::Bone(aiNode* root, aiBone* bone, aiNodeAnim* anim){
 	parent = (Bone*)0;
 
 	for(int w = 0; w < bone->mNumWeights; w++){
@@ -22,11 +22,23 @@ Bone::Bone(aiBone* bone, aiNodeAnim* anim){
 	}
 
 	aiMatrix4x4 mat = bone->mOffsetMatrix;
-	offsetTransform = glm::mat4(mat.a1, mat.a2, mat.a3, mat.a4,
-				 			    mat.b1, mat.b2, mat.b3, mat.b4,
-				 			    mat.c1, mat.c2, mat.c3, mat.c4,
-	   			 			    mat.d1, mat.d2, mat.d3, mat.d4);
-	if(anim != 0){
+
+	offsetTransform = glm::mat4(mat.a1, mat.b1, mat.c1, mat.d1,
+				 			    mat.a2, mat.b2, mat.c2, mat.d2,
+				 			    mat.a3, mat.b3, mat.c3, mat.d3,
+	   			 			    mat.a4, mat.b4, mat.c4, mat.d4);
+
+
+	aiMatrix4x4 rtTrans = root->mTransformation;
+	rootTransform = glm::mat4(rtTrans.a1, rtTrans.a2, rtTrans.a3, rtTrans.a4,
+				 			    rtTrans.b1, rtTrans.b2, rtTrans.b3, rtTrans.b4,
+				 			    rtTrans.c1, rtTrans.c2, rtTrans.c3, rtTrans.c4,
+	   			 			    rtTrans.d1, rtTrans.d2, rtTrans.d3, rtTrans.d4);
+	rootTransform = glm::inverse(rootTransform);
+
+	DEBUG(bone->mName.C_Str());
+	if(anim != 0){	
+		DEBUG("\tANIMATED");
 		for(int p=0; p<anim->mNumPositionKeys; p++){
 			aiVectorKey k = anim->mPositionKeys[p];
 			pos[k.mTime] = glm::vec3(k.mValue.x, k.mValue.y, k.mValue.z);
@@ -41,12 +53,18 @@ Bone::Bone(aiBone* bone, aiNodeAnim* anim){
 			aiQuatKey k = anim->mRotationKeys[r];
 			rot[k.mTime] = glm::quat(k.mValue.w, k.mValue.x, k.mValue.y, k.mValue.z);
 		}
+	} else {
+		DEBUG("\tNOT_ANIMATED");
 	}
+}
+
+glm::mat4 Bone::getCompleteTransform(){
+	return rootTransform * getTotalTransform() * offsetTransform;
 }
 
 glm::mat4 Bone::getTotalTransform(){
 	if(parent){
-		return currentTransform * parent->getTotalTransform();
+		return parent->getTotalTransform() * currentTransform;
 	} else {
 		return currentTransform;
 	}
@@ -134,27 +152,30 @@ void Bone::setAt(double frame){
 				break;
 			}
 		}
-		if(leftRotFrame == rightRotFrame) {
+		if(sin(acos(glm::dot(leftRotFrame, rightRotFrame))) == 0 || leftRotFrame == rightRotFrame) {
 			endRot = leftRotFrame;
 		} else {
 			endRot = glm::mix(leftRotFrame, rightRotFrame, boneHelpers::getMix(r1, r2, frame));				
 		}
-    	if(isnan(endRot.x)){
-			ERROR("!!!!!!!!!!!!!!!!!");
-			ERROR("r1: " << r1);
-			ERROR("r2: " << r2);
-			ERROR("l: " << leftRotFrame.x << ", " << leftRotFrame.y << ", " << leftRotFrame.z << ", " << leftRotFrame.w);
-			ERROR("r: " << rightRotFrame.x << ", " << rightRotFrame.y << ", " << rightRotFrame.z << ", " << rightRotFrame.w);
-			ERROR("end: " << endRot.x << ", " << endRot.y << ", " << endRot.z << ", " << endRot.w);
+		if(isnan(endRot.x)){
+			endRot = leftRotFrame;
+			//FATAL("Is a nan");
 		}
-	}
+ 	}
 	DEBUG("rot framed between: " << r1 << " - " << r2);
 	DEBUG("    with transformation: " << endRot.x << ", " << endRot.y << ", " << endRot.z << ", " << endRot.w);
 
-	currentTransform = glm::mat4(); 
-	currentTransform = currentTransform * glm::mat4_cast(endRot);
-	currentTransform = glm::scale(currentTransform, endScale);
-	currentTransform = glm::translate(currentTransform, endPos);
+	//currentTransform = glm::mat4(1.f);
+	glm::mat4 r = glm::mat4_cast(endRot);
+	//currentTransform = glm::mat4_cast(endRot) * currentTransform;
+	//currentTransform = currentTransform * glm::mat4_cast(endRot);
+	//currentTransform = glm::scale(currentTransform, endScale);
+	//currentTransform = glm::scale(glm::mat4(1.f), endScale) * currentTransform;
+	glm::mat4 s = glm::scale(glm::mat4(1.f), endScale);
+	//currentTransform = glm::translate(currentTransform, endPos);
+	//currentTransform = glm::translate(glm::mat4(1.f), endPos) * currentTransform;
+	glm::mat4 t = glm::translate(glm::mat4(1.f), endPos);
+	currentTransform = t * s * r * glm::mat4(1);
 }
 
 void Bone::setNameDebug(const char* name){
