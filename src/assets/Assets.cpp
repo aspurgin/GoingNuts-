@@ -4,9 +4,13 @@
 namespace Assets {
    
    namespace {
+      //Entire system for the sound
       FMOD::System *soundSystem;
+      //Error result
       FMOD_RESULT result;
+      //create a map for sounds and music
       std::map<int, FMOD::Sound*> sounds, music;
+
       Mesh squirrel, block, nut, depthWheel, background, guageMask1, guageMask2, scoreMask1, scoreMask2, youWon, youLost;
       Texture whiteDepthWheel, blackDepthWheel, hudElements;
       std::map<int, Mesh> meshes;
@@ -97,6 +101,8 @@ namespace Assets {
          FMOD::Sound *sound;
          result = soundSystem->createSound(filename, FMOD_DEFAULT, 0, &sound);
          FMODErrorCheck(result);
+
+         //put the pointer to the sound as value in hash map
          sounds[type] = sound;
       }
 
@@ -104,14 +110,18 @@ namespace Assets {
          FMOD::Sound *track;
          result = soundSystem->createStream(filename, FMOD_DEFAULT, 0, &track);
          FMODErrorCheck(result);
+         //put pointer to the music track as value in hash map
          music[type] = track;
       }
 
       void loadSoundsAndMusic() {
          unsigned int version;
 
+         //Create the sound system
          result = FMOD::System_Create(&soundSystem);
          FMODErrorCheck(result);
+
+         //Check the version of the sound system for compatibility
          result = soundSystem->getVersion(&version);
          
          if (version < FMOD_VERSION)
@@ -120,7 +130,9 @@ namespace Assets {
             exit(-1);
          }
 
+         //Initialize the system with 32 channels. 32 was an arbitrary number and may be changed.
          result = soundSystem->init(32, FMOD_INIT_NORMAL, 0);
+         //Check if there was a problem making a sound buffer
          if (result == FMOD_ERR_OUTPUT_CREATEBUFFER)
          {
             result = soundSystem->setSpeakerMode(FMOD_SPEAKERMODE_STEREO);
@@ -130,15 +142,18 @@ namespace Assets {
          }
          FMODErrorCheck(result);
 
+         //load all music tracks
          loadTrack("assets/audio/tracks/goingnuts.mp3", GAME_M);
          loadTrack("assets/audio/tracks/goingnutsgg.mp3", TITLE_M);
 
+         //load all sound effects
          loadSound("assets/audio/sfx/blockfall.wav", BLOCK_FALL_S);
          loadSound("assets/audio/sfx/itemget.wav", ITEM_S);
          loadSound("assets/audio/sfx/nutget.wav", NUT_S);
 
       }
 
+      //free everything
       void releaseSoundsAndMusic() {
          soundSystem->release();
       }

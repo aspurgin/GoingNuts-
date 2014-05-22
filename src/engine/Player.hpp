@@ -23,7 +23,6 @@ class Player: public Movable {
       void died();
       bool getIsDead();
       void render();
-      void setModel();
       void setShouldJump();
       void setShouldNotJump();
       bool getShouldJump();
@@ -42,8 +41,6 @@ class Player: public Movable {
       int lives;
       bool isDead;
       Drill* drill;
-      //Mesh model;
-      CellShader cshader;
       bool shouldJump;
       bool isJumping;
       Direction horDirection;

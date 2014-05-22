@@ -8,7 +8,7 @@ Block::Block() {
    timesDrilled = 0;
    groupIn = 0;
    model = Assets::getMesh(Assets::BLOCK_M);
-   cshader = Assets::getCShader();
+   this->shaderType = C_SHADE;
    scale = 0.48f;
    scaleX = 0.48f;
    scaleY = 0.48f;
@@ -108,43 +108,20 @@ void Block::setScale() {
    }
    else if (isDead()) {
       scale = curScale - deathCounter;
+      //printf("My scale!: %f\n", scale);
    }
+   scaleX = scale;
+   scaleY = scale;
+   scaleZ = scale + 1;
 }
 
 void Block::render() {
    setScale();
-   position = center;
-   cshader.setMaterial(mat);
-   modelTrans.useModelViewMatrix();
-   modelTrans.loadIdentity();
-   modelTrans.pushMatrix();
-   modelTrans.translate(glm::vec3(0, 0, -1));
-   modelTrans.translate(center);
-   modelTrans.scale(scale, scale, scale + 1);
-   modelTrans.rotate(0, glm::vec3(0, 1, 0));
-   setModel();
-
-   safe_glEnableVertexAttribArray(cshader.h_aPosition);
-   glBindBuffer(GL_ARRAY_BUFFER, model.vertHandle());
-   safe_glVertexAttribPointer(cshader.h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
-   //DEBUG("positions: " << glGetError());
-
-   safe_glEnableVertexAttribArray(cshader.h_aNormal);
-   glBindBuffer(GL_ARRAY_BUFFER, model.normHandle());
-   safe_glVertexAttribPointer(cshader.h_aNormal, 3, GL_FLOAT, GL_FALSE, 0, 0);
-   //DEBUG("normals: " << glGetError());
-
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.idxHandle());
-   glDrawElements(GL_TRIANGLES, model.getIdxCount(), GL_UNSIGNED_INT, 0);
-   modelTrans.popMatrix();
-   //DEBUG("idxs: " << glGetError());
-
-   safe_glDisableVertexAttribArray(cshader.h_aPosition);
-   safe_glDisableVertexAttribArray(cshader.h_aNormal);
-}
-
-void Block::setModel() {
-   safe_glUniformMatrix4fv(cshader.h_uModelMatrix, glm::value_ptr(modelTrans.modelViewMatrix));
+   position = center + glm::vec3(0, 0, -1);
+   if (shaderType == C_SHADE) {
+      printf("got here!\n");
+   }
+   Renderable::render();
 }
 
 void Block::genParticles() {

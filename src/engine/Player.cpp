@@ -8,9 +8,9 @@ Player::Player(glm::vec3 center, float width, float height) {
    this->velocity = 1.f;
    this->lives = 3;
    this->isDead = false;
-   model = Assets::getMesh(Assets::SQUIRREL_M);
+   this->model = Assets::getMesh(Assets::SQUIRREL_M);
    this->hasHardHat = false;
-   this->cshader = Assets::getCShader();
+   this->shaderType = C_SHADE;
    this->mat = 5;
    this->scale = 1;
    scaleX = 1;
@@ -67,34 +67,8 @@ void Player::checkMoveState() {
 void Player::render() {
    checkMoveState();
    position = center;
-   cshader.setMaterial(mat);
-   modelTrans.useModelViewMatrix();
-   modelTrans.loadIdentity();
-   modelTrans.pushMatrix();
-   modelTrans.translate(center);
-   modelTrans.scale(scale);
-   modelTrans.rotate(ang, glm::vec3(0, 1, 0));
-   setModel();
    
-   safe_glEnableVertexAttribArray(cshader.h_aPosition);
-   glBindBuffer(GL_ARRAY_BUFFER, model.vertHandle());
-   safe_glVertexAttribPointer(cshader.h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-   safe_glEnableVertexAttribArray(cshader.h_aNormal);
-   glBindBuffer(GL_ARRAY_BUFFER, model.normHandle());
-   safe_glVertexAttribPointer(cshader.h_aNormal, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.idxHandle());
-   glDrawElements(GL_TRIANGLES, model.getIdxCount(), GL_UNSIGNED_INT, 0);
-   
-   modelTrans.popMatrix();
-   //printf("num verts: %d\n", model.getVertCount());
-   safe_glDisableVertexAttribArray(cshader.h_aPosition);
-   safe_glDisableVertexAttribArray(cshader.h_aNormal);
-}
-
-void Player::setModel() {
-   safe_glUniformMatrix4fv(cshader.h_uModelMatrix, glm::value_ptr(modelTrans.modelViewMatrix));
+   Renderable::render();
 }
 
 void Player::setShouldJump() {

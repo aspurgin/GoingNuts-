@@ -10,7 +10,7 @@ Particle::Particle(float mass, float ttl, glm::vec3 pos, glm::vec3 vel, int mat)
    this->pos = pos;
    this->vel = vel;
    this->model = Assets::getMesh(Assets::BLOCK_M);
-   cshader = Assets::getCShader();
+   this->shaderType = C_SHADE;
    this->scale = .05;
    scaleX = 0.05;
    scaleY = 0.05;
@@ -33,36 +33,7 @@ void Particle::render() {
    glm::vec3 axis = glm::cross(camVec, right);
    float angle = glm::dot(camVec, front) * TO_DEGREES;
    position = pos;
-   cshader.setMaterial(mat);
-   modelTrans.useModelViewMatrix();
-   modelTrans.loadIdentity();
-   modelTrans.pushMatrix();
-   modelTrans.translate(pos);
-   modelTrans.scale(scale);
-   modelTrans.rotate(angle, axis);
-   setModel();
-
-   safe_glEnableVertexAttribArray(cshader.h_aPosition);
-   glBindBuffer(GL_ARRAY_BUFFER, model.vertHandle());
-   safe_glVertexAttribPointer(cshader.h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
-   DEBUG("positions: " << glGetError());
-
-   safe_glEnableVertexAttribArray(cshader.h_aNormal);
-   glBindBuffer(GL_ARRAY_BUFFER, model.normHandle());
-   safe_glVertexAttribPointer(cshader.h_aNormal, 3, GL_FLOAT, GL_FALSE, 0, 0);
-   DEBUG("normals: " << glGetError());
-
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.idxHandle());
-   glDrawElements(GL_TRIANGLES, model.getIdxCount(), GL_UNSIGNED_INT, 0);
-   modelTrans.popMatrix();
-   DEBUG("idxs: " << glGetError());
-
-   safe_glDisableVertexAttribArray(cshader.h_aPosition);
-   safe_glDisableVertexAttribArray(cshader.h_aNormal);
-}
-
-void Particle::setModel() {
-   safe_glUniformMatrix4fv(cshader.h_uModelMatrix, glm::value_ptr(modelTrans.modelViewMatrix));
+   Renderable::render();
 }
 
 ParticleSystem::ParticleSystem() {
@@ -246,8 +217,4 @@ void ParticleSystem::renderLightMap() {
    for (std::vector<Particle>::iterator it = p.begin(); it != p.end(); ++it) {
       it->renderLightMap();
    }
-}
-
-void ParticleSystem::setModel() {
-
 }

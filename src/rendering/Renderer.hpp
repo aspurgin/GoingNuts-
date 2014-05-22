@@ -31,6 +31,12 @@ class Renderer {
       GLuint fb_tex;
       GLuint fb;
       int shadow_size;
+      std::list<Renderable *> currObjs;
+      void renderHud();
+      void renderLightShadowMap();
+      void renderGame();
+      void renderWinLoss();
+      void renderDebugShadowMapText();
    public:
       Camera camera;
       bool toggle;

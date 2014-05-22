@@ -13,11 +13,8 @@ class Nut: public Movable {
       bool shouldFall();
       void setWillFall();
       void render();
-      void setModel();
    private:
       float velocity;
-      //Mesh model;
-      CellShader cshader;
       glm::vec3 offset;
       bool floatingUp;
       void updateOffset();

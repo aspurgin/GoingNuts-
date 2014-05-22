@@ -33,7 +33,7 @@ class Movable: public Collidable, public Renderable {
       glm::vec3 center;
       double fallCounter;
       bool canFall;
-      int mat;
+      //int mat;
       int state;
    private:
       float width;

@@ -726,9 +726,10 @@ std::list<Renderable*> NutGame::getCertainObjectsToDraw(int type) {
          }
       }
    }
-   if (type == BLOCK) {
+   //causes bugs, will just render psystem on its own --Drew
+   /*if (type == BLOCK) {
       objects.push_back(&psystem);
-   }
+   }*/
    objects.unique();
    return objects;
 }

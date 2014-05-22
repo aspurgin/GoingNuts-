@@ -35,7 +35,6 @@ class Block: public Movable {
       double deathCounter;
       bool shouldScale;
       void render();
-      void setModel();
       void setScale();
       //void updatePSystem(double dt);
       void genParticles();
@@ -43,8 +42,6 @@ class Block: public Movable {
       BlockGroup *groupIn;
       int blockType;
       std::vector<Block*> attatchedTo;
-      //Mesh model;
-      CellShader cshader;
       ParticleSystem *psystem;
    private:
       int timesDrilled;

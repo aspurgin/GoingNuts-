@@ -35,10 +35,8 @@ class Particle: public Renderable {
 
       /* function to implement for Renderable template */
       void render();
-      void setModel();
    private:
-      Mesh model;
-      CellShader cshader;      
+      
 };
 
 class ParticleSystem: public Renderable {
@@ -79,7 +77,6 @@ class ParticleSystem: public Renderable {
 
       /* Need to implement for Renderable template */
       void render();
-      void setModel();
       void renderLightMap();
 
    private:
