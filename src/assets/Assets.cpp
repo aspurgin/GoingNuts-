@@ -12,7 +12,7 @@ namespace Assets {
       std::map<int, FMOD::Sound*> sounds, music;
 
       Mesh squirrel, block, nut, depthWheel, background, guageMask1, guageMask2, scoreMask1, scoreMask2, youWon, youLost, cylinder;
-      Texture whiteDepthWheel, blackDepthWheel, hudElements, cylinderNormal, cylinderColor;
+      Texture whiteDepthWheel, blackDepthWheel, hudElements, squirrelTex, cylinderNormal, cylinderColor;
       std::map<int, Mesh> meshes;
       std::map<int, Texture> textures;
       CellShader cshader;
@@ -38,7 +38,7 @@ namespace Assets {
          
          cylinderColor = Texture("assets/textures/Cylinder_Color.png", RGB_TEX);
          cylinderNormal = Texture("assets/textures/Cylinder_Normal.png", RGB_TEX);
-
+         squirrelTex = Texture("assets/textures/squirrel.png", RGBA_TEX);
 
          textures[WHITE_DEPTH_WHEEL_T] = whiteDepthWheel;
          textures[BLACK_DEPTH_WHEEL_T] = blackDepthWheel;
@@ -46,6 +46,7 @@ namespace Assets {
 
          textures[CYLINDER_COLOR_T] = cylinderColor;
          textures[CYLINDER_NORMAL_T] = cylinderNormal;
+         textures[SQUIRREL_T] = squirrelTex;
       }
 
       void loadMeshes() {

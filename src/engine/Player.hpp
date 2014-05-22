@@ -37,6 +37,7 @@ class Player: public Movable {
       void giveHardHat();
       void takeAwayHardHat();
    private:
+      Texture texture;
       float velocity;
       int lives;
       bool isDead;

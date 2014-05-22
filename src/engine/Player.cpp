@@ -21,6 +21,7 @@ Player::Player(glm::vec3 center, float width, float height) {
    this->isJumping = false;
    this->horDirection = STOPPED;
    this->movingToColumn = 3;
+   this->texture = Assets::getTexture(Assets::SQUIRREL_T);
 }
 
 void Player::drillBlock(Block *block) {
@@ -51,6 +52,7 @@ bool Player::getIsDead() {
 }
 
 void Player::checkMoveState() {
+   model.setAt("run", -1);
    switch(horDirection) {
       case LEFT:
          ang = -90;
