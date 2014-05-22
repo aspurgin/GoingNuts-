@@ -208,6 +208,7 @@ void Renderer::renderLightShadowMap() {
    for (std::list<Renderable*>::iterator it = currObjs.begin(); it != currObjs.end(); ++it) {
       (*it)->renderLightMap();
    }
+
    ngame->psystem.renderLightMap();
    glBindFramebuffer(GL_FRAMEBUFFER, 0);
    glUseProgram(0);
@@ -216,6 +217,7 @@ void Renderer::renderLightShadowMap() {
 }
 
 void Renderer::renderGame() {
+
    //*** Render the Game ***/
    glUseProgram(cshader.shadeProg);//cshader.shadeProg);
    glViewport(0, 0, (GLsizei)1280, (GLsizei)720);
@@ -303,6 +305,7 @@ void Renderer::renderDebugShadowMapText() {
 
    glDrawArrays(GL_TRIANGLES, 0, 6);
    glUseProgram(0);
+
 }
 
 void Renderer::render() {
@@ -314,4 +317,5 @@ void Renderer::render() {
    renderGame();
    renderWinLoss();
    //renderDebugShadowMapText();
+
 }

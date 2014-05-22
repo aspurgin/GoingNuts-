@@ -36,7 +36,7 @@ class Particle: public Renderable {
       /* function to implement for Renderable template */
       void render();
    private:
-      
+
 };
 
 class ParticleSystem: public Renderable {

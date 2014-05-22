@@ -18,6 +18,7 @@
 NutGame game;
 bool tog = false;
 
+
 void keyPressed(GLFWwindow *window, int key, int scancode, int action, int mods) {
 
    if (key == GLFW_KEY_A) {
@@ -33,6 +34,7 @@ void keyPressed(GLFWwindow *window, int key, int scancode, int action, int mods)
          tog = !tog;
       }   
    }
+   
    else if (key == GLFW_KEY_W) {
       if (action == GLFW_PRESS) {
          game.up = true;

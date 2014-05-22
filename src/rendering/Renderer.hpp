@@ -39,7 +39,7 @@ class Renderer {
       void renderDebugShadowMapText();
    public:
       Camera camera;
-      bool toggle;
+      bool toggle, antiAlias;
       OrthographicCamera orthographicCamera;
       Light light;
       PhongShader pshader;
