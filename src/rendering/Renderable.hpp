@@ -9,8 +9,9 @@
 #include "../assets/Mesh.hpp"
 #include "../shaders/LightMapShader.hpp"
 #include "../assets/Assets.hpp"
+#include "../assets/Texture.hpp"
 
-enum {C_SHADE, CT_SHADE, P_SHADE};
+enum {C_SHADE, CT_SHADE, P_SHADE, PT_SHADE};
 
 class Renderable {
    protected:
@@ -19,17 +20,21 @@ class Renderable {
       float scale;
       float scaleX, scaleY, scaleZ;
       float ang;
+      Texture colorTexture;
+      Texture normalTexture;
       glm::vec3 position;
       glm::vec3 axis;
       RenderingHelper modelTrans;
       LightMapShader lmShader;
       CellShader cshader;
       CellShaderTexture ctshader;
+      PhongTextureShader ptshader;
       PhongShader pshader;
       Mesh model;
       void csRender();
       void ctsRender();
       void psRender();
+      void ptsRender();
    public:
       Renderable();
       virtual void render();// = 0;

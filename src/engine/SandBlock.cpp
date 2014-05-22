@@ -12,6 +12,9 @@ SandBlock::SandBlock(glm::vec3 center, float width, float height, ParticleSystem
    setObject(center, width, height);
    this->mat = 1;  //change to something meaningfull
    this->psystem = psystem;
+   this->shaderType = PT_SHADE;
+   this->colorTexture = Assets::getTexture(Assets::DIRT_COLOR_T);
+   this->normalTexture = Assets::getTexture(Assets::DIRT_NORMAL_T);
 }
 
 int SandBlock::getStrength() {

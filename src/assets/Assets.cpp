@@ -12,7 +12,11 @@ namespace Assets {
       std::map<int, FMOD::Sound*> sounds, music;
 
       Mesh squirrel, block, nut, depthWheel, background, guageMask1, guageMask2, scoreMask1, scoreMask2, youWon, youLost, cylinder;
+<<<<<<< Updated upstream
       Texture whiteDepthWheel, blackDepthWheel, hudElements, squirrelTex, cylinderNormal, cylinderColor;
+=======
+      Texture whiteDepthWheel, blackDepthWheel, hudElements, cylinderNormal, cylinderColor, dirtColor, dirtNormal, rockColor, rockNormal;
+>>>>>>> Stashed changes
       std::map<int, Mesh> meshes;
       std::map<int, Texture> textures;
       CellShader cshader;
@@ -40,6 +44,12 @@ namespace Assets {
          cylinderNormal = Texture("assets/textures/Cylinder_Normal.png", RGB_TEX);
          squirrelTex = Texture("assets/textures/squirrel.png", RGBA_TEX);
 
+         dirtColor = Texture("assets/textures/DirtTextureTileable.jpg");
+         dirtNormal = Texture("assets/textures/DirtTextureTileableNormals.jpg");
+
+         rockColor = Texture("assets/textures/testRock.png");
+         rockNormal = Texture("assets/textures/RockTextureTileableNormals.jpg");
+
          textures[WHITE_DEPTH_WHEEL_T] = whiteDepthWheel;
          textures[BLACK_DEPTH_WHEEL_T] = blackDepthWheel;
          textures[HUD_ELEMENTS_T] = hudElements;
@@ -47,11 +57,15 @@ namespace Assets {
          textures[CYLINDER_COLOR_T] = cylinderColor;
          textures[CYLINDER_NORMAL_T] = cylinderNormal;
          textures[SQUIRREL_T] = squirrelTex;
+         textures[DIRT_COLOR_T] = dirtColor;
+         textures[DIRT_NORMAL_T] = dirtNormal;
+         textures[ROCK_COLOR_T] = rockColor;
+         textures[ROCK_NORMAL_T] = rockNormal;
       }
 
       void loadMeshes() {
          squirrel = Mesh("assets/models/AnimSquirrel.dae");
-         block = Mesh("assets/models/Cube.obj");
+         block = Mesh("assets/models/Block0.obj");
          nut = Mesh("assets/models/Acorn.obj");
          depthWheel = Mesh("assets/models/DepthWheel.obj");
          background = Mesh("assets/models/Background.obj");

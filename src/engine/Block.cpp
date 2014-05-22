@@ -9,10 +9,10 @@ Block::Block() {
    groupIn = 0;
    model = Assets::getMesh(Assets::BLOCK_M);
    this->shaderType = C_SHADE;
-   scale = 0.48f;
-   scaleX = 0.48f;
-   scaleY = 0.48f;
-   scaleZ = 0.48f;
+   scale = 0.5f;
+   scaleX = 0.5f;
+   scaleY = 0.5f;
+   scaleZ = 0.5f;
    curScale = 0.48f;
    this->modelTrans.useModelViewMatrix();
    model.debug();
@@ -117,7 +117,7 @@ void Block::setScale() {
 
 void Block::render() {
    setScale();
-   position = center + glm::vec3(0, 0, -1);
+   position = center;// + glm::vec3(0, 0, -1);
    
    Renderable::render();
 }

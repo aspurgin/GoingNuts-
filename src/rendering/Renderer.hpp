@@ -50,6 +50,7 @@ class Renderer {
       PhongShader pshader;
       PhongTextureShader ptshader;
       CellShader cshader;
+      CellShaderTexture cetshader;
       FlatTextureShader ctshader;
       LightMapShader lmShader;
       RenderingHelper modelTrans;
