@@ -51,7 +51,7 @@ size_t Mesh::getIdxCount(){
 }
 
 void Mesh::debug(){
-   DEBUG("_-----------------_");
+  /* DEBUG("_-----------------_");
    for(int i=0; i<vertices.size(); i++){
       DEBUG(vertices[i].x << ", " << vertices[i].y << ", " << vertices[i].z);
    }
@@ -59,7 +59,7 @@ void Mesh::debug(){
    for(int i=0; i<indeces.size(); i++){
       DEBUG(indeces[i].x << ", " << indeces[i].y << ", " << indeces[i].z);
    }
-   DEBUG("_-----------------_");
+   DEBUG("_-----------------_");*/
 }
 
 void Mesh::parseAnimIdx(const char* fileName){
@@ -116,9 +116,6 @@ void Mesh::parseAI(const char* path){
                                    face.mIndices[2]));
    }
 
-   if(mesh->mNumUVComponents[2] != 2){
-      ERROR("Texture component count should be 2, is actually: " << mesh->mNumUVComponents);
-   }
    for(unsigned int u=0; u<mesh->mNumVertices; u++){
       uvs.push_back(glm::vec2(mesh->mTextureCoords[0][u].x, mesh->mTextureCoords[0][u].y));
    }
@@ -176,13 +173,34 @@ void Mesh::calculateTangentsAndBitangents() {
 }
 
 void Mesh::setAt(const char* anim, float interp){
-   setAt(animIds[std::string(anim)], interp);
+   string animName(anim);
+   if(interp < 0 || animIds.find(animName) != animIds.end()){
+      setAt(animIds[animName], interp);
+   } else {
+      WARN("Animation not found: " << anim);
+   }
 }
 
 void Mesh::setAt(int anim, float interp){
-   WARN("NOT YET MIPLEMENTED");
+   if(interp < 0){
+      setAtRaw(0);
+      return;
+   }
+   glm::vec2 bounds = anims[anim];
+   float range = bounds[1] - bounds[0];
+   float rescoped = fmodf(interp * range, range) + bounds[0];
+   setAtRaw(rescoped);
 }
 
+void Mesh::setAtRaw(float interp){
+   skeleton.setAt(interp);
+   for(int i=0; i<vertices.size(); i++){
+      tmpVertices[i] = skeleton.transform(i, vertices[i]);
+      tmpNormals[i] = skeleton.transform(i, normals[i]);
+   }
+   bindPositionBuffer();
+   bindNormalBuffer();
+}
 
 void Mesh::reset(){
    tmpVertices.clear();

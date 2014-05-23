@@ -351,6 +351,6 @@ void Renderer::render() {
    renderGame();
    renderWinLoss();
    //renderDebugShadowMapText();
-   //renderNormalMappedCylinder();
+   renderNormalMappedCylinder();
 
 }

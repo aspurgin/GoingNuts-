@@ -14,6 +14,7 @@
 #include <assimp/Importer.hpp>      // C++ importer interface
 #include <assimp/scene.h>           // Output data structure
 #include <assimp/postprocess.h>     // Post processing flags
+#include "Skeleton.hpp"
 
 #ifdef _WIN32
 #define _CRT_SECURE_NO_WARNINGS
@@ -48,6 +49,7 @@ class Mesh {
       void parseAI(const char* path);
       void parseAnimIdx(const char* filename);
       void calculateTangentsAndBitangents();
+      void setAtRaw(float interp);
       void reset();
 
       void bindPositionBuffer();
@@ -56,6 +58,8 @@ class Mesh {
       void bindIdxBuffer();
       void bindTanBuffer();
       void bindBiTanBuffer();
+
+      Skeleton skeleton;
 
       GLuint vertHandle_;
       GLuint idxHandle_;
