@@ -12,11 +12,8 @@ namespace Assets {
       std::map<int, FMOD::Sound*> sounds, music;
 
       Mesh squirrel, block, nut, depthWheel, background, guageMask1, guageMask2, scoreMask1, scoreMask2, youWon, youLost, cylinder;
-<<<<<<< Updated upstream
-      Texture whiteDepthWheel, blackDepthWheel, hudElements, squirrelTex, cylinderNormal, cylinderColor;
-=======
-      Texture whiteDepthWheel, blackDepthWheel, hudElements, cylinderNormal, cylinderColor, dirtColor, dirtNormal, rockColor, rockNormal;
->>>>>>> Stashed changes
+
+      Texture whiteDepthWheel, blackDepthWheel, hudElements, cylinderNormal, cylinderColor, dirtColor, dirtNormal, rockColor, rockNormal, squirrelTex;
       std::map<int, Mesh> meshes;
       std::map<int, Texture> textures;
       CellShader cshader;
@@ -53,14 +50,13 @@ namespace Assets {
          textures[WHITE_DEPTH_WHEEL_T] = whiteDepthWheel;
          textures[BLACK_DEPTH_WHEEL_T] = blackDepthWheel;
          textures[HUD_ELEMENTS_T] = hudElements;
-
          textures[CYLINDER_COLOR_T] = cylinderColor;
          textures[CYLINDER_NORMAL_T] = cylinderNormal;
-         textures[SQUIRREL_T] = squirrelTex;
          textures[DIRT_COLOR_T] = dirtColor;
          textures[DIRT_NORMAL_T] = dirtNormal;
          textures[ROCK_COLOR_T] = rockColor;
          textures[ROCK_NORMAL_T] = rockNormal;
+         textures[SQUIRREL_T] = squirrelTex;
       }
 
       void loadMeshes() {

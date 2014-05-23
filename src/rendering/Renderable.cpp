@@ -119,7 +119,7 @@ void Renderable::ctsRender() {
    glBindTexture(GL_TEXTURE_2D, colorTexture.textureID);
 
    // Set our "colorTextureSampler" sampler to user Texture Unit 0
-   glUniform1i(ctshader.h_colorTextureSampler, 0);
+   glUniform1i(ctshader.h_myTextureSampler, 0);
 
    //Draw the object!
    glDrawElements(GL_TRIANGLES, model.getIdxCount(), GL_UNSIGNED_INT, 0);
@@ -233,6 +233,7 @@ void Renderable::render() {
          break;
       case PT_SHADE:
          ptsRender();
+         break;
    }
 }
 

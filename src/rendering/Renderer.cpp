@@ -244,63 +244,15 @@ void Renderer::renderGame() {
 
    //setModel();
    renderWalls();
-   std::list<Renderable*> nuts = ngame->getNutsToDraw();
+   //std::list<Renderable*> nuts = ngame->getNutsToDraw();
 
    ngame->psystem.render();
    
-   for (std::list<Renderable*>::iterator it = nuts.begin(); it != nuts.end(); ++it) {
+   for (std::list<Renderable*>::iterator it = currObjs.begin(); it != currObjs.end(); ++it) {
       (*it)->render(); 
    }
-
-   //ngame->player.render();
-
-   glUseProgram(0);
-
-   glUseProgram(cetshader.shadeProg);//cshader.shadeProg);
-   glViewport(0, 0, (GLsizei)1280, (GLsizei)720);
-   modelTrans.useModelViewMatrix();
-   modelTrans.loadIdentity();
-
-
-   camera.setEye(glm::vec3(3.0f, ngame->player.getCenter().y, 8.0f));
-   light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y, 6.0f));
-
-   if (toggle) {
-      light.getLightCam().setView(cetshader.h_uViewMatrix);
-      light.getLightCam().setProjectionMatrix(cetshader.h_uProjMatrix, (float)winWidth / winHeight, 0.1f, 100.0f);
-   }
-   else {
-      camera.setView(cetshader.h_uViewMatrix);
-      camera.setProjectionMatrix(cetshader.h_uProjMatrix, (float)winWidth / winHeight, 0.1f, 100.0f);
-   }
-   safe_glUniform3f(cetshader.h_lightPos, light.position.x, light.position.y, light.position.z);
-   safe_glUniform3f(cetshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
-   //safe_glUniform3f(cshader.h_lightColor, light.color.x, light.color.y, light.color.z);
 
    ngame->player.render();
-
-   glUseProgram(0);
-
-   glUseProgram(ptshader.shadeProg);//ptshader.shadeProg);
-   modelTrans.useModelViewMatrix();
-   modelTrans.loadIdentity();
-
-
-   //camera.setEye(glm::vec3(3.0f, ngame->player.getCenter().y, 8.0f));
-   //light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y + 2, 6.0f));
-
-   camera.setView(ptshader.h_uViewMatrix);
-   camera.setProjectionMatrix(ptshader.h_uProjMatrix, (float)winWidth / winHeight, 0.1f, 100.0f);
-
-   safe_glUniform3f(ptshader.h_lightPos, light.position.x, light.position.y, light.position.z);
-   safe_glUniform3f(ptshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
-   safe_glUniform3f(ptshader.h_lightColor, light.color.x, light.color.y, light.color.z);
-
-   std::list<Renderable *> blocks = ngame->getBlocksToDraw();
-
-   for (std::list<Renderable*>::iterator it = blocks.begin(); it != blocks.end(); ++it) {
-      (*it)->render(); 
-   }
 
    glUseProgram(0);
    

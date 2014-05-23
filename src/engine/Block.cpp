@@ -117,7 +117,7 @@ void Block::setScale() {
 
 void Block::render() {
    setScale();
-   position = center;// + glm::vec3(0, 0, -1);
+   position = center + glm::vec3(0, 0, -1);
    
    Renderable::render();
 }
