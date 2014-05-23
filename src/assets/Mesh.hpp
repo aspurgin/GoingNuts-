@@ -48,6 +48,14 @@ class Mesh {
       void parseAI(const char* path);
       void parseAnimIdx(const char* filename);
       void calculateTangentsAndBitangents();
+      void reset();
+
+      void bindPositionBuffer();
+      void bindNormalBuffer();
+      void bindUvBuffer();
+      void bindIdxBuffer();
+      void bindTanBuffer();
+      void bindBiTanBuffer();
 
       GLuint vertHandle_;
       GLuint idxHandle_;
@@ -72,6 +80,13 @@ class Mesh {
       std::vector<glm::vec3> normals;
       std::vector<glm::vec3> tangents;
       std::vector<glm::vec3> bitangents;
+
+      std::vector<glm::vec3> tmpVertices;
+      std::vector<glm::uvec3> tmpIndeces;
+      std::vector<glm::vec2> tmpUvs;
+      std::vector<glm::vec3> tmpNormals;
+      std::vector<glm::vec3> tmptangents;
+      std::vector<glm::vec3> tmpbitangents;
 };
 
 #endif

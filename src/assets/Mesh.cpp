@@ -11,6 +11,8 @@
 
 #include "Mesh.hpp"
 
+ using namespace std;
+
 
 void debugNodes(aiNode* node, int level){
    for(int t = 0; t<level; t++){
@@ -120,6 +122,7 @@ void Mesh::parseAI(const char* path){
    for(unsigned int u=0; u<mesh->mNumVertices; u++){
       uvs.push_back(glm::vec2(mesh->mTextureCoords[0][u].x, mesh->mTextureCoords[0][u].y));
    }
+   reset();
 }
 
 void Mesh::calculateTangentsAndBitangents() {
@@ -169,6 +172,7 @@ void Mesh::calculateTangentsAndBitangents() {
 
       tangent = glm::normalize(tangent - normal * glm::dot(normal, tangent));
    }
+   reset();
 }
 
 void Mesh::setAt(const char* anim, float interp){
@@ -179,34 +183,71 @@ void Mesh::setAt(int anim, float interp){
    WARN("NOT YET MIPLEMENTED");
 }
 
+
+void Mesh::reset(){
+   tmpVertices.clear();
+   tmpIndeces.clear();
+   tmpUvs.clear();
+   tmpNormals.clear();
+   tmptangents.clear();
+   tmpbitangents.clear();
+
+   tmpVertices = vector<glm::vec3>(vertices);
+   tmpIndeces = vector<glm::uvec3>(indeces);
+   tmpUvs = vector<glm::vec2>(uvs);
+   tmpNormals = vector<glm::vec3>(normals);
+   tmptangents = vector<glm::vec3>(tangents);
+   tmpbitangents = vector<glm::vec3>(bitangents);
+}
+
 void  Mesh::buildBuffers(){
    calculateTangentsAndBitangents();
 
-   glGenBuffers(1, &normHandle_);
-   glBindBuffer(GL_ARRAY_BUFFER, normHandle_);
-   glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &(normals[0]), GL_STATIC_DRAW);
-   //glBindBuffer(GL_ARRAY_BUFFER, 0);
-   
+   bindPositionBuffer();
+   bindIdxBuffer();
+   bindNormalBuffer();
+   bindUvBuffer();
+   bindTanBuffer();
+   bindBiTanBuffer();
+}
+
+
+void Mesh::bindPositionBuffer(){
    glGenBuffers(1, &vertHandle_);
    glBindBuffer(GL_ARRAY_BUFFER, vertHandle_);
-   glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &(vertices[0]), GL_STATIC_DRAW);
+   glBufferData(GL_ARRAY_BUFFER, tmpVertices.size() * sizeof(glm::vec3), &(tmpVertices[0]), GL_STREAM_DRAW);
    //glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
 
+void Mesh::bindNormalBuffer(){
+   glGenBuffers(1, &normHandle_);
+   glBindBuffer(GL_ARRAY_BUFFER, normHandle_);
+   glBufferData(GL_ARRAY_BUFFER, tmpNormals.size() * sizeof(glm::vec3), &(tmpNormals[0]), GL_STATIC_DRAW);
+   //glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void Mesh::bindUvBuffer(){
    glGenBuffers(1, &uvHandle_);
    glBindBuffer(GL_ARRAY_BUFFER, uvHandle_);
-   glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(glm::vec2), &(uvs[0]), GL_STATIC_DRAW);
+   glBufferData(GL_ARRAY_BUFFER, tmpUvs.size() * sizeof(glm::vec2), &(tmpUvs[0]), GL_STATIC_DRAW);
    //glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
 
+void Mesh::bindIdxBuffer(){
    glGenBuffers(1, &idxHandle_);
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, idxHandle_);
-   glBufferData(GL_ELEMENT_ARRAY_BUFFER, indeces.size() * sizeof(glm::uvec3), &(indeces[0]), GL_STATIC_DRAW);
+   glBufferData(GL_ELEMENT_ARRAY_BUFFER, tmpIndeces.size() * sizeof(glm::uvec3), &(tmpIndeces[0]), GL_STATIC_DRAW);
    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
 
+void Mesh::bindTanBuffer(){
    glGenBuffers(1, &tangentsHandle_);
    glBindBuffer(GL_ARRAY_BUFFER, tangentsHandle_);
-   glBufferData(GL_ARRAY_BUFFER, tangents.size() * sizeof(glm::vec3), &(tangents[0]), GL_STATIC_DRAW);
+   glBufferData(GL_ARRAY_BUFFER, tmptangents.size() * sizeof(glm::vec3), &(tmptangents[0]), GL_STATIC_DRAW);   
+}
 
+void Mesh::bindBiTanBuffer(){
    glGenBuffers(1, &bitangentsHandle_);
    glBindBuffer(GL_ARRAY_BUFFER, bitangentsHandle_);
-   glBufferData(GL_ARRAY_BUFFER, bitangents.size() * sizeof(glm::vec3), &(bitangents[0]), GL_STATIC_DRAW);
+   glBufferData(GL_ARRAY_BUFFER, tmpbitangents.size() * sizeof(glm::vec3), &(tmpbitangents[0]), GL_STATIC_DRAW);
 }
