@@ -42,15 +42,9 @@ public:
 
 	Bone(aiNode*, aiBone*, aiNodeAnim*);
 	void setParent(Bone* parent);
+	float getWeightForVertex(int);
+
 	void setNameDebug(const char*);
 	void printChain();
 	void debug();
-
-	float getWeightForVertex(int x){
-		if(weight.find(x) != weight.end()){
-			return weight[x];			
-		} else {
-			return noWeight;
-		}
-	}
 };

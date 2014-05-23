@@ -22,30 +22,20 @@ namespace skHelpers{
 	}
 
 	aiNodeAnim* animForName(const aiScene* scene, aiString name){
-		DEBUG("looking for " << name.C_Str());
+		INFO("looking for " << name.C_Str());
 		for(int a = 0; a<scene->mNumAnimations; a++) {
 			aiAnimation* anim = scene->mAnimations[a];
 			for(int c = 0; c<anim->mNumChannels; c++){
-				DEBUG("\tChecking: " << anim->mChannels[c]->mNodeName.C_Str());
+				INFO("\tChecking: " << anim->mChannels[c]->mNodeName.C_Str());
 				if(string(name.C_Str()) == string(anim->mChannels[c]->mNodeName.C_Str())){
-					DEBUG("\tfound it!");
+					INFO("\tfound it!");
 					return anim->mChannels[c];
 				}
 			}
 		}
-		DEBUG("\tdid not find it!");
+		INFO("\tdid not find it!");
 		return 0;
 	}
-}
-
-void Skeleton::setAt(float frame){
-	for(int i=0; i<bones.size(); i++){
-		bones[i]->setAt(frame / 24.0);
-	}
-}
-
-Skeleton::Skeleton(){
-	hasBones = false;
 }
 
 Skeleton::Skeleton (const aiScene* scene) {
@@ -73,10 +63,25 @@ Skeleton::Skeleton (const aiScene* scene) {
 	}
 }
 
+Skeleton::Skeleton(){
+	hasBones = false;
+}
+
 Skeleton::~Skeleton(){
 }
 
+/*
+ * Sets the deformation of the skeleton for a time in the animation.
+ */
+void Skeleton::setAt(float frame){
+	for(int i=0; i<bones.size(); i++){
+		bones[i]->setAt(frame / 24.0);
+	}
+}
 
+/*
+ * transforms a vertex based on the last set state of the skeleton
+ */
 glm::vec3 Skeleton::transform(int v, glm::vec3 vertex){
 	glm::vec3 accum(0,0,0);
 	for(int b=0; b<bones.size(); b++){

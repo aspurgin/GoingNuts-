@@ -52,16 +52,18 @@ bool Player::getIsDead() {
 }
 
 void Player::checkMoveState() {
-   model.setAt("run", -1);
    switch(horDirection) {
       case LEFT:
          ang = -90;
+         model.setAt("run", glfwGetTime() * 0.1);
          break;
       case RIGHT:
          ang = 90;
+         model.setAt("run", glfwGetTime() * 2.0);
          break;
       case STOPPED:
          ang = 0;
+         model.setAt("test", glfwGetTime() * 2.0);
          break;
    }
 }

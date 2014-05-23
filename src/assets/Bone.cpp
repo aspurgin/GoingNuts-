@@ -205,3 +205,11 @@ void Bone::debug(){
 	DEBUG("\t" << this->getTransform());
 	DEBUG("\t" << this->getTotalTransform());
 }
+
+float Bone::getWeightForVertex(int x) {
+	if(weight.find(x) != weight.end()) {
+		return weight[x];			
+	} else {
+		return noWeight;
+	}
+}
