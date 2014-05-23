@@ -9,7 +9,9 @@
 #define _CRT_SECURE_NO_WARNINGS
 #endif
 
-#include "Mesh.hpp"
+#include "backupMesh.hpp"
+
+using namespace std;
 
 
 void debugNodes(aiNode* node, int level){
@@ -49,7 +51,7 @@ size_t Mesh::getIdxCount(){
 }
 
 void Mesh::debug(){
-   DEBUG("_-----------------_");
+  /* DEBUG("_-----------------_");
    for(int i=0; i<vertices.size(); i++){
       DEBUG(vertices[i].x << ", " << vertices[i].y << ", " << vertices[i].z);
    }
@@ -57,7 +59,7 @@ void Mesh::debug(){
    for(int i=0; i<indeces.size(); i++){
       DEBUG(indeces[i].x << ", " << indeces[i].y << ", " << indeces[i].z);
    }
-   DEBUG("_-----------------_");
+   DEBUG("_-----------------_");*/
 }
 
 void Mesh::parseAnimIdx(const char* fileName){
@@ -84,19 +86,28 @@ void Mesh::parseAI(const char* path){
    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_JoinIdenticalVertices);
 
 
+
    if(!scene) {
       ERROR("Could not import file: " << path);
-      ERROR("Reason: " << importer.GetErrorString());
+      FATAL("Reason: " << importer.GetErrorString());
       exit(1);
    }
    debugNodes(scene->mRootNode, 0);
    const aiMesh* mesh = scene->mMeshes[0];
+
+   if(mesh->HasBones()){
+      INFO("importing skeleton for: " << path);
+      this->skeleton = Skeleton(scene);
+   } else {
+      INFO("no skeleton for: " << path);
+   }
 
    for(unsigned int v=0; v<mesh->mNumVertices; v++){
       vertices.push_back(glm::vec3(mesh->mVertices[v][0],
                                    mesh->mVertices[v][1],
                                    mesh->mVertices[v][2]));
    }
+   DEBUG("NumVerts: " << mesh->mNumVertices);
 
    for(unsigned int n=0; n<mesh->mNumVertices; n++){
       normals.push_back(glm::vec3(mesh->mNormals[n][0],
@@ -114,12 +125,10 @@ void Mesh::parseAI(const char* path){
                                    face.mIndices[2]));
    }
 
-   if(mesh->mNumUVComponents[2] != 2){
-      ERROR("Texture component count should be 2, is actually: " << mesh->mNumUVComponents);
-   }
    for(unsigned int u=0; u<mesh->mNumVertices; u++){
       uvs.push_back(glm::vec2(mesh->mTextureCoords[0][u].x, mesh->mTextureCoords[0][u].y));
    }
+   reset();
 }
 
 void Mesh::calculateTangentsAndBitangents() {
@@ -171,42 +180,109 @@ void Mesh::calculateTangentsAndBitangents() {
    }
 }
 
+
+/*
+ * This is the part used to animate the mesh. It
+ * does not currently do anything.
+ * 
+ * anim: character string for the animation cycle to use
+ *
+ * interp: 0.f - 1.f value determining the progress through the cycle
+ */
 void Mesh::setAt(const char* anim, float interp){
-   setAt(animIds[std::string(anim)], interp);
+   string animName(anim);
+   if(interp < 0 || animIds.find(animName) != animIds.end()){
+      setAt(animIds[animName], interp);
+   } else {
+      WARN("Animation not found: " << anim);
+   }
 }
 
 void Mesh::setAt(int anim, float interp){
-   WARN("NOT YET MIPLEMENTED");
+   if(interp < 0){
+      setAtRaw(0);
+      return;
+   }
+   glm::vec2 bounds = anims[anim];
+   float range = bounds[1] - bounds[0];
+   float rescoped = fmodf(interp * range, range) + bounds[0];
+   setAtRaw(rescoped);
+}
+
+void Mesh::setAtRaw(float interp){
+   skeleton.setAt(interp);
+   for(int i=0; i<vertices.size(); i++){
+      tmpVertices[i] = skeleton.transform(i, vertices[i]);
+      tmpNormals[i] = skeleton.transform(i, normals[i]);
+   }
+   bindPositionBuffer();
+   bindNormalBuffer();
+}
+
+void Mesh::reset(){
+   tmpVertices.clear();
+   tmpIndeces.clear();
+   tmpUvs.clear();
+   tmpNormals.clear();
+   tmptangents.clear();
+   tmpbitangents.clear();
+
+   tmpVertices = vector<glm::vec3>(vertices);
+   tmpIndeces = vector<glm::uvec3>(indeces);
+   tmpUvs = vector<glm::vec2>(uvs);
+   tmpNormals = vector<glm::vec3>(normals);
+   tmptangents = vector<glm::vec3>(tangents);
+   tmpbitangents = vector<glm::vec3>(bitangents);
 }
 
 void  Mesh::buildBuffers(){
    calculateTangentsAndBitangents();
 
-   glGenBuffers(1, &normHandle_);
-   glBindBuffer(GL_ARRAY_BUFFER, normHandle_);
-   glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &(normals[0]), GL_STATIC_DRAW);
-   //glBindBuffer(GL_ARRAY_BUFFER, 0);
-   
+   bindPositionBuffer();
+   bindIdxBuffer();
+   bindNormalBuffer();
+   bindUvBuffer();
+   bindTanBuffer();
+   bindBiTanBuffer();
+}
+
+
+void Mesh::bindPositionBuffer(){
    glGenBuffers(1, &vertHandle_);
    glBindBuffer(GL_ARRAY_BUFFER, vertHandle_);
-   glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &(vertices[0]), GL_STATIC_DRAW);
+   glBufferData(GL_ARRAY_BUFFER, tmpVertices.size() * sizeof(glm::vec3), &(tmpVertices[0]), GL_STREAM_DRAW);
    //glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
 
+void Mesh::bindNormalBuffer(){
+   glGenBuffers(1, &normHandle_);
+   glBindBuffer(GL_ARRAY_BUFFER, normHandle_);
+   glBufferData(GL_ARRAY_BUFFER, tmpNormals.size() * sizeof(glm::vec3), &(tmpNormals[0]), GL_STATIC_DRAW);
+   //glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void Mesh::bindUvBuffer(){
    glGenBuffers(1, &uvHandle_);
    glBindBuffer(GL_ARRAY_BUFFER, uvHandle_);
-   glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(glm::vec2), &(uvs[0]), GL_STATIC_DRAW);
+   glBufferData(GL_ARRAY_BUFFER, tmpUvs.size() * sizeof(glm::vec2), &(tmpUvs[0]), GL_STATIC_DRAW);
    //glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
 
+void Mesh::bindIdxBuffer(){
    glGenBuffers(1, &idxHandle_);
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, idxHandle_);
-   glBufferData(GL_ELEMENT_ARRAY_BUFFER, indeces.size() * sizeof(glm::uvec3), &(indeces[0]), GL_STATIC_DRAW);
+   glBufferData(GL_ELEMENT_ARRAY_BUFFER, tmpIndeces.size() * sizeof(glm::uvec3), &(tmpIndeces[0]), GL_STATIC_DRAW);
    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
 
+void Mesh::bindTanBuffer(){
    glGenBuffers(1, &tangentsHandle_);
    glBindBuffer(GL_ARRAY_BUFFER, tangentsHandle_);
-   glBufferData(GL_ARRAY_BUFFER, tangents.size() * sizeof(glm::vec3), &(tangents[0]), GL_STATIC_DRAW);
+   glBufferData(GL_ARRAY_BUFFER, tmptangents.size() * sizeof(glm::vec3), &(tmptangents[0]), GL_STATIC_DRAW);   
+}
 
+void Mesh::bindBiTanBuffer(){
    glGenBuffers(1, &bitangentsHandle_);
    glBindBuffer(GL_ARRAY_BUFFER, bitangentsHandle_);
-   glBufferData(GL_ARRAY_BUFFER, bitangents.size() * sizeof(glm::vec3), &(bitangents[0]), GL_STATIC_DRAW);
+   glBufferData(GL_ARRAY_BUFFER, tmpbitangents.size() * sizeof(glm::vec3), &(tmpbitangents[0]), GL_STATIC_DRAW);
 }
