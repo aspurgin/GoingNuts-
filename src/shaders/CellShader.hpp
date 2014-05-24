@@ -32,6 +32,11 @@ class CellShader {
       GLint h_uMatDif;
       GLint h_uMatSpec;
       GLint h_uMatShine;
+      //Shadow handles
+      GLint h_uCasterProj;
+      GLint h_uCasterView;
+      GLint h_uDepthMapSampler;
+
       int shadeProg;
 
       CellShader();

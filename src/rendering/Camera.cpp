@@ -27,6 +27,10 @@ void Camera::shake() {
 
 void Camera::setEye(glm::vec3 pos) {
    eye = pos;
-   lookAt.z = pos.z - 15;
+   lookAt.z = pos.z - 15;//15;
    lookAt.y = pos.y;// - 1;
+}
+
+void Camera::setLookAt(glm::vec3 pos) {
+   lookAt = pos;
 }

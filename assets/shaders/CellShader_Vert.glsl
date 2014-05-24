@@ -12,6 +12,13 @@ uniform Material uMat;
 uniform mat4 uProjMatrix;
 uniform mat4 uViewMatrix;
 uniform mat4 uModelMatrix;
+
+//Shadow variables
+uniform mat4 uCasterProj;
+uniform mat4 uCasterView;
+varying vec4 st_shadow;
+//End shadow variables
+
 uniform vec3 lightPos;
 uniform vec3 cameraPos;
 
@@ -23,6 +30,9 @@ void main() {
    vec4 lightPoint = vec4(lightPos, 1);
    vec4 vPosition;
    vec4 vNormal;
+
+   //Compute shadow texture coord
+   st_shadow = uCasterProj * uCasterView * uModelMatrix * vec4 (aPosition, 1.0);
 
    vPosition = uModelMatrix * vec4(aPosition.x, aPosition.y, aPosition.z, 1);
    position = vPosition;
@@ -36,4 +46,6 @@ void main() {
 
    vPosition = uViewMatrix * vPosition;
    gl_Position = uProjMatrix * vPosition;
+
+
 }
