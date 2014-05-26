@@ -52,7 +52,7 @@ bool Player::getIsDead() {
 }
 
 void Player::checkMoveState() {
-   //model.setAt("run", -1);
+   model.setAt("run", glfwGetTime());
    switch(horDirection) {
       case LEFT:
          ang = -90;

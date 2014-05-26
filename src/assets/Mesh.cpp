@@ -85,6 +85,7 @@ void Mesh::parseAI(const char* path){
    Assimp::Importer importer;
    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_JoinIdenticalVertices);
 
+   skeleton = Skeleton(scene);
 
    if(!scene) {
       ERROR("Could not import file: " << path);
