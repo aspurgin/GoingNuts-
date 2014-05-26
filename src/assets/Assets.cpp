@@ -11,7 +11,7 @@ namespace Assets {
       //create a map for sounds and music
       std::map<int, FMOD::Sound*> sounds, music;
 
-      Mesh squirrel, block, nut, depthWheel, background, guageMask1, guageMask2, scoreMask1, scoreMask2, youWon, youLost, cylinder;
+      Mesh squirrel, block, nut, depthWheel, background, guageMask1, guageMask2, scoreMask1, scoreMask2, youWon, youLost, cylinder, goingNuts, sun, nutColor, nutOutline, energy, points, powerUpBG, questionMark, level, depth;
 
       Texture whiteDepthWheel, blackDepthWheel, hudElements, cylinderNormal, cylinderColor, dirtColor, dirtNormal, rockColor, rockNormal, squirrelTex;
       std::map<int, Mesh> meshes;
@@ -72,6 +72,16 @@ namespace Assets {
          youWon = Mesh("assets/models/YouWon.obj");
          youLost = Mesh("assets/models/YouLost.obj");
          cylinder = Mesh("assets/models/Cylinder.obj");
+         goingNuts = Mesh("assets/models/GoingNuts.obj");
+         sun = Mesh("assets/models/Sun.obj");
+         nutColor = Mesh("assets/models/NutColor.obj");
+         nutOutline = Mesh("assets/models/NutOutline.obj");
+         energy = Mesh("assets/models/Energy.obj");
+         points = Mesh("assets/models/Points.obj");
+         powerUpBG = Mesh("assets/models/PowerUpIndicatorBackground.obj");
+         questionMark = Mesh("assets/models/QuestionMark.obj");
+         level = Mesh("assets/models/Level.obj");
+         depth = Mesh("assets/models/Depth.obj");
 
          block.buildBuffers();
          squirrel.buildBuffers();
@@ -85,6 +95,16 @@ namespace Assets {
          youWon.buildBuffers();
          youLost.buildBuffers();
          cylinder.buildBuffers();
+         goingNuts.buildBuffers();
+         sun.buildBuffers();
+         nutColor.buildBuffers();
+         nutOutline.buildBuffers();
+         energy.buildBuffers();
+         points.buildBuffers();
+         powerUpBG.buildBuffers();
+         questionMark.buildBuffers();
+         level.buildBuffers();
+         depth.buildBuffers();
 
          meshes[SQUIRREL_M] = squirrel;
          meshes[BLOCK_M] = block;
@@ -98,6 +118,16 @@ namespace Assets {
          meshes[YOU_WON_M] = youWon;
          meshes[YOU_LOST_M] = youLost;
          meshes[CYLINDER_M] = cylinder;
+         meshes[GOING_NUTS_M] = goingNuts;
+         meshes[SUN_M] = sun;
+         meshes[NUT_COLOR_M] = nutColor;
+         meshes[NUT_OUTLINE_M] = nutOutline;
+         meshes[ENERGY_M] = energy;
+         meshes[POINTS_M] = points;
+         meshes[POWER_UP_BG_M] = powerUpBG;
+         meshes[QUESTION_MARK_M] = questionMark;
+         meshes[LEVEL_M] = level;
+         meshes[DEPTH_M] = depth;
       }
 
       void initShaders() {

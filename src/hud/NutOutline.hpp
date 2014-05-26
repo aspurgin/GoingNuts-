@@ -1,5 +1,5 @@
-#ifndef YOU_WON_HPP
-#define YOU_WON_HPP
+#ifndef NUT_OUTLINE_HPP
+#define NUT_OUTLINE_HPP
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -8,9 +8,9 @@
 #include "../assets/Assets.hpp"
 #include "../rendering/Renderable.hpp"
 
-class YouWon : public Renderable {
+class NutOutline : public Renderable {
    public:
-      YouWon();
+      NutOutline();
       void render();
 };
 

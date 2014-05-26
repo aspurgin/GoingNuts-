@@ -11,7 +11,7 @@
 #include "../assets/Assets.hpp"
 #include "../assets/Texture.hpp"
 
-enum {C_SHADE, CT_SHADE, P_SHADE, PT_SHADE};
+enum {C_SHADE, CT_SHADE, P_SHADE, PT_SHADE, FT_SHADE};
 
 class Renderable {
    protected:
@@ -29,12 +29,14 @@ class Renderable {
       CellShader cshader;
       CellShaderTexture ctshader;
       PhongTextureShader ptshader;
+      FlatTextureShader ftshader;
       PhongShader pshader;
       Mesh model;
       void csRender();
       void ctsRender();
       void psRender();
       void ptsRender();
+      void ftsRender();
    public:
       Renderable();
       virtual void render();// = 0;
