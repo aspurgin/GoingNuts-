@@ -21,6 +21,7 @@ Player::Player(glm::vec3 center, float width, float height) {
    this->isJumping = false;
    this->horDirection = STOPPED;
    this->movingToColumn = 3;
+   this->numDynamites = 0;
    this->texture = Assets::getTexture(Assets::SQUIRREL_T);
 }
 
@@ -117,10 +118,27 @@ bool Player::getHasHardHat() {
    return hasHardHat;
 }
 
-void Player::giveHardHat() {
+void Player::collectHardHat() {
    hasHardHat = true;
 }
 
 void Player::takeAwayHardHat() {
    hasHardHat = false;
+}
+
+void Player::collectSuperDrill() {
+   delete this->drill;
+   this->drill = new SuperDrill();
+}
+
+void Player::collectDynamite() {
+   numDynamites++;
+}
+
+void Player::throwDynamite() {
+   numDynamites--;
+}
+
+int Player::getNumDynamites() {
+   return numDynamites;
 }
