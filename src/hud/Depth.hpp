@@ -1,5 +1,5 @@
-#ifndef YOU_WON_HPP
-#define YOU_WON_HPP
+#ifndef Depth_HPP
+#define Depth_HPP
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -8,9 +8,9 @@
 #include "../assets/Assets.hpp"
 #include "../rendering/Renderable.hpp"
 
-class YouWon : public Renderable {
+class Depth : public Renderable {
    public:
-      YouWon();
+      Depth();
       void render();
 };
 

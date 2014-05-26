@@ -51,7 +51,7 @@ class Renderer {
       PhongTextureShader ptshader;
       CellShader cshader;
       CellShaderTexture cetshader;
-      FlatTextureShader ctshader;
+      FlatTextureShader ftshader;
       LightMapShader lmShader;
       RenderingHelper modelTrans;
       int winWidth, winHeight;

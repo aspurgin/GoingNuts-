@@ -1,5 +1,5 @@
-#ifndef YOU_WON_HPP
-#define YOU_WON_HPP
+#ifndef Level_HPP
+#define Level_HPP
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -8,9 +8,9 @@
 #include "../assets/Assets.hpp"
 #include "../rendering/Renderable.hpp"
 
-class YouWon : public Renderable {
+class Level : public Renderable {
    public:
-      YouWon();
+      Level();
       void render();
 };
 

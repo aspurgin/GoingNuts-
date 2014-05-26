@@ -87,6 +87,15 @@ void keyPressed(GLFWwindow *window, int key, int scancode, int action, int mods)
          game.releasedSinceRightPress = true;
       }
    }
+   else if (key == GLFW_KEY_SPACE) {
+      if (action == GLFW_PRESS) {
+         game.throwDynamitePressed = true;
+      }
+      else if (action == GLFW_RELEASE) {
+         game.throwDynamitePressed = false;
+         game.releasedSinceThrowDynamitePressed = true;
+      }
+   }
    else if (key == GLFW_KEY_ESCAPE) {
       glfwTerminate();
 

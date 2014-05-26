@@ -1,5 +1,5 @@
-#ifndef YOU_WON_HPP
-#define YOU_WON_HPP
+#ifndef GOING_NUTS_HPP
+#define GOING_NUTS_HPP
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -8,9 +8,9 @@
 #include "../assets/Assets.hpp"
 #include "../rendering/Renderable.hpp"
 
-class YouWon : public Renderable {
+class GoingNuts : public Renderable {
    public:
-      YouWon();
+      GoingNuts();
       void render();
 };
 

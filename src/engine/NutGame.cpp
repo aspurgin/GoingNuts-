@@ -12,11 +12,13 @@ NutGame::NutGame() {
    this->left = false;
    this->right = false;
    this->up = false;
+   this->throwDynamitePressed = false;
    this->checkingGroupForOtherAdds = false;
-   releasedSinceDownPress = true;
-   releasedSinceLeftPress = true;
-   releasedSinceUpPress = true;
-   releasedSinceRightPress = true;
+   this->releasedSinceDownPress = true;
+   this->releasedSinceLeftPress = true;
+   this->releasedSinceUpPress = true;
+   this->releasedSinceRightPress = true;
+   this->releasedSinceThrowDynamitePressed = true;
    this->nutsLeft = 0;
    this->score = 0;
    this->psystem = ParticleSystem();
@@ -76,6 +78,12 @@ void NutGame::init() {
          }
          else if (c == 'H') {
             gameGrid[row][col] = new HardHat(glm::vec3(col, -row, 0), 0.99f, 0.99f);
+         }
+         else if (c == 'D') {
+            gameGrid[row][col] = new MovableSuperDrill(glm::vec3(col, -row, 0), 0.99f, 0.99f);
+         }
+         else if (c == 'Y') {
+            gameGrid[row][col] = new MovableDynamite(glm::vec3(col, -row, 0), 0.99f, 0.99f);
          }
          fgetc(file);
       }
@@ -248,7 +256,17 @@ void NutGame::fallDown(double toAdd) {
                         gameGrid[row + 1][col] = 0;
                      }
                      else if (gameGrid[row + 1][col]->getMovableType() == HARDHAT) {
-                        player.giveHardHat();
+                        player.collectHardHat();
+                        delete gameGrid[row + 1][col];
+                        gameGrid[row + 1][col] = 0;
+                     }
+                     else if (gameGrid[row + 1][col]->getMovableType() == SUPERDRILL) {
+                        player.collectSuperDrill();
+                        delete gameGrid[row + 1][col];
+                        gameGrid[row + 1][col] = 0;
+                     }
+                     else if (gameGrid[row + 1][col]->getMovableType() == DYNAMITE) {
+                        player.collectDynamite();
                         delete gameGrid[row + 1][col];
                         gameGrid[row + 1][col] = 0;
                      }
@@ -283,7 +301,17 @@ void NutGame::fallDown(double toAdd) {
                         gameGrid[row][col] = 0;
                      }
                      else if (gameGrid[row][col]->getMovableType() == HARDHAT) {
-                        player.giveHardHat();
+                        player.collectHardHat();
+                        delete gameGrid[row][col];
+                        gameGrid[row][col] = 0;
+                     }
+                     else if (gameGrid[row][col]->getMovableType() == SUPERDRILL) {
+                        player.collectSuperDrill();
+                        delete gameGrid[row][col];
+                        gameGrid[row][col] = 0;
+                     }
+                     else if (gameGrid[row][col]->getMovableType() == DYNAMITE) {
+                        player.collectDynamite();
                         delete gameGrid[row][col];
                         gameGrid[row][col] = 0;
                      }
@@ -603,6 +631,12 @@ void NutGame::handleKeyInput() {
          }
       }
       
+      if (throwDynamitePressed && releasedSinceThrowDynamitePressed && player.getNumDynamites() > 0) {
+         releasedSinceThrowDynamitePressed = false;
+         pos = glm::vec2(player.getCenter());
+         player.throwDynamite();
+         explodeDynamiteAt(-pos.y, pos.x);
+      }
       
       if (left) {
          pos = glm::vec2(player.getCenter());
@@ -620,7 +654,13 @@ void NutGame::handleKeyInput() {
                      addToScore(5);
                   }
                   else if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - .00001)]->getMovableType() == HARDHAT) {
-                     player.giveHardHat();
+                     player.collectHardHat();
+                  }
+                  else if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - .00001)]->getMovableType() == SUPERDRILL) {
+                     player.collectSuperDrill();
+                  }
+                  else if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - .00001)]->getMovableType() == DYNAMITE) {
+                     player.collectDynamite();
                   }
                   //DEBUG("Deleted Here 6");
                   delete gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - .00001)];
@@ -648,7 +688,13 @@ void NutGame::handleKeyInput() {
                      addToScore(5);
                   }
                   else if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)]->getMovableType() == HARDHAT) {
-                     player.giveHardHat();
+                     player.collectHardHat();
+                  }
+                  else if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)]->getMovableType() == SUPERDRILL) {
+                     player.collectSuperDrill();
+                  }
+                  else if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)]->getMovableType() == DYNAMITE) {
+                     player.collectDynamite();
                   }
                   //DEBUG("Deleted Here 7");
                   delete gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)];
@@ -701,12 +747,12 @@ std::list<Renderable*> NutGame::getHardHatsToDraw() {
    return getCertainObjectsToDraw(HARDHAT);
 }
 
-/*
-std::list<Renderable*> NutGame::getSuperDrillToDraw() {
+
+std::list<Renderable*> NutGame::getSuperDrillsToDraw() {
    return getCertainObjectsToDraw(SUPERDRILL);
 }
-
-std::list<Renderable*> NutGame::getDynamiteToDraw() {
+/*
+std::list<Renderable*> NutGame::getDynamitesToDraw() {
    return getCertainObjectsToDraw(DYNAMITE);
 }
 */
@@ -761,4 +807,28 @@ bool NutGame::isGameWon() {
 
 void NutGame::updatePSystem(double dt) {
    psystem.timeStep((float)dt);
+}
+
+void NutGame::explodeDynamiteAt(int row, int col) {
+   for (int rowCount = row - 1; rowCount <= row + 1; rowCount++) {
+      for (int colCount = col - 1; colCount <= col + 1; colCount++) {
+         if (rowCount >= 0 && rowCount < NUMROWS && colCount >= 0 && colCount < NUMCOLS) {
+            if (gameGrid[rowCount][colCount] != 0) {
+               if (gameGrid[rowCount][colCount]->getMovableType() == BLOCK && !((Block*) gameGrid[rowCount][colCount])->isDead()) {
+                  ((Block*) gameGrid[rowCount][colCount])->makeDead();
+                  if (((Block*) gameGrid[rowCount][colCount])->isInAGroup()) {
+                     ((Block*) gameGrid[rowCount][colCount])->getGroupIn()->stopGroupFalling();
+                     ((Block*) gameGrid[rowCount][colCount])->getGroupIn()->destroy();
+                     delete ((Block*) gameGrid[rowCount][colCount])->getGroupIn();
+                  }
+               }
+               else if (gameGrid[rowCount][colCount]->getMovableType() == DYNAMITE) {
+                  delete gameGrid[rowCount][colCount];
+                  gameGrid[rowCount][colCount] = 0;
+                  explodeDynamiteAt(rowCount, colCount);
+               }
+            }
+         }
+      }
+   }
 }

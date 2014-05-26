@@ -16,6 +16,7 @@ Renderable::Renderable() {
    ctshader = Assets::getCShaderTexture();
    ptshader = Assets::getPhongTextureShader();
    pshader = Assets::getPShader();
+   ftshader = Assets::getFlatTextureShader();
    
 }
 
@@ -220,6 +221,40 @@ void Renderable::ptsRender() {
 
 }
 
+void Renderable::ftsRender() {
+   ftshader.setMaterial(mat);
+   modelTrans.useModelViewMatrix();
+   modelTrans.loadIdentity();
+   modelTrans.pushMatrix();
+
+   modelTrans.translate(position);
+   modelTrans.scale(scaleX,scaleY,scaleZ);
+
+   safe_glUniformMatrix4fv(ftshader.h_uModelMatrix, glm::value_ptr(modelTrans.modelViewMatrix));
+   
+   safe_glEnableVertexAttribArray(ftshader.h_aPosition);
+   glBindBuffer(GL_ARRAY_BUFFER, model.vertHandle());
+   safe_glVertexAttribPointer(ftshader.h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
+   
+   //UVs
+   safe_glEnableVertexAttribArray(ftshader.h_vertexUV);
+   glBindBuffer(GL_ARRAY_BUFFER, model.uvHandle());
+   safe_glVertexAttribPointer(ftshader.h_vertexUV, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+   // Bind our texture in Texture Unit 0
+   glActiveTexture(GL_TEXTURE0);
+   glBindTexture(GL_TEXTURE_2D, colorTexture.textureID);
+   // Set our "myTextureSampler" sampler to user Texture Unit 0
+   glUniform1i(ftshader.h_myTextureSampler, 0);
+
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.idxHandle());
+   glDrawElements(GL_TRIANGLES, model.getIdxCount(), GL_UNSIGNED_INT, 0);
+   modelTrans.popMatrix();
+
+   safe_glDisableVertexAttribArray(ftshader.h_aPosition);
+   safe_glDisableVertexAttribArray(ftshader.h_vertexUV);
+}
+
 void Renderable::render() {
    switch (shaderType) {
       case C_SHADE:
@@ -233,6 +268,9 @@ void Renderable::render() {
          break;
       case PT_SHADE:
          ptsRender();
+         break;
+      case FT_SHADE:
+         ftsRender();
          break;
    }
 }
