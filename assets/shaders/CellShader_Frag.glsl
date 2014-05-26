@@ -13,6 +13,11 @@ varying vec4 st_shadow;
 uniform sampler2D depth_map;
 //End shadow variables
 
+/*uniform sampler2D normalTextureSampler;
+attribute vec2 vertexUV;
+attribute vec3 aTangent;
+attribute vec3 aBitangent;*/
+
 varying vec4 normal;
 varying vec4 light;
 varying vec4 position;

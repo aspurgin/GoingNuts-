@@ -14,6 +14,7 @@
 #include "Mesh.hpp"
 #include "Texture.hpp"
 #include "../shaders/PhongTextureShader.hpp"
+#include "../rendering/Camera.hpp"
 
 namespace Assets {
    enum Music { GAME_M, TITLE_M };
@@ -24,6 +25,8 @@ namespace Assets {
    enum Textures { WHITE_DEPTH_WHEEL_T, BLACK_DEPTH_WHEEL_T, HUD_ELEMENTS_T, CYLINDER_NORMAL_T, CYLINDER_COLOR_T, DIRT_COLOR_T, DIRT_NORMAL_T, ROCK_COLOR_T, ROCK_NORMAL_T,  SQUIRREL_T};
 
    void loadAssets();
+   void initializeCamera();
+   Camera& getCamera();
    void playSound(int);
    void playMusic(int);
    Mesh& getMesh(int);

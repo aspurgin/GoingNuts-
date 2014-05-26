@@ -680,7 +680,7 @@ std::list<Renderable*> NutGame::getObjectsToDraw() {
          }
       }
    }
-   objects.push_back(&psystem);
+   //objects.push_back(&psystem);
    objects.unique();
    return objects;
 }

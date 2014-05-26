@@ -34,3 +34,7 @@ void Camera::setEye(glm::vec3 pos) {
 void Camera::setLookAt(glm::vec3 pos) {
    lookAt = pos;
 }
+
+glm::vec3 Camera::getPosition() {
+   return eye;
+}

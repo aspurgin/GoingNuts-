@@ -48,7 +48,7 @@ void Renderer::initDebugLightMap() {
 
 
 Renderer::Renderer(int width, int height, NutGame *game, Hud* hud) {
-   camera = Camera(glm::vec3(3.0f, 1.0f, 10.0f), glm::vec3(3.0f, 0.0f, 5.0f), glm::vec3(0, 1, 0));
+   camera = Assets::getCamera();//Camera(glm::vec3(3.0f, 1.0f, 10.0f), glm::vec3(3.0f, 0.0f, 5.0f), glm::vec3(0, 1, 0));
    ptshader = Assets::getPhongTextureShader();
 
    //cshader = ShaderUtils::installCellShader(textFileRead((char *) "assets/shaders/CellShader_Vert.glsl"),
@@ -210,7 +210,7 @@ void Renderer::renderLightShadowMap() {
       (*it)->renderLightMap();
    }
 
-   ngame->psystem.renderLightMap();
+   //ngame->psystem.renderLightMap();
    glBindFramebuffer(GL_FRAMEBUFFER, 0);
    glUseProgram(0);
 

@@ -32,6 +32,7 @@ public:
    void setProjectionMatrix(GLint, float, float, float);
    void setEye(glm::vec3);
    void setLookAt(glm::vec3);
+   glm::vec3 getPosition();
 };
 
 #endif

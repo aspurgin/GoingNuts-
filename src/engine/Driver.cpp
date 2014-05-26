@@ -127,6 +127,7 @@ int main(void)
    GLenum err = glewInit();
    glfwSetKeyCallback(window, keyPressed);
    Assets::loadAssets();
+   Camera myCam = Assets::getCamera();
    game.init();
    Hud hud(&game);
    Renderer renderer(1280, 720, &game, &hud);
@@ -141,7 +142,7 @@ int main(void)
       delta = currentTime - lastTime;
       fpsTime += delta;
       
-      if (/*!game.player.getIsDead() &&*/ game.getNutsLeft() != 0) {
+      if (!game.player.getIsDead() && game.getNutsLeft() != 0) {
          game.checkGrid(delta);
          game.fallDown(delta);
       }
@@ -180,6 +181,8 @@ int main(void)
       //Poll for and process events
       glfwPollEvents();
 
+      glm::vec3 pos = myCam.getPosition();
+      //printf("Cam pos: %f, %f, %f\n", pos.x, pos.y, pos.z);
       fpsCount++;
       //Assets::update();
    }
