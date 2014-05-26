@@ -78,8 +78,11 @@ Skeleton::~Skeleton(){
 
 
 glm::vec3 Skeleton::transform(int v, glm::vec3 vertex){
+	TRACE("Before: " << vertex.x << ", " << vertex.y << ", " << vertex.z);
 	glm::vec3 accum(0,0,0);
+	TRACE("numBones: " << bones.size());
 	for(int b=0; b<bones.size(); b++){
+		TRACE("\t" << b);
 		Bone* bone = bones[b];
 		float weight = bone->getWeightForVertex(v);
 		if(weight){
@@ -87,5 +90,6 @@ glm::vec3 Skeleton::transform(int v, glm::vec3 vertex){
 			accum += glm::vec3(inc) * weight;
 		}
 	}
+	TRACE("After: " << accum.x << ", " << accum.y << ", " << accum.z); 
 	return accum;
 }

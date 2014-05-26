@@ -18,6 +18,9 @@
 #include "CrystalBlock.hpp"
 #include "LavaBlock.hpp"
 #include "MovableTypes.hpp"
+#include "MovableSuperDrill.hpp"
+#include "MovableDynamite.hpp"
+#include "HardHat.hpp"
 #include <stdio.h>
 #include <vector>
 
@@ -38,8 +41,8 @@ class NutGame {
       std::list<Renderable*> getPlayerToDraw();
       std::list<Renderable*> getNutsToDraw();
       std::list<Renderable*> getHardHatsToDraw();
-      //std::list<Renderable*> getSuperDrillToDraw();
-      //std::list<Renderable*> getDynamiteToDraw();
+      std::list<Renderable*> getSuperDrillsToDraw();
+      //std::list<Renderable*> getDynamitesToDraw();
       bool isDrillingDown();
       bool isDrillingUp();
       bool isDrillingLeft();
@@ -64,10 +67,13 @@ class NutGame {
       bool left;
       bool right;
       bool up;
+      bool throwDynamitePressed;
+      bool releasedSinceThrowDynamitePressed;
       Player player;
       //Added these to have a single particle system in the game instead of per block
       ParticleSystem psystem;
       void updatePSystem(double dt);
+      void explodeDynamiteAt(int row, int col);
    private:
       std::list<Renderable*> getCertainObjectsToDraw(int type);
       void setFallingMovables(int row, int col);
