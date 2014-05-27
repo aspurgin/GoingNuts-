@@ -20,7 +20,7 @@ DirtBlock::DirtBlock(glm::vec3 center, float width, float height, int color, Par
 }
 
 int DirtBlock::getStrength() {
-   return 2;
+   return 1;
 }
 
 float DirtBlock::getMoveSpeedPercentage() {

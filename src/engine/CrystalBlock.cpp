@@ -12,6 +12,7 @@ CrystalBlock::CrystalBlock(glm::vec3 center, float width, float height, Particle
    setObject(center, width, height);
    this->mat = 1;  //change to something meaningfull
    this->psystem = psystem;
+   this->mat = 7;
 }
 
 int CrystalBlock::getStrength() {

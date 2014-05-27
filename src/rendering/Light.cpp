@@ -9,7 +9,7 @@ Light::Light() {
 
 void Light::setPosition(glm::vec3 pos) {
 	position = pos;
-	lightCam.setEye(pos);
+	lightCam.setPosition(pos);
 }
 
 Camera Light::getLightCam() {

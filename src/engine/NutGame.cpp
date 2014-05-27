@@ -22,6 +22,7 @@ NutGame::NutGame() {
    this->nutsLeft = 0;
    this->score = 0;
    this->psystem = ParticleSystem();
+   NUMROWS = 0;
 }
 
 NutGame::~NutGame() {
@@ -38,56 +39,61 @@ NutGame::~NutGame() {
 void NutGame::init() {
    std::FILE *file = fopen("levels/level25per.txt", "r");
    //std::FILE *file = fopen("levels/test.txt", "r");
-   char c;
-
-   for (int row = 0; row < NUMROWS; row++) {
+   char c = 'a';
+   int row = 0;
+   while(c != '-') {
+      std::vector<Movable*> tmp(NUMCOLS);
+   //for (int row = 0; row < NUMROWS; row++) {
       for (int col = 0; col< NUMCOLS; col++) {
          c = fgetc(file);
          //They are all .99 because there  is some rounding errors with collision detection if they are 1
          if (c == 'X') {
-            gameGrid[row][col] = new StoneBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, &psystem);
+            tmp[col] = new StoneBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, &psystem);
          }
          else if (c == 'S') {
-            gameGrid[row][col] = new SandBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, &psystem);
+            tmp[col] = new SandBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, &psystem);
          }
          else if (c == 'C') {
-            gameGrid[row][col] = new CrystalBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, &psystem);
+            tmp[col] = new CrystalBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, &psystem);
          }
          else if (c == 'L') {
-            gameGrid[row][col] = new LavaBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, &psystem);
+            tmp[col] = new LavaBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, &psystem);
          }
          else if (c == 'R') {
-            gameGrid[row][col] = new DirtBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, 1, &psystem);
+            tmp[col] = new DirtBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, 1, &psystem);
          }
          else if (c == 'G') {
-            gameGrid[row][col] = new DirtBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, 3, &psystem);
+            tmp[col] = new DirtBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, 3, &psystem);
          }
          else if (c == 'B') {
-            gameGrid[row][col] = new DirtBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, 2, &psystem);
+            tmp[col] = new DirtBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, 2, &psystem);
          }
          else if (c == 'P') {
             player = Player(glm::vec3(col, -row, 0), 0.99f, 0.99f);
-            gameGrid[row][col] = &player;
+            tmp[col] = &player;
          }
          else if (c == '0') {
-            gameGrid[row][col] = 0;
+            tmp[col] = 0;
          }
          else if (c == 'N') {
-            gameGrid[row][col] = new Nut(glm::vec3(col, -row, 0), 0.99f, 0.99f);
+            tmp[col] = new Nut(glm::vec3(col, -row, 0), 0.99f, 0.99f);
             nutsLeft++;
          }
          else if (c == 'H') {
-            gameGrid[row][col] = new HardHat(glm::vec3(col, -row, 0), 0.99f, 0.99f);
+            tmp[col] = new HardHat(glm::vec3(col, -row, 0), 0.99f, 0.99f);
          }
          else if (c == 'D') {
-            gameGrid[row][col] = new MovableSuperDrill(glm::vec3(col, -row, 0), 0.99f, 0.99f);
+            tmp[col] = new MovableSuperDrill(glm::vec3(col, -row, 0), 0.99f, 0.99f);
          }
          else if (c == 'Y') {
-            gameGrid[row][col] = new MovableDynamite(glm::vec3(col, -row, 0), 0.99f, 0.99f);
+            tmp[col] = new MovableDynamite(glm::vec3(col, -row, 0), 0.99f, 0.99f);
          }
          fgetc(file);
       }
+      gameGrid.push_back(tmp);
+      row++;
    }
+   NUMROWS = row;
    fclose(file);
 
    connectBlocks();
@@ -726,7 +732,7 @@ void NutGame::handleKeyInput() {
 }
 
 std::list<Renderable*> NutGame::getObjectsToDraw() {
-   int count = player.getCenter().y - NUM_BLOCKS_VISIBLE_ABOVE_PLAYER;
+   int count = -player.getCenter().y - NUM_BLOCKS_VISIBLE_ABOVE_PLAYER;
    std::list<Renderable*> objects;
    
    if (count < 0) {
@@ -771,7 +777,7 @@ std::list<Renderable*> NutGame::getDynamitesToDraw() {
 }
 
 std::list<Renderable*> NutGame::getCertainObjectsToDraw(int type) {
-   int count = player.getCenter().y - NUM_BLOCKS_VISIBLE_ABOVE_PLAYER;
+   int count = -player.getCenter().y - NUM_BLOCKS_VISIBLE_ABOVE_PLAYER;
    std::list<Renderable*> objects;
    
    if (count < 0) {

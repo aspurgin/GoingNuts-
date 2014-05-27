@@ -7,10 +7,10 @@ MovableDynamite::MovableDynamite(glm::vec3 center, float width, float height) {
    this->velocity = 1.f;
    this->model = Assets::getMesh(Assets::BLOCK_M);
    this->cshader = Assets::getCShader();
-   this->scale = 0.5f;
-   this->scaleX = 0.5f;
-   this->scaleY = 0.5f;
-   this->scaleZ = 0.5f;
+   this->scale = 0.2f;
+   this->scaleX = 0.2f;
+   this->scaleY = 0.2f;
+   this->scaleZ = 0.2f;
    this->mat = 5;
    this->ang = 0;
    this->modelTrans.useModelViewMatrix();

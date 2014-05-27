@@ -46,7 +46,7 @@ ParticleSystem::ParticleSystem() {
    time = 0;
    ttl = 5;
    spread = glm::vec3(4, 1, 4);
-   vel = glm::vec3(0, 3, 0);
+   vel = glm::vec3(0, 3, 3);
    numParticles = 0;
    mat = 0;
 }
@@ -157,7 +157,7 @@ void ParticleSystem::stop() {
 }
 
 
-void ParticleSystem::timeStep(float dt, Movable* gameGrid[17][7]) {
+void ParticleSystem::timeStep(float dt, std::vector<std::vector<Movable *> > gameGrid) {//Movable* gameGrid[17][7]) {
    float perParticle = 1.0f / perSec;
    float toGenerate = 0;
    std::vector<Particle>::iterator it;
@@ -191,7 +191,7 @@ void ParticleSystem::timeStep(float dt, Movable* gameGrid[17][7]) {
 }
 
 
-void ParticleSystem::computeForces(Movable* gameGrid[17][7]) {
+void ParticleSystem::computeForces(std::vector<std::vector<Movable *> > gameGrid) {//Movable* gameGrid[17][7]) {
    /**
     * F = ma
     * a = F/m

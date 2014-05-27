@@ -135,7 +135,7 @@ namespace Renderer {
             (*it)->renderLightMap();
          }
 
-         //ngame->psystem.renderLightMap();
+         ngame->psystem.renderLightMap();
          glBindFramebuffer(GL_FRAMEBUFFER, 0);
          glUseProgram(0);
 
@@ -369,8 +369,8 @@ namespace Renderer {
       //exit(1);
       //left = Wall(glm::vec3(-1.5, -10, 0));
       //right = Wall(glm::vec3(7.5, -10, 0));
-      back = Wall(glm::vec3(3.0, 0.0, -3.0));
-      back.setScale(glm::vec3(4.0, 1.0, 0.1));
+      back = Wall(glm::vec3(3.0, -8.0, -3.0));
+      back.setScale(glm::vec3(4.0, 12.0, 0.1));
       toggle = false;
       initialize();
       //hello
@@ -485,6 +485,7 @@ namespace Renderer {
       currObjs = ngame->getObjectsToDraw();
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+      //printf("hi\n");
       
       renderHud();
       
