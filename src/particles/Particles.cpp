@@ -24,13 +24,12 @@ Particle::Particle(float mass, float ttl, glm::vec3 pos, glm::vec3 vel, int mat)
    this->box = BoundingBox2D(glm::vec2(pos.x, pos.y), scaleX, scaleY);
 }
 
-
 // Nothing in this function, but compiler complains if it isn't declared
-Particle::~Particle() {}
-
+Particle::~Particle() {
+}
 
 void Particle::render() {
-   glm::vec3 look = glm::vec3(Renderer::camera.eye.x, Renderer::camera.eye.y, Renderer::camera.eye.z) - pos;
+   glm::vec3 look = Renderer::camera.eye - pos;
    look = glm::normalize(look);
    axis = glm::cross(front, look);
    ang = glm::acos(glm::dot(front, look)) * TO_DEGREES;
@@ -68,7 +67,6 @@ ParticleSystem::ParticleSystem(glm::vec3 pos, int mat) {
    this->mat = mat;
 }
 
-
 ParticleSystem::ParticleSystem(glm::vec3 pos, glm::vec3 vel, glm::vec3 spread, int perSec,
                                float mass, float ttl) {
    this->pos = pos;
@@ -82,7 +80,6 @@ ParticleSystem::ParticleSystem(glm::vec3 pos, glm::vec3 vel, glm::vec3 spread, i
    numParticles = 0;
 }
 
-
 void ParticleSystem::add() {
    glm::vec3 newVel;
 
@@ -93,11 +90,9 @@ void ParticleSystem::add() {
    p.push_back(Particle(mass, ttl, pos, newVel, mat));
 }
 
-
 void ParticleSystem::add(float mass, float ttl, glm::vec3 pos, glm::vec3 vel) {
    p.push_back(Particle(mass, ttl, pos, vel, mat));
 }
-
 
 void ParticleSystem::burst(int num) {
    for (int i = 0; i < num; i++) {
@@ -105,57 +100,46 @@ void ParticleSystem::burst(int num) {
    }
 }
 
-
 void ParticleSystem::moveTo(glm::vec3 to) {
    pos = to;
 }
-
 
 void ParticleSystem::moveBy(glm::vec3 by) {
    pos += by;
 }
 
-
 void ParticleSystem::setInitialVelocity(glm::vec3 newVel) {
    vel = newVel;
 }
-
 
 void ParticleSystem::setMass(float newMass) {
    mass = newMass;
 }
 
-
 void ParticleSystem::setMatID(int matID) {
    mat = matID;
 }
-
 
 void ParticleSystem::setPerSec(int n) {
    perSec = n;
 }
 
-
 void ParticleSystem::setSpread(glm::vec3 newSpread) {
    spread = newSpread;
 }
-
 
 void ParticleSystem::setTTL(float newTTL) {
    ttl = newTTL;
 }
 
-
 void ParticleSystem::start() {
    on = true;
 }
-
 
 void ParticleSystem::stop() {
    on = false;
    time = numParticles = 0;
 }
-
 
 void ParticleSystem::timeStep(float dt, Movable* gameGrid[17][7]) {
    float perParticle = 1.0f / perSec;
@@ -190,7 +174,6 @@ void ParticleSystem::timeStep(float dt, Movable* gameGrid[17][7]) {
    DEBUG("finished Timestep");
 }
 
-
 void ParticleSystem::computeForces(Movable* gameGrid[17][7]) {
    /**
     * F = ma
@@ -216,79 +199,94 @@ void ParticleSystem::computeForces(Movable* gameGrid[17][7]) {
    int numCols = 7, numRows = 17;
    int direction = 0;
    float horizontalPush = -1.8;
-   float groundPush = -2.0;
+   float groundPush = -1.8;
    float particleWidth = 0.1;
    float blockWidth = 1;
 
    for (std::vector<Particle>::iterator it = p.begin(); it != p.end(); ++it) {
       it->netForce = glm::vec3(0, GRAVITY * it->mass, 0);
 
-      // Moving right
-      /*if (it->vel.x > 0) {
-         hcol = (int)(it->pos.x + particleWidth + blockWidth / 2.0f);
-         hrow = (int)((it->pos.y - blockWidth) * -1);
+      //Find the estimated column and row of moving particle
+      // Moving left
+      if (it->vel.x < 0) {
+         estCol = (int)(it->pos.x + blockWidth / 2.0f + particleWidth);
 
-      }// Moving left
+      }// Moving right
       else {
-         hcol = (int)(it->pos.x - particleWidth + blockWidth / 2.0f);
-         hrow = (int)((it->pos.y - blockWidth) * -1);
+         estCol = (int)(it->pos.x + blockWidth / 2.0f - particleWidth);
 
       }
-      // Moving up
-      if (it->vel.y > 0) {
-         vcol = (int)(it->pos.x + blockWidth / 2.0f);
-         vrow = (int)((it->pos.y - particleWidth - blockWidth) * -1);
-
-      }// Moving down
+      // Moving down
+      if (it->vel.y < 0) {
+         estRow = (int)((it->pos.y - blockWidth / 2.0f + particleWidth) * -1);
+      }// Moving up
       else {
-         vcol = (int)(it->pos.x + blockWidth / 2.0f);
-         vrow = (int)((it->pos.y + particleWidth - blockWidth) * -1);
-      }*/
+         estRow = (int)((it->pos.y - blockWidth / 2.0f - particleWidth) * -1);
+      }
 
-      col = (int)(it->pos.x - blockWidth / 2.0f);
-      row = (int)((it->pos.y + blockWidth / 2.0f) * -1);
+      //Actual column and row
+      row = (int)((it->pos.y - blockWidth / 2.0f) * -1);
+      col = (int)(it->pos.x + blockWidth / 2.0f);
 
       //Only check collisions if particle is in gameGrid
-      //printf("pos x:%f, y:%f AND In box: %d, %d\n", pos.x, pos.y, col, row);
-      //printf("currPos: %f, %f\n", it->pos.x, it->pos.y);
-      /*if (0 <= col && col < numCols && 0 <= row && row < numRows && it->pos.z <= 0.5) {
+      /*printf("x:%f, y:%f     estCol: %d estRow: %d     col: %d row: %d\n", it->pos.x, it->pos.y,
+             estCol, estRow, col, row);*/
+      if (0 <= col && col < numCols && 0 <= row && row < numRows && it->pos.z <= 0.5) {
          // left collision check
-         if (col > 0 && col < numCols - 1 && gameGrid[row][col - 1] && it->isIntersecting((Collidable*)gameGrid[row][col - 1])) {
-            it->vel += glm::vec3((it->vel.x) * horizontalPush, 0, 0);
-            printf("isIntersecting:%d\n", it->isIntersecting((Collidable*)gameGrid[row][col - 1]));
+         if (it->vel.x < 0 && estCol - 1 >= 0 && col < estCol) {
+            if (gameGrid[row][col] && gameGrid[row][col]->getMovableType() == BLOCK && gameGrid[row][estCol - 1] && gameGrid[row][estCol - 1]->getMovableType() == BLOCK && it->isIntersecting(((Collidable*)gameGrid[row][estCol - 1]))) {
+               it->vel.x += it->vel.x * horizontalPush;
+               //printf("left collision\n");
+            }
          } // right collision check
-         else if (col > 0 && col < numCols - 1 && gameGrid[row][col + 1] && it->isIntersecting((Collidable*)gameGrid[row][col + 1])) {
-            it->vel += glm::vec3((it->vel.x) * horizontalPush, 0, 0);
-            printf("isIntersecting:%d\n", it->isIntersecting((Collidable*)gameGrid[row][col + 1]));
+         else if (estCol + 1 < numCols && col > estCol) {
+            if (gameGrid[row][col] && gameGrid[row][col]->getMovableType() == BLOCK && gameGrid[row][estCol + 1] && gameGrid[row][estCol + 1]->getMovableType() == BLOCK && it->isIntersecting(((Collidable*)gameGrid[row][estCol + 1]))) {
+               it->vel.x += it->vel.x * horizontalPush;
+               //printf("right collision\n");
+            }
          }
-         // bottom collision check
-         if (row > 0 && row < numRows - 1 && gameGrid[row + 1][col] && it->isIntersecting((Collidable*)gameGrid[row + 1][col])) {
-            it->vel += glm::vec3(0, (it->vel.y) * groundPush, 0);
-            printf("isIntersecting:%d\n", it->isIntersecting((Collidable*)gameGrid[row + 1][col]));
-         } // top collision check
-         else if (1) {
-            // some top collision checking here
+
+         //Downward collision check
+         if (it->vel.y < 0 && estRow + 1 < numRows) {
+            if (gameGrid[row][col] && gameGrid[row][col]->getMovableType() == BLOCK && gameGrid[estRow + 1][col] && gameGrid[estRow + 1][col]->getMovableType() == BLOCK && it->isIntersecting(((Collidable*)gameGrid[estRow + 1][col]))) {
+               it->vel.y += it->vel.y * groundPush;
+            }
          }
          // back wall collision check #hardcodelife
          if (it->pos.z <= -0.4) {
-            it->vel += glm::vec3(0, 0, it->vel.z * -2);
+            it->vel.z += it->vel.z * -2;
          }
-      //}
-      //Check if adjacent blocks exists
-      */
+         /*if (col > 0 && col < numCols - 1 && gameGrid[row][col - 1] && it->isIntersecting((Collidable*)gameGrid[row][col - 1])) {
+          it->vel += glm::vec3((it->vel.x) * horizontalPush, 0, 0);
+          printf("isIntersecting:%d\n", it->isIntersecting((Collidable*)gameGrid[row][col - 1]));
+          } // right collision check
+          else if (col > 0 && col < numCols - 1 && gameGrid[row][col + 1] && it->isIntersecting((Collidable*)gameGrid[row][col + 1])) {
+          it->vel += glm::vec3((it->vel.x) * horizontalPush, 0, 0);
+          printf("isIntersecting:%d\n", it->isIntersecting((Collidable*)gameGrid[row][col + 1]));
+          }
+          // bottom collision check
+          if (row > 0 && row < numRows - 1 && gameGrid[row + 1][col] && it->isIntersecting((Collidable*)gameGrid[row + 1][col])) {
+          it->vel += glm::vec3(0, (it->vel.y) * groundPush, 0);
+          printf("isIntersecting:%d\n", it->isIntersecting((Collidable*)gameGrid[row + 1][col]));
+          } // top collision check
+          else if (1) {
+          // some top collision checking here
+          }
+          // back wall collision check #hardcodelife
+          if (it->pos.z <= -0.4) {
+          it->vel += glm::vec3(0, 0, it->vel.z * -2);
+          }*/
+      }
    }
 }
-
 
 float ParticleSystem::percentOf(float of) {
    return ((float)rand() / (float)RAND_MAX) * of;
 }
 
-
 float ParticleSystem::percentRange(float of) {
    return ((float)rand() / (float)RAND_MAX) * of * 2 - of;
 }
-
 
 void ParticleSystem::render() {
    int i;
