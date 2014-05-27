@@ -22,6 +22,7 @@ NutGame::NutGame() {
    this->nutsLeft = 0;
    this->score = 0;
    this->psystem = ParticleSystem();
+   NUMROWS = 0;
 }
 
 NutGame::~NutGame() {
@@ -38,56 +39,61 @@ NutGame::~NutGame() {
 void NutGame::init() {
    std::FILE *file = fopen("levels/level25per.txt", "r");
    //std::FILE *file = fopen("levels/test.txt", "r");
-   char c;
-
-   for (int row = 0; row < NUMROWS; row++) {
+   char c = 'a';
+   int row = 0;
+   while(c != '-') {
+      std::vector<Movable*> tmp(NUMCOLS);
+   //for (int row = 0; row < NUMROWS; row++) {
       for (int col = 0; col< NUMCOLS; col++) {
          c = fgetc(file);
          //They are all .99 because there  is some rounding errors with collision detection if they are 1
          if (c == 'X') {
-            gameGrid[row][col] = new StoneBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, &psystem);
+            tmp[col] = new StoneBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, &psystem);
          }
          else if (c == 'S') {
-            gameGrid[row][col] = new SandBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, &psystem);
+            tmp[col] = new SandBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, &psystem);
          }
          else if (c == 'C') {
-            gameGrid[row][col] = new CrystalBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, &psystem);
+            tmp[col] = new CrystalBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, &psystem);
          }
          else if (c == 'L') {
-            gameGrid[row][col] = new LavaBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, &psystem);
+            tmp[col] = new LavaBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, &psystem);
          }
          else if (c == 'R') {
-            gameGrid[row][col] = new DirtBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, 1, &psystem);
+            tmp[col] = new DirtBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, 1, &psystem);
          }
          else if (c == 'G') {
-            gameGrid[row][col] = new DirtBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, 3, &psystem);
+            tmp[col] = new DirtBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, 3, &psystem);
          }
          else if (c == 'B') {
-            gameGrid[row][col] = new DirtBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, 2, &psystem);
+            tmp[col] = new DirtBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, 2, &psystem);
          }
          else if (c == 'P') {
             player = Player(glm::vec3(col, -row, 0), 0.99f, 0.99f);
-            gameGrid[row][col] = &player;
+            tmp[col] = &player;
          }
          else if (c == '0') {
-            gameGrid[row][col] = 0;
+            tmp[col] = 0;
          }
          else if (c == 'N') {
-            gameGrid[row][col] = new Nut(glm::vec3(col, -row, 0), 0.99f, 0.99f);
+            tmp[col] = new Nut(glm::vec3(col, -row, 0), 0.99f, 0.99f);
             nutsLeft++;
          }
          else if (c == 'H') {
-            gameGrid[row][col] = new HardHat(glm::vec3(col, -row, 0), 0.99f, 0.99f);
+            tmp[col] = new HardHat(glm::vec3(col, -row, 0), 0.99f, 0.99f);
          }
          else if (c == 'D') {
-            gameGrid[row][col] = new MovableSuperDrill(glm::vec3(col, -row, 0), 0.99f, 0.99f);
+            tmp[col] = new MovableSuperDrill(glm::vec3(col, -row, 0), 0.99f, 0.99f);
          }
          else if (c == 'Y') {
-            gameGrid[row][col] = new MovableDynamite(glm::vec3(col, -row, 0), 0.99f, 0.99f);
+            tmp[col] = new MovableDynamite(glm::vec3(col, -row, 0), 0.99f, 0.99f);
          }
          fgetc(file);
       }
+      gameGrid.push_back(tmp);
+      row++;
    }
+   NUMROWS = row;
    fclose(file);
 
    connectBlocks();
@@ -287,6 +293,9 @@ void NutGame::fallDown(double toAdd) {
                            else {
                               gameGrid[row][col]->stopFalling();
                               gameGrid[row][col]->setCanNotFall();
+                              if(gameGrid[row][col]->getMovableType() == BLOCK) {
+                                 Assets::playSound(Assets::BLOCK_FALL_S);
+                              }
                               gameGrid[row][col]->moveTo(glm::vec2(gameGrid[row][col]->getCenter().x, -row));
                            }
                         }
@@ -329,6 +338,9 @@ void NutGame::fallDown(double toAdd) {
                            }
                            gameGrid[row][col]->stopFalling();
                            gameGrid[row][col]->setCanNotFall();
+                           if(gameGrid[row][col]->getMovableType() == BLOCK) {
+                              Assets::playSound(Assets::BLOCK_FALL_S);
+                           }
                            gameGrid[row][col]->moveTo(glm::vec2(gameGrid[row][col]->getCenter().x, -row));
                            //delete gameGrid[row][col];
                            //gameGrid[row][col] = 0;
@@ -350,6 +362,9 @@ void NutGame::fallDown(double toAdd) {
                      else {
                         gameGrid[row][col]->stopFalling();
                         gameGrid[row][col]->setCanNotFall();
+                        if(gameGrid[row][col]->getMovableType() == BLOCK) {
+                           Assets::playSound(Assets::BLOCK_FALL_S);
+                        }
                         gameGrid[row][col]->moveTo(glm::vec2(gameGrid[row][col]->getCenter().x, -row));
                      }
                   }
@@ -494,7 +509,7 @@ void NutGame::setFallingMovables(int row, int col) {
    }
    
    if (row < NUMROWS - 2 && gameGrid[row][col]->getMovableType() == PLAYER &&
-       gameGrid[row + 1][col] != 0 && (gameGrid[row + 1][col]->getMovableType() == NUT || 
+       gameGrid[row + 1][col] != 0 && (gameGrid[row + 1][col]->getMovableType() != BLOCK || //Zach I changed this because you couldn't fall on powerups before --Drew 
        (gameGrid[row + 1][col]->getMovableType() == BLOCK && 
        (((Block*)gameGrid[row + 1][col])->getBlockType() == LAVABLOCK)))) {
       gameGrid[row][col]->setCanFall();
@@ -517,6 +532,7 @@ void NutGame::finishSettingFallingMovables() {
                gameGrid[row + 1][col]->getMovableType() == PLAYER ||
                gameGrid[row + 1][col]->willFall() || gameGrid[row + 1][col]->getCanFall()))){
                ((Block*)gameGrid[row][col])->getGroupIn()->setGroupCanNotFall();
+               Assets::playSound(Assets::BLOCK_FALL_S);
 
                it = mightFallGroupList.erase(it);
                //--it;
@@ -716,7 +732,7 @@ void NutGame::handleKeyInput() {
 }
 
 std::list<Renderable*> NutGame::getObjectsToDraw() {
-   int count = player.getCenter().y - NUM_BLOCKS_VISIBLE_ABOVE_PLAYER;
+   int count = -player.getCenter().y - NUM_BLOCKS_VISIBLE_ABOVE_PLAYER;
    std::list<Renderable*> objects;
    
    if (count < 0) {
@@ -730,7 +746,7 @@ std::list<Renderable*> NutGame::getObjectsToDraw() {
          }
       }
    }
-   //objects.push_back(&psystem);
+   objects.push_back(&psystem);
    objects.unique();
    return objects;
 }
@@ -755,14 +771,13 @@ std::list<Renderable*> NutGame::getHardHatsToDraw() {
 std::list<Renderable*> NutGame::getSuperDrillsToDraw() {
    return getCertainObjectsToDraw(SUPERDRILL);
 }
-/*
+
 std::list<Renderable*> NutGame::getDynamitesToDraw() {
    return getCertainObjectsToDraw(DYNAMITE);
 }
-*/
 
 std::list<Renderable*> NutGame::getCertainObjectsToDraw(int type) {
-   int count = player.getCenter().y - NUM_BLOCKS_VISIBLE_ABOVE_PLAYER;
+   int count = -player.getCenter().y - NUM_BLOCKS_VISIBLE_ABOVE_PLAYER;
    std::list<Renderable*> objects;
    
    if (count < 0) {

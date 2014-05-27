@@ -24,16 +24,17 @@
 #include <stdio.h>
 #include <vector>
 
-#define NUMROWS 17
+//#define NUMROWS 17
 #define NUMCOLS 7
 #define NUM_BLOCKS_VISIBLE_ABOVE_PLAYER 6
-#define NUM_TOTAL_BLOCKS_VISIBLE 17
+#define NUM_TOTAL_BLOCKS_VISIBLE 12
 
 class NutGame {
    public:
       ~NutGame();
       NutGame();
-      Movable *gameGrid[NUMROWS][NUMCOLS];
+      std::vector<std::vector<Movable *> > gameGrid;
+      //Movable *gameGrid[NUMROWS][NUMCOLS];
       void init();
       bool isBlockAtPosition(glm::vec2 pos);
       std::list<Renderable*> getObjectsToDraw();
@@ -42,7 +43,7 @@ class NutGame {
       std::list<Renderable*> getNutsToDraw();
       std::list<Renderable*> getHardHatsToDraw();
       std::list<Renderable*> getSuperDrillsToDraw();
-      //std::list<Renderable*> getDynamitesToDraw();
+      std::list<Renderable*> getDynamitesToDraw();
       bool isDrillingDown();
       bool isDrillingUp();
       bool isDrillingLeft();
@@ -90,6 +91,7 @@ class NutGame {
       bool checkingGroupForOtherAdds;
       std::vector<BlockGroup*> mightFallGroupList;
       std::vector<Movable*> mightFallBlockList;
+      int NUMROWS;
 };
 
 #endif

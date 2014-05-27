@@ -5,10 +5,14 @@ MovableDynamite::MovableDynamite() {}
 MovableDynamite::MovableDynamite(glm::vec3 center, float width, float height) {
    setObject(center, width, height);
    this->velocity = 1.f;
-   this->model = Assets::getMesh(Assets::NUT_M);
+   this->model = Assets::getMesh(Assets::BLOCK_M);
    this->cshader = Assets::getCShader();
-   this->scale = 0.8f;
+   this->scale = 0.2f;
+   this->scaleX = 0.2f;
+   this->scaleY = 0.2f;
+   this->scaleZ = 0.2f;
    this->mat = 5;
+   this->ang = 0;
    this->modelTrans.useModelViewMatrix();
    this->offset = glm::vec3(0.0f,0.0f,0.0f);
    this->floatingUp = true;
@@ -52,7 +56,10 @@ void MovableDynamite::updateOffset() {
 
 void MovableDynamite::render() {
    updateOffset();
-   cshader.setMaterial(mat);
+   position = center;// + offset;
+   Renderable::render();
+
+   /*cshader.setMaterial(mat);
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
    modelTrans.pushMatrix();
@@ -74,7 +81,7 @@ void MovableDynamite::render() {
    modelTrans.popMatrix();
 
    safe_glDisableVertexAttribArray(cshader.h_aPosition);
-   safe_glDisableVertexAttribArray(cshader.h_aNormal);
+   safe_glDisableVertexAttribArray(cshader.h_aNormal);*/
 }
 
 void MovableDynamite::setModel() {

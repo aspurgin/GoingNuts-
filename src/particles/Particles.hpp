@@ -72,7 +72,7 @@ class ParticleSystem: public Renderable {
       /* turns off automatic generation of Particles */
       void stop();
       /* simulates the particles given a time step */
-      void timeStep(float dt, Movable* gameGrid[17][7]);
+      void timeStep(float dt, std::vector<std::vector<Movable *> > gameGrid);//Movable* gameGrid[17][7]);
 
       /* Need to implement for Renderable template */
       void render();
@@ -91,7 +91,7 @@ class ParticleSystem: public Renderable {
       glm::vec3 vel;
 
       /* calculates and sets net force for each Particle */
-      void computeForces(Movable* gameGrid[17][7]);
+      void computeForces(std::vector<std::vector<Movable *> > gameGrid);//Movable* gameGrid[17][7]);
       /* returns a random float from the range 0 to "of" */
       float percentOf(float of);
       /* returns a random float from the range "-of" to "of" */

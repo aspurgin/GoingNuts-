@@ -45,7 +45,7 @@ ParticleSystem::ParticleSystem() {
    time = 0;
    ttl = 5;
    spread = glm::vec3(4, 1, 4);
-   vel = glm::vec3(0, 1, 0);
+   vel = glm::vec3(0, 3, 3);
    numParticles = 0;
    mat = 0;
 }
@@ -141,7 +141,8 @@ void ParticleSystem::stop() {
    time = numParticles = 0;
 }
 
-void ParticleSystem::timeStep(float dt, Movable* gameGrid[17][7]) {
+
+void ParticleSystem::timeStep(float dt, std::vector<std::vector<Movable *> > gameGrid) {//Movable* gameGrid[17][7]) {
    float perParticle = 1.0f / perSec;
    float toGenerate = 0;
    std::vector<Particle>::iterator it;
@@ -174,7 +175,8 @@ void ParticleSystem::timeStep(float dt, Movable* gameGrid[17][7]) {
    DEBUG("finished Timestep");
 }
 
-void ParticleSystem::computeForces(Movable* gameGrid[17][7]) {
+
+void ParticleSystem::computeForces(std::vector<std::vector<Movable *> > gameGrid) {//Movable* gameGrid[17][7]) {
    /**
     * F = ma
     * a = F/m
@@ -196,13 +198,14 @@ void ParticleSystem::computeForces(Movable* gameGrid[17][7]) {
     */
    int col, row;
    int estCol, estRow;
-   int numCols = 7, numRows = 17;
+   int numCols = 7, numRows = gameGrid.size();
    int direction = 0;
    float horizontalPush = -1.8;
    float groundPush = -1.8;
    float particleWidth = 0.1;
    float blockWidth = 1;
 
+   printf("numRows: %d\n", numRows);
    for (std::vector<Particle>::iterator it = p.begin(); it != p.end(); ++it) {
       it->netForce = glm::vec3(0, GRAVITY * it->mass, 0);
 

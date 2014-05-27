@@ -5,10 +5,14 @@ HardHat::HardHat() {}
 HardHat::HardHat(glm::vec3 center, float width, float height) {
    setObject(center, width, height);
    this->velocity = 1.f;
-   this->model = Assets::getMesh(Assets::NUT_M);
+   this->model = Assets::getMesh(Assets::HHAT_M);
    this->cshader = Assets::getCShader();
-   this->scale = 0.8f;
-   this->mat = 5;
+   this->scale = 0.2f;
+   this->scaleX = 0.25f;
+   this->scaleY = 0.25f;
+   this->scaleZ = 0.25f;
+   this->mat = 0;
+   this->shaderType = C_SHADE;
    this->modelTrans.useModelViewMatrix();
    this->offset = glm::vec3(0.0f,0.0f,0.0f);
    this->floatingUp = true;
@@ -51,8 +55,12 @@ void HardHat::updateOffset() {
 }
 
 void HardHat::render() {
-   updateOffset();
-   cshader.setMaterial(mat);
+   //printf("got here\n");
+   //printf("position: %f, %f, %f\n", center.x, center.y, center.z);
+   //updateOffset();
+   position = center;// + offset;
+   Renderable::render();
+   /*cshader.setMaterial(mat);
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
    modelTrans.pushMatrix();
@@ -74,9 +82,14 @@ void HardHat::render() {
    modelTrans.popMatrix();
 
    safe_glDisableVertexAttribArray(cshader.h_aPosition);
-   safe_glDisableVertexAttribArray(cshader.h_aNormal);
+   safe_glDisableVertexAttribArray(cshader.h_aNormal);*/
 }
 
 void HardHat::setModel() {
    safe_glUniformMatrix4fv(cshader.h_uModelMatrix, glm::value_ptr(modelTrans.modelViewMatrix)); 
+}
+
+void HardHat::setPosition(glm::vec3 pos) {
+   position = pos;
+   center = pos;
 }

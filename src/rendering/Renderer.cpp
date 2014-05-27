@@ -93,7 +93,7 @@ namespace Renderer {
          safe_glUniform3f(ftshader.h_lightPos, light.position.x, light.position.y, light.position.z);
          safe_glUniform3f(ftshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
 
-         camera.setEye(glm::vec3(3.0f, ngame->player.getCenter().y + 1, 6.0f));
+         camera.setPosition(glm::vec3(3.0f, ngame->player.getCenter().y + 1, 6.0f));
          light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y - 1, 6.0f));
 
          hud->render();
@@ -119,12 +119,13 @@ namespace Renderer {
 
          //Initialize my shader for the light shadow map
          glUseProgram(lmShader.shadeProg);
-         camera.setEye(glm::vec3(3.0f, ngame->player.getCenter().y, 8.0f));
-         light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y, 6.0f));
+         //float eyeOffsetX = ngame->player.getCenter().x + (ngame->player.getCenter().x - 3)*2/5.0;
+         //camera.setPosition(glm::vec3(3.0, ngame->player.getCenter().y, 8.0f));
+         //light.setPosition(glm::vec3(3.0, ngame->player.getCenter().y, 8.0f));
 
          //for the view and projection, use the virtual camera at the light's position
          light.getLightCam().setView(lmShader.h_uViewMatrix);
-         light.getLightCam().setProjectionMatrix(lmShader.h_uProjMatrix, 1, 1.0f, 20.0f);
+         light.getLightCam().setProjectionMatrix(lmShader.h_uProjMatrix, 1, 1.0f, 25.0f);
          // model matrix does nothing for the monkey - make it an identity matrix
          //safe_glUniformMatrix4fv (lmShader.h_uModelMatrix, glm::value_ptr(glm::mat4(0)));
 
@@ -134,12 +135,54 @@ namespace Renderer {
             (*it)->renderLightMap();
          }
 
-         //ngame->psystem.renderLightMap();
+         ngame->psystem.renderLightMap();
          glBindFramebuffer(GL_FRAMEBUFFER, 0);
          glUseProgram(0);
 
          glClear(GL_DEPTH_BUFFER_BIT);
       }
+
+      
+      void renderBlocks() {
+         std::list<Renderable*> blocks = ngame->getBlocksToDraw();
+
+         for (std::list<Renderable*>::iterator it = blocks.begin(); it != blocks.end(); ++it) {
+            (*it)->render();
+         }
+
+      }
+
+      void renderPlayer() {
+         ngame->player.render();
+      }
+
+      void renderNuts() {
+         std::list<Renderable*> nuts = ngame->getNutsToDraw();
+         for (std::list<Renderable*>::iterator iter = nuts.begin(); iter != nuts.end(); ++iter) {
+            (*iter)->render();
+         }
+      }
+
+      void renderDynamite() {
+         std::list<Renderable *> dynamite = ngame->getDynamitesToDraw();
+
+         for (std::list<Renderable*>::iterator it = dynamite.begin(); it != dynamite.end(); ++it) {
+            (*it)->render();
+         }
+      }
+
+      void renderHardHat() {
+         std::list<Renderable *> hhats = ngame->getHardHatsToDraw();
+
+         for (std::list<Renderable*>::iterator it = hhats.begin(); it != hhats.end(); ++it) {
+            (*it)->render();
+         }   
+      }
+
+      void renderSuperDrill() {
+
+      }
+      
 
       void renderGame() {
 
@@ -150,7 +193,7 @@ namespace Renderer {
          modelTrans.loadIdentity();
 
          /***************************BEGIN TEST CODE**********************************
-         */glClearColor(1,1,1,1);/*
+         */glClearColor(0.2,0.2,0.2,1);/*
          static float test = 0;
          static float step = 0.02;
 
@@ -165,8 +208,17 @@ namespace Renderer {
 
          /***************************END TEST CODE**********************************/
 
-         camera.setEye(glm::vec3(3.0f, ngame->player.getCenter().y, 8.0f));
-         light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y, 6.0f));
+         /*float eyeOffsetX = 3.0;
+         if(ngame->player.movingHorizontal() == LEFT) {
+            eyeOffsetX = 0;
+         }
+         else if(ngame->player.movingHorizontal() == RIGHT) {
+            eyeOffsetX = 7;
+         }*/
+         
+         if(ngame->throwDynamitePressed) {
+            camera.shake(0.2);
+         }
          light.getLightCam().setLookAt(glm::vec3(3.0, ngame->player.getCenter().y, 0));
 
          if (toggle) {
@@ -196,18 +248,16 @@ namespace Renderer {
 
          ngame->psystem.render();
          
-         std::list<Renderable*> blocks = ngame->getBlocksToDraw();
-         for (std::list<Renderable*>::iterator it = blocks.begin(); it != blocks.end(); ++it) {
-            (*it)->render();
-         }
-         ngame->player.render();
-
-
-         std::list<Renderable*> nuts = ngame->getNutsToDraw();
-         for (std::list<Renderable*>::iterator iter = nuts.begin(); iter != nuts.end(); ++iter) {
-            (*iter)->render();
-         }
+         renderPlayer();
+         renderBlocks();
+         renderDynamite();
+         renderHardHat();
+         renderSuperDrill();
+         renderNuts();
+         
+         glUseProgram(0);
       }
+
 
       void renderWinLoss() {
          //*** Render Win Loss ***/
@@ -224,7 +274,7 @@ namespace Renderer {
          safe_glUniform3f(ftshader.h_lightPos, light.position.x, light.position.y, light.position.z);
          safe_glUniform3f(ftshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
 
-         camera.setEye(glm::vec3(3.0f, ngame->player.getCenter().y + 1, 6.0f));
+         camera.setPosition(glm::vec3(3.0f, ngame->player.getCenter().y + 1, 6.0f));
          light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y - 1, 6.0f));
 
          hud->renderWinLoss();
@@ -247,7 +297,7 @@ namespace Renderer {
          modelTrans.loadIdentity();
 
 
-         camera.setEye(glm::vec3(3.0f, ngame->player.getCenter().y, 8.0f));
+         camera.setPosition(glm::vec3(3.0f, ngame->player.getCenter().y, 8.0f));
          light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y + 2, 6.0f));
 
          camera.setView(ptshader.h_uViewMatrix);
@@ -319,8 +369,8 @@ namespace Renderer {
       //exit(1);
       //left = Wall(glm::vec3(-1.5, -10, 0));
       //right = Wall(glm::vec3(7.5, -10, 0));
-      back = Wall(glm::vec3(3.0, 0.0, -3.0));
-      back.setScale(glm::vec3(4.0, 1.0, 0.1));
+      back = Wall(glm::vec3(3.0, -8.0, -3.0));
+      back.setScale(glm::vec3(4.0, 12.0, 0.1));
       toggle = false;
       initialize();
       //hello
@@ -435,7 +485,16 @@ namespace Renderer {
       currObjs = ngame->getObjectsToDraw();
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+      //printf("hi\n");
+      
       renderHud();
+      
+      float eyeOffsetX = 3.0 + (ngame->player.getCenter().x - 3)/1.4;
+      float eyeOffsetZ = 10.0 + (ngame->player.getCenter().x - 3)*(ngame->player.getCenter().x - 3)/10.0;
+      camera.setEye(glm::vec3(eyeOffsetX, ngame->player.getCenter().y, eyeOffsetZ));
+      light.setPosition(glm::vec3(3.0, ngame->player.getCenter().y, 8.0f));
+
+
       renderLightShadowMap();
       renderGame();
       renderWinLoss();
@@ -443,7 +502,6 @@ namespace Renderer {
       //renderNormalMappedCylinder();
 
    }
-
 }
 
 /*void Renderer::initDebugLightMap() {

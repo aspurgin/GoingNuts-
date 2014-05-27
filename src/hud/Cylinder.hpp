@@ -15,16 +15,8 @@
 
 
 class Cylinder : public Renderable {
-   private:
-      //Mesh model;
-      PhongTextureShader cshader;
-      Texture colorTexture;
-      Texture normalTexture;
-      glm::vec3 position;
-
    public:
       Cylinder();
       void render();
-      void setModel();
 };
 #endif

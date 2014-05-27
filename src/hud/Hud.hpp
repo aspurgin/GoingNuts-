@@ -23,6 +23,9 @@
 #include "QuestionMark.hpp"
 #include "Level.hpp"
 #include "Depth.hpp"
+#include "DepthMask.hpp"
+#include "ScoreMask.hpp"
+#include "Number.hpp"
 
 class Hud: public Renderable
 {

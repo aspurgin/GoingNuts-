@@ -24,13 +24,14 @@ int Block::getTimesDrilled() {
 
 void Block::addToTimesDrilled() {
    timesDrilled++;
+   genParticles();
    if (timesDrilled >= getStrength()) {
       if (isInAGroup()) {
          groupIn->destroy();
          delete groupIn;
       }
       else {
-         genParticles();
+         //genParticles();
       }
       state = DEAD;
    }
@@ -128,3 +129,4 @@ void Block::genParticles() {
    psystem->setSpread(glm::vec3(4,1,4));
    psystem->burst(25);
 }
+

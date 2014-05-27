@@ -5,8 +5,9 @@
 #include "Movable.hpp"
 #include "NormalDrill.hpp"
 #include "SuperDrill.hpp"
+#include "HardHat.hpp"
 
-#define HOR_MOVE_RATE 3
+#define HOR_MOVE_RATE 5.0
 
 enum Direction {LEFT, RIGHT, STOPPED};
 
@@ -56,6 +57,7 @@ class Player: public Movable {
       int numDynamites;
       void checkMoveState();
       float foodPercent;
+      HardHat hat;
 };
 
 #endif

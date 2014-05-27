@@ -11,7 +11,7 @@ namespace Assets {
       //create a map for sounds and music
       std::map<int, FMOD::Sound*> sounds, music;
 
-      Mesh squirrel, block, nut, depthWheel, background, guageMask1, guageMask2, scoreMask1, scoreMask2, youWon, youLost, cylinder, goingNuts, sun, nutColor, nutOutline, energy, points, powerUpBG, questionMark, level, depth;
+      Mesh squirrel, block, nut, depthWheel, background, guageMask1, guageMask2, scoreMask1, scoreMask2, youWon, youLost, cylinder, goingNuts, sun, nutColor, nutOutline, energy, points, powerUpBG, questionMark, level, depth, depthMask, scoreMask, number, hardHat;
 
       Texture whiteDepthWheel, blackDepthWheel, hudElements, cylinderNormal, cylinderColor, dirtColor, dirtNormal, rockColor, rockNormal, squirrelTex;
       std::map<int, Mesh*> meshes;
@@ -83,6 +83,10 @@ namespace Assets {
          questionMark = Mesh("assets/models/QuestionMark.obj");
          level = Mesh("assets/models/Level.obj");
          depth = Mesh("assets/models/Depth.obj");
+         depthMask = Mesh("assets/models/DepthMask.obj");
+         scoreMask = Mesh("assets/models/ScoreMask.obj");
+         number = Mesh("assets/models/Number1.obj");
+         hardHat = Mesh("assets/models/HardHat.obj");
 
          block.buildBuffers();
          squirrel.buildBuffers();
@@ -106,6 +110,10 @@ namespace Assets {
          questionMark.buildBuffers();
          level.buildBuffers();
          depth.buildBuffers();
+         depthMask.buildBuffers();
+         scoreMask.buildBuffers();
+         number.buildBuffers();
+         hardHat.buildBuffers();
 
          meshes[SQUIRREL_M] = &squirrel;
          meshes[BLOCK_M] = &block;
@@ -129,6 +137,10 @@ namespace Assets {
          meshes[QUESTION_MARK_M] = &questionMark;
          meshes[LEVEL_M] = &level;
          meshes[DEPTH_M] = &depth;
+         meshes[DEPTH_MASK_M] = &depthMask;
+         meshes[SCORE_MASK_M] = &scoreMask;
+         meshes[NUMBER_M] = &number;
+         meshes[HHAT_M] = &hardHat;
       }
 
       void initShaders() {
@@ -239,8 +251,10 @@ namespace Assets {
 
    void playSound(int type) {
       if (Settings::soundEnabled()) {
-         result = soundSystem->playSound(FMOD_CHANNEL_FREE, sounds[type], false, 0);
+         FMOD::Channel *channel;
+         result = soundSystem->playSound(FMOD_CHANNEL_FREE, sounds[type], false, &channel);
          FMODErrorCheck(result);
+         channel->setVolume(0.5f);
          soundSystem->update();
       }
    }

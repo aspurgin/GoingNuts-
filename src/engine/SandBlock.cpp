@@ -10,7 +10,7 @@ SandBlock::SandBlock(glm::vec3 center, int color) {
 SandBlock::SandBlock(glm::vec3 center, float width, float height, ParticleSystem* psystem) {
    this->blockType = SANDBLOCK;
    setObject(center, width, height);
-   this->mat = 1;  //change to something meaningfull
+   this->mat = 0;  //change to something meaningfull
    this->psystem = psystem;
    this->shaderType = C_SHADE;
    this->colorTexture = Assets::getTexture(Assets::DIRT_COLOR_T);
@@ -22,5 +22,5 @@ int SandBlock::getStrength() {
 }
 
 float SandBlock::getMoveSpeedPercentage() {
-   return 50;
+   return 20;
 }

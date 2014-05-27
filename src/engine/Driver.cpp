@@ -192,7 +192,7 @@ int main(void)
       //renderer.render();
 
       //Swap front and back buffers
-
+    
       glfwSwapBuffers(window);
 
       //Poll for and process events
