@@ -125,5 +125,6 @@ void Block::render() {
 void Block::genParticles() {
    psystem->moveTo(center);
    psystem->setMatID(this->mat);
-   psystem->burst(25);
+   psystem->setSpread(glm::vec3(4,1,0));
+   psystem->burst(1);
 }

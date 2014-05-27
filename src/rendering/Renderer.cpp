@@ -149,6 +149,21 @@ namespace Renderer {
          modelTrans.useModelViewMatrix();
          modelTrans.loadIdentity();
 
+         /***************************BEGIN TEST CODE**********************************
+         */glClearColor(1,1,1,1);/*
+         static float test = 0;
+         static float step = 0.02;
+
+         test += step;
+         if (test<-3 || test>9) {
+            step *= -1;
+            test += 2*step;
+         }
+
+         camera.setEye(glm::vec3(test, ngame->player.getCenter().y - 2*test, 8.0f));
+         camera.setLookAt(glm::vec3(test, ngame->player.getCenter().y - 6, 0.0f));
+
+         /***************************END TEST CODE**********************************/
 
          camera.setEye(glm::vec3(3.0f, ngame->player.getCenter().y, 8.0f));
          light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y, 6.0f));
@@ -676,7 +691,9 @@ void Renderer::renderGame() {
    modelTrans.loadIdentity();
 
 
-   camera.setEye(glm::vec3(3.0f, ngame->player.getCenter().y, 8.0f));
+   camera.setEye(glm::vec3(3.0f, ngame->player.getCenter().y + 1, 8.0f));//DELETE THIS
+   //camera.setLookAt(glm::vec3(3, ngame->player.getCenter().y, 0));//DELETE THIS
+   //camera.setEye(glm::vec3(3.0f, ngame->player.getCenter().y, 18.0f));
    light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y, 6.0f));
    light.getLightCam().setLookAt(glm::vec3(3.0, ngame->player.getCenter().y, 0));
 
