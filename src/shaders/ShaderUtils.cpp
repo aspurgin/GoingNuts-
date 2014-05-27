@@ -484,3 +484,174 @@ PhongTextureShader ShaderUtils::installPhongTextureShader(const GLchar *vShaderN
    glUseProgram(0);
    return phongTextureShader;
 }
+
+BloomShader ShaderUtils::installBloomShaders(const GLchar *vBrightShaderName, const GLchar *fBrightShaderName,
+                                             const GLchar *vBlurShaderName, const GLchar *fBlurShaderName,
+                                             const GLchar *vCompositeShaderName, const GLchar *fCompositeShaderName) {
+   GLuint VS; //handles to shader object
+   GLuint FS; //handles to frag shader object
+   GLint vCompiled; //status
+   GLint fCompiled;
+   GLint linked;
+   int ShadeProg; //Shade prog nums
+   BloomShader bloomShader;
+
+   // INSTALL BRIGHT SHADERS
+   VS = glCreateShader(GL_VERTEX_SHADER);
+   FS = glCreateShader(GL_FRAGMENT_SHADER);
+
+   //load the source
+   glShaderSource(VS, 1, &vBrightShaderName, NULL);
+   glShaderSource(FS, 1, &fBrightShaderName, NULL);
+
+   //compile shader and print log
+   glCompileShader(VS);
+   /* check shader status requires helper functions */
+   printOpenGLError();
+   glGetShaderiv(VS, GL_COMPILE_STATUS, &vCompiled);
+   printShaderInfoLog(VS);
+
+   //compile shader and print log
+   glCompileShader(FS);
+   /* check shader status requires helper functions */
+   printOpenGLError();
+   glGetShaderiv(FS, GL_COMPILE_STATUS, &fCompiled);
+   printShaderInfoLog(FS);
+
+   if (!vCompiled || !fCompiled) {
+      printf("Error compiling either shader %s or %s", vBrightShaderName, fBrightShaderName);
+      throw(1);
+   }
+
+   //create a program object and attach the compiled shader
+   ShadeProg = glCreateProgram();
+   glAttachShader(ShadeProg, VS);
+   glAttachShader(ShadeProg, FS);
+
+   glLinkProgram(ShadeProg);
+   /* check shader status requires helper functions */
+   printOpenGLError();
+   glGetProgramiv(ShadeProg, GL_LINK_STATUS, &linked);
+   printProgramInfoLog(ShadeProg);
+
+   glUseProgram(ShadeProg);
+
+   /* get handles to attribute data */
+   bloomShader.h_aPositionBright = safe_glGetAttribLocation(ShadeProg, "aPosition");
+   bloomShader.h_uProjMatrixBright = safe_glGetUniformLocation(ShadeProg, "uProjMatrix");
+   bloomShader.h_uViewMatrixBright = safe_glGetUniformLocation(ShadeProg, "uViewMatrix");
+   bloomShader.h_uModelMatrixBright = safe_glGetUniformLocation(ShadeProg, "uModelMatrix");
+   bloomShader.shadeProgBright = ShadeProg;
+   // END BRIGHT SHADER INSTALLATION
+
+
+   // START BLUR SHADER INSTALLATION
+   VS = glCreateShader(GL_VERTEX_SHADER);
+   FS = glCreateShader(GL_FRAGMENT_SHADER);
+
+   //load the source
+   glShaderSource(VS, 1, &vBlurShaderName, NULL);
+   glShaderSource(FS, 1, &fBlurShaderName, NULL);
+
+   //compile shader and print log
+   glCompileShader(VS);
+   /* check shader status requires helper functions */
+   printOpenGLError();
+   glGetShaderiv(VS, GL_COMPILE_STATUS, &vCompiled);
+   printShaderInfoLog(VS);
+
+   //compile shader and print log
+   glCompileShader(FS);
+   /* check shader status requires helper functions */
+   printOpenGLError();
+   glGetShaderiv(FS, GL_COMPILE_STATUS, &fCompiled);
+   printShaderInfoLog(FS);
+
+   if (!vCompiled || !fCompiled) {
+      printf("Error compiling either shader %s or %s", vBlurShaderName, fBlurShaderName);
+      throw(1);
+   }
+
+   //create a program object and attach the compiled shader
+   ShadeProg = glCreateProgram();
+   glAttachShader(ShadeProg, VS);
+   glAttachShader(ShadeProg, FS);
+
+   glLinkProgram(ShadeProg);
+   /* check shader status requires helper functions */
+   printOpenGLError();
+   glGetProgramiv(ShadeProg, GL_LINK_STATUS, &linked);
+   printProgramInfoLog(ShadeProg);
+
+   glUseProgram(ShadeProg);
+
+   /* get handles to attribute data */
+   bloomShader.h_aPositionBlur = safe_glGetAttribLocation(ShadeProg, "aPosition");
+   bloomShader.h_uProjMatrixBlur = safe_glGetUniformLocation(ShadeProg, "uProjMatrix");
+   bloomShader.h_uViewMatrixBlur = safe_glGetUniformLocation(ShadeProg, "uViewMatrix");
+   bloomShader.h_uModelMatrixBlur = safe_glGetUniformLocation(ShadeProg, "uModelMatrix");
+   bloomShader.h_myTextureSamplerBlur  = glGetUniformLocation(ShadeProg, "myTextureSampler");
+   bloomShader.shadeProgBlur = ShadeProg;
+   // END BLUR SHADER INSTALLATION
+
+
+   // START COMPOSITE SHADER INSTALLATION
+   VS = glCreateShader(GL_VERTEX_SHADER);
+   FS = glCreateShader(GL_FRAGMENT_SHADER);
+
+   //load the source
+   glShaderSource(VS, 1, &vCompositeShaderName, NULL);
+   glShaderSource(FS, 1, &fCompositeShaderName, NULL);
+
+   //compile shader and print log
+   glCompileShader(VS);
+   /* check shader status requires helper functions */
+   printOpenGLError();
+   glGetShaderiv(VS, GL_COMPILE_STATUS, &vCompiled);
+   printShaderInfoLog(VS);
+
+   //compile shader and print log
+   glCompileShader(FS);
+   /* check shader status requires helper functions */
+   printOpenGLError();
+   glGetShaderiv(FS, GL_COMPILE_STATUS, &fCompiled);
+   printShaderInfoLog(FS);
+
+   if (!vCompiled || !fCompiled) {
+      printf("Error compiling either shader %s or %s", vCompositeShaderName, fCompositeShaderName);
+      throw(1);
+   }
+
+   //create a program object and attach the compiled shader
+   ShadeProg = glCreateProgram();
+   glAttachShader(ShadeProg, VS);
+   glAttachShader(ShadeProg, FS);
+
+   glLinkProgram(ShadeProg);
+   /* check shader status requires helper functions */
+   printOpenGLError();
+   glGetProgramiv(ShadeProg, GL_LINK_STATUS, &linked);
+   printProgramInfoLog(ShadeProg);
+
+   glUseProgram(ShadeProg);
+
+   /* get handles to attribute data */
+   bloomShader.h_aPositionComposite = safe_glGetAttribLocation(ShadeProg, "aPosition");
+   bloomShader.h_uProjMatrixComposite = safe_glGetUniformLocation(ShadeProg, "uProjMatrix");
+   bloomShader.h_uViewMatrixComposite = safe_glGetUniformLocation(ShadeProg, "uViewMatrix");
+   bloomShader.h_uModelMatrixComposite = safe_glGetUniformLocation(ShadeProg, "uModelMatrix");
+   bloomShader.h_myTextureSamplerComposite  = glGetUniformLocation(ShadeProg, "myTextureSampler");
+   bloomShader.h_uMatAmb = safe_glGetUniformLocation(ShadeProg, "uMat.aColor");
+   bloomShader.h_uMatDif = safe_glGetUniformLocation(ShadeProg, "uMat.dColor");
+   bloomShader.h_uMatSpec = safe_glGetUniformLocation(ShadeProg, "uMat.sColor");
+   bloomShader.h_uMatShine = safe_glGetUniformLocation(ShadeProg, "uMat.shine");
+   bloomShader.h_lightPosComposite = safe_glGetUniformLocation(ShadeProg, "lightPos");
+   bloomShader.h_cameraPosComposite = safe_glGetUniformLocation(ShadeProg, "cameraPos");
+   bloomShader.h_aNormalComposite = safe_glGetAttribLocation(ShadeProg, "aNormal");
+   bloomShader.shadeProgComposite = ShadeProg;
+   // END COMPOSITE SHADER INSTALLATION
+
+   glUseProgram(0);
+   return bloomShader;
+}
+   

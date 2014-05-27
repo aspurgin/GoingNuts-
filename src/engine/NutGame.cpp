@@ -251,6 +251,7 @@ void NutGame::fallDown(double toAdd) {
                         nutsLeft--;
                         Assets::playSound(Assets::NUT_S);
                         addToScore(5);
+                        player.addEnergy(10);
                         //DEBUG("Deleted Here 2");
                         delete gameGrid[row + 1][col];
                         gameGrid[row + 1][col] = 0;
@@ -296,6 +297,7 @@ void NutGame::fallDown(double toAdd) {
                         nutsLeft--;
                         Assets::playSound(Assets::NUT_S);
                         addToScore(5);
+                        player.addEnergy(10);
                         //DEBUG("Deleted Here 3");
                         delete gameGrid[row][col];
                         gameGrid[row][col] = 0;
@@ -652,6 +654,7 @@ void NutGame::handleKeyInput() {
                      nutsLeft--;
                      Assets::playSound(Assets::NUT_S);
                      addToScore(5);
+                     player.addEnergy(10);
                   }
                   else if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - .00001)]->getMovableType() == HARDHAT) {
                      player.collectHardHat();
@@ -686,6 +689,7 @@ void NutGame::handleKeyInput() {
                      nutsLeft--;
                      Assets::playSound(Assets::NUT_S);
                      addToScore(5);
+                     player.addEnergy(10);
                   }
                   else if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)]->getMovableType() == HARDHAT) {
                      player.collectHardHat();
@@ -831,4 +835,8 @@ void NutGame::explodeDynamiteAt(int row, int col) {
          }
       }
    }
+}
+
+Player NutGame::getPlayer() {
+   return this->player;
 }

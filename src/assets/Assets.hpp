@@ -37,6 +37,7 @@ namespace Assets {
    PhongTextureShader& getPhongTextureShader();
    PhongShader& getPShader();
    LightMapShader& getLightMapShader();
+   BloomShader& getBShader();
    void releaseAll();
    void update();
 };

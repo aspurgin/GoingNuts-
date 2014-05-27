@@ -1,16 +1,13 @@
 // This is the bright pass
 
-uniform sampler2D myTextureSampler;
-
-varying vec2 UV;
-
-float luminance;
-float middleGrey;
-float threshold;
-
 void main() {
+   float luminance = 0.8;
+   float middleGrey = 0.5;
+   float threshold = 0.8;
+
    // Get the color without any alterations
-   vec3 color = texture2D(myTextureSampler, vec2(UV.x, 1.0 - UV.y)).rgb;
+   // vec3 color = texture2D(myTextureSampler, vec2(UV.x, 1.0 - UV.y)).rgb;
+   vec3 color = vec3(0.5, 0.2, 0.1);
 
    // Adjust color based on grey scale and luminance
    color *= (middleGrey / luminance );
@@ -23,4 +20,5 @@ void main() {
 
    // Render first bright pass with this color
    gl_FragColor.rgb = color;
+   //gl_FragColor = vec4(0.5, 0.2, 0.1, 1.0);
 }

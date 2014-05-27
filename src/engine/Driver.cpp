@@ -110,7 +110,7 @@ int main(void)
    double delta;
    GLFWwindow* window;
    int last = 0, current;
-   char scoreString[20];
+   char scoreString[50];
    std::vector<Movable*> toBePassed;
    float fpsTime = 0;
    int fpsCount = 0;
@@ -154,6 +154,7 @@ int main(void)
       if (!game.player.getIsDead() && game.getNutsLeft() != 0) {
          game.checkGrid(delta);
          game.fallDown(delta);
+         game.player.takeAwayEnergy(delta);
       }
       game.updatePSystem(delta);
 
@@ -162,7 +163,7 @@ int main(void)
          fpsCount = 0;
          fpsTime = 0;
       }
-      sprintf(scoreString, "FPS: %.0f Score: %d", 1.0/delta, game.getScore());
+      sprintf(scoreString, "FPS: %.0f Score: %d Energy: %f", 1.0/delta, game.getScore(), game.player.getEnergyLeft());
       
       if (game.player.getIsDead()) {
          sprintf(scoreString, "FPS: %.0f Score: %d  You are Dead", 1.0/delta, game.getScore());

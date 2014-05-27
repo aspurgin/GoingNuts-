@@ -6,7 +6,7 @@ Nut::Nut(glm::vec3 center, float width, float height) {
    setObject(center, width, height);
    this->velocity = 1.f;
    this->model = Assets::getMesh(Assets::NUT_M);
-   this->shaderType = C_SHADE;
+   this->shaderType = B_SHADE;
    this->scale = 0.8f;
    scaleX = 0.8f;
    scaleY = 0.8f;
