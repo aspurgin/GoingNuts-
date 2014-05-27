@@ -43,6 +43,7 @@ class Player: public Movable {
       int getNumDynamites();
       void takeAwayEnergy(float toSub);
       void addEnergy(float toAdd);
+      bool threwDynamite;
    private:
       Texture texture;
       float velocity;
