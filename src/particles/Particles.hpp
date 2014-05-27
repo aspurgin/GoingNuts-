@@ -12,9 +12,10 @@
 #include <cstdlib>
 #include <glm/glm.hpp>
 #include "../rendering/Renderable.hpp"
+#include "../engine/Movable.hpp"
 #include "../assets/Assets.hpp"
 
-class Particle: public Renderable {
+class Particle: public Renderable, public Collidable {
    public:
       Particle(float mass, float ttl, glm::vec3 pos, glm::vec3 vel, int mat);
       ~Particle();
@@ -27,9 +28,7 @@ class Particle: public Renderable {
       glm::vec3 newVelocity; // not sure what this is for
       glm::vec3 netForce;
       
-      //Used for billboarding
       glm::vec3 front;
-      glm::vec3 axis;
       // Need list of things that are applying forces
       // Need textureID field
 
@@ -73,7 +72,7 @@ class ParticleSystem: public Renderable {
       /* turns off automatic generation of Particles */
       void stop();
       /* simulates the particles given a time step */
-      void timeStep(float dt);
+      void timeStep(float dt, Movable* gameGrid[17][7]);
 
       /* Need to implement for Renderable template */
       void render();
@@ -92,7 +91,7 @@ class ParticleSystem: public Renderable {
       glm::vec3 vel;
 
       /* calculates and sets net force for each Particle */
-      void computeForces();
+      void computeForces(Movable* gameGrid[17][7]);
       /* returns a random float from the range 0 to "of" */
       float percentOf(float of);
       /* returns a random float from the range "-of" to "of" */

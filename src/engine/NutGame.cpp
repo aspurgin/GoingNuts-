@@ -819,7 +819,24 @@ bool NutGame::isGameWon() {
 }
 
 void NutGame::updatePSystem(double dt) {
-   psystem.timeStep((float)dt);
+   static int num = 0, x = 0, y = 0;
+   //psystem.timeStep((float)dt/10, gameGrid);
+   psystem.timeStep((float)dt, gameGrid);
+   //psystem.setTTL(5);
+   //psystem.setInitialVelocity(glm::vec3(0, 1, 0));
+   //psystem.setSpread(glm::vec3(4, 1, 0));
+   //player.addEnergy(1);
+
+   /*num++;
+   if (num == 5) {
+      x = (x + 1) % 7;
+      if (!x)
+         y = (y + 1) % 10;
+      //psystem.moveTo(glm::vec3(-.5 + (float)x / 10.0f, 0.5 - (float)y / 10.0f, 0));
+      psystem.moveTo(glm::vec3(x, 2, 0));
+      num = 0;
+      psystem.add();
+   }*/
 }
 
 void NutGame::explodeDynamiteAt(int row, int col) {
