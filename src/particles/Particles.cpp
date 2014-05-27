@@ -45,7 +45,7 @@ ParticleSystem::ParticleSystem() {
    time = 0;
    ttl = 5;
    spread = glm::vec3(4, 1, 4);
-   vel = glm::vec3(0, 3, 3);
+   vel = glm::vec3(0, 3, 0);
    numParticles = 0;
    mat = 0;
 }
@@ -202,7 +202,7 @@ void ParticleSystem::computeForces(std::vector<std::vector<Movable *> > gameGrid
    int direction = 0;
    float horizontalPush = -1.8;
    float groundPush = -1.8;
-   float particleWidth = 0.1;
+   float particleWidth = 0.3;//Make this bigger if particles are going through blocks
    float blockWidth = 1;
 
    for (std::vector<Particle>::iterator it = p.begin(); it != p.end(); ++it) {
