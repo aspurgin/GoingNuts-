@@ -1,0 +1,704 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+  <asset><contributor><author></author><authoring_tool>FBX COLLADA exporter</authoring_tool><comments></comments></contributor><created>2014-05-27T09:47:08Z</created><keywords></keywords><modified>2014-05-27T09:47:08Z</modified><revision></revision><subject></subject><title></title><unit meter="0.010000" name="centimeter"></unit><up_axis>Y_UP</up_axis></asset>
+  <library_materials>
+    <material id="lambert1" name="lambert1">
+      <instance_effect url="#lambert1-fx"/>
+    </material>
+  </library_materials>
+  <library_effects>
+    <effect id="lambert1-fx" name="lambert1">
+      <profile_COMMON>
+        <technique sid="standard">
+          <lambert>
+            <emission>
+              <color sid="emission">0.000000  0.000000 0.000000 1.000000</color>
+            </emission>
+            <ambient>
+              <color sid="ambient">0.000000  0.000000 0.000000 1.000000</color>
+            </ambient>
+            <diffuse>
+              <color sid="diffuse">0.400000  0.400000 0.400000 1.000000</color>
+            </diffuse>
+            <transparent opaque="RGB_ZERO">
+              <color sid="transparent">0.000000  0.000000 0.000000 1.000000</color>
+            </transparent>
+            <transparency>
+              <float sid="transparency">1.000000</float>
+            </transparency>
+          </lambert>
+        </technique>
+      </profile_COMMON>
+    </effect>
+  </library_effects>
+  <library_geometries>
+    <geometry id="pCylinder1-lib" name="pCylinder1Mesh">
+      <mesh>
+        <source id="pCylinder1-POSITION">
+          <float_array id="pCylinder1-POSITION-array" count="30">
+0.000000 -0.375000 -0.100000
+-0.100000 -0.375000 -0.000000
+-0.000000 -0.375000 0.100000
+0.100000 -0.375000 0.000000
+0.074095 0.375000 -0.067156
+-0.067156 0.375000 -0.074095
+-0.074095 0.375000 0.067156
+0.067156 0.375000 0.074095
+0.000000 -0.375000 0.000000
+0.000000 0.375000 0.000000
+</float_array>
+          <technique_common>
+            <accessor source="#pCylinder1-POSITION-array" count="10" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="pCylinder1-Normal0">
+          <float_array id="pCylinder1-Normal0-array" count="144">
+-0.998885 -0.047205 -0.000024
+-0.670829 0.047205 -0.740109
+0.000024 -0.047205 -0.998885
+0.000024 -0.047205 -0.998885
+-0.670829 0.047205 -0.740109
+0.740108 0.047205 -0.670829
+-0.000024 -0.047205 0.998885
+-0.740108 0.047205 0.670829
+-0.998885 -0.047205 -0.000024
+-0.998885 -0.047205 -0.000024
+-0.740108 0.047205 0.670829
+-0.670829 0.047205 -0.740109
+0.998885 -0.047205 0.000024
+0.670829 0.047205 0.740109
+-0.000024 -0.047205 0.998885
+-0.000024 -0.047205 0.998885
+0.670829 0.047205 0.740109
+-0.740108 0.047205 0.670829
+0.000024 -0.047205 -0.998885
+0.740108 0.047205 -0.670829
+0.998885 -0.047205 0.000024
+0.998885 -0.047205 0.000024
+0.740108 0.047205 -0.670829
+0.670829 0.047205 0.740109
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 -0.000000
+0.000000 -1.000000 -0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 -0.000000
+0.000000 -1.000000 -0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 -0.000000
+0.000000 -1.000000 -0.000000
+0.000000 -1.000000 -0.000000
+0.000000 -1.000000 -0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 -0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 -0.000000
+0.000000 1.000000 -0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 -0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+</float_array>
+          <technique_common>
+            <accessor source="#pCylinder1-Normal0-array" count="48" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="pCylinder1-UV0">
+          <float_array id="pCylinder1-UV0-array" count="40">
+0.500000 0.000000
+0.343750 0.156250
+0.500000 0.312500
+0.656250 0.156250
+0.375000 0.312500
+0.437500 0.312500
+0.500000 0.312500
+0.562500 0.312500
+0.625000 0.312500
+0.375000 0.688440
+0.437500 0.688440
+0.500000 0.688440
+0.562500 0.688440
+0.625000 0.688440
+0.500000 0.687500
+0.343750 0.843750
+0.500000 1.000000
+0.656250 0.843750
+0.500000 0.150000
+0.500000 0.837500
+</float_array>
+          <technique_common>
+            <accessor source="#pCylinder1-UV0-array" count="20" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="pCylinder1-VERTEX">
+          <input semantic="POSITION" source="#pCylinder1-POSITION"/>
+        </vertices>
+        <triangles count="16" material="lambert1"><input semantic="VERTEX" offset="0" source="#pCylinder1-VERTEX"/><input semantic="NORMAL" offset="1" source="#pCylinder1-Normal0"/><input semantic="TEXCOORD" offset="2" set="0" source="#pCylinder1-UV0"/><p> 1 0 5 5 1 10 0 2 4 0 3 4 5 4 10 4 5 9 2 6 6 6 7 11 1 8 5 1 9 5 6 10 11 5 11 10 3 12 7 7 13 12 2 14 6 2 15 6 7 16 12 6 17 11 0 18 8 4 19 13 3 20 7 3 21 7 4 22 13 7 23 12 1 24 1 0 25 0 8 26 18 2 27 2 1 28 1 8 29 18 3 30 3 2 31 2 8 32 18 0 33 0 3 34 3 8 35 18 4 36 16 5 37 15 9 38 19 5 39 15 6 40 14 9 41 19 6 42 14 7 43 17 9 44 19 7 45 17 4 46 16 9 47 19</p></triangles>
+      </mesh>
+    </geometry>
+    <geometry id="pCylinder2-lib" name="pCylinder2Mesh">
+      <mesh>
+        <source id="pCylinder2-POSITION">
+          <float_array id="pCylinder2-POSITION-array" count="30">
+0.000000 -0.375000 -0.100000
+-0.100000 -0.375000 -0.000000
+-0.000000 -0.375000 0.100000
+0.100000 -0.375000 0.000000
+0.074095 0.375000 -0.067156
+-0.067156 0.375000 -0.074095
+-0.074095 0.375000 0.067156
+0.067156 0.375000 0.074095
+0.000000 -0.375000 0.000000
+0.000000 0.375000 0.000000
+</float_array>
+          <technique_common>
+            <accessor source="#pCylinder2-POSITION-array" count="10" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="pCylinder2-Normal0">
+          <float_array id="pCylinder2-Normal0-array" count="144">
+-0.998885 -0.047205 -0.000024
+-0.670829 0.047205 -0.740109
+0.000024 -0.047205 -0.998885
+0.000024 -0.047205 -0.998885
+-0.670829 0.047205 -0.740109
+0.740108 0.047205 -0.670829
+-0.000024 -0.047205 0.998885
+-0.740108 0.047205 0.670829
+-0.998885 -0.047205 -0.000024
+-0.998885 -0.047205 -0.000024
+-0.740108 0.047205 0.670829
+-0.670829 0.047205 -0.740109
+0.998885 -0.047205 0.000024
+0.670829 0.047205 0.740109
+-0.000024 -0.047205 0.998885
+-0.000024 -0.047205 0.998885
+0.670829 0.047205 0.740109
+-0.740108 0.047205 0.670829
+0.000024 -0.047205 -0.998885
+0.740108 0.047205 -0.670829
+0.998885 -0.047205 0.000024
+0.998885 -0.047205 0.000024
+0.740108 0.047205 -0.670829
+0.670829 0.047205 0.740109
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 -0.000000
+0.000000 -1.000000 -0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 -0.000000
+0.000000 -1.000000 -0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 -0.000000
+0.000000 -1.000000 -0.000000
+0.000000 -1.000000 -0.000000
+0.000000 -1.000000 -0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 -0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 -0.000000
+0.000000 1.000000 -0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 -0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+</float_array>
+          <technique_common>
+            <accessor source="#pCylinder2-Normal0-array" count="48" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="pCylinder2-UV0">
+          <float_array id="pCylinder2-UV0-array" count="40">
+0.500000 0.000000
+0.343750 0.156250
+0.500000 0.312500
+0.656250 0.156250
+0.375000 0.312500
+0.437500 0.312500
+0.500000 0.312500
+0.562500 0.312500
+0.625000 0.312500
+0.375000 0.688440
+0.437500 0.688440
+0.500000 0.688440
+0.562500 0.688440
+0.625000 0.688440
+0.500000 0.687500
+0.343750 0.843750
+0.500000 1.000000
+0.656250 0.843750
+0.500000 0.150000
+0.500000 0.837500
+</float_array>
+          <technique_common>
+            <accessor source="#pCylinder2-UV0-array" count="20" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="pCylinder2-VERTEX">
+          <input semantic="POSITION" source="#pCylinder2-POSITION"/>
+        </vertices>
+        <triangles count="16" material="lambert1"><input semantic="VERTEX" offset="0" source="#pCylinder2-VERTEX"/><input semantic="NORMAL" offset="1" source="#pCylinder2-Normal0"/><input semantic="TEXCOORD" offset="2" set="0" source="#pCylinder2-UV0"/><p> 1 0 5 5 1 10 0 2 4 0 3 4 5 4 10 4 5 9 2 6 6 6 7 11 1 8 5 1 9 5 6 10 11 5 11 10 3 12 7 7 13 12 2 14 6 2 15 6 7 16 12 6 17 11 0 18 8 4 19 13 3 20 7 3 21 7 4 22 13 7 23 12 1 24 1 0 25 0 8 26 18 2 27 2 1 28 1 8 29 18 3 30 3 2 31 2 8 32 18 0 33 0 3 34 3 8 35 18 4 36 16 5 37 15 9 38 19 5 39 15 6 40 14 9 41 19 6 42 14 7 43 17 9 44 19 7 45 17 4 46 16 9 47 19</p></triangles>
+      </mesh>
+    </geometry>
+    <geometry id="pCylinder3-lib" name="pCylinder3Mesh">
+      <mesh>
+        <source id="pCylinder3-POSITION">
+          <float_array id="pCylinder3-POSITION-array" count="30">
+0.000000 -0.375000 -0.100000
+-0.100000 -0.375000 -0.000000
+-0.000000 -0.375000 0.100000
+0.100000 -0.375000 0.000000
+0.074095 0.375000 -0.067156
+-0.067156 0.375000 -0.074095
+-0.074095 0.375000 0.067156
+0.067156 0.375000 0.074095
+0.000000 -0.375000 0.000000
+0.000000 0.375000 0.000000
+</float_array>
+          <technique_common>
+            <accessor source="#pCylinder3-POSITION-array" count="10" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="pCylinder3-Normal0">
+          <float_array id="pCylinder3-Normal0-array" count="144">
+-0.998885 -0.047205 -0.000024
+-0.670829 0.047205 -0.740109
+0.000024 -0.047205 -0.998885
+0.000024 -0.047205 -0.998885
+-0.670829 0.047205 -0.740109
+0.740108 0.047205 -0.670829
+-0.000024 -0.047205 0.998885
+-0.740108 0.047205 0.670829
+-0.998885 -0.047205 -0.000024
+-0.998885 -0.047205 -0.000024
+-0.740108 0.047205 0.670829
+-0.670829 0.047205 -0.740109
+0.998885 -0.047205 0.000024
+0.670829 0.047205 0.740109
+-0.000024 -0.047205 0.998885
+-0.000024 -0.047205 0.998885
+0.670829 0.047205 0.740109
+-0.740108 0.047205 0.670829
+0.000024 -0.047205 -0.998885
+0.740108 0.047205 -0.670829
+0.998885 -0.047205 0.000024
+0.998885 -0.047205 0.000024
+0.740108 0.047205 -0.670829
+0.670829 0.047205 0.740109
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 -0.000000
+0.000000 -1.000000 -0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 -0.000000
+0.000000 -1.000000 -0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 -0.000000
+0.000000 -1.000000 -0.000000
+0.000000 -1.000000 -0.000000
+0.000000 -1.000000 -0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 -0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 -0.000000
+0.000000 1.000000 -0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 -0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+</float_array>
+          <technique_common>
+            <accessor source="#pCylinder3-Normal0-array" count="48" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="pCylinder3-UV0">
+          <float_array id="pCylinder3-UV0-array" count="40">
+0.500000 0.000000
+0.343750 0.156250
+0.500000 0.312500
+0.656250 0.156250
+0.375000 0.312500
+0.437500 0.312500
+0.500000 0.312500
+0.562500 0.312500
+0.625000 0.312500
+0.375000 0.688440
+0.437500 0.688440
+0.500000 0.688440
+0.562500 0.688440
+0.625000 0.688440
+0.500000 0.687500
+0.343750 0.843750
+0.500000 1.000000
+0.656250 0.843750
+0.500000 0.150000
+0.500000 0.837500
+</float_array>
+          <technique_common>
+            <accessor source="#pCylinder3-UV0-array" count="20" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="pCylinder3-VERTEX">
+          <input semantic="POSITION" source="#pCylinder3-POSITION"/>
+        </vertices>
+        <triangles count="16" material="lambert1"><input semantic="VERTEX" offset="0" source="#pCylinder3-VERTEX"/><input semantic="NORMAL" offset="1" source="#pCylinder3-Normal0"/><input semantic="TEXCOORD" offset="2" set="0" source="#pCylinder3-UV0"/><p> 1 0 5 5 1 10 0 2 4 0 3 4 5 4 10 4 5 9 2 6 6 6 7 11 1 8 5 1 9 5 6 10 11 5 11 10 3 12 7 7 13 12 2 14 6 2 15 6 7 16 12 6 17 11 0 18 8 4 19 13 3 20 7 3 21 7 4 22 13 7 23 12 1 24 1 0 25 0 8 26 18 2 27 2 1 28 1 8 29 18 3 30 3 2 31 2 8 32 18 0 33 0 3 34 3 8 35 18 4 36 16 5 37 15 9 38 19 5 39 15 6 40 14 9 41 19 6 42 14 7 43 17 9 44 19 7 45 17 4 46 16 9 47 19</p></triangles>
+      </mesh>
+    </geometry>
+    <geometry id="pCylinder4-lib" name="pCylinder4Mesh">
+      <mesh>
+        <source id="pCylinder4-POSITION">
+          <float_array id="pCylinder4-POSITION-array" count="30">
+0.000000 -0.375000 -0.100000
+-0.100000 -0.375000 -0.000000
+-0.000000 -0.375000 0.100000
+0.100000 -0.375000 0.000000
+0.074095 0.375000 -0.067156
+-0.067156 0.375000 -0.074095
+-0.074095 0.375000 0.067156
+0.067156 0.375000 0.074095
+0.000000 -0.375000 0.000000
+0.000000 0.375000 0.000000
+</float_array>
+          <technique_common>
+            <accessor source="#pCylinder4-POSITION-array" count="10" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="pCylinder4-Normal0">
+          <float_array id="pCylinder4-Normal0-array" count="144">
+-0.998885 -0.047205 -0.000024
+-0.670829 0.047205 -0.740109
+0.000024 -0.047205 -0.998885
+0.000024 -0.047205 -0.998885
+-0.670829 0.047205 -0.740109
+0.740108 0.047205 -0.670829
+-0.000024 -0.047205 0.998885
+-0.740108 0.047205 0.670829
+-0.998885 -0.047205 -0.000024
+-0.998885 -0.047205 -0.000024
+-0.740108 0.047205 0.670829
+-0.670829 0.047205 -0.740109
+0.998885 -0.047205 0.000024
+0.670829 0.047205 0.740109
+-0.000024 -0.047205 0.998885
+-0.000024 -0.047205 0.998885
+0.670829 0.047205 0.740109
+-0.740108 0.047205 0.670829
+0.000024 -0.047205 -0.998885
+0.740108 0.047205 -0.670829
+0.998885 -0.047205 0.000024
+0.998885 -0.047205 0.000024
+0.740108 0.047205 -0.670829
+0.670829 0.047205 0.740109
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 -0.000000
+0.000000 -1.000000 -0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 -0.000000
+0.000000 -1.000000 -0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 -0.000000
+0.000000 -1.000000 -0.000000
+0.000000 -1.000000 -0.000000
+0.000000 -1.000000 -0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 -0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 -0.000000
+0.000000 1.000000 -0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 -0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+</float_array>
+          <technique_common>
+            <accessor source="#pCylinder4-Normal0-array" count="48" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="pCylinder4-UV0">
+          <float_array id="pCylinder4-UV0-array" count="40">
+0.500000 0.000000
+0.343750 0.156250
+0.500000 0.312500
+0.656250 0.156250
+0.375000 0.312500
+0.437500 0.312500
+0.500000 0.312500
+0.562500 0.312500
+0.625000 0.312500
+0.375000 0.688440
+0.437500 0.688440
+0.500000 0.688440
+0.562500 0.688440
+0.625000 0.688440
+0.500000 0.687500
+0.343750 0.843750
+0.500000 1.000000
+0.656250 0.843750
+0.500000 0.150000
+0.500000 0.837500
+</float_array>
+          <technique_common>
+            <accessor source="#pCylinder4-UV0-array" count="20" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="pCylinder4-VERTEX">
+          <input semantic="POSITION" source="#pCylinder4-POSITION"/>
+        </vertices>
+        <triangles count="16" material="lambert1"><input semantic="VERTEX" offset="0" source="#pCylinder4-VERTEX"/><input semantic="NORMAL" offset="1" source="#pCylinder4-Normal0"/><input semantic="TEXCOORD" offset="2" set="0" source="#pCylinder4-UV0"/><p> 1 0 5 5 1 10 0 2 4 0 3 4 5 4 10 4 5 9 2 6 6 6 7 11 1 8 5 1 9 5 6 10 11 5 11 10 3 12 7 7 13 12 2 14 6 2 15 6 7 16 12 6 17 11 0 18 8 4 19 13 3 20 7 3 21 7 4 22 13 7 23 12 1 24 1 0 25 0 8 26 18 2 27 2 1 28 1 8 29 18 3 30 3 2 31 2 8 32 18 0 33 0 3 34 3 8 35 18 4 36 16 5 37 15 9 38 19 5 39 15 6 40 14 9 41 19 6 42 14 7 43 17 9 44 19 7 45 17 4 46 16 9 47 19</p></triangles>
+      </mesh>
+    </geometry>
+    <geometry id="pCylinder5-lib" name="pCylinder5Mesh">
+      <mesh>
+        <source id="pCylinder5-POSITION">
+          <float_array id="pCylinder5-POSITION-array" count="48">
+0.130341 0.041684 -0.196017
+0.051683 0.041684 -0.226212
+-0.191488 0.041684 -0.116134
+-0.214666 0.041684 -0.024317
+-0.123597 0.041684 0.194637
+-0.030731 0.041684 0.220303
+0.183053 0.041684 0.134346
+0.233482 0.041684 0.051546
+0.130341 0.142569 -0.196017
+0.051683 0.142569 -0.226212
+-0.191488 0.142569 -0.116134
+-0.214666 0.142569 -0.024317
+-0.123597 0.142569 0.194637
+-0.030731 0.142569 0.220303
+0.183053 0.142569 0.134346
+0.233482 0.142569 0.051546
+</float_array>
+          <technique_common>
+            <accessor source="#pCylinder5-POSITION-array" count="16" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="pCylinder5-Normal0">
+          <float_array id="pCylinder5-Normal0-array" count="48">
+0.836711 0.000000 -0.547644
+-0.240907 0.000000 -0.970548
+-0.604079 0.000000 -0.796924
+-0.976959 0.000000 0.213425
+-0.799262 0.000000 0.600983
+0.192917 0.000000 0.981215
+0.538284 0.000000 0.842763
+0.987509 0.000000 -0.157564
+0.836711 0.000000 -0.547644
+-0.240907 0.000000 -0.970548
+-0.604079 0.000000 -0.796924
+-0.976959 0.000000 0.213425
+-0.799262 0.000000 0.600983
+0.192917 0.000000 0.981215
+0.538284 0.000000 0.842763
+0.987509 0.000000 -0.157564
+</float_array>
+          <technique_common>
+            <accessor source="#pCylinder5-Normal0-array" count="16" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="pCylinder5-UV0">
+          <float_array id="pCylinder5-UV0-array" count="36">
+0.375000 0.312500
+0.406250 0.312500
+0.437500 0.312500
+0.468750 0.312500
+0.500000 0.312500
+0.531250 0.312500
+0.562500 0.312500
+0.593750 0.312500
+0.625000 0.312500
+0.375000 0.688440
+0.406250 0.688440
+0.437500 0.688440
+0.468750 0.688440
+0.500000 0.688440
+0.531250 0.688440
+0.562500 0.688440
+0.593750 0.688440
+0.625000 0.688440
+</float_array>
+          <technique_common>
+            <accessor source="#pCylinder5-UV0-array" count="18" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="pCylinder5-VERTEX">
+          <input semantic="POSITION" source="#pCylinder5-POSITION"/>
+          <input semantic="NORMAL" source="#pCylinder5-Normal0"/>
+        </vertices>
+        <triangles count="16" material="lambert1"><input semantic="VERTEX" offset="0" source="#pCylinder5-VERTEX"/><input semantic="TEXCOORD" offset="1" set="0" source="#pCylinder5-UV0"/><p> 1 1 9 10 0 0 0 0 9 10 8 9 1 1 2 2 10 11 1 1 10 11 9 10 11 12 2 2 3 3 2 2 11 12 10 11 12 13 3 3 4 4 3 3 12 13 11 12 13 14 12 13 4 4 13 14 4 4 5 5 14 15 13 14 5 5 14 15 5 5 6 6 14 15 6 6 15 16 6 6 7 7 15 16 8 17 15 16 7 7 7 7 0 8 8 17</p></triangles>
+      </mesh>
+    </geometry>
+    <geometry id="pCylinder6-lib" name="pCylinder6Mesh">
+      <mesh>
+        <source id="pCylinder6-POSITION">
+          <float_array id="pCylinder6-POSITION-array" count="48">
+0.130341 0.041684 -0.196017
+0.051683 0.041684 -0.226212
+-0.191488 0.041684 -0.116134
+-0.214666 0.041684 -0.024317
+-0.123597 0.041684 0.194637
+-0.030731 0.041684 0.220303
+0.183053 0.041684 0.134346
+0.233482 0.041684 0.051546
+0.130341 0.142569 -0.196017
+0.051683 0.142569 -0.226212
+-0.191488 0.142569 -0.116134
+-0.214666 0.142569 -0.024317
+-0.123597 0.142569 0.194637
+-0.030731 0.142569 0.220303
+0.183053 0.142569 0.134346
+0.233482 0.142569 0.051546
+</float_array>
+          <technique_common>
+            <accessor source="#pCylinder6-POSITION-array" count="16" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="pCylinder6-Normal0">
+          <float_array id="pCylinder6-Normal0-array" count="48">
+0.836711 0.000000 -0.547644
+-0.240907 0.000000 -0.970548
+-0.604079 0.000000 -0.796924
+-0.976959 0.000000 0.213425
+-0.799262 0.000000 0.600983
+0.192917 0.000000 0.981215
+0.538284 0.000000 0.842763
+0.987509 0.000000 -0.157564
+0.836711 0.000000 -0.547644
+-0.240907 0.000000 -0.970548
+-0.604079 0.000000 -0.796924
+-0.976959 0.000000 0.213425
+-0.799262 0.000000 0.600983
+0.192917 0.000000 0.981215
+0.538284 0.000000 0.842763
+0.987509 0.000000 -0.157564
+</float_array>
+          <technique_common>
+            <accessor source="#pCylinder6-Normal0-array" count="16" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="pCylinder6-UV0">
+          <float_array id="pCylinder6-UV0-array" count="36">
+0.375000 0.312500
+0.406250 0.312500
+0.437500 0.312500
+0.468750 0.312500
+0.500000 0.312500
+0.531250 0.312500
+0.562500 0.312500
+0.593750 0.312500
+0.625000 0.312500
+0.375000 0.688440
+0.406250 0.688440
+0.437500 0.688440
+0.468750 0.688440
+0.500000 0.688440
+0.531250 0.688440
+0.562500 0.688440
+0.593750 0.688440
+0.625000 0.688440
+</float_array>
+          <technique_common>
+            <accessor source="#pCylinder6-UV0-array" count="18" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="pCylinder6-VERTEX">
+          <input semantic="POSITION" source="#pCylinder6-POSITION"/>
+          <input semantic="NORMAL" source="#pCylinder6-Normal0"/>
+        </vertices>
+        <triangles count="16" material="lambert1"><input semantic="VERTEX" offset="0" source="#pCylinder6-VERTEX"/><input semantic="TEXCOORD" offset="1" set="0" source="#pCylinder6-UV0"/><p> 1 1 9 10 0 0 0 0 9 10 8 9 1 1 2 2 10 11 1 1 10 11 9 10 11 12 2 2 3 3 2 2 11 12 10 11 12 13 3 3 4 4 3 3 12 13 11 12 13 14 12 13 4 4 13 14 4 4 5 5 14 15 13 14 5 5 14 15 5 5 6 6 14 15 6 6 15 16 6 6 7 7 15 16 8 17 15 16 7 7 7 7 0 8 8 17</p></triangles>
+      </mesh>
+    </geometry>
+  </library_geometries>
+  <library_visual_scenes>
+    <visual_scene id="TNT" name="TNT">
+      <node name="pCylinder1" id="pCylinder1" sid="pCylinder1"><matrix sid="matrix">1.000000 0.000000 0.000000 0.090674 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 -0.081374 0.000000 0.000000 0.000000 1.000000</matrix><instance_geometry url="#pCylinder1-lib"><bind_material><technique_common><instance_material symbol="lambert1" target="#lambert1"/></technique_common></bind_material></instance_geometry><extra><technique profile="FCOLLADA"><visibility>1.000000</visibility></technique></extra></node>
+      <node name="pCylinder2" id="pCylinder2" sid="pCylinder2"><matrix sid="matrix">0.781718 0.000000 -0.623632 -0.083699 0.000000 1.000000 0.000000 0.000000 0.623632 0.000000 0.781718 -0.074399 0.000000 0.000000 0.000000 1.000000</matrix><instance_geometry url="#pCylinder2-lib"><bind_material><technique_common><instance_material symbol="lambert1" target="#lambert1"/></technique_common></bind_material></instance_geometry><extra><technique profile="FCOLLADA"><visibility>1.000000</visibility></technique></extra></node>
+      <node name="pCylinder3" id="pCylinder3" sid="pCylinder3"><matrix sid="matrix">0.789604 0.000000 0.613616 0.088349 0.000000 1.000000 0.000000 0.000000 -0.613616 0.000000 0.789604 0.088349 0.000000 0.000000 0.000000 1.000000</matrix><instance_geometry url="#pCylinder3-lib"><bind_material><technique_common><instance_material symbol="lambert1" target="#lambert1"/></technique_common></bind_material></instance_geometry><extra><technique profile="FCOLLADA"><visibility>1.000000</visibility></technique></extra></node>
+      <node name="pCylinder4" id="pCylinder4" sid="pCylinder4"><matrix sid="matrix">1.000000 0.000000 0.000000 -0.086024 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.090674 0.000000 0.000000 0.000000 1.000000</matrix><instance_geometry url="#pCylinder4-lib"><bind_material><technique_common><instance_material symbol="lambert1" target="#lambert1"/></technique_common></bind_material></instance_geometry><extra><technique profile="FCOLLADA"><visibility>1.000000</visibility></technique></extra></node>
+      <node name="pCylinder5" id="pCylinder5" sid="pCylinder5"><matrix sid="matrix">0.921342 0.000000 -0.388754 -0.002025 0.000000 1.000000 0.000000 0.077006 0.388754 0.000000 0.921342 0.004050 0.000000 0.000000 0.000000 1.000000</matrix><instance_geometry url="#pCylinder5-lib"><bind_material><technique_common><instance_material symbol="lambert1" target="#lambert1"/></technique_common></bind_material></instance_geometry><extra><technique profile="FCOLLADA"><visibility>1.000000</visibility></technique></extra></node>
+      <node name="pCylinder6" id="pCylinder6" sid="pCylinder6"><matrix sid="matrix">0.921342 0.000000 -0.388754 -0.002025 0.000000 1.000000 0.000000 -0.256872 0.388754 0.000000 0.921342 0.004050 0.000000 0.000000 0.000000 1.000000</matrix><instance_geometry url="#pCylinder6-lib"><bind_material><technique_common><instance_material symbol="lambert1" target="#lambert1"/></technique_common></bind_material></instance_geometry><extra><technique profile="FCOLLADA"><visibility>1.000000</visibility></technique></extra></node>
+      <extra><technique profile="MAX3D"><frame_rate>24.000000</frame_rate></technique><technique profile="FCOLLADA"><start_time>0.041667</start_time><end_time>2.000000</end_time></technique></extra>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#TNT"></instance_visual_scene>
+  </scene>
+</COLLADA>
