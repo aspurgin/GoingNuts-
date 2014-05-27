@@ -205,7 +205,6 @@ void ParticleSystem::computeForces(std::vector<std::vector<Movable *> > gameGrid
    float particleWidth = 0.1;
    float blockWidth = 1;
 
-   printf("numRows: %d\n", numRows);
    for (std::vector<Particle>::iterator it = p.begin(); it != p.end(); ++it) {
       it->netForce = glm::vec3(0, GRAVITY * it->mass, 0);
 
