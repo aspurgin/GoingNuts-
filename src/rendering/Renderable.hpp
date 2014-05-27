@@ -10,8 +10,10 @@
 #include "../shaders/LightMapShader.hpp"
 #include "../assets/Assets.hpp"
 #include "../assets/Texture.hpp"
+#include "Camera.hpp"
+#include "Light.hpp"
 
-enum {C_SHADE, CT_SHADE, P_SHADE, PT_SHADE};
+enum {C_SHADE, CT_SHADE, P_SHADE, PT_SHADE, B_SHADE};
 
 class Renderable {
    protected:
@@ -30,11 +32,13 @@ class Renderable {
       CellShaderTexture ctshader;
       PhongTextureShader ptshader;
       PhongShader pshader;
+      BloomShader bshader;
       Mesh model;
       void csRender();
       void ctsRender();
       void psRender();
       void ptsRender();
+      void bRender();
    public:
       Renderable();
       virtual void render();// = 0;

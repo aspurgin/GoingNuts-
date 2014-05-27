@@ -22,6 +22,7 @@ namespace Assets {
       LightMapShader lmshader;
       PhongTextureShader ptshader;
       PhongShader pshader;
+      BloomShader bshader;
   
       //code found from tutorial: http://katyscode.wordpress.com/2012/10/05/cutting-your-teeth-on-fmod-part-1-build-environment-initialization-and-playing-sounds/
       void FMODErrorCheck(FMOD_RESULT res) {
@@ -102,23 +103,30 @@ namespace Assets {
 
       void initShaders() {
          pshader = ShaderUtils::installPhongShader(textFileRead((char *) "assets/shaders/Phong_Vert.glsl"),
-            textFileRead((char *) "assets/shaders/Phong_Frag.glsl"));
+                                                   textFileRead((char *) "assets/shaders/Phong_Frag.glsl"));
 
 
          cshader = ShaderUtils::installCellShader(textFileRead((char *) "assets/shaders/CellShader_Vert.glsl"),
-            textFileRead((char *) "assets/shaders/CellShader_Frag.glsl"));
+                                                  textFileRead((char *) "assets/shaders/CellShader_Frag.glsl"));
 
          ctshader = ShaderUtils::installCellShaderTexture(textFileRead((char *) "assets/shaders/CellShaderTexture_Vert.glsl"),
-            textFileRead((char *) "assets/shaders/CellShaderTexture_Frag.glsl"));
+                                                          textFileRead((char *) "assets/shaders/CellShaderTexture_Frag.glsl"));
 
          ptshader = ShaderUtils::installPhongTextureShader(textFileRead((char *) "assets/shaders/PhongTextureShader_Vert.glsl"),
-            textFileRead((char *) "assets/shaders/PhongTextureShader_Frag.glsl"));
+                                                           textFileRead((char *) "assets/shaders/PhongTextureShader_Frag.glsl"));
 
          ftshader = ShaderUtils::installFlatTextureShader(textFileRead((char *) "assets/shaders/FlatTextureShader_Vert.glsl"),
-            textFileRead((char *) "assets/shaders/FlatTextureShader_Frag.glsl"));
+                                                          textFileRead((char *) "assets/shaders/FlatTextureShader_Frag.glsl"));
 
          lmshader = ShaderUtils::installLightMapShader(textFileRead((char *) "assets/shaders/LightMap_Vert.glsl"), 
-            textFileRead((char *) "assets/shaders/LightMap_Frag.glsl"));
+                                                       textFileRead((char *) "assets/shaders/LightMap_Frag.glsl"));
+
+         bshader = ShaderUtils::installBloomShaders(textFileRead((char *) "assets/shaders/BloomShaderBright_Vert.glsl"),
+                                                    textFileRead((char *) "assets/shaders/BloomShaderBright_Frag.glsl"),
+                                                    textFileRead((char *) "assets/shaders/BloomShaderBlur_Vert.glsl"),
+                                                    textFileRead((char *) "assets/shaders/BloomShaderBlur_Frag.glsl"),
+                                                    textFileRead((char *) "assets/shaders/BloomShaderComposite_Vert.glsl"),
+                                                    textFileRead((char *) "assets/shaders/BloomShaderComposite_Frag.glsl"));
       }
 
       void loadSound(const char *filename, int type) {
@@ -247,6 +255,10 @@ namespace Assets {
 
    LightMapShader& getLightMapShader() {
       return lmshader;
+   }
+
+   BloomShader& getBShader() {
+      return bshader;
    }
    
    void releaseAll() {

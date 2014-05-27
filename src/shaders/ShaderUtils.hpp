@@ -24,6 +24,7 @@
 #include "PhongTextureShader.hpp"
 #include "DebugShadowShader.hpp"
 #include "LightMapShader.hpp"
+#include "BloomShader.hpp"
 
 class ShaderUtils {
    public:
@@ -34,6 +35,9 @@ class ShaderUtils {
       static PhongTextureShader installPhongTextureShader(const GLchar*, const GLchar*);
       static DebugShadowShader installDebugShadowShader(const GLchar*, const GLchar*);
       static LightMapShader installLightMapShader(const GLchar*, const GLchar*);
+      static BloomShader installBloomShaders(const GLchar *vBrightShaderName, const GLchar *fBrightShaderName,
+                                             const GLchar *vBlurShaderName, const GLchar *fBlurShaderName,
+                                             const GLchar *vCompositeShaderName, const GLchar *fCompositeShaderName);
    private:
       ShaderUtils();
 };

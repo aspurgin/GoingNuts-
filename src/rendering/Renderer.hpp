@@ -8,6 +8,7 @@
 #include "OrthographicCamera.hpp"
 #include "Light.hpp"
 #include "../shaders/PhongShader.hpp"
+#include "../shaders/BloomShader.hpp"
 #include "../shaders/PhongTextureShader.hpp"
 #include "../shaders/CellShaderTexture.hpp"
 #include "../shaders/DebugShadowShader.hpp"
@@ -33,6 +34,8 @@ class Renderer {
       DebugShadowShader dSS;
       GLuint fb_tex;
       GLuint fb;
+      GLuint fbBloom_tex1;
+      GLuint fbBloom1;
       int shadow_size;
       std::list<Renderable *> currObjs;
       void renderHud();
@@ -41,6 +44,7 @@ class Renderer {
       void renderWinLoss();
       void renderDebugShadowMapText();
       void renderNormalMappedCylinder();
+      void checkGLError();
 
    public:
       Camera camera;
@@ -53,6 +57,7 @@ class Renderer {
       CellShaderTexture cetshader;
       FlatTextureShader ctshader;
       LightMapShader lmShader;
+      BloomShader bshader;
       RenderingHelper modelTrans;
       int winWidth, winHeight;
       NutGame *ngame;

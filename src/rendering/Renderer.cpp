@@ -61,6 +61,7 @@ Renderer::Renderer(int width, int height, NutGame *game, Hud* hud) {
    pshader = Assets::getPShader();
    ctshader = Assets::getFlatTextureShader();
    lmShader = Assets::getLightMapShader();
+   bshader = Assets::getBShader();
    light = Light();
    winWidth = width;
    winHeight = height;
@@ -134,14 +135,48 @@ void Renderer::initialize() {
 
    //Go back to using the original frame buffer
    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
    //End tutorial code
+
+   // START OF FBO FOR BLOOM
+   fbBloom1 = 0;
+   fbBloom_tex1 = 0;
+   // generate the frame buffer
+   glGenFramebuffers(1, &fbBloom1);
+   // generate the texture
+   glGenTextures(1, &fbBloom_tex1);
+   // Bind our frame buffer
+   glBindFramebuffer(GL_FRAMEBUFFER, fbBloom1);
+   
+   //create the colorbuffer texture and attach it to the frame buffer
+   glEnable(GL_TEXTURE_2D);
+   glActiveTexture(GL_TEXTURE2);
+   glBindTexture(GL_TEXTURE_2D, fbBloom_tex1);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 1280, 720, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fbBloom_tex1, 0);
+   glDisable(GL_TEXTURE_2D);
+
+
+   GLenum drawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
+   glDrawBuffers(1, drawBuffers);
+
+   checkGLError();
+   //Go back to using the original frame buffer
+   glBindFramebuffer(GL_FRAMEBUFFER, 0);
+   // END OF FBO FOR BLOOM
 
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
    initDebugLightMap();
 
    cylinder = new Cylinder();
+
+   printf("this is fbBloom1 %d\n", fbBloom1);
+   printf("this is fbBloom_tex1 %d\n", fbBloom_tex1);
 }
 
 void Renderer::setModel() {
@@ -220,7 +255,7 @@ void Renderer::renderLightShadowMap() {
 void Renderer::renderGame() {
 
    //*** Render the Game ***/
-   glUseProgram(cshader.shadeProg);//cshader.shadeProg);
+   glUseProgram(cshader.shadeProg);
    glViewport(0, 0, (GLsizei)1280, (GLsizei)720);
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
@@ -244,18 +279,20 @@ void Renderer::renderGame() {
 
    //setModel();
    renderWalls();
-   //std::list<Renderable*> nuts = ngame->getNutsToDraw();
 
    ngame->psystem.render();
    
-   for (std::list<Renderable*>::iterator it = currObjs.begin(); it != currObjs.end(); ++it) {
-      (*it)->render(); 
+   std::list<Renderable*> blocks = ngame->getBlocksToDraw();
+   for (std::list<Renderable*>::iterator it = blocks.begin(); it != blocks.end(); ++it) {
+      (*it)->render();
    }
-
    ngame->player.render();
 
-   glUseProgram(0);
-   
+
+   std::list<Renderable*> nuts = ngame->getNutsToDraw();
+   for (std::list<Renderable*>::iterator iter = nuts.begin(); iter != nuts.end(); ++iter) {
+      (*iter)->render();
+   }
 }
 
 void Renderer::renderWinLoss() {
@@ -343,4 +380,13 @@ void Renderer::render() {
    //renderDebugShadowMapText();
    //renderNormalMappedCylinder();
 
+}
+
+void Renderer::checkGLError() {
+   if (GL_NO_ERROR != glGetError()) {
+      printf("GL Failed\n");
+   }
+   else {
+      printf("GL Success\n");
+   }
 }

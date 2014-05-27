@@ -1,10 +1,10 @@
-#include "CellShader.hpp"
+#include "BloomShader.hpp"
 
-CellShader::CellShader() {
+BloomShader::BloomShader() {
 }
 
-void CellShader::setMaterial(int i) {
-  glUseProgram(shadeProg);
+void BloomShader::setMaterial(int i) {
+  glUseProgram(shadeProgComposite);
   switch (i) {
     case 0:
       safe_glUniform3f(h_uMatAmb, 0.2, 0.2, 0.2);
