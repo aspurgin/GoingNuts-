@@ -25,9 +25,14 @@ public:
    glm::vec3 wVector;
    glm::vec3 uVector;
    glm::vec3 vVector;
+   bool shakeUp;
+   bool isShaking;
+   float delta;
+   int shakeFrames;
+   float maxDelta;
    Camera();
    Camera(glm::vec3, glm::vec3, glm::vec3);
-   void shake();
+   void shake(float);
    void setView(GLint);
    void setProjectionMatrix(GLint, float, float, float);
    void setEye(glm::vec3);

@@ -25,7 +25,7 @@ Player::Player(glm::vec3 center, float width, float height) {
    this->foodPercent = 100;
    this->texture = Assets::getTexture(Assets::SQUIRREL_T);
 }
-
+  
 void Player::drillBlock(Block *block) {
    drill->drillBlock(block);
 }
@@ -54,7 +54,7 @@ bool Player::getIsDead() {
 }
 
 void Player::checkMoveState() {
-   model->setAt("run", glfwGetTime());
+   model->setAt("run", glfwGetTime()*2);
    switch(horDirection) {
       case LEFT:
          ang = -90;

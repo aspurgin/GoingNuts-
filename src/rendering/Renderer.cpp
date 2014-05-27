@@ -119,8 +119,9 @@ namespace Renderer {
 
          //Initialize my shader for the light shadow map
          glUseProgram(lmShader.shadeProg);
-         camera.setPosition(glm::vec3(3.0f, ngame->player.getCenter().y, 8.0f));
-         light.setPosition(glm::vec3(0, ngame->player.getCenter().y, 6.0f));
+         //float eyeOffsetX = ngame->player.getCenter().x + (ngame->player.getCenter().x - 3)*2/5.0;
+         //camera.setPosition(glm::vec3(3.0, ngame->player.getCenter().y, 8.0f));
+         //light.setPosition(glm::vec3(3.0, ngame->player.getCenter().y, 8.0f));
 
          //for the view and projection, use the virtual camera at the light's position
          light.getLightCam().setView(lmShader.h_uViewMatrix);
@@ -150,7 +151,7 @@ namespace Renderer {
          modelTrans.loadIdentity();
 
          /***************************BEGIN TEST CODE**********************************
-         */glClearColor(1,1,1,1);/*
+         */glClearColor(0.2,0.2,0.2,1);/*
          static float test = 0;
          static float step = 0.02;
 
@@ -165,8 +166,17 @@ namespace Renderer {
 
          /***************************END TEST CODE**********************************/
 
-         camera.setEye(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y, 10.0f));
-         light.setPosition(glm::vec3(0, ngame->player.getCenter().y, 6.0f));
+         /*float eyeOffsetX = 3.0;
+         if(ngame->player.movingHorizontal() == LEFT) {
+            eyeOffsetX = 0;
+         }
+         else if(ngame->player.movingHorizontal() == RIGHT) {
+            eyeOffsetX = 7;
+         }*/
+         
+         if(ngame->throwDynamitePressed) {
+            camera.shake(0.2);
+         }
          light.getLightCam().setLookAt(glm::vec3(3.0, ngame->player.getCenter().y, 0));
 
          if (toggle) {
@@ -442,7 +452,15 @@ namespace Renderer {
       currObjs = ngame->getObjectsToDraw();
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+      
       renderHud();
+      
+      float eyeOffsetX = 3.0 + (ngame->player.getCenter().x - 3)/1.4;
+      float eyeOffsetZ = 10.0 + (ngame->player.getCenter().x - 3)*(ngame->player.getCenter().x - 3)/10.0;
+      camera.setEye(glm::vec3(eyeOffsetX, ngame->player.getCenter().y, eyeOffsetZ));
+      light.setPosition(glm::vec3(3.0, ngame->player.getCenter().y, 8.0f));
+
+
       renderLightShadowMap();
       renderGame();
       renderWinLoss();

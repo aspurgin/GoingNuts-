@@ -52,6 +52,7 @@ void Nut::updateOffset() {
    }
 
    offset.y = height;
+   offset.z = -1.0;
 }
 
 void Nut::render() {

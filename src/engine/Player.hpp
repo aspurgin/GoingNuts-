@@ -6,7 +6,7 @@
 #include "NormalDrill.hpp"
 #include "SuperDrill.hpp"
 
-#define HOR_MOVE_RATE 3
+#define HOR_MOVE_RATE 5.0
 
 enum Direction {LEFT, RIGHT, STOPPED};
 

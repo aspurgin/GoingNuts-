@@ -22,5 +22,5 @@ int SandBlock::getStrength() {
 }
 
 float SandBlock::getMoveSpeedPercentage() {
-   return 50;
+   return 20;
 }

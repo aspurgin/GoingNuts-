@@ -8,6 +8,8 @@ Camera::Camera(glm::vec3 e, glm::vec3 lA, glm::vec3 up) {
    eye = e;//glm::vec3(3.0f, 1.0f, 10.0f);
    lookAt = lA;//glm::vec3(3.0f, 0.0f, 5.0f);
    upVec = up;//glm::vec3(0, 1, 0);
+   isShaking = false;
+   shakeUp = true;
 }
 
 void Camera::setView(GLint  viewHandle) {
@@ -21,12 +23,35 @@ void Camera::setProjectionMatrix(GLint projectionHandle, float ratio, float near
    safe_glUniformMatrix4fv(projectionHandle, glm::value_ptr(Projection));
 }
 
-void Camera::shake() {
-
+void Camera::shake(float max) {
+   isShaking = true;
+   shakeFrames = 0;
+   delta = 0;
+   maxDelta = max;
 }
 
 void Camera::setEye(glm::vec3 pos) {
    eye = pos;
+   if(isShaking) {
+      shakeFrames++;
+      eye.y += delta;
+      lookAt.y += delta;
+      if(shakeUp) {
+         delta += 0.1;
+      }
+      else {
+         delta -= 0.1;
+      } 
+      if(delta > maxDelta) {
+         shakeUp = false;
+      }
+      else if(delta < -maxDelta) {
+         shakeUp = true;
+      }
+      if(shakeFrames > 30) {
+         isShaking = false;
+      }
+   }
    //lookAt.z = pos.z - 15;//15;
    //lookAt.y = pos.y;// - 1;
 }
