@@ -26,6 +26,8 @@
 #include "DepthMask.hpp"
 #include "ScoreMask.hpp"
 #include "Number.hpp"
+#include "HardHatImage.hpp"
+#include "DynamiteImage.hpp"
 
 class Hud: public Renderable
 {
@@ -40,6 +42,9 @@ class Hud: public Renderable
       NutGame* nutGame;
       YouWon* youWon;
       YouLost* youLost;
+      HardHatImage* hardHatImage;
+      DynamiteImage* dynamiteImage;
+      QuestionMark* questionMark;
       std::vector<Renderable*> components;
 };
 

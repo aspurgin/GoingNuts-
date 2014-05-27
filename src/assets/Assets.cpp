@@ -11,7 +11,7 @@ namespace Assets {
       //create a map for sounds and music
       std::map<int, FMOD::Sound*> sounds, music;
 
-      Mesh squirrel, block, nut, depthWheel, background, guageMask1, guageMask2, scoreMask1, scoreMask2, youWon, youLost, cylinder, goingNuts, sun, nutColor, nutOutline, energy, points, powerUpBG, questionMark, level, depth, depthMask, scoreMask, number, hardHat, dynamite;
+      Mesh squirrel, block, nut, depthWheel, background, guageMask1, guageMask2, scoreMask1, scoreMask2, youWon, youLost, cylinder, goingNuts, sun, nutColor, nutOutline, energy, points, powerUpBG, questionMark, level, depth, depthMask, scoreMask, number, hardHat, dynamite, hardHatImage, dynamiteImage;
 
       Texture whiteDepthWheel, blackDepthWheel, hudElements, cylinderNormal, cylinderColor, dirtColor, dirtNormal, rockColor, rockNormal, squirrelTex, crystalNormal, sandNormal, lavaNormal;
       std::map<int, Mesh*> meshes;
@@ -96,7 +96,9 @@ namespace Assets {
          number = Mesh("assets/models/Number1.obj");
          hardHat = Mesh("assets/models/HardHat.obj");
          dynamite = Mesh("assets/models/TNT.dae");
-
+         hardHatImage = Mesh("assets/models/HardHatImage.obj");
+         dynamiteImage = Mesh("assets/models/DynamiteImage.obj");
+         
          block.buildBuffers();
          squirrel.buildBuffers();
          nut.buildBuffers();
@@ -124,6 +126,8 @@ namespace Assets {
          number.buildBuffers();
          hardHat.buildBuffers();
          dynamite.buildBuffers();
+         hardHatImage.buildBuffers();
+         dynamiteImage.buildBuffers();
 
          meshes[SQUIRREL_M] = &squirrel;
          meshes[BLOCK_M] = &block;
@@ -152,6 +156,8 @@ namespace Assets {
          meshes[NUMBER_M] = &number;
          meshes[HHAT_M] = &hardHat;
          meshes[TNT_M] = &dynamite;
+         meshes[HARD_HAT_IMAGE_M] = &hardHatImage;
+         meshes[DYNAMITE_IMAGE_M] = &dynamiteImage;
       }
 
       void initShaders() {
