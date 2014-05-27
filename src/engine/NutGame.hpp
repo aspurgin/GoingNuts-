@@ -69,6 +69,7 @@ class NutGame {
       bool up;
       bool throwDynamitePressed;
       bool releasedSinceThrowDynamitePressed;
+      Player getPlayer();
       Player player;
       //Added these to have a single particle system in the game instead of per block
       ParticleSystem psystem;

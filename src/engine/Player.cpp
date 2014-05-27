@@ -22,6 +22,7 @@ Player::Player(glm::vec3 center, float width, float height) {
    this->horDirection = STOPPED;
    this->movingToColumn = 3;
    this->numDynamites = 0;
+   this->foodPercent = 100;
    this->texture = Assets::getTexture(Assets::SQUIRREL_T);
 }
 
@@ -141,4 +142,16 @@ void Player::throwDynamite() {
 
 int Player::getNumDynamites() {
    return numDynamites;
+}
+
+void Player::takeAwayEnergy(float toSub) {
+   foodPercent -= 5 * toSub;
+}
+
+float Player::getEnergyLeft() {
+   return foodPercent;
+}
+
+void Player::addEnergy(float toAdd) {
+   foodPercent += toAdd;
 }

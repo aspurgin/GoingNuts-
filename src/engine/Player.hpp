@@ -19,7 +19,7 @@ class Player: public Movable {
       bool shouldFall();
       void setWillFall();
       int getDepth();
-      float getEnergy();
+      float getEnergyLeft();
       void died();
       bool getIsDead();
       void render();
@@ -40,6 +40,8 @@ class Player: public Movable {
       void collectDynamite();
       void throwDynamite();
       int getNumDynamites();
+      void takeAwayEnergy(float toSub);
+      void addEnergy(float toAdd);
    private:
       Texture texture;
       float velocity;
@@ -53,6 +55,7 @@ class Player: public Movable {
       bool hasHardHat;
       int numDynamites;
       void checkMoveState();
+      float foodPercent;
 };
 
 #endif
