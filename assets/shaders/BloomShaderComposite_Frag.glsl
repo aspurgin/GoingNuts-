@@ -40,8 +40,8 @@ void main() {
    vec3 eyeVert = eyePos - positionVec;
    eyeVert = normalize(eyeVert);
 
-   vec3 lightVert = eyePos - lightVec;
-   lightVert = normalize(lightVert);
+   vec3 lightVert = lightVec - positionVec;
+   lightVert = normalize(lightVec);
 
    normalVec = normalize(normalVec);
    float angleBetweenCamera = dot(normalVec, eyeVert);

@@ -285,6 +285,7 @@ void Renderable::bRender() {
 
 
    // BLUR PASS
+   glClearColor(0, 0, 0, 1.0);
    glBindFramebuffer(GL_FRAMEBUFFER, 2);
    glViewport(0, 0, 1280, 720);
    glUseProgram(bshader.shadeProgBlur);
@@ -328,6 +329,7 @@ void Renderable::bRender() {
 
 
    // COMPOSITE PASS
+   glClearColor(0, 0, 0, 1.0);
    glViewport(0, 0, (GLsizei)1280, (GLsizei)720);
    glDisable(GL_TEXTURE_2D);
    glUseProgram(bshader.shadeProgComposite);
