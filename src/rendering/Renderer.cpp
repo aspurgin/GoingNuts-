@@ -218,7 +218,8 @@ namespace Renderer {
             eyeOffsetX = 7;
          }*/
          
-         if(ngame->throwDynamitePressed) {
+         if(ngame->throwDynamitePressed && ngame->player.threwDynamite) {
+            ngame->player.threwDynamite = false;
             camera.shake(0.2);
          }
          light.getLightCam().setLookAt(glm::vec3(3.0, ngame->player.getCenter().y, 0));

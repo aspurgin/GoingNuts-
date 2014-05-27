@@ -25,6 +25,7 @@ Player::Player(glm::vec3 center, float width, float height) {
    this->foodPercent = 100;
    this->texture = Assets::getTexture(Assets::SQUIRREL_T);
    this->hat = HardHat(center, 0.99, 0.99);
+   this->threwDynamite = false;
 }
   
 void Player::drillBlock(Block *block) {
@@ -144,6 +145,7 @@ void Player::collectDynamite() {
 }
 
 void Player::throwDynamite() {
+   threwDynamite = true;
    numDynamites--;
 }
 
@@ -152,7 +154,7 @@ int Player::getNumDynamites() {
 }
 
 void Player::takeAwayEnergy(float toSub) {
-   foodPercent -= 5 * toSub;
+   foodPercent -= 2.5 * toSub;
    if (foodPercent <= 0) {
       isDead = true;
    }
