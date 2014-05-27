@@ -14,7 +14,7 @@ DirtBlock::DirtBlock(glm::vec3 center, float width, float height, int color, Par
    this->color = color;
    this->mat = color;
    this->psystem = psystem;
-   this->shaderType = C_SHADE;
+   this->shaderType = PT_SHADE;
    this->colorTexture = Assets::getTexture(Assets::DIRT_COLOR_T);
    this->normalTexture = Assets::getTexture(Assets::DIRT_NORMAL_T);
 }

@@ -13,7 +13,7 @@ namespace Assets {
 
       Mesh squirrel, block, nut, depthWheel, background, guageMask1, guageMask2, scoreMask1, scoreMask2, youWon, youLost, cylinder, goingNuts, sun, nutColor, nutOutline, energy, points, powerUpBG, questionMark, level, depth, depthMask, scoreMask, number, hardHat, dynamite;
 
-      Texture whiteDepthWheel, blackDepthWheel, hudElements, cylinderNormal, cylinderColor, dirtColor, dirtNormal, rockColor, rockNormal, squirrelTex;
+      Texture whiteDepthWheel, blackDepthWheel, hudElements, cylinderNormal, cylinderColor, dirtColor, dirtNormal, rockColor, rockNormal, squirrelTex, crystalNormal, sandNormal, lavaNormal;
       std::map<int, Mesh*> meshes;
       std::map<int, Texture> textures;
       CellShader cshader;
@@ -46,8 +46,12 @@ namespace Assets {
          dirtNormal = Texture("assets/textures/DirtTextureTileableNormals.jpg");
 
          rockColor = Texture("assets/textures/testRock.png");
-         rockNormal = Texture("assets/textures/RockTextureTileableNormals.jpg");
+         rockNormal = Texture("assets/textures/RockTextureTileableNormals2.png");
 
+         crystalNormal = Texture("assets/textures/CrystalTileableNormals2.png");
+         sandNormal = Texture("assets/textures/SandTileableNormals1.png");
+         lavaNormal = Texture("assets/textures/LavaTileableNormals1.png");
+         
          textures[WHITE_DEPTH_WHEEL_T] = whiteDepthWheel;
          textures[BLACK_DEPTH_WHEEL_T] = blackDepthWheel;
          textures[HUD_ELEMENTS_T] = hudElements;
@@ -58,6 +62,10 @@ namespace Assets {
          textures[ROCK_COLOR_T] = rockColor;
          textures[ROCK_NORMAL_T] = rockNormal;
          textures[SQUIRREL_T] = squirrelTex;
+         textures[CRYSTAL_T] = crystalNormal;
+         textures[SAND_T] = sandNormal;
+         textures[LAVA_T] = lavaNormal;
+
       }
 
       void loadMeshes() {

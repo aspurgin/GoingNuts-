@@ -146,11 +146,24 @@ namespace Renderer {
 
       
       void renderBlocks() {
+         glUseProgram(ptshader.shadeProg);//ptshader.shadeProg);
+         modelTrans.useModelViewMatrix();
+         modelTrans.loadIdentity();
+
+         camera.setView(ptshader.h_uViewMatrix);
+         camera.setProjectionMatrix(ptshader.h_uProjMatrix, (float)winWidth / winHeight, 0.1f, 100.0f);
+
+         safe_glUniform3f(ptshader.h_lightPos, light.position.x, light.position.y, light.position.z);
+         safe_glUniform3f(ptshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
+         safe_glUniform3f(ptshader.h_lightColor, light.color.x, light.color.y, light.color.z);
+
          std::list<Renderable*> blocks = ngame->getBlocksToDraw();
 
          for (std::list<Renderable*>::iterator it = blocks.begin(); it != blocks.end(); ++it) {
             (*it)->render();
          }
+
+         glUseProgram(0);
 
       }
 
@@ -251,12 +264,13 @@ namespace Renderer {
          ngame->psystem.render();
          
          renderPlayer();
-         renderBlocks();
          renderDynamite();
          renderHardHat();
          renderSuperDrill();
          renderNuts();
          
+         renderBlocks();
+
          glUseProgram(0);
       }
 
@@ -310,6 +324,7 @@ namespace Renderer {
          safe_glUniform3f(ptshader.h_lightColor, light.color.x, light.color.y, light.color.z);
 
          cylinder->render();
+         //renderBlocks();
       }
 
       void renderDebugShadowMapText() {

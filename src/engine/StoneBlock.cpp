@@ -13,7 +13,7 @@ StoneBlock::StoneBlock(glm::vec3 center, float width, float height, ParticleSyst
    this->mat = 4;
    setObject(center, width, height);
    this->psystem = psystem;
-   this->shaderType = C_SHADE;
+   this->shaderType = PT_SHADE;
    this->colorTexture = Assets::getTexture(Assets::ROCK_COLOR_T);
    this->normalTexture = Assets::getTexture(Assets::ROCK_NORMAL_T);
 }

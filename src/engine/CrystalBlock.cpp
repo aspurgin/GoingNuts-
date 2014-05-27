@@ -13,6 +13,9 @@ CrystalBlock::CrystalBlock(glm::vec3 center, float width, float height, Particle
    this->mat = 1;  //change to something meaningfull
    this->psystem = psystem;
    this->mat = 7;
+   this->colorTexture = Assets::getTexture(Assets::DIRT_COLOR_T);
+   this->normalTexture = Assets::getTexture(Assets::CRYSTAL_T);
+   this->shaderType = PT_SHADE;
 }
 
 int CrystalBlock::getStrength() {
