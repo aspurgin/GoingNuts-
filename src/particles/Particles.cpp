@@ -46,7 +46,7 @@ ParticleSystem::ParticleSystem() {
    time = 0;
    ttl = 5;
    spread = glm::vec3(4, 1, 4);
-   vel = glm::vec3(0, 1, 0);
+   vel = glm::vec3(0, 3, 0);
    numParticles = 0;
    mat = 0;
 }
