@@ -11,7 +11,6 @@ namespace Assets {
       //create a map for sounds and music
       std::map<int, FMOD::Sound*> sounds, music;
 
-      static Camera cam;
       Mesh squirrel, block, nut, depthWheel, background, guageMask1, guageMask2, scoreMask1, scoreMask2, youWon, youLost, cylinder, goingNuts, sun, nutColor, nutOutline, energy, points, powerUpBG, questionMark, level, depth;
 
       Texture whiteDepthWheel, blackDepthWheel, hudElements, cylinderNormal, cylinderColor, dirtColor, dirtNormal, rockColor, rockNormal, squirrelTex;
@@ -222,20 +221,20 @@ namespace Assets {
       }
    }
 
-   void initializeCamera() {
+   /*void initializeCamera() {
       cam = Camera(glm::vec3(3.0f, 1.0f, 10.0f), glm::vec3(3.0f, 0.0f, 5.0f), glm::vec3(0, 1, 0)); 
    }
 
    Camera& getCamera() {
       return cam;
-   }
+   }*/
 
    void loadAssets() {
       loadTextures();
       loadMeshes();
       initShaders();
       loadSoundsAndMusic();
-      initializeCamera();
+      //initializeCamera();
    }
 
    void playSound(int type) {

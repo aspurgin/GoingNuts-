@@ -1,5 +1,5 @@
 #include "NutGame.hpp"
-#include "../rendering/Renderer.hpp"
+
 #include "MovableTypes.hpp"
 #include <stdlib.h>
 #include <string>
@@ -14,6 +14,7 @@
 #endif
 #include <GLFW/glfw3.h>
 #include "../assets/Assets.hpp"
+#include "../rendering/Renderer.hpp"
 
 NutGame game;
 bool tog = false;
@@ -136,10 +137,12 @@ int main(void)
    GLenum err = glewInit();
    glfwSetKeyCallback(window, keyPressed);
    Assets::loadAssets();
-   Camera& myCam = Assets::getCamera();
+   //Camera& myCam = Renderer::getCamera();
    game.init();
    Hud hud(&game);
-   Renderer renderer(1280, 720, &game, &hud);
+
+   Renderer::Renderer(1280, 720, &game, &hud);
+   //Renderer renderer(1280, 720, &game, &hud);
    
    Assets::playMusic(Assets::GAME_M);
    //Loop until the user closes the window
@@ -181,8 +184,12 @@ int main(void)
       lastTime = currentTime;
       // Render here
       glViewport(0, 0, (GLsizei)1280, (GLsizei)720);
-      renderer.toggle = tog;
-      renderer.render();
+      
+      Renderer::toggle = tog;
+      Renderer::render();
+      
+      //renderer.toggle = tog;
+      //renderer.render();
 
       //Swap front and back buffers
 
@@ -191,7 +198,7 @@ int main(void)
       //Poll for and process events
       glfwPollEvents();
 
-      glm::vec3 pos = myCam.getPosition();
+      glm::vec3 pos = Renderer::camera.getPosition();
       //printf("Cam pos: %f, %f, %f\n", pos.x, pos.y, pos.z);
       fpsCount++;
       //Assets::update();

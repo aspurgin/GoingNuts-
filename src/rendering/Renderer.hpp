@@ -22,7 +22,35 @@
 #include "Wall.hpp"
 #include "../hud/Cylinder.hpp"
 
-class Renderer {
+namespace Renderer {
+      extern Camera camera;
+      extern bool toggle, antiAlias;
+      extern OrthographicCamera orthographicCamera;
+      extern Light light;
+      extern PhongShader pshader;
+      extern PhongTextureShader ptshader;
+      extern CellShader cshader;
+      extern CellShaderTexture cetshader;
+      extern FlatTextureShader ftshader;
+      extern LightMapShader lmShader;
+      extern BloomShader bshader;
+      extern RenderingHelper modelTrans;
+      extern int winWidth, winHeight;
+      extern NutGame *ngame;
+
+      //Mesh squirrel;
+      //Mesh block;
+      //Renderer();
+      void Renderer(int, int, NutGame*, Hud*);
+      void initialize();
+      void setModel();
+      void renderCube(glm::vec3, int, float);
+      void renderSquirrel(glm::vec3, int, float);
+      void render();
+};
+#endif
+
+/*class Renderer {
    private:
       void renderWalls();
       void initDebugLightMap();
@@ -47,7 +75,7 @@ class Renderer {
       void checkGLError();
 
    public:
-      Camera& camera = Assets::getCamera();
+      Camera camera;
       bool toggle, antiAlias;
       OrthographicCamera orthographicCamera;
       Light light;
@@ -62,8 +90,8 @@ class Renderer {
       int winWidth, winHeight;
       NutGame *ngame;
       Hud* hud;
-      Mesh squirrel;
-      Mesh block;
+      //Mesh squirrel;
+      //Mesh block;
       Renderer();
       Renderer(int, int, NutGame*, Hud*);
       void initialize();
@@ -71,8 +99,6 @@ class Renderer {
       void renderCube(glm::vec3, int, float);
       void renderSquirrel(glm::vec3, int, float);
       void render();
+};*/
 
-
-};
-
-#endif
+//#endif
