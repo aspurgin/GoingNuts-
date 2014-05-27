@@ -15,7 +15,7 @@
 
 class ScoreGuageMask : public Renderable {
    private:
-      Mesh mask1, mask2;
+      Mesh *mask1, *mask2;
       //CellShaderTexture cshader;
       FlatTextureShader cshader;
       Texture texture;

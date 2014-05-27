@@ -31,17 +31,17 @@ void Wall::render() {
    setModel();
 
    safe_glEnableVertexAttribArray(cshader.h_aPosition);
-   glBindBuffer(GL_ARRAY_BUFFER, model.vertHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, model->vertHandle());
    safe_glVertexAttribPointer(cshader.h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
    DEBUG("positions: " << glGetError());
 
    safe_glEnableVertexAttribArray(cshader.h_aNormal);
-   glBindBuffer(GL_ARRAY_BUFFER, model.normHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, model->normHandle());
    safe_glVertexAttribPointer(cshader.h_aNormal, 3, GL_FLOAT, GL_FALSE, 0, 0);
    DEBUG("normals: " << glGetError());
 
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.idxHandle());
-   glDrawElements(GL_TRIANGLES, model.getIdxCount(), GL_UNSIGNED_INT, 0);
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->idxHandle());
+   glDrawElements(GL_TRIANGLES, model->getIdxCount(), GL_UNSIGNED_INT, 0);
    modelTrans.popMatrix();
    DEBUG("idxs: " << glGetError());
 

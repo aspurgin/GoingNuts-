@@ -16,7 +16,7 @@
 
 class Cylinder : public Renderable {
    private:
-      Mesh model;
+      //Mesh model;
       PhongTextureShader cshader;
       Texture colorTexture;
       Texture normalTexture;

@@ -26,16 +26,16 @@ void ScoreGuageMask::render() {
    setModel();
    
    safe_glEnableVertexAttribArray(cshader.h_aPosition);
-   glBindBuffer(GL_ARRAY_BUFFER, mask1.vertHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, mask1->vertHandle());
    safe_glVertexAttribPointer(cshader.h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
    
    safe_glEnableVertexAttribArray(cshader.h_aNormal);
-   glBindBuffer(GL_ARRAY_BUFFER, mask1.normHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, mask1->normHandle());
    safe_glVertexAttribPointer(cshader.h_aNormal, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
    //UVs
    safe_glEnableVertexAttribArray(cshader.h_vertexUV);
-   glBindBuffer(GL_ARRAY_BUFFER, mask1.uvHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, mask1->uvHandle());
    safe_glVertexAttribPointer(cshader.h_vertexUV, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
 
@@ -45,8 +45,8 @@ void ScoreGuageMask::render() {
    // Set our "myTextureSampler" sampler to user Texture Unit 0
    glUniform1i(cshader.h_myTextureSampler, 0);
 
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mask1.idxHandle());
-   glDrawElements(GL_TRIANGLES, mask1.getIdxCount(), GL_UNSIGNED_INT, 0);
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mask1->idxHandle());
+   glDrawElements(GL_TRIANGLES, mask1->getIdxCount(), GL_UNSIGNED_INT, 0);
    modelTrans.popMatrix();
 
    safe_glDisableVertexAttribArray(cshader.h_aPosition);
@@ -65,16 +65,16 @@ void ScoreGuageMask::render() {
    setModel();
    
    safe_glEnableVertexAttribArray(cshader.h_aPosition);
-   glBindBuffer(GL_ARRAY_BUFFER, mask2.vertHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, mask2->vertHandle());
    safe_glVertexAttribPointer(cshader.h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
    
    safe_glEnableVertexAttribArray(cshader.h_aNormal);
-   glBindBuffer(GL_ARRAY_BUFFER, mask2.normHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, mask2->normHandle());
    safe_glVertexAttribPointer(cshader.h_aNormal, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
    //UVs
    safe_glEnableVertexAttribArray(cshader.h_vertexUV);
-   glBindBuffer(GL_ARRAY_BUFFER, mask2.uvHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, mask2->uvHandle());
    safe_glVertexAttribPointer(cshader.h_vertexUV, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
 
@@ -84,8 +84,8 @@ void ScoreGuageMask::render() {
    // Set our "myTextureSampler" sampler to user Texture Unit 0
    glUniform1i(cshader.h_myTextureSampler, 0);
 
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mask2.idxHandle());
-   glDrawElements(GL_TRIANGLES, mask2.getIdxCount(), GL_UNSIGNED_INT, 0);
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mask2->idxHandle());
+   glDrawElements(GL_TRIANGLES, mask2->getIdxCount(), GL_UNSIGNED_INT, 0);
    modelTrans.popMatrix();
 
    safe_glDisableVertexAttribArray(cshader.h_aPosition);

@@ -2,7 +2,7 @@
 
 
 DepthWheel::DepthWheel(int type, glm::vec3 position) {
-   this->model = Assets::getMesh(Assets::DEPTH_WHEEL_M);
+   model = Assets::getMesh(Assets::DEPTH_WHEEL_M);
    //this->cshader = Assets::getCShaderTexture();
    this->cshader = Assets::getFlatTextureShader();
    this->scale = 0.4f;
@@ -49,16 +49,16 @@ void DepthWheel::render() {
    setModel();
    
    safe_glEnableVertexAttribArray(cshader.h_aPosition);
-   glBindBuffer(GL_ARRAY_BUFFER, model.vertHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, model->vertHandle());
    safe_glVertexAttribPointer(cshader.h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
    
    safe_glEnableVertexAttribArray(cshader.h_aNormal);
-   glBindBuffer(GL_ARRAY_BUFFER, model.normHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, model->normHandle());
    safe_glVertexAttribPointer(cshader.h_aNormal, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
    //UVs
    safe_glEnableVertexAttribArray(cshader.h_vertexUV);
-   glBindBuffer(GL_ARRAY_BUFFER, model.uvHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, model->uvHandle());
    safe_glVertexAttribPointer(cshader.h_vertexUV, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
 
@@ -70,8 +70,8 @@ void DepthWheel::render() {
    // Set our "myTextureSampler" sampler to user Texture Unit 0
    glUniform1i(cshader.h_myTextureSampler, 0);
 
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.idxHandle());
-   glDrawElements(GL_TRIANGLES, model.getIdxCount(), GL_UNSIGNED_INT, 0);
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->idxHandle());
+   glDrawElements(GL_TRIANGLES, model->getIdxCount(), GL_UNSIGNED_INT, 0);
    modelTrans.popMatrix();
 
 

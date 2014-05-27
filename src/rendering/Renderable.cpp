@@ -1,4 +1,5 @@
 #include "Renderable.hpp"
+#include "Renderer.hpp"
 
 Renderable::Renderable() {
    modelTrans.useModelViewMatrix();
@@ -32,10 +33,10 @@ void Renderable::renderLightMap() {
    modelTrans.popMatrix();
 
    safe_glEnableVertexAttribArray(lmShader.h_aPosition);
-   glBindBuffer(GL_ARRAY_BUFFER, model.vertHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, model->vertHandle());
    safe_glVertexAttribPointer(lmShader.h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.idxHandle());
-   glDrawElements(GL_TRIANGLES, model.getIdxCount(), GL_UNSIGNED_INT, 0);
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->idxHandle());
+   glDrawElements(GL_TRIANGLES, model->getIdxCount(), GL_UNSIGNED_INT, 0);
 
    //modelTrans.popMatrix();
 
@@ -59,21 +60,21 @@ void Renderable::csRender() {
 
    //Bind the positions
    safe_glEnableVertexAttribArray(cshader.h_aPosition);
-   glBindBuffer(GL_ARRAY_BUFFER, model.vertHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, model->vertHandle());
    safe_glVertexAttribPointer(cshader.h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
    //DEBUG("positions: " << glGetError());
 
    //Bind the normals
    safe_glEnableVertexAttribArray(cshader.h_aNormal);
-   glBindBuffer(GL_ARRAY_BUFFER, model.normHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, model->normHandle());
    safe_glVertexAttribPointer(cshader.h_aNormal, 3, GL_FLOAT, GL_FALSE, 0, 0);
    //DEBUG("normals: " << glGetError());
 
    //Bind the index
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.idxHandle());
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->idxHandle());
    
    //Draw the object!
-   glDrawElements(GL_TRIANGLES, model.getIdxCount(), GL_UNSIGNED_INT, 0);
+   glDrawElements(GL_TRIANGLES, model->getIdxCount(), GL_UNSIGNED_INT, 0);
 
    safe_glDisableVertexAttribArray(cshader.h_aPosition);
    safe_glDisableVertexAttribArray(cshader.h_aNormal);
@@ -96,21 +97,21 @@ void Renderable::ctsRender() {
 
    //Bind the positions
    safe_glEnableVertexAttribArray(ctshader.h_aPosition);
-   glBindBuffer(GL_ARRAY_BUFFER, model.vertHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, model->vertHandle());
    safe_glVertexAttribPointer(ctshader.h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
    //DEBUG("positions: " << glGetError());
 
    //Bind the normals
    safe_glEnableVertexAttribArray(ctshader.h_aNormal);
-   glBindBuffer(GL_ARRAY_BUFFER, model.normHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, model->normHandle());
    safe_glVertexAttribPointer(ctshader.h_aNormal, 3, GL_FLOAT, GL_FALSE, 0, 0);
    //DEBUG("normals: " << glGetError());
 
    //Bind the index
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.idxHandle());
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->idxHandle());
    
    safe_glEnableVertexAttribArray(ctshader.h_vertexUV);
-   glBindBuffer(GL_ARRAY_BUFFER, model.uvHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, model->uvHandle());
    safe_glVertexAttribPointer(ctshader.h_vertexUV, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
    // Bind our colorTexture to Texture Unit 0
@@ -121,7 +122,7 @@ void Renderable::ctsRender() {
    glUniform1i(ctshader.h_myTextureSampler, 0);
 
    //Draw the object!
-   glDrawElements(GL_TRIANGLES, model.getIdxCount(), GL_UNSIGNED_INT, 0);
+   glDrawElements(GL_TRIANGLES, model->getIdxCount(), GL_UNSIGNED_INT, 0);
 
    safe_glDisableVertexAttribArray(ctshader.h_aPosition);
    safe_glDisableVertexAttribArray(ctshader.h_aNormal);
@@ -144,21 +145,21 @@ void Renderable::psRender() {
 
    //Bind the positions
    safe_glEnableVertexAttribArray(pshader.h_aPosition);
-   glBindBuffer(GL_ARRAY_BUFFER, model.vertHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, model->vertHandle());
    safe_glVertexAttribPointer(pshader.h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
    //DEBUG("positions: " << glGetError());
 
    //Bind the normals
    safe_glEnableVertexAttribArray(pshader.h_aNormal);
-   glBindBuffer(GL_ARRAY_BUFFER, model.normHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, model->normHandle());
    safe_glVertexAttribPointer(pshader.h_aNormal, 3, GL_FLOAT, GL_FALSE, 0, 0);
    //DEBUG("normals: " << glGetError());
 
    //Bind the index
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.idxHandle());
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->idxHandle());
    
    //Bind the index
-   glDrawElements(GL_TRIANGLES, model.getIdxCount(), GL_UNSIGNED_INT, 0);
+   glDrawElements(GL_TRIANGLES, model->getIdxCount(), GL_UNSIGNED_INT, 0);
 
    safe_glDisableVertexAttribArray(pshader.h_aPosition);
    safe_glDisableVertexAttribArray(pshader.h_aNormal);
@@ -177,23 +178,23 @@ void Renderable::ptsRender() {
    modelTrans.popMatrix();
 
    safe_glEnableVertexAttribArray(ptshader.h_aPosition);
-   glBindBuffer(GL_ARRAY_BUFFER, model.vertHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, model->vertHandle());
    safe_glVertexAttribPointer(ptshader.h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
    
    safe_glEnableVertexAttribArray(ptshader.h_aNormal);
-   glBindBuffer(GL_ARRAY_BUFFER, model.normHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, model->normHandle());
    safe_glVertexAttribPointer(ptshader.h_aNormal, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
    safe_glEnableVertexAttribArray(ptshader.h_vertexUV);
-   glBindBuffer(GL_ARRAY_BUFFER, model.uvHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, model->uvHandle());
    safe_glVertexAttribPointer(ptshader.h_vertexUV, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
    safe_glEnableVertexAttribArray(ptshader.h_aTangent);
-   glBindBuffer(GL_ARRAY_BUFFER, model.tangentHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, model->tangentHandle());
    safe_glVertexAttribPointer(ptshader.h_aTangent, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
    safe_glEnableVertexAttribArray(ptshader.h_aBitangent);
-   glBindBuffer(GL_ARRAY_BUFFER, model.bitangentHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, model->bitangentHandle());
    safe_glVertexAttribPointer(ptshader.h_aBitangent, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 
@@ -211,18 +212,18 @@ void Renderable::ptsRender() {
    // Set our "normalTextureSampler" sampler to user Texture Unit 1
    glUniform1i(ptshader.h_normalTextureSampler, 1);
 
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.idxHandle());
-   glDrawElements(GL_TRIANGLES, model.getIdxCount(), GL_UNSIGNED_INT, 0);
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->idxHandle());
+   glDrawElements(GL_TRIANGLES, model->getIdxCount(), GL_UNSIGNED_INT, 0);
 
    safe_glDisableVertexAttribArray(ptshader.h_aPosition);
    safe_glDisableVertexAttribArray(ptshader.h_aNormal);
 }
 
 void Renderable::bRender() {
-   Light light = Light();
-   light.setPosition(glm::vec3(0.0, 0.0, 6.0f));
-   Camera camera = Camera(glm::vec3(3.0f, 1.0f, 10.0f), glm::vec3(3.0f, 0.0f, 5.0f), glm::vec3(0, 1, 0));
-   camera.setEye(glm::vec3(3.0f, 0.0, 8.0f));
+   Light light = Renderer::light;//Light();
+   //light.setPosition(glm::vec3(0.0, 0.0, 6.0f));
+   Camera camera = Renderer::camera;//Camera(glm::vec3(3.0f, 1.0f, 10.0f), glm::vec3(3.0f, 0.0f, 5.0f), glm::vec3(0, 1, 0));
+   //camera.setEye(glm::vec3(3.0f, 0.0, 8.0f));
 
    // BRIGHT PASS
    glBindFramebuffer(GL_FRAMEBUFFER, 2);
@@ -243,15 +244,15 @@ void Renderable::bRender() {
 
    //Bind the positions
    safe_glEnableVertexAttribArray(bshader.h_aPositionBright);
-   glBindBuffer(GL_ARRAY_BUFFER, model.vertHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, model->vertHandle());
    safe_glVertexAttribPointer(bshader.h_aPositionBright, 3, GL_FLOAT, GL_FALSE, 0, 0);
    //DEBUG("positions: " << glGetError());
 
    //Bind the index
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.idxHandle());
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->idxHandle());
 
    //Draw the object!
-   glDrawElements(GL_TRIANGLES, model.getIdxCount(), GL_UNSIGNED_INT, 0);
+   glDrawElements(GL_TRIANGLES, model->getIdxCount(), GL_UNSIGNED_INT, 0);
 
    safe_glDisableVertexAttribArray(bshader.h_aPositionBright);
    glDisable(GL_TEXTURE_2D);
@@ -280,12 +281,12 @@ void Renderable::bRender() {
 
    //Bind the positions
    safe_glEnableVertexAttribArray(bshader.h_aPositionBlur);
-   glBindBuffer(GL_ARRAY_BUFFER, model.vertHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, model->vertHandle());
    safe_glVertexAttribPointer(bshader.h_aPositionBlur, 3, GL_FLOAT, GL_FALSE, 0, 0);
    //DEBUG("positions: " << glGetError());
 
    //Bind the index
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.idxHandle());
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->idxHandle());
 
    // Set our "colorTextureSampler" sampler to user Texture Unit 0
    glEnable(GL_TEXTURE_2D);
@@ -294,7 +295,7 @@ void Renderable::bRender() {
    glUniform1i(bshader.h_myTextureSamplerBlur, 2);
 
    //Draw the object!
-   glDrawElements(GL_TRIANGLES, model.getIdxCount(), GL_UNSIGNED_INT, 0);
+   glDrawElements(GL_TRIANGLES, model->getIdxCount(), GL_UNSIGNED_INT, 0);
 
    safe_glDisableVertexAttribArray(bshader.h_aPositionBlur);
    glDisable(GL_TEXTURE_2D);
@@ -329,18 +330,18 @@ void Renderable::bRender() {
 
    //Bind the positions
    safe_glEnableVertexAttribArray(bshader.h_aPositionComposite);
-   glBindBuffer(GL_ARRAY_BUFFER, model.vertHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, model->vertHandle());
    safe_glVertexAttribPointer(bshader.h_aPositionComposite, 3, GL_FLOAT, GL_FALSE, 0, 0);
    //DEBUG("positions: " << glGetError());
 
    //Bind the normals
    safe_glEnableVertexAttribArray(bshader.h_aNormalComposite);
-   glBindBuffer(GL_ARRAY_BUFFER, model.normHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, model->normHandle());
    safe_glVertexAttribPointer(bshader.h_aNormalComposite, 3, GL_FLOAT, GL_FALSE, 0, 0);
    //DEBUG("normals: " << glGetError());
 
    //Bind the index
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.idxHandle());
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->idxHandle());
 
    // Set our "colorTextureSampler" sampler to user Texture Unit 0
    glEnable(GL_TEXTURE_2D);
@@ -351,7 +352,7 @@ void Renderable::bRender() {
    glUniform1i(bshader.h_myTextureSamplerComposite, 2);
 
    //Draw the object!
-   glDrawElements(GL_TRIANGLES, model.getIdxCount(), GL_UNSIGNED_INT, 0);
+   glDrawElements(GL_TRIANGLES, model->getIdxCount(), GL_UNSIGNED_INT, 0);
 
    safe_glDisableVertexAttribArray(bshader.h_aPositionComposite);
    glDisable(GL_TEXTURE_2D);
@@ -372,12 +373,12 @@ void Renderable::ftsRender() {
    safe_glUniformMatrix4fv(ftshader.h_uModelMatrix, glm::value_ptr(modelTrans.modelViewMatrix));
    
    safe_glEnableVertexAttribArray(ftshader.h_aPosition);
-   glBindBuffer(GL_ARRAY_BUFFER, model.vertHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, model->vertHandle());
    safe_glVertexAttribPointer(ftshader.h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
    
    //UVs
    safe_glEnableVertexAttribArray(ftshader.h_vertexUV);
-   glBindBuffer(GL_ARRAY_BUFFER, model.uvHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, model->uvHandle());
    safe_glVertexAttribPointer(ftshader.h_vertexUV, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
    // Bind our texture in Texture Unit 0
@@ -386,8 +387,8 @@ void Renderable::ftsRender() {
    // Set our "myTextureSampler" sampler to user Texture Unit 0
    glUniform1i(ftshader.h_myTextureSampler, 0);
 
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.idxHandle());
-   glDrawElements(GL_TRIANGLES, model.getIdxCount(), GL_UNSIGNED_INT, 0);
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->idxHandle());
+   glDrawElements(GL_TRIANGLES, model->getIdxCount(), GL_UNSIGNED_INT, 0);
    modelTrans.popMatrix();
 
    safe_glDisableVertexAttribArray(ftshader.h_aPosition);
