@@ -46,6 +46,7 @@ namespace Renderer {
       void setModel();
       void renderCube(glm::vec3, int, float);
       void renderSquirrel(glm::vec3, int, float);
+      //void renderNormalMappedCylinder();
       void render();
 };
 #endif
