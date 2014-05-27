@@ -3,9 +3,9 @@
 Hud::Hud(NutGame* nutGame) : Renderable()
 {
 	this->nutGame = nutGame;
-	//DepthGuage* depthGuage = new DepthGuage(nutGame);
-	//ScoreGuage* scoreGuage = new ScoreGuage(nutGame);
-	//Background* background = new Background();
+	DepthGuage* depthGuage = new DepthGuage(nutGame);
+	ScoreGuage* scoreGuage = new ScoreGuage(nutGame);
+	Background* background = new Background();
 	youWon = new YouWon();
 	youLost = new YouLost();
 
@@ -20,10 +20,15 @@ Hud::Hud(NutGame* nutGame) : Renderable()
 	QuestionMark* questionMark = new QuestionMark();
 	Level* level = new Level();
 	Depth* depth = new Depth();
+	DepthMask* depthMask = new DepthMask();
+	ScoreMask* scoreMask = new ScoreMask();
+	Number* number = new Number();
 
-	//components.push_back(background);
-	//components.push_back(depthGuage);
-	//components.push_back(scoreGuage);
+	components.push_back(background);
+	components.push_back(depthGuage);
+	components.push_back(depthMask);
+	components.push_back(scoreGuage);
+	components.push_back(scoreMask);
 	//components.push_back(cylinder);
 	components.push_back(goingNuts);
 	components.push_back(sun);
@@ -31,7 +36,7 @@ Hud::Hud(NutGame* nutGame) : Renderable()
 	components.push_back(nutOutline);
 	components.push_back(energy);
 	components.push_back(points);
-	components.push_back(points);
+	components.push_back(number);
 	components.push_back(powerUpBG);
 	components.push_back(questionMark);
 	components.push_back(level);

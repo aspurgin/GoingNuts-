@@ -11,7 +11,7 @@ namespace Assets {
       //create a map for sounds and music
       std::map<int, FMOD::Sound*> sounds, music;
 
-      Mesh squirrel, block, nut, depthWheel, background, guageMask1, guageMask2, scoreMask1, scoreMask2, youWon, youLost, cylinder, goingNuts, sun, nutColor, nutOutline, energy, points, powerUpBG, questionMark, level, depth;
+      Mesh squirrel, block, nut, depthWheel, background, guageMask1, guageMask2, scoreMask1, scoreMask2, youWon, youLost, cylinder, goingNuts, sun, nutColor, nutOutline, energy, points, powerUpBG, questionMark, level, depth, depthMask, scoreMask, number;
 
       Texture whiteDepthWheel, blackDepthWheel, hudElements, cylinderNormal, cylinderColor, dirtColor, dirtNormal, rockColor, rockNormal, squirrelTex;
       std::map<int, Mesh*> meshes;
@@ -83,6 +83,9 @@ namespace Assets {
          questionMark = Mesh("assets/models/QuestionMark.obj");
          level = Mesh("assets/models/Level.obj");
          depth = Mesh("assets/models/Depth.obj");
+         depthMask = Mesh("assets/models/DepthMask.obj");
+         scoreMask = Mesh("assets/models/ScoreMask.obj");
+         number = Mesh("assets/models/Number1.obj");
 
          block.buildBuffers();
          squirrel.buildBuffers();
@@ -106,6 +109,9 @@ namespace Assets {
          questionMark.buildBuffers();
          level.buildBuffers();
          depth.buildBuffers();
+         depthMask.buildBuffers();
+         scoreMask.buildBuffers();
+         number.buildBuffers();
 
          meshes[SQUIRREL_M] = &squirrel;
          meshes[BLOCK_M] = &block;
@@ -129,6 +135,9 @@ namespace Assets {
          meshes[QUESTION_MARK_M] = &questionMark;
          meshes[LEVEL_M] = &level;
          meshes[DEPTH_M] = &depth;
+         meshes[DEPTH_MASK_M] = &depthMask;
+         meshes[SCORE_MASK_M] = &scoreMask;
+         meshes[NUMBER_M] = &number;
       }
 
       void initShaders() {
