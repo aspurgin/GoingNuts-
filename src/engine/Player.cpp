@@ -146,7 +146,9 @@ int Player::getNumDynamites() {
 
 void Player::takeAwayEnergy(float toSub) {
    foodPercent -= 5 * toSub;
-   isDead = foodPercent <= 0;
+   if (foodPercent <= 0) {
+      isDead = true;
+   }
 }
 
 float Player::getEnergyLeft() {
