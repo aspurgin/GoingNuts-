@@ -15,7 +15,7 @@ Block::Block() {
    scaleZ = 0.5f;
    curScale = 0.48f;
    this->modelTrans.useModelViewMatrix();
-   model.debug();
+   //model.debug();
 }
 
 int Block::getTimesDrilled() {

@@ -36,6 +36,10 @@ class CellShader {
       GLint h_uCasterProj;
       GLint h_uCasterView;
       GLint h_uDepthMapSampler;
+      GLint h_uNormalMapSampler;
+      GLint h_aTangent;
+      GLint h_bTangent;
+      GLint h_uv;
 
       int shadeProg;
 

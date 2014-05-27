@@ -16,7 +16,11 @@ uniform sampler2D depth_map;
 /*uniform sampler2D normalTextureSampler;
 attribute vec2 vertexUV;
 attribute vec3 aTangent;
-attribute vec3 aBitangent;*/
+attribute vec3 aBitangent;
+
+varying vec3 lightDirection_tangent;
+varying vec3 viewDirection_tangent;
+varying vec2 uv;*/
 
 varying vec4 normal;
 varying vec4 light;
@@ -40,6 +44,16 @@ void main() {
    float shadow_factor;
    float epsilon = 0.0;
    float myshad = 0.0;
+
+   //Normal mapping stuff not working yet
+   // Calculate the normal from the texture map
+   //vec3 textureNormalValue = vec3( texture2D( normalTextureSampler, uv ) );
+   //vec3 textureNormal_tangent = normalize(textureNormalValue * 2.0 - 1.0);
+
+   //Normal mapping stuff not working yet
+   // Calculate the diffuse color
+   //vec3 normalVec = textureNormal_tangent;
+   //vec3 light_Vec = normalize(lightDirection_tangent);
 
    vec4 cameraPoint = vec4(cameraPos, 1);
 

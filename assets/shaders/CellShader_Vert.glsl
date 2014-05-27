@@ -29,8 +29,8 @@ varying vec4 normal;
 varying vec4 light;
 varying vec4 position;
 
-varying vec3 lightDirection_tangent;
-varying vec3 viewDirection_tangent;
+/*varying vec3 lightDirection_tangent;
+varying vec3 viewDirection_tangent;*/
 
 void main() {
    vec4 lightPoint = vec4(lightPos, 1);

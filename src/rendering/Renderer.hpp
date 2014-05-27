@@ -43,7 +43,7 @@ class Renderer {
       void renderNormalMappedCylinder();
 
    public:
-      Camera camera;
+      Camera& camera = Assets::getCamera();
       bool toggle, antiAlias;
       OrthographicCamera orthographicCamera;
       Light light;

@@ -136,7 +136,7 @@ int main(void)
    GLenum err = glewInit();
    glfwSetKeyCallback(window, keyPressed);
    Assets::loadAssets();
-   Camera myCam = Assets::getCamera();
+   Camera& myCam = Assets::getCamera();
    game.init();
    Hud hud(&game);
    Renderer renderer(1280, 720, &game, &hud);
