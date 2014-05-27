@@ -1,8 +1,16 @@
 #version 120
 
+struct Material {
+   vec3 aColor;
+   vec3 dColor;
+   vec3 sColor;
+   float shine;
+};
+
 uniform vec3 lightColor;
 uniform sampler2D colorTextureSampler;
 uniform sampler2D normalTextureSampler;
+uniform Material uMat;
 
 varying vec3 lightDirection_tangent;
 varying vec3 viewDirection_tangent;
@@ -11,11 +19,16 @@ varying vec2 uv;
 void main() {
    // Get the color from the texture and calculate the ambient, diffuse, and
    // specular colors
-   vec3 textureColor = vec3(texture2D(colorTextureSampler, uv));
+   /*vec3 textureColor = vec3(texture2D(colorTextureSampler, uv));
    vec3 ambientColor = textureColor * 0.3;
    vec3 diffuseColor = textureColor * 1.0;
    vec3 specularColor = textureColor * 1.0;
    float shine = 2.0;
+*/
+   vec3 ambientColor = uMat.aColor;
+   vec3 diffuseColor = uMat.dColor;
+   vec3 specularColor = uMat.sColor;
+   float shine = uMat.shine;
 
    // Calculate the normal from the texture map
    vec3 textureNormalValue = vec3( texture2D( normalTextureSampler, uv ) );

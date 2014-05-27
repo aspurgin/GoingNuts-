@@ -443,7 +443,6 @@ namespace Renderer {
       //renderNormalMappedCylinder();
 
    }
-
 }
 
 /*void Renderer::initDebugLightMap() {

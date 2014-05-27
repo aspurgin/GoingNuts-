@@ -166,17 +166,17 @@ void Renderable::psRender() {
 }
 
 void Renderable::ptsRender() {
+   ptshader.setMaterial(mat);
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
    modelTrans.pushMatrix();
 
    modelTrans.translate(position);
-   modelTrans.scale(scale);
+   modelTrans.scale(scaleX, scaleY, scaleZ);
    modelTrans.rotate(ang, axis);
-   //Bind the model matrix
-   safe_glUniformMatrix4fv(ptshader.h_uModelMatrix, glm::value_ptr(modelTrans.modelViewMatrix));
-   modelTrans.popMatrix();
 
+   safe_glUniformMatrix4fv(ptshader.h_uModelMatrix, glm::value_ptr(modelTrans.modelViewMatrix));
+   
    safe_glEnableVertexAttribArray(ptshader.h_aPosition);
    glBindBuffer(GL_ARRAY_BUFFER, model->vertHandle());
    safe_glVertexAttribPointer(ptshader.h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
@@ -214,9 +214,12 @@ void Renderable::ptsRender() {
 
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->idxHandle());
    glDrawElements(GL_TRIANGLES, model->getIdxCount(), GL_UNSIGNED_INT, 0);
+   modelTrans.popMatrix();
+
 
    safe_glDisableVertexAttribArray(ptshader.h_aPosition);
    safe_glDisableVertexAttribArray(ptshader.h_aNormal);
+   //safe_glDisableVertexAttribArray(ptshader.h_vertexUV);
 }
 
 void Renderable::bRender() {
