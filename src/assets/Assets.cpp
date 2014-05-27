@@ -11,7 +11,7 @@ namespace Assets {
       //create a map for sounds and music
       std::map<int, FMOD::Sound*> sounds, music;
 
-      Mesh squirrel, block, nut, depthWheel, background, guageMask1, guageMask2, scoreMask1, scoreMask2, youWon, youLost, cylinder, goingNuts, sun, nutColor, nutOutline, energy, points, powerUpBG, questionMark, level, depth, depthMask, scoreMask, number, hardHat;
+      Mesh squirrel, block, nut, depthWheel, background, guageMask1, guageMask2, scoreMask1, scoreMask2, youWon, youLost, cylinder, goingNuts, sun, nutColor, nutOutline, energy, points, powerUpBG, questionMark, level, depth, depthMask, scoreMask, number, hardHat, dynamite;
 
       Texture whiteDepthWheel, blackDepthWheel, hudElements, cylinderNormal, cylinderColor, dirtColor, dirtNormal, rockColor, rockNormal, squirrelTex;
       std::map<int, Mesh*> meshes;
@@ -61,7 +61,7 @@ namespace Assets {
       }
 
       void loadMeshes() {
-         squirrel = Mesh("assets/models/AnimSquirrel.dae");
+         squirrel = Mesh("assets/models/AnimSquirrel.dae"); //"assets/models/squirrel2.dae");//
          block = Mesh("assets/models/Block0.obj");
          nut = Mesh("assets/models/Acorn.obj");
          depthWheel = Mesh("assets/models/DepthWheel.obj");
@@ -87,6 +87,7 @@ namespace Assets {
          scoreMask = Mesh("assets/models/ScoreMask.obj");
          number = Mesh("assets/models/Number1.obj");
          hardHat = Mesh("assets/models/HardHat.obj");
+         dynamite = Mesh("assets/models/TNT.dae");
 
          block.buildBuffers();
          squirrel.buildBuffers();
@@ -114,6 +115,7 @@ namespace Assets {
          scoreMask.buildBuffers();
          number.buildBuffers();
          hardHat.buildBuffers();
+         dynamite.buildBuffers();
 
          meshes[SQUIRREL_M] = &squirrel;
          meshes[BLOCK_M] = &block;
@@ -141,6 +143,7 @@ namespace Assets {
          meshes[SCORE_MASK_M] = &scoreMask;
          meshes[NUMBER_M] = &number;
          meshes[HHAT_M] = &hardHat;
+         meshes[TNT_M] = &dynamite;
       }
 
       void initShaders() {

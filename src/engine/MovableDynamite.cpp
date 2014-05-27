@@ -5,13 +5,13 @@ MovableDynamite::MovableDynamite() {}
 MovableDynamite::MovableDynamite(glm::vec3 center, float width, float height) {
    setObject(center, width, height);
    this->velocity = 1.f;
-   this->model = Assets::getMesh(Assets::BLOCK_M);
+   this->model = Assets::getMesh(Assets::TNT_M);
    this->cshader = Assets::getCShader();
-   this->scale = 0.2f;
-   this->scaleX = 0.2f;
-   this->scaleY = 0.2f;
-   this->scaleZ = 0.2f;
-   this->mat = 5;
+   this->scale = 1.0f;
+   this->scaleX = 1.0f;
+   this->scaleY = 1.0f;
+   this->scaleZ = 1.0f;
+   this->mat = 1;
    this->ang = 0;
    this->modelTrans.useModelViewMatrix();
    this->offset = glm::vec3(0.0f,0.0f,0.0f);

@@ -131,7 +131,9 @@ namespace Renderer {
 
          //std::list<Renderable*> currObjs = ngame->getObjectsToDraw();
          //Render the light shadow map for all casting objects
+         int test = 0;
          for (std::list<Renderable*>::iterator it = currObjs.begin(); it != currObjs.end(); ++it) {
+            //printf("hello?: %d\n", test++);
             (*it)->renderLightMap();
          }
 
