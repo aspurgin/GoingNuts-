@@ -21,6 +21,8 @@ Player::Player(glm::vec3 center, float width, float height) {
    this->isJumping = false;
    this->horDirection = STOPPED;
    this->movingToColumn = 3;
+   this->numDynamites = 0;
+   this->foodPercent = 100;
    this->texture = Assets::getTexture(Assets::SQUIRREL_T);
 }
 
@@ -52,7 +54,7 @@ bool Player::getIsDead() {
 }
 
 void Player::checkMoveState() {
-   //model.setAt("run", -1);
+   model.setAt("run", glfwGetTime());
    switch(horDirection) {
       case LEFT:
          ang = -90;
@@ -117,10 +119,40 @@ bool Player::getHasHardHat() {
    return hasHardHat;
 }
 
-void Player::giveHardHat() {
+void Player::collectHardHat() {
    hasHardHat = true;
 }
 
 void Player::takeAwayHardHat() {
    hasHardHat = false;
+}
+
+void Player::collectSuperDrill() {
+   delete this->drill;
+   this->drill = new SuperDrill();
+}
+
+void Player::collectDynamite() {
+   numDynamites++;
+}
+
+void Player::throwDynamite() {
+   numDynamites--;
+}
+
+int Player::getNumDynamites() {
+   return numDynamites;
+}
+
+void Player::takeAwayEnergy(float toSub) {
+   foodPercent -= 5 * toSub;
+   isDead = foodPercent <= 0;
+}
+
+float Player::getEnergyLeft() {
+   return foodPercent;
+}
+
+void Player::addEnergy(float toAdd) {
+   foodPercent += toAdd;
 }

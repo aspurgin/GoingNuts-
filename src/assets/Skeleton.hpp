@@ -1,5 +1,9 @@
 #pragma once
 
+#ifdef _WIN32
+#include "../helperFiles/Util.hpp"
+#endif
+
 #include "Bone.hpp"
 #include <assimp/anim.h>
 #include <assimp/scene.h>

@@ -55,7 +55,7 @@ class Renderer {
       PhongTextureShader ptshader;
       CellShader cshader;
       CellShaderTexture cetshader;
-      FlatTextureShader ctshader;
+      FlatTextureShader ftshader;
       LightMapShader lmShader;
       BloomShader bshader;
       RenderingHelper modelTrans;

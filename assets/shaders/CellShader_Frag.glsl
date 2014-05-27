@@ -8,11 +8,34 @@ struct Material {
 uniform Material uMat;
 uniform vec3 cameraPos;
 
+//Shadow variables
+varying vec4 st_shadow;
+uniform sampler2D depth_map;
+//End shadow variables
+
 varying vec4 normal;
 varying vec4 light;
 varying vec4 position;
 
+//Shadow helper function
+float create_shadow (vec4 texture_coords) {
+	float epsilon = 0.0;
+	float shad = texture2D (depth_map, texture_coords.xy).r;
+
+	if(shad + epsilon < texture_coords.z) {
+		return 0.2;
+	}
+
+	return 1.0;
+}
+
 void main() {
+   //shadow temporary vars
+   vec4 shad_coord = st_shadow;
+   float shadow_factor;
+   float epsilon = 0.0;
+   float myshad = 0.0;
+
    vec4 cameraPoint = vec4(cameraPos, 1);
 
    vec3 normalVec = vec3(normal.x, normal.y, normal.z);
@@ -24,8 +47,13 @@ void main() {
    vec3 eyeVert = eyePos - positionVec;
    eyeVert = normalize(eyeVert);
 
-   vec3 lightVert = eyePos - lightVec;
-   lightVert = normalize(lightVert);
+   //Andy, I changed this. It used to be eyeVec - lightVec ..... but I think it's supposed to be lightVec - positionVec. Could be wrong
+   //though. I'll let you do further lighting stuff to get looking right. --Drew
+   vec3 lightVert = lightVec - positionVec;
+   
+   //Andy, this used to be normalize(lightVert), and I changed it to lightVec. We already calculated the light vector in
+   //the vertex shader and I think it was interpolated, so we don't need to calculate it again. --Drew
+   lightVert = normalize(lightVec);
 
    normalVec = normalize(normalVec);
    float angleBetweenCamera = dot(normalVec, eyeVert);
@@ -61,4 +89,21 @@ void main() {
          gl_FragColor *= 0.8;
       }
    }
+
+   //shadow code
+   //get the values between 0 and 1
+   shad_coord.xyz /= shad_coord.w;
+   shad_coord.xyz += 1.0;
+   shad_coord.xyz *= 0.5;
+
+   myshad = texture2D (depth_map, shad_coord.xy).r;
+
+   if(myshad + epsilon < shad_coord.z) {
+      shadow_factor =  0.2;
+   }
+   else {
+      shadow_factor = 1.0;
+   }
+
+   gl_FragColor = vec4(gl_FragColor.x * shadow_factor, gl_FragColor.y * shadow_factor, gl_FragColor.z * shadow_factor, 1.0);
 }

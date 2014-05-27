@@ -144,6 +144,9 @@ CellShader ShaderUtils::installCellShader(const GLchar *vShaderName, const GLcha
    cellShader.h_uMatShine = safe_glGetUniformLocation(ShadeProg, "uMat.shine");
    cellShader.h_lightPos = safe_glGetUniformLocation(ShadeProg, "lightPos");
    cellShader.h_cameraPos = safe_glGetUniformLocation(ShadeProg, "cameraPos");
+   cellShader.h_uCasterProj = safe_glGetUniformLocation(ShadeProg, "uCasterProj");
+   cellShader.h_uCasterView = safe_glGetUniformLocation(ShadeProg, "uCasterView");
+   cellShader.h_uDepthMapSampler = safe_glGetUniformLocation(ShadeProg, "depth_map");
    cellShader.shadeProg = ShadeProg;
 
    glUseProgram(0);

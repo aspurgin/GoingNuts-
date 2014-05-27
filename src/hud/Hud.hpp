@@ -13,6 +13,16 @@
 #include "YouWon.hpp"
 #include "YouLost.hpp"
 #include "Cylinder.hpp"
+#include "GoingNuts.hpp"
+#include "Sun.hpp"
+#include "NutColor.hpp"
+#include "NutOutline.hpp"
+#include "Energy.hpp"
+#include "Points.hpp"
+#include "PowerUpIndicatorBackground.hpp"
+#include "QuestionMark.hpp"
+#include "Level.hpp"
+#include "Depth.hpp"
 
 class Hud: public Renderable
 {

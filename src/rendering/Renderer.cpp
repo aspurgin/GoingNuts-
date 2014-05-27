@@ -59,7 +59,7 @@ Renderer::Renderer(int width, int height, NutGame *game, Hud* hud) {
    cshader = Assets::getCShader();
    cetshader = Assets::getCShaderTexture();
    pshader = Assets::getPShader();
-   ctshader = Assets::getFlatTextureShader();
+   ftshader = Assets::getFlatTextureShader();
    lmShader = Assets::getLightMapShader();
    bshader = Assets::getBShader();
    light = Light();
@@ -93,7 +93,7 @@ void Renderer::initialize() {
    
    //Note: found from tutorial: http://antongerdelan.net/opengl/texture_shadows.html
       // dimensions of depth map
-   shadow_size = 256;
+   shadow_size = 512;
 
    // create framebuffer
    fb = 0;
@@ -195,14 +195,14 @@ void Renderer::renderHud() {
    glEnable(GL_BLEND);
    glDisable(GL_DEPTH_TEST);
 
-   glUseProgram(ctshader.shadeProg);
+   glUseProgram(ftshader.shadeProg);
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
 
-   orthographicCamera.setView(ctshader.h_uViewMatrix);
-   orthographicCamera.setProjectionMatrix(ctshader.h_uProjMatrix);
-   safe_glUniform3f(ctshader.h_lightPos, light.position.x, light.position.y, light.position.z);
-   safe_glUniform3f(ctshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
+   orthographicCamera.setView(ftshader.h_uViewMatrix);
+   orthographicCamera.setProjectionMatrix(ftshader.h_uProjMatrix);
+   safe_glUniform3f(ftshader.h_lightPos, light.position.x, light.position.y, light.position.z);
+   safe_glUniform3f(ftshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
 
    camera.setEye(glm::vec3(3.0f, ngame->player.getCenter().y + 1, 6.0f));
    light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y - 1, 6.0f));
@@ -263,6 +263,7 @@ void Renderer::renderGame() {
 
    camera.setEye(glm::vec3(3.0f, ngame->player.getCenter().y, 8.0f));
    light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y, 6.0f));
+   light.getLightCam().setLookAt(glm::vec3(3.0, ngame->player.getCenter().y, 0));
 
    if (toggle) {
       light.getLightCam().setView(cshader.h_uViewMatrix);
@@ -272,6 +273,15 @@ void Renderer::renderGame() {
       camera.setView(cshader.h_uViewMatrix);
       camera.setProjectionMatrix(cshader.h_uProjMatrix, (float)winWidth / winHeight, 0.1f, 100.0f);
    }
+
+   light.getLightCam().setView(cshader.h_uCasterView);
+   light.getLightCam().setProjectionMatrix(cshader.h_uCasterProj, 1, 1.0, 100);
+   glActiveTexture(GL_TEXTURE0);
+   glBindTexture(GL_TEXTURE_2D, fb_tex);
+
+   // Set our "colorTextureSampler" sampler to user Texture Unit 0
+   glUniform1i(cshader.h_uDepthMapSampler, 0);
+
    safe_glUniform3f(cshader.h_lightPos, light.position.x, light.position.y, light.position.z);
    safe_glUniform3f(cshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
    //safe_glUniform3f(cshader.h_lightColor, light.color.x, light.color.y, light.color.z);
@@ -301,14 +311,14 @@ void Renderer::renderWinLoss() {
    glEnable(GL_BLEND);
    glDisable(GL_DEPTH_TEST);
 
-   glUseProgram(ctshader.shadeProg);
+   glUseProgram(ftshader.shadeProg);
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
 
-   orthographicCamera.setView(ctshader.h_uViewMatrix);
-   orthographicCamera.setProjectionMatrix(ctshader.h_uProjMatrix);
-   safe_glUniform3f(ctshader.h_lightPos, light.position.x, light.position.y, light.position.z);
-   safe_glUniform3f(ctshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
+   orthographicCamera.setView(ftshader.h_uViewMatrix);
+   orthographicCamera.setProjectionMatrix(ftshader.h_uProjMatrix);
+   safe_glUniform3f(ftshader.h_lightPos, light.position.x, light.position.y, light.position.z);
+   safe_glUniform3f(ftshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
 
    camera.setEye(glm::vec3(3.0f, ngame->player.getCenter().y + 1, 6.0f));
    light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y - 1, 6.0f));

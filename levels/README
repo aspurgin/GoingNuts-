@@ -1,0 +1,13 @@
+X = StoneBlock
+S = SandBlock
+C = CrystalBlock
+L = LavaBlock
+R = red DirtBlock
+G = greed DirtBlock
+B = blue DirtBlock
+P = Player
+0 = empty scace
+N = Nut
+H = HardHat
+D = SuperDrill
+Y = Dynamite

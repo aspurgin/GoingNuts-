@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 #include "Movable.hpp"
 #include "NormalDrill.hpp"
-#include "HardHat.hpp"
+#include "SuperDrill.hpp"
 
 #define HOR_MOVE_RATE 3
 
@@ -19,7 +19,7 @@ class Player: public Movable {
       bool shouldFall();
       void setWillFall();
       int getDepth();
-      float getEnergy();
+      float getEnergyLeft();
       void died();
       bool getIsDead();
       void render();
@@ -34,8 +34,14 @@ class Player: public Movable {
       void setMovingToColumn(int column);
       int getMovingToColumn();
       bool getHasHardHat();
-      void giveHardHat();
+      void collectHardHat();
       void takeAwayHardHat();
+      void collectSuperDrill();
+      void collectDynamite();
+      void throwDynamite();
+      int getNumDynamites();
+      void takeAwayEnergy(float toSub);
+      void addEnergy(float toAdd);
    private:
       Texture texture;
       float velocity;
@@ -47,7 +53,9 @@ class Player: public Movable {
       Direction horDirection;
       int movingToColumn;
       bool hasHardHat;
+      int numDynamites;
       void checkMoveState();
+      float foodPercent;
 };
 
 #endif

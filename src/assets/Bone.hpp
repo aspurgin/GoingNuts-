@@ -17,6 +17,9 @@
 #include <glm/gtx/euler_angles.hpp>
 #include <glm/gtx/norm.hpp>
 
+#ifdef _WIN32
+#include "../helperFiles/Util.hpp"
+#endif
 
 class Bone {
 private:

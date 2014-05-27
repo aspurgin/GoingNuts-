@@ -13,7 +13,7 @@
 #include "Camera.hpp"
 #include "Light.hpp"
 
-enum {C_SHADE, CT_SHADE, P_SHADE, PT_SHADE, B_SHADE};
+enum {C_SHADE, CT_SHADE, P_SHADE, PT_SHADE, FT_SHADE, B_SHADE};
 
 class Renderable {
    protected:
@@ -31,6 +31,7 @@ class Renderable {
       CellShader cshader;
       CellShaderTexture ctshader;
       PhongTextureShader ptshader;
+      FlatTextureShader ftshader;
       PhongShader pshader;
       BloomShader bshader;
       Mesh model;
@@ -39,6 +40,7 @@ class Renderable {
       void psRender();
       void ptsRender();
       void bRender();
+      void ftsRender();
    public:
       Renderable();
       virtual void render();// = 0;
