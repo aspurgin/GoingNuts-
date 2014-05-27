@@ -503,7 +503,7 @@ void NutGame::setFallingMovables(int row, int col) {
    }
    
    if (row < NUMROWS - 2 && gameGrid[row][col]->getMovableType() == PLAYER &&
-       gameGrid[row + 1][col] != 0 && (gameGrid[row + 1][col]->getMovableType() == NUT || 
+       gameGrid[row + 1][col] != 0 && (gameGrid[row + 1][col]->getMovableType() != BLOCK || //Zach I changed this because you couldn't fall on powerups before --Drew 
        (gameGrid[row + 1][col]->getMovableType() == BLOCK && 
        (((Block*)gameGrid[row + 1][col])->getBlockType() == LAVABLOCK)))) {
       gameGrid[row][col]->setCanFall();

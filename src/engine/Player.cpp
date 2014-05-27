@@ -24,6 +24,7 @@ Player::Player(glm::vec3 center, float width, float height) {
    this->numDynamites = 0;
    this->foodPercent = 100;
    this->texture = Assets::getTexture(Assets::SQUIRREL_T);
+   this->hat = HardHat(center, 0.99, 0.99);
 }
   
 void Player::drillBlock(Block *block) {
@@ -71,8 +72,14 @@ void Player::checkMoveState() {
 void Player::render() {
    checkMoveState();
    position = center;
-   
    Renderable::render();
+
+   if(hasHardHat) {
+      //printf("here!\n");
+      glm::vec3 off(0.1, 0.4, 1);
+      hat.setPosition(position + off);
+      hat.render();
+   }
 }
 
 void Player::setShouldJump() {

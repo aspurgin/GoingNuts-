@@ -418,5 +418,9 @@ void Renderable::render() {
    }
 }
 
+void Renderable::setPosition(glm::vec3 pos) {
+   this->position = pos;
+}
+
 
 

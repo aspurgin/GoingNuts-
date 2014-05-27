@@ -46,5 +46,6 @@ class Renderable {
       virtual void render();// = 0;
       //virtual void setModel();// = 0;
       void renderLightMap();
+      virtual void setPosition(glm::vec3);
 };
 #endif

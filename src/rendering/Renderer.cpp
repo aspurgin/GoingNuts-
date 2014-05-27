@@ -142,6 +142,48 @@ namespace Renderer {
          glClear(GL_DEPTH_BUFFER_BIT);
       }
 
+      
+      void renderBlocks() {
+         std::list<Renderable*> blocks = ngame->getBlocksToDraw();
+
+         for (std::list<Renderable*>::iterator it = blocks.begin(); it != blocks.end(); ++it) {
+            (*it)->render();
+         }
+
+      }
+
+      void renderPlayer() {
+         ngame->player.render();
+      }
+
+      void renderNuts() {
+         std::list<Renderable*> nuts = ngame->getNutsToDraw();
+         for (std::list<Renderable*>::iterator iter = nuts.begin(); iter != nuts.end(); ++iter) {
+            (*iter)->render();
+         }
+      }
+
+      void renderDynamite() {
+         std::list<Renderable *> dynamite = ngame->getDynamitesToDraw();
+
+         for (std::list<Renderable*>::iterator it = dynamite.begin(); it != dynamite.end(); ++it) {
+            (*it)->render();
+         }
+      }
+
+      void renderHardHat() {
+         std::list<Renderable *> hhats = ngame->getHardHatsToDraw();
+
+         for (std::list<Renderable*>::iterator it = hhats.begin(); it != hhats.end(); ++it) {
+            (*it)->render();
+         }   
+      }
+
+      void renderSuperDrill() {
+
+      }
+      
+
       void renderGame() {
 
          //*** Render the Game ***/
@@ -206,25 +248,16 @@ namespace Renderer {
 
          ngame->psystem.render();
          
-         std::list<Renderable*> blocks = ngame->getBlocksToDraw();
+         renderPlayer();
+         renderBlocks();
+         renderDynamite();
+         renderHardHat();
+         renderSuperDrill();
+         renderNuts();
          
-         ngame->player.render();
-
-         for (std::list<Renderable*>::iterator it = blocks.begin(); it != blocks.end(); ++it) {
-            (*it)->render();
-         }
-         
-         std::list<Renderable *> dynamite = ngame->getDynamitesToDraw();
-
-         for (std::list<Renderable*>::iterator it = dynamite.begin(); it != dynamite.end(); ++it) {
-            (*it)->render();
-         }
-
-         std::list<Renderable*> nuts = ngame->getNutsToDraw();
-         for (std::list<Renderable*>::iterator iter = nuts.begin(); iter != nuts.end(); ++iter) {
-            (*iter)->render();
-         }
+         glUseProgram(0);
       }
+
 
       void renderWinLoss() {
          //*** Render Win Loss ***/
