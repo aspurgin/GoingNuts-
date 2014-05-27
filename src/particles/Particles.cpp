@@ -249,7 +249,7 @@ void ParticleSystem::computeForces(Movable* gameGrid[17][7]) {
       row = (int)((it->pos.y + blockWidth / 2.0f) * -1);
 
       //Only check collisions if particle is in gameGrid
-      printf("pos x:%f, y:%f AND In box: %d, %d\n", pos.x, pos.y, col, row);
+      //printf("pos x:%f, y:%f AND In box: %d, %d\n", pos.x, pos.y, col, row);
       //printf("currPos: %f, %f\n", it->pos.x, it->pos.y);
       /*if (0 <= col && col < numCols && 0 <= row && row < numRows && it->pos.z <= 0.5) {
          // left collision check
