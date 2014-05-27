@@ -42,7 +42,7 @@ class NutGame {
       std::list<Renderable*> getNutsToDraw();
       std::list<Renderable*> getHardHatsToDraw();
       std::list<Renderable*> getSuperDrillsToDraw();
-      //std::list<Renderable*> getDynamitesToDraw();
+      std::list<Renderable*> getDynamitesToDraw();
       bool isDrillingDown();
       bool isDrillingUp();
       bool isDrillingLeft();

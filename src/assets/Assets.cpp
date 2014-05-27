@@ -239,8 +239,10 @@ namespace Assets {
 
    void playSound(int type) {
       if (Settings::soundEnabled()) {
-         result = soundSystem->playSound(FMOD_CHANNEL_FREE, sounds[type], false, 0);
+         FMOD::Channel *channel;
+         result = soundSystem->playSound(FMOD_CHANNEL_FREE, sounds[type], false, &channel);
          FMODErrorCheck(result);
+         channel->setVolume(0.5f);
          soundSystem->update();
       }
    }

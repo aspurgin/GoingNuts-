@@ -93,7 +93,7 @@ namespace Renderer {
          safe_glUniform3f(ftshader.h_lightPos, light.position.x, light.position.y, light.position.z);
          safe_glUniform3f(ftshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
 
-         camera.setEye(glm::vec3(3.0f, ngame->player.getCenter().y + 1, 6.0f));
+         camera.setPosition(glm::vec3(3.0f, ngame->player.getCenter().y + 1, 6.0f));
          light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y - 1, 6.0f));
 
          hud->render();
@@ -119,12 +119,12 @@ namespace Renderer {
 
          //Initialize my shader for the light shadow map
          glUseProgram(lmShader.shadeProg);
-         camera.setEye(glm::vec3(3.0f, ngame->player.getCenter().y, 8.0f));
-         light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y, 6.0f));
+         camera.setPosition(glm::vec3(3.0f, ngame->player.getCenter().y, 8.0f));
+         light.setPosition(glm::vec3(0, ngame->player.getCenter().y, 6.0f));
 
          //for the view and projection, use the virtual camera at the light's position
          light.getLightCam().setView(lmShader.h_uViewMatrix);
-         light.getLightCam().setProjectionMatrix(lmShader.h_uProjMatrix, 1, 1.0f, 20.0f);
+         light.getLightCam().setProjectionMatrix(lmShader.h_uProjMatrix, 1, 1.0f, 25.0f);
          // model matrix does nothing for the monkey - make it an identity matrix
          //safe_glUniformMatrix4fv (lmShader.h_uModelMatrix, glm::value_ptr(glm::mat4(0)));
 
@@ -150,8 +150,8 @@ namespace Renderer {
          modelTrans.loadIdentity();
 
 
-         camera.setEye(glm::vec3(3.0f, ngame->player.getCenter().y, 8.0f));
-         light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y, 6.0f));
+         camera.setEye(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y, 10.0f));
+         light.setPosition(glm::vec3(0, ngame->player.getCenter().y, 6.0f));
          light.getLightCam().setLookAt(glm::vec3(3.0, ngame->player.getCenter().y, 0));
 
          if (toggle) {
@@ -182,11 +182,18 @@ namespace Renderer {
          ngame->psystem.render();
          
          std::list<Renderable*> blocks = ngame->getBlocksToDraw();
+         
+         ngame->player.render();
+
          for (std::list<Renderable*>::iterator it = blocks.begin(); it != blocks.end(); ++it) {
             (*it)->render();
          }
-         ngame->player.render();
+         
+         std::list<Renderable *> dynamite = ngame->getDynamitesToDraw();
 
+         for (std::list<Renderable*>::iterator it = dynamite.begin(); it != dynamite.end(); ++it) {
+            (*it)->render();
+         }
 
          std::list<Renderable*> nuts = ngame->getNutsToDraw();
          for (std::list<Renderable*>::iterator iter = nuts.begin(); iter != nuts.end(); ++iter) {
@@ -209,7 +216,7 @@ namespace Renderer {
          safe_glUniform3f(ftshader.h_lightPos, light.position.x, light.position.y, light.position.z);
          safe_glUniform3f(ftshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
 
-         camera.setEye(glm::vec3(3.0f, ngame->player.getCenter().y + 1, 6.0f));
+         camera.setPosition(glm::vec3(3.0f, ngame->player.getCenter().y + 1, 6.0f));
          light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y - 1, 6.0f));
 
          hud->renderWinLoss();
@@ -232,7 +239,7 @@ namespace Renderer {
          modelTrans.loadIdentity();
 
 
-         camera.setEye(glm::vec3(3.0f, ngame->player.getCenter().y, 8.0f));
+         camera.setPosition(glm::vec3(3.0f, ngame->player.getCenter().y, 8.0f));
          light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y + 2, 6.0f));
 
          camera.setView(ptshader.h_uViewMatrix);

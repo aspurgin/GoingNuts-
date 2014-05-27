@@ -287,6 +287,9 @@ void NutGame::fallDown(double toAdd) {
                            else {
                               gameGrid[row][col]->stopFalling();
                               gameGrid[row][col]->setCanNotFall();
+                              if(gameGrid[row][col]->getMovableType() == BLOCK) {
+                                 Assets::playSound(Assets::BLOCK_FALL_S);
+                              }
                               gameGrid[row][col]->moveTo(glm::vec2(gameGrid[row][col]->getCenter().x, -row));
                            }
                         }
@@ -329,6 +332,9 @@ void NutGame::fallDown(double toAdd) {
                            }
                            gameGrid[row][col]->stopFalling();
                            gameGrid[row][col]->setCanNotFall();
+                           if(gameGrid[row][col]->getMovableType() == BLOCK) {
+                              Assets::playSound(Assets::BLOCK_FALL_S);
+                           }
                            gameGrid[row][col]->moveTo(glm::vec2(gameGrid[row][col]->getCenter().x, -row));
                            //delete gameGrid[row][col];
                            //gameGrid[row][col] = 0;
@@ -350,6 +356,9 @@ void NutGame::fallDown(double toAdd) {
                      else {
                         gameGrid[row][col]->stopFalling();
                         gameGrid[row][col]->setCanNotFall();
+                        if(gameGrid[row][col]->getMovableType() == BLOCK) {
+                           Assets::playSound(Assets::BLOCK_FALL_S);
+                        }
                         gameGrid[row][col]->moveTo(glm::vec2(gameGrid[row][col]->getCenter().x, -row));
                      }
                   }
@@ -517,6 +526,7 @@ void NutGame::finishSettingFallingMovables() {
                gameGrid[row + 1][col]->getMovableType() == PLAYER ||
                gameGrid[row + 1][col]->willFall() || gameGrid[row + 1][col]->getCanFall()))){
                ((Block*)gameGrid[row][col])->getGroupIn()->setGroupCanNotFall();
+               Assets::playSound(Assets::BLOCK_FALL_S);
 
                it = mightFallGroupList.erase(it);
                //--it;
@@ -730,7 +740,7 @@ std::list<Renderable*> NutGame::getObjectsToDraw() {
          }
       }
    }
-   //objects.push_back(&psystem);
+   objects.push_back(&psystem);
    objects.unique();
    return objects;
 }
@@ -755,11 +765,10 @@ std::list<Renderable*> NutGame::getHardHatsToDraw() {
 std::list<Renderable*> NutGame::getSuperDrillsToDraw() {
    return getCertainObjectsToDraw(SUPERDRILL);
 }
-/*
+
 std::list<Renderable*> NutGame::getDynamitesToDraw() {
    return getCertainObjectsToDraw(DYNAMITE);
 }
-*/
 
 std::list<Renderable*> NutGame::getCertainObjectsToDraw(int type) {
    int count = player.getCenter().y - NUM_BLOCKS_VISIBLE_ABOVE_PLAYER;
