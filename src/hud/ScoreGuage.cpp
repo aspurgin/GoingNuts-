@@ -3,7 +3,7 @@
 
 ScoreGuage::ScoreGuage(NutGame* nutGame) {
    float movValX = 22.0f;
-   float movValY = -4.2f;
+   float movValY = -5.2f;
    this->nutGame = nutGame;
    ones = new DepthWheel(Assets::WHITE_DEPTH_WHEEL_T, glm::vec3(2.4+movValX, 0.0+movValY, 0.0));
    tens = new DepthWheel(Assets::BLACK_DEPTH_WHEEL_T, glm::vec3(1.8+movValX, 0.0+movValY, 0.0));
@@ -53,7 +53,7 @@ void ScoreGuage::render() {
    hundreds->render();
    thousands->render();
    tenThousands->render();
-   scoreGuageMask->render();
+   //scoreGuageMask->render();
 }
 
 void ScoreGuage::setModel() {
