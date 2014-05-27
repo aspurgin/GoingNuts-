@@ -28,7 +28,7 @@ namespace Assets {
    //Camera& getCamera();
    void playSound(int);
    void playMusic(int);
-   Mesh& getMesh(int);
+   Mesh* getMesh(int);
    Texture& getTexture(int) ;
    CellShader& getCShader();
    CellShaderTexture& getCShaderTexture();

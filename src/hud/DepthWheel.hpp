@@ -18,7 +18,7 @@
 
 class DepthWheel : public Renderable {
    private:
-      Mesh model;
+      //Mesh model;
       //CellShaderTexture cshader;
       FlatTextureShader cshader;
       Texture texture;

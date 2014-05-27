@@ -34,7 +34,7 @@ class Renderable {
       FlatTextureShader ftshader;
       PhongShader pshader;
       BloomShader bshader;
-      Mesh model;
+      Mesh *model;
       void csRender();
       void ctsRender();
       void psRender();

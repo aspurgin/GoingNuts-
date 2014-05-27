@@ -25,23 +25,23 @@ void Cylinder::render() {
    setModel();
    
    safe_glEnableVertexAttribArray(cshader.h_aPosition);
-   glBindBuffer(GL_ARRAY_BUFFER, model.vertHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, model->vertHandle());
    safe_glVertexAttribPointer(cshader.h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
    
    safe_glEnableVertexAttribArray(cshader.h_aNormal);
-   glBindBuffer(GL_ARRAY_BUFFER, model.normHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, model->normHandle());
    safe_glVertexAttribPointer(cshader.h_aNormal, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
    safe_glEnableVertexAttribArray(cshader.h_vertexUV);
-   glBindBuffer(GL_ARRAY_BUFFER, model.uvHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, model->uvHandle());
    safe_glVertexAttribPointer(cshader.h_vertexUV, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
    safe_glEnableVertexAttribArray(cshader.h_aTangent);
-   glBindBuffer(GL_ARRAY_BUFFER, model.tangentHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, model->tangentHandle());
    safe_glVertexAttribPointer(cshader.h_aTangent, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
    safe_glEnableVertexAttribArray(cshader.h_aBitangent);
-   glBindBuffer(GL_ARRAY_BUFFER, model.bitangentHandle());
+   glBindBuffer(GL_ARRAY_BUFFER, model->bitangentHandle());
    safe_glVertexAttribPointer(cshader.h_aBitangent, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 
@@ -60,8 +60,8 @@ void Cylinder::render() {
    glUniform1i(cshader.h_normalTextureSampler, 1);
 
    cshader.setMaterial(3);
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.idxHandle());
-   glDrawElements(GL_TRIANGLES, model.getIdxCount(), GL_UNSIGNED_INT, 0);
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->idxHandle());
+   glDrawElements(GL_TRIANGLES, model->getIdxCount(), GL_UNSIGNED_INT, 0);
    modelTrans.popMatrix();
 
 

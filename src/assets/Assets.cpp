@@ -14,7 +14,7 @@ namespace Assets {
       Mesh squirrel, block, nut, depthWheel, background, guageMask1, guageMask2, scoreMask1, scoreMask2, youWon, youLost, cylinder, goingNuts, sun, nutColor, nutOutline, energy, points, powerUpBG, questionMark, level, depth;
 
       Texture whiteDepthWheel, blackDepthWheel, hudElements, cylinderNormal, cylinderColor, dirtColor, dirtNormal, rockColor, rockNormal, squirrelTex;
-      std::map<int, Mesh> meshes;
+      std::map<int, Mesh*> meshes;
       std::map<int, Texture> textures;
       CellShader cshader;
       CellShaderTexture ctshader;
@@ -107,28 +107,28 @@ namespace Assets {
          level.buildBuffers();
          depth.buildBuffers();
 
-         meshes[SQUIRREL_M] = squirrel;
-         meshes[BLOCK_M] = block;
-         meshes[NUT_M] = nut;
-         meshes[DEPTH_WHEEL_M] = depthWheel;
-         meshes[BACKGROUND_M] = background;
-         meshes[DEPTH_GUAGE_MASK_1_M] = guageMask1;
-         meshes[DEPTH_GUAGE_MASK_2_M] = guageMask2;
-         meshes[SCORE_GUAGE_MASK_1_M] = scoreMask1;
-         meshes[SCORE_GUAGE_MASK_2_M] = scoreMask2;
-         meshes[YOU_WON_M] = youWon;
-         meshes[YOU_LOST_M] = youLost;
-         meshes[CYLINDER_M] = cylinder;
-         meshes[GOING_NUTS_M] = goingNuts;
-         meshes[SUN_M] = sun;
-         meshes[NUT_COLOR_M] = nutColor;
-         meshes[NUT_OUTLINE_M] = nutOutline;
-         meshes[ENERGY_M] = energy;
-         meshes[POINTS_M] = points;
-         meshes[POWER_UP_BG_M] = powerUpBG;
-         meshes[QUESTION_MARK_M] = questionMark;
-         meshes[LEVEL_M] = level;
-         meshes[DEPTH_M] = depth;
+         meshes[SQUIRREL_M] = &squirrel;
+         meshes[BLOCK_M] = &block;
+         meshes[NUT_M] = &nut;
+         meshes[DEPTH_WHEEL_M] = &depthWheel;
+         meshes[BACKGROUND_M] = &background;
+         meshes[DEPTH_GUAGE_MASK_1_M] = &guageMask1;
+         meshes[DEPTH_GUAGE_MASK_2_M] = &guageMask2;
+         meshes[SCORE_GUAGE_MASK_1_M] = &scoreMask1;
+         meshes[SCORE_GUAGE_MASK_2_M] = &scoreMask2;
+         meshes[YOU_WON_M] = &youWon;
+         meshes[YOU_LOST_M] = &youLost;
+         meshes[CYLINDER_M] = &cylinder;
+         meshes[GOING_NUTS_M] = &goingNuts;
+         meshes[SUN_M] = &sun;
+         meshes[NUT_COLOR_M] = &nutColor;
+         meshes[NUT_OUTLINE_M] = &nutOutline;
+         meshes[ENERGY_M] = &energy;
+         meshes[POINTS_M] = &points;
+         meshes[POWER_UP_BG_M] = &powerUpBG;
+         meshes[QUESTION_MARK_M] = &questionMark;
+         meshes[LEVEL_M] = &level;
+         meshes[DEPTH_M] = &depth;
       }
 
       void initShaders() {
@@ -260,7 +260,7 @@ namespace Assets {
       }
    }
 
-   Mesh& getMesh(int type) {
+   Mesh* getMesh(int type) {
       /*if (type == SQUIRREL_M) {
          printf("num verts: %d\n", meshes[type].getVertCount());
       }*/
