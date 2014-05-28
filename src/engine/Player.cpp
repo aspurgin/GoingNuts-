@@ -56,15 +56,17 @@ bool Player::getIsDead() {
 }
 
 void Player::checkMoveState() {
-   model->setAt("run", glfwGetTime()*2);
    switch(horDirection) {
       case LEFT:
+         model->setAt("drillSide", glfwGetTime());
          ang = -90;
          break;
       case RIGHT:
+         model->setAt("drillSide", glfwGetTime());
          ang = 90;
          break;
       case STOPPED:
+         model->setAt("drill", glfwGetTime());
          ang = 0;
          break;
    }

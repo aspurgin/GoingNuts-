@@ -267,7 +267,7 @@ namespace Renderer {
 
 
          //setModel();
-         renderWalls();
+         //renderWalls();
 
          ngame->psystem.render();
          
