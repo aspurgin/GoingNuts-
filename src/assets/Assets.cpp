@@ -69,7 +69,7 @@ namespace Assets {
       }
 
       void loadMeshes() {
-         squirrel = Mesh("assets/models/AnimSquirrel.dae"); //"assets/models/squirrel2.dae");//
+         squirrel = Mesh("assets/models/squirrel2.dae");//
          block = Mesh("assets/models/Block0.obj");
          nut = Mesh("assets/models/Acorn.obj");
          depthWheel = Mesh("assets/models/DepthWheel.obj");

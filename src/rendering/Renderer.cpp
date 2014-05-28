@@ -168,7 +168,14 @@ namespace Renderer {
       }
 
       void renderPlayer() {
+         /*glUseProgram(cetshader.shadeProg);
+         camera.setView(cshader.h_uViewMatrix);
+         camera.setProjectionMatrix(cshader.h_uProjMatrix, (float)winWidth / winHeight, 0.1f, 100.0f);
+         safe_glUniform3f(cshader.h_lightPos, light.position.x, light.position.y, light.position.z);
+         safe_glUniform3f(cshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);*/
+
          ngame->player.render();
+         //glUseProgram(0);
       }
 
       void renderNuts() {
@@ -264,10 +271,11 @@ namespace Renderer {
 
          ngame->psystem.render();
          
-         renderPlayer();
+
          renderDynamite();
          renderHardHat();
          renderSuperDrill();
+         renderPlayer();
          renderNuts();
          
          renderBlocks();

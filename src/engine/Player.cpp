@@ -23,7 +23,7 @@ Player::Player(glm::vec3 center, float width, float height) {
    this->movingToColumn = 3;
    this->numDynamites = 0;
    this->foodPercent = 100;
-   this->texture = Assets::getTexture(Assets::SQUIRREL_T);
+   this->colorTexture = Assets::getTexture(Assets::SQUIRREL_T);
    this->hat = HardHat(center, 0.99, 0.99);
    this->threwDynamite = false;
 }
