@@ -11,7 +11,7 @@ MovableDynamite::MovableDynamite(glm::vec3 center, float width, float height) {
    this->scaleX = 1.0f;
    this->scaleY = 1.0f;
    this->scaleZ = 1.0f;
-   this->mat = 1;
+   this->mat = 6;
    this->ang = 0;
    this->modelTrans.useModelViewMatrix();
    this->offset = glm::vec3(0.0f,0.0f,0.0f);

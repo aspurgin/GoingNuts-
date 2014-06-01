@@ -126,14 +126,13 @@ namespace Renderer {
          //for the view and projection, use the virtual camera at the light's position
          light.getLightCam().setView(lmShader.h_uViewMatrix);
          light.getLightCam().setProjectionMatrix(lmShader.h_uProjMatrix, 1, 1.0f, 25.0f);
-         // model matrix does nothing for the monkey - make it an identity matrix
+         
          //safe_glUniformMatrix4fv (lmShader.h_uModelMatrix, glm::value_ptr(glm::mat4(0)));
 
          //std::list<Renderable*> currObjs = ngame->getObjectsToDraw();
          //Render the light shadow map for all casting objects
          int test = 0;
          for (std::list<Renderable*>::iterator it = currObjs.begin(); it != currObjs.end(); ++it) {
-            //printf("hello?: %d\n", test++);
             (*it)->renderLightMap();
          }
 
@@ -518,13 +517,13 @@ namespace Renderer {
       float eyeOffsetX = 3.0 + (ngame->player.getCenter().x - 3)/1.4;
       float eyeOffsetZ = 10.0 + (ngame->player.getCenter().x - 3)*(ngame->player.getCenter().x - 3)/10.0;
       camera.setEye(glm::vec3(eyeOffsetX, ngame->player.getCenter().y, eyeOffsetZ));
-      light.setPosition(glm::vec3(3.0, ngame->player.getCenter().y, 8.0f));
+      light.setPosition(glm::vec3(0.0, ngame->player.getCenter().y, 8.0f));
 
 
       renderLightShadowMap();
       renderGame();
       renderWinLoss();
-      //renderDebugShadowMapText();
+      renderDebugShadowMapText();
       //renderNormalMappedCylinder();
 
    }
