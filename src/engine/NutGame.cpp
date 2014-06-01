@@ -590,7 +590,7 @@ void NutGame::handleKeyInput() {
             if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + .5 - 1)] != 0) {
                if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + .5 - 1)]->getMovableType() == BLOCK) {
                   block = (Block *)gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + .5 - 1)];
-                  player.drillBlock(block);
+                  player.drillBlock(block, DRILLING_LEFT);
                   if (block->isDead() && block->deathCounter == -1) {
                      addToScore(1);
                      block->deathCounter = 0;
@@ -607,7 +607,7 @@ void NutGame::handleKeyInput() {
             if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)] != 0) {
                if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)]->getMovableType() == BLOCK) {
                   block = (Block *)gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)];
-                  player.drillBlock(block);
+                  player.drillBlock(block, DRILLING_RIGHT);
                   if (block->isDead() && block->deathCounter == -1) {
                       addToScore(1);
                      block->deathCounter = 0;
@@ -623,7 +623,7 @@ void NutGame::handleKeyInput() {
          if (gameGrid[(int)(pos.y + 1.5)][(int)(pos.x + .5)] != 0) {
             if (gameGrid[(int)(pos.y + 1.5)][(int)(pos.x + .5)]->getMovableType() == BLOCK) {
                block = (Block *)gameGrid[(int)(pos.y + 1.5)][(int)(pos.x + .5)];
-               player.drillBlock(block);
+               player.drillBlock(block, DRILLING_DOWN);
                if (block->isDead() && block->deathCounter == -1) {
                   addToScore(1);
                   block->deathCounter = 0;
@@ -639,7 +639,7 @@ void NutGame::handleKeyInput() {
             if (gameGrid[(int)(pos.y - 0.5)][(int)(pos.x + .5)] != 0) {
                if (gameGrid[(int)(pos.y - 0.5)][(int)(pos.x + .5)]->getMovableType() == BLOCK) {
                   block = (Block *)gameGrid[(int)(pos.y - 0.5)][(int)(pos.x + .5)];
-                  player.drillBlock(block);
+                  player.drillBlock(block, DRILLING_UP);
                   if (block->isDead() && block->deathCounter == -1) {
                      addToScore(1);
                      block->deathCounter = 0;

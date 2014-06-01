@@ -10,12 +10,13 @@
 #define HOR_MOVE_RATE 5.0
 
 enum Direction {LEFT, RIGHT, STOPPED};
+enum State {DRILLING_DOWN, DRILLING_UP, DRILLING_RIGHT, DRILLING_LEFT, RUNNING_LEFT, RUNNING_RIGHT, FALLING, STATIC};
 
 class Player: public Movable {
    public:
       Player();
       Player(glm::vec3, float, float);
-      void drillBlock(Block *);
+      void drillBlock(Block *, int);
       int getMovableType();
       bool shouldFall();
       void setWillFall();
@@ -57,8 +58,11 @@ class Player: public Movable {
       bool hasHardHat;
       int numDynamites;
       void checkMoveState();
+      void setAnimation();
+      int state;
       float foodPercent;
       HardHat hat;
+      int drillCount;
 };
 
 #endif

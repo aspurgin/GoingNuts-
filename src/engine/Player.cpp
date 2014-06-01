@@ -26,10 +26,14 @@ Player::Player(glm::vec3 center, float width, float height) {
    this->colorTexture = Assets::getTexture(Assets::SQUIRREL_T);
    this->hat = HardHat(center, 0.99, 0.99);
    this->threwDynamite = false;
+   this->state = STATIC;
+   drillCount = 0;
 }
   
-void Player::drillBlock(Block *block) {
+void Player::drillBlock(Block *block, int state) {
    drill->drillBlock(block);
+   this->state = state;
+   drillCount = 0;
 }
 
 int Player::getMovableType() {
@@ -38,6 +42,7 @@ int Player::getMovableType() {
 
 bool Player::shouldFall() {
 	if (fallCounter != -1) {
+      //state = FALLING;
 		return true;
 	}
 	return false;
@@ -58,15 +63,63 @@ bool Player::getIsDead() {
 void Player::checkMoveState() {
    switch(horDirection) {
       case LEFT:
-         model->setAt("drillSide", glfwGetTime());
+         state = RUNNING_LEFT;
+         //model->setAt("drillSide", glfwGetTime());
+         //model->setAt("run", glfwGetTime()*2);
          ang = -90;
          break;
       case RIGHT:
-         model->setAt("drillSide", glfwGetTime());
+         state = RUNNING_RIGHT;
+         //model->setAt("drillSide", glfwGetTime());
+         //model->setAt("run", glfwGetTime()*2);
          ang = 90;
          break;
       case STOPPED:
-         model->setAt("drill", glfwGetTime());
+         //state = STATIC;
+         //model->setAt("drill", glfwGetTime());
+         ang = 0;
+         break;
+   }
+}
+
+void Player::setAnimation() {
+   switch(state) {
+      case DRILLING_DOWN:
+      case DRILLING_UP:
+         model->setAt("drill", glfwGetTime()*2);
+         drillCount++;
+         if(drillCount > 20) {
+            state = STATIC;
+            drillCount = 0;
+         }
+         ang = 0;
+         break;
+      case DRILLING_LEFT:
+         model->setAt("drillSide", glfwGetTime()*2);
+         drillCount++;
+         if(drillCount > 20) {
+            state = STATIC;
+            drillCount = 0;
+         }
+         ang = -90;
+         break;
+      case DRILLING_RIGHT:
+         model->setAt("drillSide", glfwGetTime()*2);
+         drillCount++;
+         if(drillCount > 20) {
+            state = STATIC;
+            drillCount = 0;
+         }
+         ang = 90;
+         break;
+      case RUNNING_LEFT:
+      case RUNNING_RIGHT:
+         model->setAt("run", glfwGetTime()*2);
+         break;
+      case FALLING:
+         break;
+      case STATIC:
+         model->setAt("test", glfwGetTime());
          ang = 0;
          break;
    }
@@ -74,6 +127,7 @@ void Player::checkMoveState() {
 
 void Player::render() {
    checkMoveState();
+   setAnimation();
    position = center;
    Renderable::render();
 
