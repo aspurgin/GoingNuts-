@@ -166,6 +166,8 @@ void Renderable::psRender() {
 }
 
 void Renderable::ptsRender() {
+   glUseProgram(ptshader.shadeProg);
+   
    ptshader.setMaterial(mat);
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
@@ -365,6 +367,8 @@ void Renderable::bRender() {
 }
 
 void Renderable::ftsRender() {
+   glUseProgram(ftshader.shadeProg);
+   
    ftshader.setMaterial(mat);
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();

@@ -28,6 +28,7 @@
 #include "Number.hpp"
 #include "HardHatImage.hpp"
 #include "DynamiteImage.hpp"
+#include "Minimap.hpp"
 
 class Hud: public Renderable
 {
