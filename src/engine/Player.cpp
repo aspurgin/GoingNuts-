@@ -63,13 +63,17 @@ bool Player::getIsDead() {
 void Player::checkMoveState() {
    switch(horDirection) {
       case LEFT:
-         state = RUNNING_LEFT;
+         if (state != DRILLING_LEFT) {
+            state = RUNNING_LEFT;
+         }
          //model->setAt("drillSide", glfwGetTime());
          //model->setAt("run", glfwGetTime()*2);
          ang = -90;
          break;
       case RIGHT:
-         state = RUNNING_RIGHT;
+         if (state != DRILLING_RIGHT) {
+            state = RUNNING_RIGHT;
+         }
          //model->setAt("drillSide", glfwGetTime());
          //model->setAt("run", glfwGetTime()*2);
          ang = 90;
@@ -128,6 +132,7 @@ void Player::setAnimation() {
 void Player::render() {
    checkMoveState();
    setAnimation();
+   
    position = center;
    Renderable::render();
 
