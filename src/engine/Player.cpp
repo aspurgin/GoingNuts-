@@ -139,7 +139,7 @@ void Player::render() {
 
    if(hasHardHat) {
       //printf("here!\n");
-      glm::vec3 off(0.1, 0.4, 1);
+      glm::vec3 off(0.1, 0.4, 0.5);
       hat.setPosition(position + off);
       hat.render();
    }
