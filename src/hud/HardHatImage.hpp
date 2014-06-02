@@ -11,6 +11,7 @@
 class HardHatImage : public Renderable {
    public:
       HardHatImage();
+      HardHatImage(glm::vec3 position, glm::vec3 scale);
       void render();
 };
 

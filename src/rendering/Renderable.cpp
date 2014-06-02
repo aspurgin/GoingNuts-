@@ -19,6 +19,8 @@ Renderable::Renderable() {
    pshader = Assets::getPShader();
    bshader = Assets::getBShader();
    ftshader = Assets::getFlatTextureShader();
+   type = DIRT_BLOCK_R;
+   typeColor = 1;
 }
 
 void Renderable::renderLightMap() {

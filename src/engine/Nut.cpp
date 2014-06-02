@@ -16,6 +16,7 @@ Nut::Nut(glm::vec3 center, float width, float height) {
    this->modelTrans.useModelViewMatrix();
    this->offset = glm::vec3(0.0f,0.0f,0.0f);
    this->floatingUp = true;
+   this->type = NUT_R;
 }
 
 int Nut::getMovableType() {

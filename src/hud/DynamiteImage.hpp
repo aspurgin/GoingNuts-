@@ -11,6 +11,7 @@
 class DynamiteImage : public Renderable {
    public:
       DynamiteImage();
+      DynamiteImage(glm::vec3 position, glm::vec3 scale);
       void render();
 };
 

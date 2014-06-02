@@ -3,6 +3,8 @@
 
 namespace Assets {
    
+   
+
    namespace {
       //Entire system for the sound
       FMOD::System *soundSystem;
@@ -11,7 +13,7 @@ namespace Assets {
       //create a map for sounds and music
       std::map<int, FMOD::Sound*> sounds, music;
 
-      Mesh *squirrel, *block, *nut, *depthWheel, *background, *guageMask1, *guageMask2, *scoreMask1, *scoreMask2, *youWon, *youLost, *cylinder, *goingNuts, *sun, *nutColor, *nutOutline, *energy, *points, *powerUpBG, *questionMark, *level, *depth, *depthMask, *scoreMask, *number, *hardHat, *dynamite, *hardHatImage, *dynamiteImage, *square;
+      Mesh *squirrel, *block, *nut, *depthWheel, *background, *guageMask1, *guageMask2, *scoreMask1, *scoreMask2, *youWon, *youLost, *cylinder, *goingNuts, *sun, *nutColor, *nutOutline, *energy, *points, *powerUpBG, *questionMark, *level, *depth, *depthMask, *scoreMask, *number, *hardHat, *dynamite, *hardHatImage, *dynamiteImage, *square, *playerImage, *nutImage;
 
       Texture whiteDepthWheel, blackDepthWheel, hudElements, cylinderNormal, cylinderColor, dirtColor, dirtNormal, rockColor, rockNormal, squirrelTex, crystalNormal, sandNormal, lavaNormal;
       std::map<int, Mesh*> meshes;
@@ -69,7 +71,7 @@ namespace Assets {
       }
 
       void loadMeshes() {
-         squirrel = new Mesh("assets/models/squirrel.dae");//
+         squirrel = new Mesh("assets/models/squirrel.dae");
          block = new Mesh("assets/models/Block0.obj");
          nut = new Mesh("assets/models/Acorn.obj");
          depthWheel = new Mesh("assets/models/DepthWheel.obj");
@@ -99,7 +101,9 @@ namespace Assets {
          hardHatImage = new Mesh("assets/models/HardHatImage.obj");
          dynamiteImage = new Mesh("assets/models/DynamiteImage.obj");
          square = new Mesh("assets/models/Square.obj");
-         
+         playerImage = new Mesh("assets/models/PlayerImage.obj");
+         nutImage = new Mesh("assets/models/NutImage.obj");
+
          block->buildBuffers();
          squirrel->buildBuffers();
          nut->buildBuffers();
@@ -130,6 +134,8 @@ namespace Assets {
          hardHatImage->buildBuffers();
          dynamiteImage->buildBuffers();
          square->buildBuffers();
+         playerImage->buildBuffers();
+         nutImage->buildBuffers();
 
          meshes[SQUIRREL_M] = squirrel;
          meshes[BLOCK_M] = block;
@@ -161,6 +167,8 @@ namespace Assets {
          meshes[HARD_HAT_IMAGE_M] = hardHatImage;
          meshes[DYNAMITE_IMAGE_M] = dynamiteImage;
          meshes[SQUARE_M] = square;
+         meshes[PLAYER_IMAGE_M] = playerImage;
+         meshes[NUT_IMAGE_M] = nutImage;
       }
 
       void initShaders() {

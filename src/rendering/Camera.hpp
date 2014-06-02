@@ -17,6 +17,8 @@
 #include "../helperFiles/GLSL_helper.h"
 #endif
 
+#include <cstdlib>
+
 class Camera {
 public:
    glm::vec3 eye;
@@ -25,6 +27,7 @@ public:
    glm::vec3 wVector;
    glm::vec3 uVector;
    glm::vec3 vVector;
+   
    bool shakeUp;
    bool isShaking;
    float delta;
@@ -39,6 +42,12 @@ public:
    void setPosition(glm::vec3);
    void setLookAt(glm::vec3);
    glm::vec3 getPosition();
+private:
+   bool goingLeft;
+   bool goingRight;
+   glm::vec3 velocity;
+   glm::vec3 acceleration;
+
 };
 
 #endif

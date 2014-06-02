@@ -27,6 +27,7 @@ Player::Player(glm::vec3 center, float width, float height) {
    this->hat = HardHat(center, 0.99, 0.99);
    this->threwDynamite = false;
    this->state = STATIC;
+   this->type = PLAYER_R;
    drillCount = 0;
 }
   

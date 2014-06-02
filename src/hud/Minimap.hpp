@@ -8,6 +8,10 @@
 #include "../assets/Assets.hpp"
 #include "../rendering/Renderable.hpp"
 #include "../hud/MinimapBlock.hpp"
+#include "../hud/DynamiteImage.hpp"
+#include "../hud/HardHatImage.hpp"
+#include "../hud/PlayerImage.hpp"
+#include "../hud/NutImage.hpp"
 #include "../engine/NutGame.hpp"
 
 class Minimap : public Renderable {

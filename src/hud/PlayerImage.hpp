@@ -1,5 +1,5 @@
-#ifndef MinimapBlock_HPP
-#define MinimapBlock_HPP
+#ifndef PLAYER_IMAGE_HPP
+#define PLAYER_IMAGE_HPP
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -8,9 +8,10 @@
 #include "../assets/Assets.hpp"
 #include "../rendering/Renderable.hpp"
 
-class MinimapBlock : public Renderable {
+class PlayerImage : public Renderable {
    public:
-      MinimapBlock(glm::vec3 position, RenderType type, int colorType);
+      PlayerImage();
+      PlayerImage(glm::vec3 position, glm::vec3 scale);
       void render();
 };
 
