@@ -31,7 +31,7 @@ void Block::addToTimesDrilled() {
          delete groupIn;
       }
       else {
-         //genParticles();
+        //genParticles();
       }
       state = DEAD;
    }
@@ -124,9 +124,26 @@ void Block::render() {
 }
 
 void Block::genParticles() {
-   psystem->moveTo(center);
+   /*switch (blockType) {
+      case CRYSTALBLOCK:
+         psystem->setType(CRYSTALBLOCK);
+         //psystem->mass = 1;
+         break;
+      case DIRTBLOCK:
+         //psystem->mass = 0.05;
+         break;
+      case LAVABLOCK:
+         //s;
+         break;
+      case SANDBLOCK:
+         //s;
+         break;
+      case STONEBLOCK:
+         //s;
+         break;
+   }*/
    psystem->setMatID(this->mat);
-   psystem->setSpread(glm::vec3(4,1,4));
+   psystem->moveTo(center + glm::vec3(0, 0.5, 0));
    psystem->burst(25);
 }
 

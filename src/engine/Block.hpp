@@ -36,7 +36,7 @@ class Block: public Movable {
       bool shouldScale;
       void render();
       void setScale();
-      //void updatePSystem(double dt);
+      void updatePSystem(double dt);
       void genParticles();
    protected:
       BlockGroup *groupIn;
