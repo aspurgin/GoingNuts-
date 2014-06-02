@@ -3,6 +3,8 @@
 
 namespace Assets {
    
+   
+
    namespace {
       //Entire system for the sound
       FMOD::System *soundSystem;
@@ -69,7 +71,7 @@ namespace Assets {
       }
 
       void loadMeshes() {
-         squirrel = new Mesh("assets/models/squirrel.dae");//
+         squirrel = new Mesh("assets/models/squirrel.dae");
          block = new Mesh("assets/models/Block0.obj");
          nut = new Mesh("assets/models/Acorn.obj");
          depthWheel = new Mesh("assets/models/DepthWheel.obj");
