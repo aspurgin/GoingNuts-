@@ -1,5 +1,5 @@
-#ifndef HARD_HAT_IMAGE_HPP
-#define HARD_HAT_IMAGE_HPP
+#ifndef PLAYER_IMAGE_HPP
+#define PLAYER_IMAGE_HPP
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -8,10 +8,10 @@
 #include "../assets/Assets.hpp"
 #include "../rendering/Renderable.hpp"
 
-class HardHatImage : public Renderable {
+class PlayerImage : public Renderable {
    public:
-      HardHatImage();
-      HardHatImage(glm::vec3 position, glm::vec3 scale);
+      PlayerImage();
+      PlayerImage(glm::vec3 position, glm::vec3 scale);
       void render();
 };
 

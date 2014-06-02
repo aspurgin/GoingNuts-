@@ -21,12 +21,29 @@ void Minimap::render() {
          	{
 	         	MinimapBlock block(glm::vec3(x,y,0.0f), rtype, gridLine[j]->typeColor);
 	         	block.render();
-	        }
+	         }
+            else if (rtype == DYNAMITE_R)
+            {
+               DynamiteImage di(glm::vec3(x,y,0.0f), glm::vec3(0.05));
+               di.render();
+            }
+            else if (rtype == HARD_HAT_R)
+            {
+               HardHatImage hhi(glm::vec3(x,y,0.0f), glm::vec3(0.05));
+               hhi.render();
+            }
+            else if (rtype == PLAYER_R)
+            {
+               PlayerImage pi(glm::vec3(x,y,0.0f), glm::vec3(0.3));
+               pi.render();
+            }
+            else if (rtype == NUT_R)
+            {
+               NutImage ni(glm::vec3(x,y,0.0f), glm::vec3(0.3));
+               ni.render();
+            }
          } 
-         else
-         {
 
-         }
       }
    }
 }
