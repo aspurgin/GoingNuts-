@@ -36,7 +36,7 @@ void Camera::shake(float max) {
 
 void Camera::setEye(glm::vec3 pos) {
    eye = pos;
-   printf("lookat: %f\n", lookAt.x);
+   TRACE("lookat: " << lookAt.x);
 
    /*float delta = eye.x - pos.x;
    float absDelta = std::fabs(delta);
