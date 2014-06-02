@@ -6,6 +6,7 @@ DirtBlock::DirtBlock(glm::vec3 center, int color) {
    this->center = center;    
    this->blockType = DIRTBLOCK;
    this->color = color;
+   this->type = DIRT_BLOCK_R;
 }
 
 DirtBlock::DirtBlock(glm::vec3 center, float width, float height, int color, ParticleSystem *psystem) {
@@ -17,6 +18,8 @@ DirtBlock::DirtBlock(glm::vec3 center, float width, float height, int color, Par
    this->shaderType = PT_SHADE;
    this->colorTexture = Assets::getTexture(Assets::DIRT_COLOR_T);
    this->normalTexture = Assets::getTexture(Assets::DIRT_NORMAL_T);
+   this->type = DIRT_BLOCK_R;
+   this->typeColor = color;
 }
 
 int DirtBlock::getStrength() {

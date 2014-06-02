@@ -5,6 +5,7 @@ SandBlock::SandBlock() {};
 SandBlock::SandBlock(glm::vec3 center, int color) {
    this->center = center;    
    this->blockType = SANDBLOCK;
+   this->type = SAND_BLOCK_R;
 }
 
 SandBlock::SandBlock(glm::vec3 center, float width, float height, ParticleSystem* psystem) {
@@ -15,6 +16,7 @@ SandBlock::SandBlock(glm::vec3 center, float width, float height, ParticleSystem
    this->shaderType = PT_SHADE;
    this->colorTexture = Assets::getTexture(Assets::DIRT_COLOR_T);
    this->normalTexture = Assets::getTexture(Assets::SAND_T);
+   this->type = SAND_BLOCK_R;
 }
 
 int SandBlock::getStrength() {

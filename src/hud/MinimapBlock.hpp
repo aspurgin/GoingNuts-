@@ -10,7 +10,7 @@
 
 class MinimapBlock : public Renderable {
    public:
-      MinimapBlock(glm::vec3 position);
+      MinimapBlock(glm::vec3 position, RenderType type, int colorType);
       void render();
 };
 

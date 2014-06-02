@@ -5,6 +5,7 @@ CrystalBlock::CrystalBlock() {};
 CrystalBlock::CrystalBlock(glm::vec3 center, int color) {
    this->center = center;    
    this->blockType = CRYSTALBLOCK;
+   this->type = CRYSTAL_BLOCK_R;
 }
 
 CrystalBlock::CrystalBlock(glm::vec3 center, float width, float height, ParticleSystem* psystem) {
@@ -16,6 +17,7 @@ CrystalBlock::CrystalBlock(glm::vec3 center, float width, float height, Particle
    this->colorTexture = Assets::getTexture(Assets::DIRT_COLOR_T);
    this->normalTexture = Assets::getTexture(Assets::CRYSTAL_T);
    this->shaderType = PT_SHADE;
+   this->type = CRYSTAL_BLOCK_R;
 }
 
 int CrystalBlock::getStrength() {
