@@ -93,8 +93,8 @@ namespace Renderer {
          safe_glUniform3f(ftshader.h_lightPos, light.position.x, light.position.y, light.position.z);
          safe_glUniform3f(ftshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
 
-         camera.setPosition(glm::vec3(3.0f, ngame->player.getCenter().y + 1, 6.0f));
-         light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y - 1, 6.0f));
+         //camera.setPosition(glm::vec3(3.0f, ngame->player.getCenter().y + 1, 6.0f));
+         //light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y - 1, 6.0f));
 
          glUseProgram(0);
 
@@ -277,7 +277,7 @@ namespace Renderer {
 
 
          //setModel();
-         //renderWalls();
+         renderWalls();
 
          ngame->psystem.render();
          
@@ -309,8 +309,8 @@ namespace Renderer {
          safe_glUniform3f(ftshader.h_lightPos, light.position.x, light.position.y, light.position.z);
          safe_glUniform3f(ftshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
 
-         camera.setPosition(glm::vec3(3.0f, ngame->player.getCenter().y + 1, 6.0f));
-         light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y - 1, 6.0f));
+         //camera.setPosition(glm::vec3(3.0f, ngame->player.getCenter().y + 1, 6.0f));
+         //light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y - 1, 6.0f));
 
          hud->renderWinLoss();
 
@@ -525,8 +525,8 @@ namespace Renderer {
       
       renderHud();
       
-      float eyeOffsetX = 3.0 + (ngame->player.getCenter().x - 3)/1.4;
-      float eyeOffsetZ = 10.0 + (ngame->player.getCenter().x - 3)*(ngame->player.getCenter().x - 3)/10.0;
+      float eyeOffsetX = 3.0 + (ngame->player.getCenter().x - 3)/1.5;
+      float eyeOffsetZ = 10.0 + (ngame->player.getCenter().x - 3)*(ngame->player.getCenter().x - 3)/5.0;
       camera.setEye(glm::vec3(eyeOffsetX, ngame->player.getCenter().y, eyeOffsetZ));
       light.setPosition(glm::vec3(0.0, ngame->player.getCenter().y, 8.0f));
 
