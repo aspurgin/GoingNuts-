@@ -26,21 +26,21 @@ void main() {
    vec3 eyeVert = eyePos - positionVec;
    eyeVert = normalize(eyeVert);
 
-   vec3 lightVert = eyePos - lightVec;
-   lightVert = normalize(lightVert);
+   vec3 lightVert = lightVec - positionVec;
+   lightVert = normalize(lightVec);
 
    normalVec = normalize(normalVec);
    float angleBetweenCamera = dot(normalVec, eyeVert);
    float angleBetweenLight = dot(normalVec, lightVert);
    //Needed to flip v coordinate because SOIL inverts the texture
-   vec4 texColor = texture2D(myTextureSampler, vec2(UV.x, 1.0f-UV.y));
+   vec4 texColor = texture2D(myTextureSampler, vec2(UV.x, UV.y));
 
    // Simple Silhouette
    // If angle is too drastic, color black
-   if (max(angleBetweenCamera, 0.0) < 0.4) {
+   if (max(angleBetweenCamera, 0.0) < 0.35) {
       // Silhouette Color:
-      //gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
-      gl_FragColor = texColor * 0.4f;
+      gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+      //gl_FragColor = texColor * 0.4f;
    }
    else {
       // Base Color
@@ -63,8 +63,10 @@ void main() {
       // is not close enough to be the center and not far enough
       // to be the black outline
       if (max(angleBetweenLight, 0.0) < 0.2) {
-         gl_FragColor *= 0.6;
+         gl_FragColor *= 0.8;
       }
+	gl_FragColor.b *= 1.2;
    }
-   gl_FragColor = texColor;
+   
+   //gl_FragColor = texColor;
 }

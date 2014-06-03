@@ -734,7 +734,7 @@ void NutGame::handleKeyInput() {
 std::list<Renderable*> NutGame::getObjectsToDraw() {
    int count = -player.getCenter().y - NUM_BLOCKS_VISIBLE_ABOVE_PLAYER;
    std::list<Renderable*> objects;
-   
+     
    if (count < 0) {
       count = 0;
    }

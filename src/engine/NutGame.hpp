@@ -27,7 +27,7 @@
 //#define NUMROWS 17
 #define NUMCOLS 7
 #define NUM_BLOCKS_VISIBLE_ABOVE_PLAYER 6
-#define NUM_TOTAL_BLOCKS_VISIBLE 12
+#define NUM_TOTAL_BLOCKS_VISIBLE 14
 
 class NutGame {
    public:

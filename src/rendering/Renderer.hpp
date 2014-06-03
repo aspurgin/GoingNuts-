@@ -38,12 +38,11 @@ namespace Renderer {
       extern int winWidth, winHeight;
       extern NutGame *ngame;
 
-      //Mesh squirrel;
-      //Mesh block;
-      //Renderer();
       void Renderer(int, int, NutGame*, Hud*);
+      void useCShader();
+      void useCTShader();
+      void usePTShader();
       void initialize();
-      void setModel();
       void renderCube(glm::vec3, int, float);
       void renderSquirrel(glm::vec3, int, float);
       //void renderNormalMappedCylinder();

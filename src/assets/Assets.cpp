@@ -42,7 +42,7 @@ namespace Assets {
          
          cylinderColor = Texture("assets/textures/Cylinder_Color.png", RGB_TEX);
          cylinderNormal = Texture("assets/textures/Cylinder_Normal.png", RGB_TEX);
-         squirrelTex = Texture("assets/textures/squirrel.png", RGBA_TEX);
+         squirrelTex = Texture("assets/textures/squirrelTex.png", RGBA_TEX);
 
          dirtColor = Texture("assets/textures/DirtTextureTileable.jpg");
          dirtNormal = Texture("assets/textures/DirtTextureTileableNormals.jpg");

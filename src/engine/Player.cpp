@@ -1,4 +1,5 @@
 #include "Player.hpp"
+#include "../rendering/Renderer.hpp"
 
 Player::Player() {}
 
@@ -10,7 +11,7 @@ Player::Player(glm::vec3 center, float width, float height) {
    this->isDead = false;
    this->model = Assets::getMesh(Assets::SQUIRREL_M);
    this->hasHardHat = false;
-   this->shaderType = C_SHADE;
+   this->shaderType = CT_SHADE;
    this->mat = 5;
    this->scale = 1;
    scaleX = 1;
@@ -139,9 +140,11 @@ void Player::render() {
 
    if(hasHardHat) {
       //printf("here!\n");
+      Renderer::useCShader();
       glm::vec3 off(0.1, 0.4, 0.5);
       hat.setPosition(position + off);
       hat.render();
+      glUseProgram(0);
    }
 }
 
