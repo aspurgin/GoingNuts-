@@ -62,13 +62,11 @@ namespace Renderer {
          glBufferData(GL_ARRAY_BUFFER, sizeof(ss_quad_st), ss_quad_st, GL_STATIC_DRAW);
       }
 
-
       void renderWalls() {
          //left.render();
          //right.render();
          back.render();
       }
-
 
       void renderHud() {
          //*** Render the hud ***/
@@ -139,7 +137,6 @@ namespace Renderer {
          glClear(GL_DEPTH_BUFFER_BIT);
       }
 
-      
       void renderBlocks() {
          usePTShader();
 
@@ -186,26 +183,10 @@ namespace Renderer {
 
       }
       
-
       void renderGame() {
-
          //*** Render the Game ***/
          
-         /***************************BEGIN TEST CODE**********************************
-         */glClearColor(0.2,0.2,0.2,1);/*
-         static float test = 0;
-         static float step = 0.02;
-
-         test += step;
-         if (test<-3 || test>9) {
-            step *= -1;
-            test += 2*step;
-         }
-
-         camera.setEye(glm::vec3(test, ngame->player.getCenter().y - 2*test, 8.0f));
-         camera.setLookAt(glm::vec3(test, ngame->player.getCenter().y - 6, 0.0f));
-
-         /***************************END TEST CODE**********************************/
+         glClearColor(0.2,0.2,0.2,1);
 
          /*float eyeOffsetX = 3.0;
          if(ngame->player.movingHorizontal() == LEFT) {
@@ -245,7 +226,6 @@ namespace Renderer {
 
          glUseProgram(0);
       }
-
 
       void renderWinLoss() {
          //*** Render Win Loss ***/

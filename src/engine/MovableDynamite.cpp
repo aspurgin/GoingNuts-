@@ -17,6 +17,8 @@ MovableDynamite::MovableDynamite(glm::vec3 center, float width, float height) {
    this->offset = glm::vec3(0.0f,0.0f,0.0f);
    this->floatingUp = true;
    this->type = DYNAMITE_R;
+   this->axis = glm::vec3(0, 1, 0.2);
+   this->spinning = true;
 }
 
 int MovableDynamite::getMovableType() {

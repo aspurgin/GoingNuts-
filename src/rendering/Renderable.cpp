@@ -21,6 +21,21 @@ Renderable::Renderable() {
    ftshader = Assets::getFlatTextureShader();
    type = DIRT_BLOCK_R;
    typeColor = 1;
+   spinning = false;
+}
+
+void Renderable::updateSpin() {
+   if (spinning) {
+      ang += 0.5;
+      //let it spin twice before reset
+      if (ang > 720) {
+         ang = 0;
+      }
+   }
+}
+
+void Renderable::setSpin(bool spin) {
+   spinning = spin;
 }
 
 void Renderable::renderLightMap() {
@@ -405,6 +420,7 @@ void Renderable::ftsRender() {
 }
 
 void Renderable::render() {
+   updateSpin();
    switch (shaderType) {
       case C_SHADE:
          csRender();
@@ -429,6 +445,12 @@ void Renderable::render() {
 
 void Renderable::setPosition(glm::vec3 pos) {
    this->position = pos;
+}
+
+void Renderable::setScale(float scaleX, float scaleY, float scaleZ) {
+   this->scaleX = scaleX;
+   this->scaleY = scaleY;
+   this->scaleZ = scaleZ;
 }
 
 

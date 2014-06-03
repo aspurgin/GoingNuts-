@@ -26,6 +26,8 @@ Player::Player(glm::vec3 center, float width, float height) {
    this->foodPercent = 100;
    this->colorTexture = Assets::getTexture(Assets::SQUIRREL_T);
    this->hat = HardHat(center, 0.99, 0.99);
+   this->hat.setScale(0.25f, 0.25f, 0.25f);
+   this->hat.setSpin(false);
    this->threwDynamite = false;
    this->state = STATIC;
    this->type = PLAYER_R;
@@ -141,6 +143,7 @@ void Player::render() {
    if(hasHardHat) {
       //printf("here!\n");
       Renderer::useCShader();
+
       glm::vec3 off(0.1, 0.4, 0.5);
       hat.setPosition(position + off);
       hat.render();

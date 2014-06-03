@@ -23,6 +23,7 @@ class Renderable {
       float scale;
       float scaleX, scaleY, scaleZ;
       float ang;
+      bool spinning;
       Texture colorTexture;
       Texture normalTexture;
       glm::vec3 position;
@@ -42,6 +43,7 @@ class Renderable {
       void ptsRender();
       void bRender();
       void ftsRender();
+      void updateSpin();
    public:
       RenderType type;
       int typeColor;
@@ -50,5 +52,7 @@ class Renderable {
       //virtual void setModel();// = 0;
       void renderLightMap();
       virtual void setPosition(glm::vec3);
+      void setScale(float, float, float);
+      void setSpin(bool);
 };
 #endif
