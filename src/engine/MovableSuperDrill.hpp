@@ -14,6 +14,7 @@ class MovableSuperDrill: public Movable {
       void setWillFall();
       void render();
       void setModel();
+      void playHitGroundSound();
    private:
       float velocity;
       //Mesh model;

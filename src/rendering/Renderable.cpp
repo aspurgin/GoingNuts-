@@ -48,7 +48,7 @@ void Renderable::renderLightMap() {
       modelTrans.rotate(ang, glm::vec3(0, 1, 0));
       safe_glUniformMatrix4fv(lmShader.h_uModelMatrix, glm::value_ptr(modelTrans.modelViewMatrix));
    modelTrans.popMatrix();
-
+   
    safe_glEnableVertexAttribArray(lmShader.h_aPosition);
    glBindBuffer(GL_ARRAY_BUFFER, model->vertHandle());
    safe_glVertexAttribPointer(lmShader.h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);

@@ -13,6 +13,7 @@ class Nut: public Movable {
       bool shouldFall();
       void setWillFall();
       void render();
+      void playHitGroundSound();
    private:
       float velocity;
       glm::vec3 offset;

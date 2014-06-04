@@ -97,6 +97,9 @@ void keyPressed(GLFWwindow *window, int key, int scancode, int action, int mods)
          game.releasedSinceThrowDynamitePressed = true;
       }
    }
+   else if (key == GLFW_KEY_R) {
+      game.init();
+   }
    else if (key == GLFW_KEY_ESCAPE) {
       glfwTerminate();
 
@@ -160,7 +163,6 @@ int main(void)
          game.player.takeAwayEnergy(delta);
       }
       game.updatePSystem(delta);
-
       if (fpsTime >= 1) {
          curFps = fpsCount;
          fpsCount = 0;
@@ -184,10 +186,8 @@ int main(void)
       lastTime = currentTime;
       // Render here
       glViewport(0, 0, (GLsizei)1280, (GLsizei)720);
-      
       Renderer::toggle = tog;
       Renderer::render();
-      
       //renderer.toggle = tog;
       //renderer.render();
 

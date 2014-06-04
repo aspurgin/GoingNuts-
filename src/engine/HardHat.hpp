@@ -15,6 +15,7 @@ class HardHat: public Movable {
       void render();
       void setModel();
       void setPosition(glm::vec3);
+      void playHitGroundSound();
    private:
       float velocity;
       //Mesh model;

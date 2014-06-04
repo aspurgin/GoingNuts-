@@ -8,9 +8,9 @@
 #include "../assets/Assets.hpp"
 #include "../rendering/Renderable.hpp"
 
-class Level : public Renderable {
+class LevelLabel : public Renderable {
    public:
-      Level();
+      LevelLabel();
       void render();
 };
 

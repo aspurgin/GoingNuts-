@@ -127,9 +127,10 @@ namespace Renderer {
          
          int test = 0;
          for (std::list<Renderable*>::iterator it = currObjs.begin(); it != currObjs.end(); ++it) {
+            DEBUG("" << ((Movable*)(*it))->getMovableType());
             (*it)->renderLightMap();
          }
-
+         
          ngame->psystem.renderLightMap();
          glBindFramebuffer(GL_FRAMEBUFFER, 0);
          glUseProgram(0);
@@ -497,6 +498,7 @@ namespace Renderer {
       float eyeOffsetZ = 12.0 - (ngame->player.getCenter().x - 3)*(ngame->player.getCenter().x - 3)/9.0;
       camera.setEye(glm::vec3(eyeOffsetX, ngame->player.getCenter().y, eyeOffsetZ));
       light.setPosition(glm::vec3(3.0, ngame->player.getCenter().y, 8.0f));
+
 
       renderLightShadowMap();
       renderGame();

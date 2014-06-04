@@ -24,7 +24,7 @@ Player::Player(glm::vec3 center, float width, float height) {
    this->movingToColumn = 3;
    this->numDynamites = 0;
    this->foodPercent = 100;
-   this->colorTexture = Assets::getTexture(Assets::SQUIRREL_T);
+   //this->colorTexture = Assets::getTexture(Assets::SQUIRREL_T);
    this->hat = HardHat(center, 0.99, 0.99);
    this->hat.setScale(0.25f, 0.25f, 0.25f);
    this->hat.setSpin(false);
@@ -32,6 +32,7 @@ Player::Player(glm::vec3 center, float width, float height) {
    this->state = STATIC;
    this->type = PLAYER_R;
    drillCount = 0;
+   this->score = 0;
 }
   
 void Player::drillBlock(Block *block, int state) {
@@ -234,4 +235,19 @@ float Player::getEnergyLeft() {
 
 void Player::addEnergy(float toAdd) {
    foodPercent += toAdd;
+}
+
+void Player::addToScore(int num) {
+   if (num == 5) {
+      Assets::playSound(Assets::NUT_S);
+   }
+   score += num;
+}
+
+int Player::getScore() {
+	return score;
+}
+
+void Player::playHitGroundSound() {
+   
 }

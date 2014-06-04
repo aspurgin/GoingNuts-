@@ -90,3 +90,7 @@ void MovableDynamite::render() {
 void MovableDynamite::setModel() {
    safe_glUniformMatrix4fv(cshader.h_uModelMatrix, glm::value_ptr(modelTrans.modelViewMatrix)); 
 }
+
+void MovableDynamite::playHitGroundSound() {
+   
+}

@@ -47,6 +47,9 @@ void Movable::fall(double toAdd) {
 }
 
 void Movable::stopFalling() {
+   if (shouldFall()) {
+      playHitGroundSound();
+   }
 	fallCounter = -1;
 }
 

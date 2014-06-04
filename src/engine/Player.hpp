@@ -6,6 +6,7 @@
 #include "NormalDrill.hpp"
 #include "SuperDrill.hpp"
 #include "HardHat.hpp"
+#include "../assets/Assets.hpp"
 
 #define HOR_MOVE_RATE 5.0
 
@@ -45,6 +46,9 @@ class Player: public Movable {
       void takeAwayEnergy(float toSub);
       void addEnergy(float toAdd);
       bool threwDynamite;
+      void addToScore(int num);
+      int getScore();
+      void playHitGroundSound();
    private:
       Texture texture;
       float velocity;
@@ -63,6 +67,7 @@ class Player: public Movable {
       float foodPercent;
       HardHat hat;
       int drillCount;
+      int score;
 };
 
 #endif

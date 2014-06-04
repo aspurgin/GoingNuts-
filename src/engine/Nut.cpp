@@ -62,3 +62,7 @@ void Nut::render() {
    position = center + offset;
    Renderable::render();
 }
+
+void Nut::playHitGroundSound() {
+   
+}

@@ -8,6 +8,7 @@
 #include "BlockGroup.hpp"
 #include "../shaders/CellShader.hpp"
 #include "../particles/Particles.hpp"
+#include "../assets/Assets.hpp"
 #include <vector>
 
 #define HANG_TIME 2
@@ -38,6 +39,7 @@ class Block: public Movable {
       void setScale();
       void updatePSystem(double dt);
       void genParticles();
+      void playHitGroundSound();
    protected:
       BlockGroup *groupIn;
       int blockType;

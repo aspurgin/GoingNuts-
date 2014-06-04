@@ -147,3 +147,7 @@ void Block::genParticles() {
    psystem->burst(25);
 }
 
+void Block::playHitGroundSound() {
+   Assets::playSound(Assets::BLOCK_FALL_S);
+}
+

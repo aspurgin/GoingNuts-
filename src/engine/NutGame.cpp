@@ -20,7 +20,6 @@ NutGame::NutGame() {
    this->releasedSinceRightPress = true;
    this->releasedSinceThrowDynamitePressed = true;
    this->nutsLeft = 0;
-   this->score = 0;
    this->psystem = ParticleSystem();
    NUMROWS = 0;
 }
@@ -37,66 +36,13 @@ NutGame::~NutGame() {
 }
 
 void NutGame::init() {
-   std::FILE *file = fopen("levels/level25per.txt", "r");
-   //std::FILE *file = fopen("levels/test.txt", "r");
-   char c = 'a';
-   int row = 0;
-   while(c != '-') {
-      std::vector<Movable*> tmp(NUMCOLS);
-   //for (int row = 0; row < NUMROWS; row++) {
-      for (int col = 0; col< NUMCOLS; col++) {
-         c = fgetc(file);
-         //They are all .99 because there  is some rounding errors with collision detection if they are 1
-         if (c == 'X') {
-            tmp[col] = new StoneBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, &psystem);
-         }
-         else if (c == 'S') {
-            tmp[col] = new SandBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, &psystem);
-         }
-         else if (c == 'C') {
-            tmp[col] = new CrystalBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, &psystem);
-         }
-         else if (c == 'L') {
-            tmp[col] = new LavaBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, &psystem);
-         }
-         else if (c == 'R') {
-            tmp[col] = new DirtBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, 1, &psystem);
-         }
-         else if (c == 'G') {
-            tmp[col] = new DirtBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, 3, &psystem);
-         }
-         else if (c == 'B') {
-            tmp[col] = new DirtBlock(glm::vec3(col, -row, 0), 0.99f, 0.99f, 2, &psystem);
-         }
-         else if (c == 'P') {
-            player = Player(glm::vec3(col, -row, 0), 0.99f, 0.99f);
-            tmp[col] = &player;
-         }
-         else if (c == '0') {
-            tmp[col] = 0;
-         }
-         else if (c == 'N') {
-            tmp[col] = new Nut(glm::vec3(col, -row, 0), 0.99f, 0.99f);
-            nutsLeft++;
-         }
-         else if (c == 'H') {
-            tmp[col] = new HardHat(glm::vec3(col, -row, 0), 0.99f, 0.99f);
-         }
-         else if (c == 'D') {
-            tmp[col] = new MovableSuperDrill(glm::vec3(col, -row, 0), 0.99f, 0.99f);
-         }
-         else if (c == 'Y') {
-            tmp[col] = new MovableDynamite(glm::vec3(col, -row, 0), 0.99f, 0.99f);
-         }
-         fgetc(file);
-      }
-      gameGrid.push_back(tmp);
-      row++;
-   }
-   NUMROWS = row;
-   fclose(file);
+   levels.clear();
+   levels.push_back(Level("levels/level25pernoplayer.txt"));
+   levels.push_back(Level("levels/level25pernoplayer.txt"));
+   levels.push_back(Level("levels/level25pernoplayer.txt"));
+   levels.push_back(Level("levels/level25per.txt"));
 
-   connectBlocks();
+   loadNextLevel();
 }
 
 void NutGame::connectBlocks() {
@@ -116,6 +62,7 @@ void NutGame::maybeAddToGroupLeft(int row, int col) {
    Block* left;
 
    if (col > 0 && gameGrid[row][col - 1] != 0 &&
+       gameGrid[row][col] != 0 &&
        gameGrid[row][col]->getMovableType() == BLOCK &&
        gameGrid[row][col - 1]->getMovableType() == BLOCK) {
       thisBlock = (Block*)gameGrid[row][col];
@@ -137,7 +84,8 @@ void NutGame::maybeAddToGroupRight(int row, int col) {
    Block* thisBlock;
    Block* right;
    
-   if (col < NUMCOLS - 1 && gameGrid[row][col + 1] != 0 &&
+   if (col < NUMCOLS - 1 && gameGrid[row][col + 1] != 0 && 
+       gameGrid[row][col] != 0 &&
        gameGrid[row][col]->getMovableType() == BLOCK &&
        gameGrid[row][col + 1]->getMovableType() == BLOCK) {
          
@@ -161,6 +109,7 @@ void NutGame::maybeAddToGroupDown(int row, int col) {
    Block* down;
    
    if (row < NUMROWS - 1 && gameGrid[row + 1][col] != 0 && 
+       gameGrid[row][col] != 0 &&
        gameGrid[row + 1][col]->getMovableType() == BLOCK &&
        gameGrid[row][col]->getMovableType() == BLOCK) {
       thisBlock = (Block*)gameGrid[row][col];
@@ -255,7 +204,6 @@ void NutGame::fallDown(double toAdd) {
                   if (gameGrid[row][col]->getMovableType() == PLAYER) {
                      if (gameGrid[row + 1][col]->getMovableType() == NUT) {
                         nutsLeft--;
-                        Assets::playSound(Assets::NUT_S);
                         addToScore(5);
                         player.addEnergy(10);
                         //DEBUG("Deleted Here 2");
@@ -293,9 +241,6 @@ void NutGame::fallDown(double toAdd) {
                            else {
                               gameGrid[row][col]->stopFalling();
                               gameGrid[row][col]->setCanNotFall();
-                              if(gameGrid[row][col]->getMovableType() == BLOCK) {
-                                 Assets::playSound(Assets::BLOCK_FALL_S);
-                              }
                               gameGrid[row][col]->moveTo(glm::vec2(gameGrid[row][col]->getCenter().x, -row));
                            }
                         }
@@ -304,7 +249,6 @@ void NutGame::fallDown(double toAdd) {
                   else if (gameGrid[row + 1][col]->getMovableType() == PLAYER) {
                      if (gameGrid[row][col]->getMovableType() == NUT) {
                         nutsLeft--;
-                        Assets::playSound(Assets::NUT_S);
                         addToScore(5);
                         player.addEnergy(10);
                         //DEBUG("Deleted Here 3");
@@ -338,9 +282,6 @@ void NutGame::fallDown(double toAdd) {
                            }
                            gameGrid[row][col]->stopFalling();
                            gameGrid[row][col]->setCanNotFall();
-                           if(gameGrid[row][col]->getMovableType() == BLOCK) {
-                              Assets::playSound(Assets::BLOCK_FALL_S);
-                           }
                            gameGrid[row][col]->moveTo(glm::vec2(gameGrid[row][col]->getCenter().x, -row));
                            //delete gameGrid[row][col];
                            //gameGrid[row][col] = 0;
@@ -362,9 +303,6 @@ void NutGame::fallDown(double toAdd) {
                      else {
                         gameGrid[row][col]->stopFalling();
                         gameGrid[row][col]->setCanNotFall();
-                        if(gameGrid[row][col]->getMovableType() == BLOCK) {
-                           Assets::playSound(Assets::BLOCK_FALL_S);
-                        }
                         gameGrid[row][col]->moveTo(glm::vec2(gameGrid[row][col]->getCenter().x, -row));
                      }
                   }
@@ -377,6 +315,11 @@ void NutGame::fallDown(double toAdd) {
                   }
                   gameGrid[row + 1][col] = gameGrid[row][col];
                   gameGrid[row][col] = 0;
+                  if (row + 1 == NUMROWS - 1 && gameGrid[row + 1][col]->getMovableType() == PLAYER) {
+                     row = -1;
+                     col = NUMCOLS;
+                     loadNextLevel();
+                  }
                }
                else if (gameGrid[row][col] != 0) {
                   double place = gameGrid[row][col]->getCenter().y;
@@ -532,7 +475,6 @@ void NutGame::finishSettingFallingMovables() {
                gameGrid[row + 1][col]->getMovableType() == PLAYER ||
                gameGrid[row + 1][col]->willFall() || gameGrid[row + 1][col]->getCanFall()))){
                ((Block*)gameGrid[row][col])->getGroupIn()->setGroupCanNotFall();
-               Assets::playSound(Assets::BLOCK_FALL_S);
 
                it = mightFallGroupList.erase(it);
                //--it;
@@ -668,7 +610,6 @@ void NutGame::handleKeyInput() {
                if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - .00001)] != 0 && gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - .00001)]->getMovableType() != BLOCK) {
                   if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - .00001)]->getMovableType() == NUT) {
                      nutsLeft--;
-                     Assets::playSound(Assets::NUT_S);
                      addToScore(5);
                      player.addEnergy(10);
                   }
@@ -703,7 +644,6 @@ void NutGame::handleKeyInput() {
                if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)] != 0 && gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)]->getMovableType() != BLOCK) {
                   if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)]->getMovableType() == NUT) {
                      nutsLeft--;
-                     Assets::playSound(Assets::NUT_S);
                      addToScore(5);
                      player.addEnergy(10);
                   }
@@ -732,7 +672,7 @@ void NutGame::handleKeyInput() {
 }
 
 std::list<Renderable*> NutGame::getObjectsToDraw() {
-   int count = -player.getCenter().y - NUM_BLOCKS_VISIBLE_ABOVE_PLAYER;
+   int count = player.getCenter().y * -1 - NUM_BLOCKS_VISIBLE_ABOVE_PLAYER;
    std::list<Renderable*> objects;
      
    if (count < 0) {
@@ -805,11 +745,11 @@ int NutGame::getNutsLeft() {
 
 
 void NutGame::addToScore(int num) {
-	score += num;
+	player.addToScore(num);
 }
 
 int NutGame::getScore() {
-	return score;
+	return player.getScore();
 }
 
 int NutGame::getDepth() {
@@ -872,4 +812,26 @@ void NutGame::explodeDynamiteAt(int row, int col) {
 
 Player NutGame::getPlayer() {
    return this->player;
+}
+
+void NutGame::addToNutsLeft() {
+   nutsLeft++;
+}
+
+void NutGame::setNumRows(int rows) {
+   NUMROWS = rows;
+}
+
+void NutGame::loadNextLevel() {
+   for (int row = 0; row < NUMROWS; row++) {
+      for (int col = 0; col < NUMCOLS; col++) {
+         if (gameGrid[row][col] != 0 && gameGrid[row][col]->getMovableType() != PLAYER) {
+            delete gameGrid[row][col];
+         }
+      }
+   }
+   
+   levels[levels.size() - 1].loadLevel(this);
+   levels.pop_back();
+   connectBlocks();
 }

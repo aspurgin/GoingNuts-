@@ -1,6 +1,6 @@
 #include "Level.hpp"
 
-Level::Level() {
+LevelLabel::LevelLabel() {
    model = Assets::getMesh(Assets::LEVEL_M);
    shaderType = FT_SHADE;
    scaleX = 0.275f;
@@ -11,6 +11,6 @@ Level::Level() {
    this->modelTrans.useModelViewMatrix();
 }
 
-void Level::render() {
+void LevelLabel::render() {
    Renderable::render();
 }

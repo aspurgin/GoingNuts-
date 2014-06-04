@@ -20,7 +20,7 @@ Hud::Hud(NutGame* nutGame) : Renderable()
    Energy* energy = new Energy();
    Points* points = new Points();
    PowerUpIndicatorBackground* powerUpBG = new PowerUpIndicatorBackground();
-   Level* level = new Level();
+   LevelLabel* level = new LevelLabel();
    Depth* depth = new Depth();
    DepthMask* depthMask = new DepthMask();
    ScoreMask* scoreMask = new ScoreMask();

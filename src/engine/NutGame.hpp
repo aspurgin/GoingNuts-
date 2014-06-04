@@ -10,7 +10,6 @@
 #include "DirtBlock.hpp"
 #include "Movable.hpp"
 #include "Player.hpp"
-#include "DirtBlock.hpp"
 #include "Nut.hpp"
 #include "StoneBlock.hpp"
 #include "SandBlock.hpp"
@@ -21,6 +20,7 @@
 #include "MovableSuperDrill.hpp"
 #include "MovableDynamite.hpp"
 #include "HardHat.hpp"
+#include "Level.hpp"
 #include <stdio.h>
 #include <vector>
 
@@ -29,11 +29,13 @@
 #define NUM_BLOCKS_VISIBLE_ABOVE_PLAYER 6
 #define NUM_TOTAL_BLOCKS_VISIBLE 14
 
+class Level;
+
 class NutGame {
    public:
       ~NutGame();
       NutGame();
-      std::vector<std::vector<Movable *> > gameGrid;
+      std::vector<std::vector<Movable *>  > gameGrid;
       //Movable *gameGrid[NUMROWS][NUMCOLS];
       void init();
       bool isBlockAtPosition(glm::vec2 pos);
@@ -76,6 +78,9 @@ class NutGame {
       ParticleSystem psystem;
       void updatePSystem(double dt);
       void explodeDynamiteAt(int row, int col);
+      void addToNutsLeft();
+      void setNumRows(int rows);
+      void loadNextLevel();
    private:
       std::list<Renderable*> getCertainObjectsToDraw(int type);
       void setFallingMovables(int row, int col);
@@ -87,11 +92,11 @@ class NutGame {
       void finishSettingFallingMovables();
       void checkGroupForOtherAdds(BlockGroup* group);
       int nutsLeft;
-      int score;
       bool checkingGroupForOtherAdds;
       std::vector<BlockGroup*> mightFallGroupList;
       std::vector<Movable*> mightFallBlockList;
       int NUMROWS;
+      std::vector<Level> levels;
 };
 
 #endif

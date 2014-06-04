@@ -69,3 +69,7 @@ void HardHat::setPosition(glm::vec3 pos) {
    position = pos;
    center = pos;
 }
+
+void HardHat::playHitGroundSound() {
+   
+}

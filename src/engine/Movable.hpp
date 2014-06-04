@@ -4,7 +4,6 @@
 #include "Collidable.hpp"
 #include "BoundingBox2D.hpp"
 #include "../rendering/Renderable.hpp"
-#include "../assets/Assets.hpp"
 
 #define FALL_RATE 7
 
@@ -28,6 +27,7 @@ class Movable: public Collidable, public Renderable {
       bool getCanFall();
       void setCanFall();
       void setCanNotFall();
+      virtual void playHitGroundSound() = 0;
    protected:
       void setObject(glm::vec3 center, float width, float height);
       glm::vec3 center;
