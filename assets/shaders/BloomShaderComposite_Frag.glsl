@@ -20,7 +20,6 @@ varying vec4 normal;
 varying vec4 light;
 varying vec4 position;
 
-varying vec2 UV;
 varying vec4 bloomCoord;
 
 void main() {

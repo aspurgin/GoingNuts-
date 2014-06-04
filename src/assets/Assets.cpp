@@ -196,8 +196,10 @@ namespace Assets {
 
          bshader = ShaderUtils::installBloomShaders(textFileRead((char *) "assets/shaders/BloomShaderBright_Vert.glsl"),
                                                     textFileRead((char *) "assets/shaders/BloomShaderBright_Frag.glsl"),
-                                                    textFileRead((char *) "assets/shaders/BloomShaderBlur_Vert.glsl"),
-                                                    textFileRead((char *) "assets/shaders/BloomShaderBlur_Frag.glsl"),
+                                                    textFileRead((char *) "assets/shaders/BloomShaderBlurHor_Vert.glsl"),
+                                                    textFileRead((char *) "assets/shaders/BloomShaderBlurHor_Frag.glsl"),
+                                                    textFileRead((char *) "assets/shaders/BloomShaderBlurVer_Vert.glsl"),
+                                                    textFileRead((char *) "assets/shaders/BloomShaderBlurVer_Frag.glsl"),
                                                     textFileRead((char *) "assets/shaders/BloomShaderComposite_Vert.glsl"),
                                                     textFileRead((char *) "assets/shaders/BloomShaderComposite_Frag.glsl"));
       }

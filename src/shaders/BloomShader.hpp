@@ -26,11 +26,17 @@ class BloomShader {
       GLint h_uViewMatrixBright;
       GLint h_uProjMatrixBright;
 
-      GLint h_aPositionBlur;
-      GLint h_uModelMatrixBlur;
-      GLint h_uViewMatrixBlur;
-      GLint h_uProjMatrixBlur;
-      GLint h_myTextureSamplerBlur;
+      GLint h_aPositionBlurHor;
+      GLint h_uModelMatrixBlurHor;
+      GLint h_uViewMatrixBlurHor;
+      GLint h_uProjMatrixBlurHor;
+      GLint h_myTextureSamplerBlurHor;
+
+      GLint h_aPositionBlurVer;
+      GLint h_uModelMatrixBlurVer;
+      GLint h_uViewMatrixBlurVer;
+      GLint h_uProjMatrixBlurVer;
+      GLint h_myTextureSamplerBlurVer;
 
       GLint h_myTextureSamplerComposite;
       GLint h_aPositionComposite;
@@ -46,7 +52,8 @@ class BloomShader {
       GLint h_uMatShine;
 
       int shadeProgBright;
-      int shadeProgBlur;
+      int shadeProgBlurHor;
+      int shadeProgBlurVer;
       int shadeProgComposite;
 
       BloomShader();

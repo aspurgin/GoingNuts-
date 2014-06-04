@@ -36,7 +36,8 @@ class ShaderUtils {
       static DebugShadowShader installDebugShadowShader(const GLchar*, const GLchar*);
       static LightMapShader installLightMapShader(const GLchar*, const GLchar*);
       static BloomShader installBloomShaders(const GLchar *vBrightShaderName, const GLchar *fBrightShaderName,
-                                             const GLchar *vBlurShaderName, const GLchar *fBlurShaderName,
+                                             const GLchar *vHorBlurShaderName, const GLchar *fHorBlurShaderName,
+                                             const GLchar *vVerBlurShaderName, const GLchar *fVerBlurShaderName,
                                              const GLchar *vCompositeShaderName, const GLchar *fCompositeShaderName);
    private:
       ShaderUtils();

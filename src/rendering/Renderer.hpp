@@ -37,6 +37,8 @@ namespace Renderer {
       extern RenderingHelper modelTrans;
       extern int winWidth, winHeight;
       extern NutGame *ngame;
+      extern GLuint fbBloom1;
+      extern GLuint fbBloom_tex1;
 
       void Renderer(int, int, NutGame*, Hud*);
       void useCShader();

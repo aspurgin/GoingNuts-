@@ -12,7 +12,6 @@
 #include "../assets/Texture.hpp"
 #include "Camera.hpp"
 #include "Light.hpp"
-#include "Renderer.hpp"
 
 enum {C_SHADE, CT_SHADE, P_SHADE, PT_SHADE, FT_SHADE, B_SHADE};
 enum RenderType {DIRT_BLOCK_R, CRYSTAL_BLOCK_R, HARD_HAT_R, LAVA_BLOCK_R, NUT_R, PLAYER_R, SAND_BLOCK_R, STONE_BLOCK_R, DYNAMITE_R};
