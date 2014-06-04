@@ -1,4 +1,3 @@
-0 0 0 P 0 0 0
 C X C X C X C
 B C B H N B C
 C B C X C B X

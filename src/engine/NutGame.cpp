@@ -21,6 +21,7 @@ NutGame::NutGame() {
    this->releasedSinceThrowDynamitePressed = true;
    this->nutsLeft = 0;
    this->psystem = ParticleSystem();
+   this->isWon = false;
    NUMROWS = 0;
 }
 
@@ -37,10 +38,14 @@ NutGame::~NutGame() {
 
 void NutGame::init() {
    levels.clear();
-   levels.push_back(Level("levels/level25pernoplayer.txt"));
-   levels.push_back(Level("levels/level25pernoplayer.txt"));
-   levels.push_back(Level("levels/level25pernoplayer.txt"));
-   levels.push_back(Level("levels/level25per.txt"));
+   levels.push_back(Level("levels/level9.txt"));
+   levels.push_back(Level("levels/level8.txt"));
+   levels.push_back(Level("levels/level7.txt"));
+   levels.push_back(Level("levels/level6.txt"));
+   levels.push_back(Level("levels/level4.txt"));
+   levels.push_back(Level("levels/level3.txt"));
+   levels.push_back(Level("levels/level2.txt"));
+   levels.push_back(Level("levels/level1.txt"));
 
    loadNextLevel();
 }
@@ -319,6 +324,11 @@ void NutGame::fallDown(double toAdd) {
                      row = -1;
                      col = NUMCOLS;
                      loadNextLevel();
+                  }
+                  else if (row + 1 == NUMROWS - 3  && gameGrid[row + 1][col]->getMovableType() == PLAYER && levels.size() == 0) {
+                     row = -1;
+                     col = NUMCOLS;
+                     isWon = true;
                   }
                }
                else if (gameGrid[row][col] != 0) {
@@ -823,15 +833,18 @@ void NutGame::setNumRows(int rows) {
 }
 
 void NutGame::loadNextLevel() {
-   for (int row = 0; row < NUMROWS; row++) {
-      for (int col = 0; col < NUMCOLS; col++) {
-         if (gameGrid[row][col] != 0 && gameGrid[row][col]->getMovableType() != PLAYER) {
-            delete gameGrid[row][col];
+   
+   if (levels.size() > 0) {
+      for (int row = 0; row < NUMROWS; row++) {
+         for (int col = 0; col < NUMCOLS; col++) {
+            if (gameGrid[row][col] != 0 && gameGrid[row][col]->getMovableType() != PLAYER) {
+               delete gameGrid[row][col];
+            }
          }
       }
+      
+      levels[levels.size() - 1].loadLevel(this);
+      levels.pop_back();
+      connectBlocks();
    }
-   
-   levels[levels.size() - 1].loadLevel(this);
-   levels.pop_back();
-   connectBlocks();
 }

@@ -81,6 +81,7 @@ class NutGame {
       void addToNutsLeft();
       void setNumRows(int rows);
       void loadNextLevel();
+      bool isWon;
    private:
       std::list<Renderable*> getCertainObjectsToDraw(int type);
       void setFallingMovables(int row, int col);

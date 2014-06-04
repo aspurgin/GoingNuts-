@@ -68,7 +68,7 @@ void Hud::render()
 
 void Hud::renderWinLoss()
 {
-   if (nutGame->getNutsLeft() == 0)
+   if (nutGame->isWon)
    {
       youWon->render();
    }

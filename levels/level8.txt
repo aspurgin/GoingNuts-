@@ -1,4 +1,4 @@
-0 0 0 P 0 Y 0
+0 0 0 0 0 Y 0
 X X X X X X X
 X X X H X X B
 X X X X C X X

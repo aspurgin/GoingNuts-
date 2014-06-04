@@ -157,7 +157,7 @@ int main(void)
       delta = currentTime - lastTime;
       fpsTime += delta;
       
-      if (!game.player.getIsDead() && game.getNutsLeft() != 0) {
+      if (!game.player.getIsDead() && !game.isWon) {
          game.checkGrid(delta);
          game.fallDown(delta);
          game.player.takeAwayEnergy(delta);
@@ -175,7 +175,7 @@ int main(void)
          //printf("YOU ARE DEAD\n");
          //break;
       }
-      if (game.getNutsLeft() == 0) {
+      if (game.isWon) {
          sprintf(scoreString, "FPS: %.0f Score: %d  %s", 1.0/delta, game.getScore(), "You won!!!");
          //printf("YOU WON!!!!!!!!\n");
          //break;
