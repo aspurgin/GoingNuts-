@@ -37,6 +37,22 @@ NutGame::~NutGame() {
 }
 
 void NutGame::init() {
+   drillDownPressed = false;
+   drillLeftPressed = false;
+   drillUpPressed = false;
+   drillRightPressed = false;
+   left = false;
+   right = false;
+   up = false;
+   throwDynamitePressed = false;
+   checkingGroupForOtherAdds = false;
+   releasedSinceDownPress = true;
+   releasedSinceLeftPress = true;
+   releasedSinceUpPress = true;
+   releasedSinceRightPress = true;
+   releasedSinceThrowDynamitePressed = true;
+   nutsLeft = 0;
+   isWon = false;
    levels.clear();
    levels.push_back(Level("levels/level9.txt"));
    levels.push_back(Level("levels/level8.txt"));
@@ -165,37 +181,7 @@ bool NutGame::isDrillingRight() {
 
 void NutGame::fallDown(double toAdd) {
    double before, after;
-   
-   if (player.movingHorizontal() == LEFT) {
-      if (player.getCenter().x > player.getMovingToColumn()) {
-         before = player.getCenter().x;
-         player.moveHorizontal(HOR_MOVE_RATE * ((gameGrid[(int)(player.getCenter().y * -1 + 1)][(int)(player.getCenter().x + .5)] != 0 && gameGrid[(int)(player.getCenter().y * -1 + 1)][(int)(player.getCenter().x + .5)]->getMovableType() == BLOCK) ? (((Block*)gameGrid[(int)(player.getCenter().y * -1 + 1)][(int)(player.getCenter().x + .5)])->getMoveSpeedPercentage() / 100.0 * toAdd) : toAdd) * -1);
-         after = player.getCenter().x;
-         if (before > (int)(player.getCenter().x) + .5 && after < (int)(player.getCenter().x) + .5) {
-            gameGrid[(int)(player.getCenter().y - .5) * -1][(int)player.getCenter().x] = &player;
-            gameGrid[(int)(player.getCenter().y - .5) * -1][(int)(player.getCenter().x + .5) + 1] = 0;
-         }
-      }
-      else if (!left) {
-         player.setMoveHorizontal(STOPPED);
-         player.moveTo(glm::vec2(player.getMovingToColumn(), player.getCenter().y));
-      }
-   }
-   else if (player.movingHorizontal() == RIGHT) {
-      if (player.getCenter().x < player.getMovingToColumn()) {
-         before = player.getCenter().x;
-         player.moveHorizontal(HOR_MOVE_RATE * ((gameGrid[(int)(player.getCenter().y * -1 + 1)][(int)(player.getCenter().x + .5)] != 0 && gameGrid[(int)(player.getCenter().y * -1 + 1)][(int)(player.getCenter().x + .5)]->getMovableType() == BLOCK) ? (((Block*)gameGrid[(int)(player.getCenter().y * -1 + 1)][(int)(player.getCenter().x + .5)])->getMoveSpeedPercentage() / 100.0 * toAdd) : toAdd));
-         after = player.getCenter().x;
-         if (before < (int)(player.getCenter().x) + .5 && after > (int)(player.getCenter().x) + .5) {
-            gameGrid[(int)(player.getCenter().y - .5) * -1][(int)(player.getCenter().x + .5)] = &player;
-            gameGrid[(int)(player.getCenter().y - .5) * -1][(int)player.getCenter().x] = 0;
-         }
-      }
-      else if (!right) {
-         player.setMoveHorizontal(STOPPED);
-         player.moveTo(glm::vec2(player.getMovingToColumn(), player.getCenter().y));
-      }
-   }
+   int colColidedWith;
       
    for (int row = NUMROWS - 1; row >= 0; row--) {
       for (int col = 0; col < NUMCOLS; col++) {
@@ -205,33 +191,44 @@ void NutGame::fallDown(double toAdd) {
             }
             if (gameGrid[row][col]->shouldFall()) {
                gameGrid[row][col]->fall(toAdd);
-               if (gameGrid[row + 1][col] != 0 && gameGrid[row][col]->isIntersecting((Collidable*)gameGrid[row + 1][col])) {
+               if (gameGrid[row + 1][col] != 0 && gameGrid[row][col]->isIntersecting((Collidable*)gameGrid[row + 1][col]) || 
+                   (col != NUMCOLS - 1 && gameGrid[row + 1][col + 1] != 0 && gameGrid[row][col]->isIntersecting((Collidable*)gameGrid[row + 1][col + 1])) ||
+                   (col != 0 && gameGrid[row + 1][col - 1] != 0 && gameGrid[row][col]->isIntersecting((Collidable*)gameGrid[row + 1][col - 1]))) {
+                  if (gameGrid[row + 1][col] != 0 && gameGrid[row][col]->isIntersecting((Collidable*)gameGrid[row + 1][col])) {
+                     colColidedWith = col;
+                  }
+                  else if (col != NUMCOLS - 1 && gameGrid[row + 1][col + 1] != 0 && gameGrid[row][col]->isIntersecting((Collidable*)gameGrid[row + 1][col + 1])) {
+                     colColidedWith = col + 1;
+                  }
+                  else if (col != 0 && gameGrid[row + 1][col - 1] != 0 && gameGrid[row][col]->isIntersecting((Collidable*)gameGrid[row + 1][col - 1])) {
+                     colColidedWith = col - 1;
+                  }
                   if (gameGrid[row][col]->getMovableType() == PLAYER) {
-                     if (gameGrid[row + 1][col]->getMovableType() == NUT) {
+                     if (gameGrid[row + 1][colColidedWith]->getMovableType() == NUT) {
                         nutsLeft--;
                         addToScore(5);
                         player.addEnergy(10);
                         //DEBUG("Deleted Here 2");
-                        delete gameGrid[row + 1][col];
-                        gameGrid[row + 1][col] = 0;
+                        delete gameGrid[row + 1][colColidedWith];
+                        gameGrid[row + 1][colColidedWith] = 0;
                      }
-                     else if (gameGrid[row + 1][col]->getMovableType() == HARDHAT) {
+                     else if (gameGrid[row + 1][colColidedWith]->getMovableType() == HARDHAT) {
                         player.collectHardHat();
-                        delete gameGrid[row + 1][col];
-                        gameGrid[row + 1][col] = 0;
+                        delete gameGrid[row + 1][colColidedWith];
+                        gameGrid[row + 1][colColidedWith] = 0;
                      }
-                     else if (gameGrid[row + 1][col]->getMovableType() == SUPERDRILL) {
+                     else if (gameGrid[row + 1][colColidedWith]->getMovableType() == SUPERDRILL) {
                         player.collectSuperDrill();
-                        delete gameGrid[row + 1][col];
-                        gameGrid[row + 1][col] = 0;
+                        delete gameGrid[row + 1][colColidedWith];
+                        gameGrid[row + 1][colColidedWith] = 0;
                      }
-                     else if (gameGrid[row + 1][col]->getMovableType() == DYNAMITE) {
+                     else if (gameGrid[row + 1][colColidedWith]->getMovableType() == DYNAMITE) {
                         player.collectDynamite();
-                        delete gameGrid[row + 1][col];
-                        gameGrid[row + 1][col] = 0;
+                        delete gameGrid[row + 1][colColidedWith];
+                        gameGrid[row + 1][colColidedWith] = 0;
                      }
-                     else if (gameGrid[row + 1][col]->getMovableType() == BLOCK) {
-                        if (((Block*)gameGrid[row + 1][col])->getBlockType() == LAVABLOCK) {
+                     else if (gameGrid[row + 1][colColidedWith]->getMovableType() == BLOCK) {
+                        if (((Block*)gameGrid[row + 1][colColidedWith])->getBlockType() == LAVABLOCK) {
                            player.died();
                         }
                         else {
@@ -251,7 +248,7 @@ void NutGame::fallDown(double toAdd) {
                         }
                      }
                   }
-                  else if (gameGrid[row + 1][col]->getMovableType() == PLAYER) {
+                  else if (gameGrid[row + 1][colColidedWith]->getMovableType() == PLAYER) {
                      if (gameGrid[row][col]->getMovableType() == NUT) {
                         nutsLeft--;
                         addToScore(5);
@@ -341,6 +338,37 @@ void NutGame::fallDown(double toAdd) {
                }
             }
          }
+      }
+   }
+   
+   if (player.movingHorizontal() == LEFT) {
+      if (player.getCenter().x > player.getMovingToColumn()) {
+         before = player.getCenter().x;
+         player.moveHorizontal(HOR_MOVE_RATE * ((gameGrid[(int)(player.getCenter().y * -1 + 1)][(int)(player.getCenter().x + .5)] != 0 && gameGrid[(int)(player.getCenter().y * -1 + 1)][(int)(player.getCenter().x + .5)]->getMovableType() == BLOCK) ? (((Block*)gameGrid[(int)(player.getCenter().y * -1 + 1)][(int)(player.getCenter().x + .5)])->getMoveSpeedPercentage() / 100.0 * toAdd) : toAdd) * -1);
+         after = player.getCenter().x;
+         if (before > (int)(player.getCenter().x) + .5 && after < (int)(player.getCenter().x) + .5 && gameGrid[(int)(player.getCenter().y - .5) * -1][(int)player.getCenter().x] == 0) {
+            gameGrid[(int)(player.getCenter().y - .5) * -1][(int)player.getCenter().x] = &player;
+            gameGrid[(int)(player.getCenter().y - .5) * -1][(int)(player.getCenter().x + .5) + 1] = 0;
+         }
+      }
+      else if (!left) {
+         player.setMoveHorizontal(STOPPED);
+         player.moveTo(glm::vec2(player.getMovingToColumn(), player.getCenter().y));
+      }
+   }
+   else if (player.movingHorizontal() == RIGHT) {
+      if (player.getCenter().x < player.getMovingToColumn()) {
+         before = player.getCenter().x;
+         player.moveHorizontal(HOR_MOVE_RATE * ((gameGrid[(int)(player.getCenter().y * -1 + 1)][(int)(player.getCenter().x + .5)] != 0 && gameGrid[(int)(player.getCenter().y * -1 + 1)][(int)(player.getCenter().x + .5)]->getMovableType() == BLOCK) ? (((Block*)gameGrid[(int)(player.getCenter().y * -1 + 1)][(int)(player.getCenter().x + .5)])->getMoveSpeedPercentage() / 100.0 * toAdd) : toAdd));
+         after = player.getCenter().x;
+         if (before < (int)(player.getCenter().x) + .5 && after > (int)(player.getCenter().x) + .5 && gameGrid[(int)(player.getCenter().y - .5) * -1][(int)(player.getCenter().x + .5)] == 0) {
+            gameGrid[(int)(player.getCenter().y - .5) * -1][(int)(player.getCenter().x + .5)] = &player;
+            gameGrid[(int)(player.getCenter().y - .5) * -1][(int)player.getCenter().x] = 0;
+         }
+      }
+      else if (!right) {
+         player.setMoveHorizontal(STOPPED);
+         player.moveTo(glm::vec2(player.getMovingToColumn(), player.getCenter().y));
       }
    }
 }
