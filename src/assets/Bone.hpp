@@ -24,7 +24,7 @@
 class Bone {
 private:
 	static float noWeight;
-	Bone* parent;
+
 	std::string name;
 	std::map<int, float> weight;
 
@@ -37,6 +37,7 @@ private:
 	glm::mat4 rootTransform;
 
 public:
+	Bone* parent;
 	glm::mat4 getCompleteTransform();
 	glm::mat4 getTotalTransform();
 	glm::mat4 getTransform();
@@ -44,6 +45,7 @@ public:
 	void setAt(double frame);
 
 	Bone(aiNode*, aiBone*, aiNodeAnim*);
+	Bone(Bone*);
 	void setParent(Bone* parent);
 	void setNameDebug(const char*);
 	void printChain();

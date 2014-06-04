@@ -58,6 +58,19 @@ Bone::Bone(aiNode* root, aiBone* bone, aiNodeAnim* anim){
 	}
 }
 
+Bone::Bone(Bone* b){
+	pos = b->pos;
+	scale = b->scale;
+	rot = b->rot;
+	weight = b->weight;
+	name = b->name;
+	weight = b->weight;
+	offsetTransform = b->offsetTransform;
+	rootTransform = b->rootTransform;
+	currentTransform = b->currentTransform;
+	parent = b->parent;
+}
+
 glm::mat4 Bone::getCompleteTransform(){
 	return rootTransform * getTotalTransform() * offsetTransform;
 }

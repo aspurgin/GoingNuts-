@@ -19,6 +19,7 @@ public:
 	void setAt(float);
 
 	Skeleton (const aiScene* scene);
+	Skeleton (Skeleton* skeleton);
 	Skeleton ();
 	~Skeleton ();
 	glm::vec3 transform(int, glm::vec3);

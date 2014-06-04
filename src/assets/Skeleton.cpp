@@ -73,6 +73,26 @@ Skeleton::Skeleton (const aiScene* scene) {
 	}
 }
 
+Skeleton::Skeleton(Skeleton* s){
+	hasBones = s->hasBones;
+	if(!hasBones) {
+		return;
+	}
+
+	std::map<Bone*, Bone*> rel;
+	for(int b = 0; b<bones.size(); b++){
+		rel[bones[b]] = new Bone(s->bones[b]);
+	}
+
+	std::map<Bone*, Bone*>::iterator iter;
+	for(iter = rel.begin(); iter != rel.end(); iter++){
+		if(iter->second->parent != 0){
+			iter->second->parent = rel[iter->second->parent];
+		}
+		bones.push_back(iter->second);
+	}
+}
+
 Skeleton::~Skeleton(){
 }
 
