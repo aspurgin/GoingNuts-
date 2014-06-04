@@ -21,83 +21,84 @@ bool tog = false;
 
 
 void keyPressed(GLFWwindow *window, int key, int scancode, int action, int mods) {
-
-   if (key == GLFW_KEY_A) {
-      if (action == GLFW_PRESS) {
-         game.left = true;
+   if (!game.player.getIsDead() && !game.isWon) {
+      if (key == GLFW_KEY_A) {
+         if (action == GLFW_PRESS) {
+            game.left = true;
+         }
+         else if (action == GLFW_RELEASE) {
+            game.left = false;
+         }
       }
-      else if (action == GLFW_RELEASE) {
-         game.left = false;
+      else if (key == GLFW_KEY_E) {
+         if (action == GLFW_RELEASE) {
+            tog = !tog;
+         }   
+      }
+      
+      else if (key == GLFW_KEY_W) {
+         if (action == GLFW_PRESS) {
+            game.up = true;
+         }
+         else if (action == GLFW_RELEASE) {
+            game.up = false;
+         }
+      }
+      else if (key == GLFW_KEY_D) {
+         if (action == GLFW_PRESS) {
+            game.right = true;
+         }
+         else if (action == GLFW_RELEASE) {
+            game.right = false;
+         }
+      }
+      else if (key == GLFW_KEY_DOWN) {
+         if (action == GLFW_PRESS) {
+            game.drillDownPressed = true;
+         }
+         else if (action == GLFW_RELEASE) {
+            game.drillDownPressed = false;
+            game.releasedSinceDownPress = true;
+         }
+      }
+      else if (key == GLFW_KEY_LEFT) {
+         if (action == GLFW_PRESS) {
+            game.drillLeftPressed = true;
+         }
+         else if (action == GLFW_RELEASE) {
+            game.drillLeftPressed = false;
+            game.releasedSinceLeftPress = true;
+         }
+      }
+      else if (key == GLFW_KEY_UP) {
+         if (action == GLFW_PRESS) {
+            game.drillUpPressed = true;
+         }
+         else if (action == GLFW_RELEASE) {
+            game.drillUpPressed = false;
+            game.releasedSinceUpPress = true;
+         }
+      }
+      else if (key == GLFW_KEY_RIGHT) {
+         if (action == GLFW_PRESS) {
+            game.drillRightPressed = true;
+         }
+         else if (action == GLFW_RELEASE) {
+            game.drillRightPressed = false;
+            game.releasedSinceRightPress = true;
+         }
+      }
+      else if (key == GLFW_KEY_SPACE) {
+         if (action == GLFW_PRESS) {
+            game.throwDynamitePressed = true;
+         }
+         else if (action == GLFW_RELEASE) {
+            game.throwDynamitePressed = false;
+            game.releasedSinceThrowDynamitePressed = true;
+         }
       }
    }
-   else if (key == GLFW_KEY_E) {
-      if (action == GLFW_RELEASE) {
-         tog = !tog;
-      }   
-   }
-   
-   else if (key == GLFW_KEY_W) {
-      if (action == GLFW_PRESS) {
-         game.up = true;
-      }
-      else if (action == GLFW_RELEASE) {
-         game.up = false;
-      }
-   }
-   else if (key == GLFW_KEY_D) {
-      if (action == GLFW_PRESS) {
-         game.right = true;
-      }
-      else if (action == GLFW_RELEASE) {
-         game.right = false;
-      }
-   }
-   else if (key == GLFW_KEY_DOWN) {
-      if (action == GLFW_PRESS) {
-         game.drillDownPressed = true;
-      }
-      else if (action == GLFW_RELEASE) {
-         game.drillDownPressed = false;
-         game.releasedSinceDownPress = true;
-      }
-   }
-   else if (key == GLFW_KEY_LEFT) {
-      if (action == GLFW_PRESS) {
-         game.drillLeftPressed = true;
-      }
-      else if (action == GLFW_RELEASE) {
-         game.drillLeftPressed = false;
-         game.releasedSinceLeftPress = true;
-      }
-   }
-   else if (key == GLFW_KEY_UP) {
-      if (action == GLFW_PRESS) {
-         game.drillUpPressed = true;
-      }
-      else if (action == GLFW_RELEASE) {
-         game.drillUpPressed = false;
-         game.releasedSinceUpPress = true;
-      }
-   }
-   else if (key == GLFW_KEY_RIGHT) {
-      if (action == GLFW_PRESS) {
-         game.drillRightPressed = true;
-      }
-      else if (action == GLFW_RELEASE) {
-         game.drillRightPressed = false;
-         game.releasedSinceRightPress = true;
-      }
-   }
-   else if (key == GLFW_KEY_SPACE) {
-      if (action == GLFW_PRESS) {
-         game.throwDynamitePressed = true;
-      }
-      else if (action == GLFW_RELEASE) {
-         game.throwDynamitePressed = false;
-         game.releasedSinceThrowDynamitePressed = true;
-      }
-   }
-   else if (key == GLFW_KEY_R) {
+   if (key == GLFW_KEY_R) {
       game.init();
    }
    else if (key == GLFW_KEY_ESCAPE) {
@@ -157,11 +158,11 @@ int main(void)
       delta = currentTime - lastTime;
       fpsTime += delta;
       
-      if (!game.player.getIsDead() && !game.isWon) {
+      //if (!game.player.getIsDead() && !game.isWon) {
          game.checkGrid(delta);
          game.fallDown(delta);
          game.player.takeAwayEnergy(delta);
-      }
+      //}
       game.updatePSystem(delta);
       if (fpsTime >= 1) {
          curFps = fpsCount;
