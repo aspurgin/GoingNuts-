@@ -242,13 +242,10 @@ void Renderable::ptsRender() {
 }
 
 void Renderable::bRender() {
-   Light light = Renderer::light;//Light();
-   //light.setPosition(glm::vec3(0.0, 0.0, 6.0f));
-   Camera camera = Renderer::camera;//Camera(glm::vec3(3.0f, 1.0f, 10.0f), glm::vec3(3.0f, 0.0f, 5.0f), glm::vec3(0, 1, 0));
-   //camera.setEye(glm::vec3(3.0f, 0.0, 8.0f));
+   Light light = Renderer::light;
+   Camera camera = Renderer::camera;
 
    // BRIGHT PASS
-   // glBindFramebuffer(GL_FRAMEBUFFER, 2);
    glBindFramebuffer(GL_FRAMEBUFFER, Renderer::fbBloom1);
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -257,7 +254,7 @@ void Renderable::bRender() {
    glClearColor(0, 0, 0, 1.0);
 
    camera.setView(bshader.h_uViewMatrixBright);
-   camera.setProjectionMatrix(bshader.h_uProjMatrixBright, 1280.0 / 720.0, 1.0f, 100.0f);
+   camera.setProjectionMatrix(bshader.h_uProjMatrixBright, 1280.0 / 720.0, 0.1f, 100.0f);
 
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
@@ -297,7 +294,7 @@ void Renderable::bRender() {
    glClearColor(0, 0, 0, 1.0);
 
    camera.setView(bshader.h_uViewMatrixBlurHor);
-   camera.setProjectionMatrix(bshader.h_uProjMatrixBlurHor, 1280.0 / 720.0, 1.0f, 100.0f);
+   camera.setProjectionMatrix(bshader.h_uProjMatrixBlurHor, 1280.0 / 720.0, 0.1f, 100.0f);
 
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
@@ -341,7 +338,7 @@ void Renderable::bRender() {
    glClearColor(0, 0, 0, 1.0);
 
    camera.setView(bshader.h_uViewMatrixBlurVer);
-   camera.setProjectionMatrix(bshader.h_uProjMatrixBlurVer, 1280.0 / 720.0, 1.0f, 100.0f);
+   camera.setProjectionMatrix(bshader.h_uProjMatrixBlurVer, 1280.0 / 720.0, 0.1f, 100.0f);
 
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
@@ -386,7 +383,7 @@ void Renderable::bRender() {
    glClearColor(0, 0, 0, 1.0);
 
    camera.setView(bshader.h_uViewMatrixComposite);
-   camera.setProjectionMatrix(bshader.h_uProjMatrixComposite, (float)1280 / 720, 1.0f, 100.0f);
+   camera.setProjectionMatrix(bshader.h_uProjMatrixComposite, (float)1280 / 720, 0.1f, 100.0f);
 
    safe_glUniform3f(bshader.h_lightPosComposite, light.position.x, light.position.y, light.position.z);
    safe_glUniform3f(bshader.h_cameraPosComposite, -camera.eye.x, -camera.eye.y, -camera.eye.z);

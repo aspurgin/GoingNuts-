@@ -1,4 +1,4 @@
-0 0 0 P 0 0 0
+0 0 0 P N 0 0
 B G R B R B B
 G R B G G R R
 R R G N B R G
