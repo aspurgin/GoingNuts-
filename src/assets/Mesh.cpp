@@ -25,11 +25,29 @@ void debugNodes(aiNode* node, int level){
    }
 }
 
+Mesh::Mesh(Mesh* m){
+   skeleton = Skeleton(&(m->skeleton));
+   animIds = m->animIds;
+   anims = m->anims;
+
+   vertices = m->vertices;
+   indeces = m->indeces;
+   uvs = m->uvs;
+   normals = m->normals;
+   tangents = m->tangents;
+   bitangents = m->bitangents;
+
+   reset();
+   buildBuffers();
+}
+
 Mesh::Mesh(char* fileName)
 {
    INFO("loading model " << fileName);
    parseAI(fileName);
    parseAnimIdx(fileName);
+
+
 }
 
 Mesh::Mesh()

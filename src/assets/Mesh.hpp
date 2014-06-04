@@ -25,6 +25,7 @@
 
 class Mesh {
    public:
+      Mesh(Mesh* m);
       Mesh(char* fileName);
       Mesh();
       ~Mesh();
