@@ -29,6 +29,8 @@
 #include "HardHatImage.hpp"
 #include "DynamiteImage.hpp"
 #include "Minimap.hpp"
+#include "EnergyPercentage.hpp"
+#include "LevelNumber.hpp"
 
 class Hud: public Renderable
 {

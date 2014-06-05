@@ -13,7 +13,7 @@ namespace Assets {
       //create a map for sounds and music
       std::map<int, FMOD::Sound*> sounds, music;
 
-      Mesh *squirrel, *block, *nut, *depthWheel, *background, *guageMask1, *guageMask2, *scoreMask1, *scoreMask2, *youWon, *youLost, *cylinder, *goingNuts, *sun, *nutColor, *nutOutline, *energy, *points, *powerUpBG, *questionMark, *level, *depth, *depthMask, *scoreMask, *number, *hardHat, *dynamite, *hardHatImage, *dynamiteImage, *square, *playerImage, *nutImage;
+      Mesh *squirrel, *block, *nut, *depthWheel, *background, *guageMask1, *guageMask2, *scoreMask1, *scoreMask2, *youWon, *youLost, *cylinder, *goingNuts, *sun, *nutColor, *nutOutline, *energy, *points, *powerUpBG, *questionMark, *level, *depth, *depthMask, *scoreMask, *number, *hardHat, *dynamite, *hardHatImage, *dynamiteImage, *square, *playerImage, *nutImage, *number0, *number1, *number2, *number3, *number4, *number5, *number6, *number7, *number8, *number9;
 
       Texture whiteDepthWheel, blackDepthWheel, hudElements, cylinderNormal, cylinderColor, dirtColor, dirtNormal, rockColor, rockNormal, squirrelTex, crystalNormal, sandNormal, lavaNormal, backgroundTex;
       std::map<int, Mesh*> meshes;
@@ -106,6 +106,17 @@ namespace Assets {
          square = new Mesh("assets/models/Square.obj");
          playerImage = new Mesh("assets/models/PlayerImage.obj");
          nutImage = new Mesh("assets/models/NutImage.obj");
+         number0 = new Mesh("assets/models/Number0.obj");
+         number1 = new Mesh("assets/models/Number1.obj");
+         number2 = new Mesh("assets/models/Number2.obj");
+         number3 = new Mesh("assets/models/Number3.obj");
+         number4 = new Mesh("assets/models/Number4.obj");
+         number5 = new Mesh("assets/models/Number5.obj");
+         number6 = new Mesh("assets/models/Number6.obj");
+         number7 = new Mesh("assets/models/Number7.obj");
+         number8 = new Mesh("assets/models/Number8.obj");
+         number9 = new Mesh("assets/models/Number9.obj");
+         
 
          block->buildBuffers();
          squirrel->buildBuffers();
@@ -139,6 +150,16 @@ namespace Assets {
          square->buildBuffers();
          playerImage->buildBuffers();
          nutImage->buildBuffers();
+         number0->buildBuffers();
+         number1->buildBuffers();
+         number2->buildBuffers();
+         number3->buildBuffers();
+         number4->buildBuffers();
+         number5->buildBuffers();
+         number6->buildBuffers();
+         number7->buildBuffers();
+         number8->buildBuffers();
+         number9->buildBuffers();
 
          meshes[SQUIRREL_M] = squirrel;
          meshes[BLOCK_M] = block;
@@ -172,6 +193,16 @@ namespace Assets {
          meshes[SQUARE_M] = square;
          meshes[PLAYER_IMAGE_M] = playerImage;
          meshes[NUT_IMAGE_M] = nutImage;
+         meshes[Number0_M] = number0;
+         meshes[Number1_M] = number1;
+         meshes[Number2_M] = number2;
+         meshes[Number3_M] = number3;
+         meshes[Number4_M] = number4;
+         meshes[Number5_M] = number5;
+         meshes[Number6_M] = number6;
+         meshes[Number7_M] = number7;
+         meshes[Number8_M] = number8;
+         meshes[Number9_M] = number9;
       }
 
       void initShaders() {

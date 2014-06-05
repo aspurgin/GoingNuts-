@@ -24,8 +24,10 @@ Hud::Hud(NutGame* nutGame) : Renderable()
    Depth* depth = new Depth();
    DepthMask* depthMask = new DepthMask();
    ScoreMask* scoreMask = new ScoreMask();
-   Number* number = new Number();
+   //Number* number = new Number();
    Minimap* minimap = new Minimap(nutGame);
+   EnergyPercentage* energyPercentage = new EnergyPercentage(nutGame);
+   LevelNumber* levelNumber = new LevelNumber(nutGame);
    
    components.push_back(background);
    components.push_back(depthGuage);
@@ -39,11 +41,13 @@ Hud::Hud(NutGame* nutGame) : Renderable()
    components.push_back(nutOutline);
    components.push_back(energy);
    components.push_back(points);
-   components.push_back(number);
+   //components.push_back(number);
    components.push_back(powerUpBG);
    components.push_back(level);
    components.push_back(depth);
    components.push_back(minimap);
+   components.push_back(energyPercentage);
+   components.push_back(levelNumber);
 }
 
 Hud::~Hud()

@@ -57,6 +57,7 @@ class NutGame {
       void addToScore(int num);
       int getScore();
       int getDepth();
+      int getLevel();
       bool isGameOver();
       bool isGameWon();
       bool drillDownPressed;
@@ -93,6 +94,7 @@ class NutGame {
       void finishSettingFallingMovables();
       void checkGroupForOtherAdds(BlockGroup* group);
       int nutsLeft;
+      int level;
       bool checkingGroupForOtherAdds;
       std::vector<BlockGroup*> mightFallGroupList;
       std::vector<Movable*> mightFallBlockList;

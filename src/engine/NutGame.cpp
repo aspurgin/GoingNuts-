@@ -22,6 +22,7 @@ NutGame::NutGame() {
    this->nutsLeft = 0;
    this->psystem = ParticleSystem();
    this->isWon = false;
+   this->level = 0;
    NUMROWS = 0;
 }
 
@@ -53,6 +54,7 @@ void NutGame::init() {
    releasedSinceThrowDynamitePressed = true;
    nutsLeft = 0;
    isWon = false;
+   level = 0;
    levels.clear();
    levels.push_back(Level("levels/level9.txt"));
    levels.push_back(Level("levels/level8.txt"));
@@ -794,6 +796,10 @@ int NutGame::getDepth() {
    return (int)(player.getCenter().y) * -1;
 }
 
+int NutGame::getLevel() {
+   return level;
+}
+
 bool NutGame::isGameOver() {
    return player.getIsDead();
 }
@@ -874,5 +880,6 @@ void NutGame::loadNextLevel() {
       levels[levels.size() - 1].loadLevel(this);
       levels.pop_back();
       connectBlocks();
+      level++;
    }
 }
