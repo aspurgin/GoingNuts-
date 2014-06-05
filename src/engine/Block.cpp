@@ -15,6 +15,7 @@ Block::Block() {
    scaleZ = 0.5f;
    curScale = 0.48f;
    this->modelTrans.useModelViewMatrix();
+   isFractured = false;
    //model.debug();
 }
 
@@ -34,6 +35,7 @@ void Block::addToTimesDrilled() {
         //genParticles();
       }
       state = DEAD;
+      //makeDead();
    }
 }
 
@@ -47,7 +49,7 @@ bool Block::isDead() {
 
 bool Block::shouldDestroy() {
    if (isDead()) {
-      return deathCounter >= .2;
+      return deathCounter >= 0.2;
    }
    return false;
 }
@@ -108,8 +110,13 @@ void Block::setScale() {
       }
    }
    else if (isDead()) {
-      scale = curScale - deathCounter;
-      //printf("My scale!: %f\n", scale);
+      if (isFractured) {
+         model->setAt("explode", deathCounter/0.2);
+      }
+      else {
+         scale = curScale - deathCounter;
+         //printf("My scale!: %f\n", scale);
+      }
    }
    scaleX = scale;
    scaleY = scale;

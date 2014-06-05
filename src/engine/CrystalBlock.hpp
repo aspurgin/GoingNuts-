@@ -12,6 +12,7 @@ class CrystalBlock: public Block {
       CrystalBlock(glm::vec3 center, float width, float height, ParticleSystem* psystem);
       int getStrength();
       float getMoveSpeedPercentage();
+      void makeDead();
    private:
 };
 
