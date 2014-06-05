@@ -18,6 +18,11 @@ EnergyPercentage::EnergyPercentage(NutGame* nutGame) {
 
 void EnergyPercentage::render() {
    int energy = (int) nutGame->player.getEnergyLeft();
+   
+   if (nutGame->player.getIsDead())
+   {
+     energy = 0;
+   }
 
    int onesDigit, tensDigit, hundredsDigit;
 

@@ -13,7 +13,7 @@ namespace Assets {
       //create a map for sounds and music
       std::map<int, FMOD::Sound*> sounds, music;
 
-      Mesh *squirrel, *block, *nut, *depthWheel, *background, *guageMask1, *guageMask2, *scoreMask1, *scoreMask2, *youWon, *youLost, *cylinder, *goingNuts, *sun, *nutColor, *nutOutline, *energy, *points, *powerUpBG, *questionMark, *level, *depth, *depthMask, *scoreMask, *number, *hardHat, *dynamite, *hardHatImage, *dynamiteImage, *square, *playerImage, *nutImage, *explodeBlock, *number0, *number1, *number2, *number3, *number4, *number5, *number6, *number7, *number8, *number9;
+      Mesh *squirrel, *block, *nut, *depthWheel, *background, *guageMask1, *guageMask2, *scoreMask1, *scoreMask2, *youWon, *youLost, *cylinder, *goingNuts, *sun, *nutColor, *nutOutline, *energy, *points, *powerUpBG, *questionMark, *level, *depth, *depthMask, *scoreMask, *number, *hardHat, *dynamite, *hardHatImage, *dynamiteImage, *square, *playerImage, *nutImage, *explodeBlock, *number0, *number1, *number2, *number3, *number4, *number5, *number6, *number7, *number8, *number9, *newPercent, *superDrillImage;
 
       Texture whiteDepthWheel, blackDepthWheel, hudElements, cylinderNormal, cylinderColor, dirtColor, dirtNormal, rockColor, rockNormal, squirrelTex, crystalNormal, sandNormal, lavaNormal, backgroundTex;
       std::map<int, Mesh*> meshes;
@@ -117,6 +117,8 @@ namespace Assets {
          number7 = new Mesh("assets/models/Number7.obj");
          number8 = new Mesh("assets/models/Number8.obj");
          number9 = new Mesh("assets/models/Number9.obj");
+         newPercent = new Mesh("assets/models/NewPercent.obj");
+         superDrillImage = new Mesh("assets/models/SuperDrillImage.obj");
          
 
          block->buildBuffers();
@@ -162,6 +164,8 @@ namespace Assets {
          number7->buildBuffers();
          number8->buildBuffers();
          number9->buildBuffers();
+         newPercent->buildBuffers();
+         superDrillImage->buildBuffers();
 
          meshes[SQUIRREL_M] = squirrel;
          meshes[BLOCK_M] = block;
@@ -206,6 +210,8 @@ namespace Assets {
          meshes[Number7_M] = number7;
          meshes[Number8_M] = number8;
          meshes[Number9_M] = number9;
+         meshes[NEW_PERCENT_M] = newPercent;
+         meshes[SUPER_DRILL_IMAGE_M] = superDrillImage;
       }
 
       void initShaders() {

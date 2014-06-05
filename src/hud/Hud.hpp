@@ -31,6 +31,8 @@
 #include "Minimap.hpp"
 #include "EnergyPercentage.hpp"
 #include "LevelNumber.hpp"
+#include "NewPercent.hpp"
+#include "SuperDrillImage.hpp"
 
 class Hud: public Renderable
 {
@@ -48,6 +50,7 @@ class Hud: public Renderable
       HardHatImage* hardHatImage;
       DynamiteImage* dynamiteImage;
       QuestionMark* questionMark;
+      SuperDrillImage* superDrillImage;
       std::vector<Renderable*> components;
 };
 
