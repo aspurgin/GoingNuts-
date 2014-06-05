@@ -7,7 +7,6 @@ struct Material {
 
 attribute vec3 aPosition;
 attribute vec3 aNormal;
-attribute vec2 vertexUV;
 
 uniform Material uMat;
 uniform mat4 uProjMatrix;
@@ -20,7 +19,6 @@ varying vec4 normal;
 varying vec4 light;
 varying vec4 position;
 
-varying vec2 UV;
 varying vec4 bloomCoord;
 
 void main() {
@@ -39,7 +37,7 @@ void main() {
    normal = vNormal;
 
    vPosition = uViewMatrix * vPosition;
-   gl_Position = uProjMatrix * vPosition;
-   UV = vertexUV;
-   bloomCoord = gl_Position;
+   bloomCoord = uProjMatrix * vPosition;
+
+   gl_Position = bloomCoord;
 }

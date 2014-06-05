@@ -22,26 +22,27 @@ bool tog = false;
 
 void keyPressed(GLFWwindow *window, int key, int scancode, int action, int mods) {
    if (!game.player.getIsDead() && !game.isWon) {
-      if (key == GLFW_KEY_A) {
+      if (key == GLFW_KEY_E) {
+         if (action == GLFW_RELEASE) {
+            tog = !tog;
+         }   
+      }
+      else if (key == GLFW_KEY_A) {
          if (action == GLFW_PRESS) {
             game.left = true;
          }
          else if (action == GLFW_RELEASE) {
             game.left = false;
+            game.releasedSinceLeftPress = true;
          }
       }
-      else if (key == GLFW_KEY_E) {
-         if (action == GLFW_RELEASE) {
-            tog = !tog;
-         }   
-      }
-      
       else if (key == GLFW_KEY_W) {
          if (action == GLFW_PRESS) {
             game.up = true;
          }
          else if (action == GLFW_RELEASE) {
             game.up = false;
+            game.releasedSinceUpPress = true;
          }
       }
       else if (key == GLFW_KEY_D) {
@@ -50,6 +51,16 @@ void keyPressed(GLFWwindow *window, int key, int scancode, int action, int mods)
          }
          else if (action == GLFW_RELEASE) {
             game.right = false;
+            game.releasedSinceRightPress = true;
+         }
+      }
+      else if (key == GLFW_KEY_S) {
+         if (action == GLFW_PRESS) {
+            game.down = true;
+         }
+         else if (action == GLFW_RELEASE) {
+            game.down = false;
+            game.releasedSinceDownPress = true;
          }
       }
       else if (key == GLFW_KEY_DOWN) {
@@ -96,6 +107,9 @@ void keyPressed(GLFWwindow *window, int key, int scancode, int action, int mods)
             game.throwDynamitePressed = false;
             game.releasedSinceThrowDynamitePressed = true;
          }
+      }
+      else if (key == GLFW_KEY_T && action == GLFW_PRESS) {
+         game.useArrowKeys = !game.useArrowKeys;
       }
    }
    if (key == GLFW_KEY_R) {

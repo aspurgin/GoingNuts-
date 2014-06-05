@@ -12,6 +12,7 @@ void main() {
    vPosition = uModelMatrix * vec4(aPosition.x, aPosition.y, aPosition.z, 1);
 
    vPosition = uViewMatrix * vPosition;
-   gl_Position = uProjMatrix * vPosition;
-   bloomCoord = gl_Position;
+   bloomCoord = uProjMatrix * vPosition;
+
+   gl_Position = bloomCoord;
 }

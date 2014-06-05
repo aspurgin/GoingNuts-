@@ -13,7 +13,7 @@ namespace Assets {
       //create a map for sounds and music
       std::map<int, FMOD::Sound*> sounds, music;
 
-      Mesh *squirrel, *block, *nut, *depthWheel, *background, *guageMask1, *guageMask2, *scoreMask1, *scoreMask2, *youWon, *youLost, *cylinder, *goingNuts, *sun, *nutColor, *nutOutline, *energy, *points, *powerUpBG, *questionMark, *level, *depth, *depthMask, *scoreMask, *number, *hardHat, *dynamite, *hardHatImage, *dynamiteImage, *square, *playerImage, *nutImage, *number0, *number1, *number2, *number3, *number4, *number5, *number6, *number7, *number8, *number9;
+      Mesh *squirrel, *block, *nut, *depthWheel, *background, *guageMask1, *guageMask2, *scoreMask1, *scoreMask2, *youWon, *youLost, *cylinder, *goingNuts, *sun, *nutColor, *nutOutline, *energy, *points, *powerUpBG, *questionMark, *level, *depth, *depthMask, *scoreMask, *number, *hardHat, *dynamite, *hardHatImage, *dynamiteImage, *square, *playerImage, *nutImage, *explodeBlock, *number0, *number1, *number2, *number3, *number4, *number5, *number6, *number7, *number8, *number9;
 
       Texture whiteDepthWheel, blackDepthWheel, hudElements, cylinderNormal, cylinderColor, dirtColor, dirtNormal, rockColor, rockNormal, squirrelTex, crystalNormal, sandNormal, lavaNormal, backgroundTex;
       std::map<int, Mesh*> meshes;
@@ -76,6 +76,7 @@ namespace Assets {
       void loadMeshes() {
          squirrel = new Mesh("assets/models/squirrel.dae");
          block = new Mesh("assets/models/Block0.obj");
+         explodeBlock = new Mesh("assets/models/exploder.dae");
          nut = new Mesh("assets/models/Acorn.obj");
          depthWheel = new Mesh("assets/models/DepthWheel.obj");
          background = new Mesh("assets/models/Background.obj");
@@ -119,6 +120,7 @@ namespace Assets {
          
 
          block->buildBuffers();
+         explodeBlock->buildBuffers();
          squirrel->buildBuffers();
          nut->buildBuffers();
          depthWheel->buildBuffers();
@@ -163,6 +165,7 @@ namespace Assets {
 
          meshes[SQUIRREL_M] = squirrel;
          meshes[BLOCK_M] = block;
+         meshes[EXPLODE_BLOCK_M] = explodeBlock;
          meshes[NUT_M] = nut;
          meshes[DEPTH_WHEEL_M] = depthWheel;
          meshes[BACKGROUND_M] = background;
@@ -227,8 +230,10 @@ namespace Assets {
 
          bshader = ShaderUtils::installBloomShaders(textFileRead((char *) "assets/shaders/BloomShaderBright_Vert.glsl"),
                                                     textFileRead((char *) "assets/shaders/BloomShaderBright_Frag.glsl"),
-                                                    textFileRead((char *) "assets/shaders/BloomShaderBlur_Vert.glsl"),
-                                                    textFileRead((char *) "assets/shaders/BloomShaderBlur_Frag.glsl"),
+                                                    textFileRead((char *) "assets/shaders/BloomShaderBlurHor_Vert.glsl"),
+                                                    textFileRead((char *) "assets/shaders/BloomShaderBlurHor_Frag.glsl"),
+                                                    textFileRead((char *) "assets/shaders/BloomShaderBlurVer_Vert.glsl"),
+                                                    textFileRead((char *) "assets/shaders/BloomShaderBlurVer_Frag.glsl"),
                                                     textFileRead((char *) "assets/shaders/BloomShaderComposite_Vert.glsl"),
                                                     textFileRead((char *) "assets/shaders/BloomShaderComposite_Frag.glsl"));
       }

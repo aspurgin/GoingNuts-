@@ -16,6 +16,8 @@ namespace Renderer {
    RenderingHelper modelTrans;
    int winWidth, winHeight;
    NutGame *ngame;
+   GLuint fbBloom_tex1;
+   GLuint fbBloom1;
 
    namespace {
       Hud* hud;
@@ -27,8 +29,9 @@ namespace Renderer {
       DebugShadowShader dSS;
       GLuint fb_tex;
       GLuint fb;
-      GLuint fbBloom_tex1;
-      GLuint fbBloom1;
+      // GLuint fbBloom_tex1;
+      // GLuint fbBloom1;
+      GLuint fbBloom_depth;
       int shadow_size;
       std::list<Renderable *> currObjs;
    
@@ -139,7 +142,7 @@ namespace Renderer {
       }
 
       void renderBlocks() {
-         usePTShader();
+         //usePTShader();
 
          std::list<Renderable*> blocks = ngame->getBlocksToDraw();
 
@@ -219,11 +222,12 @@ namespace Renderer {
          renderDynamite();
          renderHardHat();
          renderSuperDrill();
+         renderBlocks();
          renderNuts();
 
          renderPlayer();
 
-         renderBlocks();
+         
 
          glUseProgram(0);
       }
@@ -286,7 +290,8 @@ namespace Renderer {
          //glEnable(GL_TEXTURE_2D);
          glActiveTexture(GL_TEXTURE0);
          //bind the texture of the light shadow map
-         glBindTexture(GL_TEXTURE_2D, fb_tex);
+         // glBindTexture(GL_TEXTURE_2D, fb_tex);
+         glBindTexture(GL_TEXTURE_2D, fbBloom_tex1);
 
          //get position of the debug square
          safe_glEnableVertexAttribArray(dSS.h_aPosition);
@@ -319,83 +324,108 @@ namespace Renderer {
 
          // create framebuffer
          fb = 0;
-         glGenFramebuffers(1, &fb);
-         glBindFramebuffer(GL_FRAMEBUFFER, fb);
+         glGenFramebuffers (1, &fb);
+         glBindFramebuffer (GL_FRAMEBUFFER, fb);
 
          // create texture for framebuffer
          fb_tex = 0;
-         glGenTextures(1, &fb_tex);
-         glActiveTexture(GL_TEXTURE0);
-         glBindTexture(GL_TEXTURE_2D, fb_tex);
+         glGenTextures (1, &fb_tex);
+         glActiveTexture (GL_TEXTURE0);
+         glBindTexture (GL_TEXTURE_2D, fb_tex);
 
          //Make a texture that is 256 by 256 that has depth information
-         glTexImage2D(
-            GL_TEXTURE_2D,
-            0,
-            GL_DEPTH_COMPONENT,
-            shadow_size,
-            shadow_size,
-            0,
-            GL_DEPTH_COMPONENT,
-            GL_UNSIGNED_BYTE,
-            NULL
-            );
+         glTexImage2D (
+           GL_TEXTURE_2D,
+           0,
+           GL_DEPTH_COMPONENT,
+           shadow_size,
+           shadow_size,
+           0,
+           GL_DEPTH_COMPONENT,
+           GL_UNSIGNED_BYTE,
+           NULL
+         );
 
          // blend the texture so that all areas are filled with a depth
-         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+         glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+         glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
          // clamp to edge. clamp to border may reduce artifacts outside light frustum
-         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+         glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+         glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
          // attach depth texture to framebuffer
-         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, fb_tex, 0);
+         glFramebufferTexture2D (GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, fb_tex, 0);
 
          // tell framebuffer not to use any colour drawing outputs
          GLenum draw_bufs[] = { GL_NONE };
-         glDrawBuffers(1, draw_bufs);
+         glDrawBuffers (1, draw_bufs);
 
          //Go back to using the original frame buffer
          glBindFramebuffer(GL_FRAMEBUFFER, 0);
          //End tutorial code
+
+         modelTrans.useModelViewMatrix();
+         modelTrans.loadIdentity();
+         initDebugLightMap();
+
+         cylinder = new Cylinder();
       }
 
       void setUpBloomFBO() {
          // START OF FBO FOR BLOOM
          fbBloom1 = 0;
          fbBloom_tex1 = 0;
+         fbBloom_depth = 0;
          // generate the frame buffer
          glGenFramebuffers(1, &fbBloom1);
          // generate the texture
          glGenTextures(1, &fbBloom_tex1);
+         // generate depth
+         glGenRenderbuffers(1, &fbBloom_depth);
+         
+         //create the colorbuffer texture and attach it to the frame buffer
+         glEnable(GL_TEXTURE_2D);
+         glBindTexture(GL_TEXTURE_2D, fbBloom_tex1);
+         glTexImage2D (
+           GL_TEXTURE_2D,
+           0,
+           GL_RGBA,
+           1280,
+           720,
+           0,
+           GL_RGBA,
+           GL_UNSIGNED_BYTE,
+           NULL
+         );
+
+         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
          // Bind our frame buffer
          glBindFramebuffer(GL_FRAMEBUFFER, fbBloom1);
 
-         //create the colorbuffer texture and attach it to the frame buffer
-         glEnable(GL_TEXTURE_2D);
-         glActiveTexture(GL_TEXTURE2);
-         glBindTexture(GL_TEXTURE_2D, fbBloom_tex1);
-         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 1280, 720, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
          glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fbBloom_tex1, 0);
          glDisable(GL_TEXTURE_2D);
 
+         glBindRenderbuffer(GL_RENDERBUFFER, fbBloom_depth);
+         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, 1280, 720);
+         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, fbBloom_depth);
 
-         GLenum drawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
-         glDrawBuffers(1, drawBuffers);
+         GLenum draw_bufs2[] = { GL_COLOR_ATTACHMENT0 };
+         glDrawBuffers (1, draw_bufs2);
 
-         checkGLError();
+
+         GLenum status = glCheckFramebufferStatus (GL_FRAMEBUFFER);
+         if (GL_FRAMEBUFFER_COMPLETE != status) {
+           fprintf (stderr, "ERROR: incomplete framebuffer\n");
+         }
          //Go back to using the original frame buffer
          glBindFramebuffer(GL_FRAMEBUFFER, 0);
          // END OF FBO FOR BLOOM
       }
-
    }
-
    void usePTShader() {
       glUseProgram(ptshader.shadeProg);//ptshader.shadeProg);
       modelTrans.useModelViewMatrix();

@@ -242,17 +242,19 @@ void Renderable::ptsRender() {
 }
 
 void Renderable::bRender() {
-   Light light = Renderer::light;//Light();
-   //light.setPosition(glm::vec3(0.0, 0.0, 6.0f));
-   Camera camera = Renderer::camera;//Camera(glm::vec3(3.0f, 1.0f, 10.0f), glm::vec3(3.0f, 0.0f, 5.0f), glm::vec3(0, 1, 0));
-   //camera.setEye(glm::vec3(3.0f, 0.0, 8.0f));
+   Light light = Renderer::light;
+   Camera camera = Renderer::camera;
 
    // BRIGHT PASS
-   glBindFramebuffer(GL_FRAMEBUFFER, 2);
-   glViewport(0, 0, 1280, 720);
+   glBindFramebuffer(GL_FRAMEBUFFER, Renderer::fbBloom1);
+   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
    glUseProgram(bshader.shadeProgBright);
+   glViewport(0, 0, 1280, 720);
+   glClearColor(0, 0, 0, 1.0);
+
    camera.setView(bshader.h_uViewMatrixBright);
-   camera.setProjectionMatrix(bshader.h_uProjMatrixBright, (float)1280 / 720, 0.1f, 100.0f);
+   camera.setProjectionMatrix(bshader.h_uProjMatrixBright, 1280.0 / 720.0, 0.1f, 100.0f);
 
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
@@ -273,6 +275,9 @@ void Renderable::bRender() {
    //Bind the index
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->idxHandle());
 
+   glEnable(GL_TEXTURE_2D);
+   // glActiveTexture(GL_TEXTURE0);
+   // glBindTexture(GL_TEXTURE_2D, 12);
    //Draw the object!
    glDrawElements(GL_TRIANGLES, model->getIdxCount(), GL_UNSIGNED_INT, 0);
 
@@ -280,16 +285,16 @@ void Renderable::bRender() {
    glDisable(GL_TEXTURE_2D);
 
    glUseProgram(0);
-   glBindFramebuffer(GL_FRAMEBUFFER, 0);
    // END OF BRIGHT PASS
 
 
-   // BLUR PASS
-   glBindFramebuffer(GL_FRAMEBUFFER, 2);
+   // BLUR PASS Horizontal
+   glUseProgram(bshader.shadeProgBlurHor);
    glViewport(0, 0, 1280, 720);
-   glUseProgram(bshader.shadeProgBlur);
-   camera.setView(bshader.h_uViewMatrixBlur);
-   camera.setProjectionMatrix(bshader.h_uProjMatrixBlur, (float)1280 / 720, 0.1f, 100.0f);
+   glClearColor(0, 0, 0, 1.0);
+
+   camera.setView(bshader.h_uViewMatrixBlurHor);
+   camera.setProjectionMatrix(bshader.h_uProjMatrixBlurHor, 1280.0 / 720.0, 0.1f, 100.0f);
 
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
@@ -298,13 +303,13 @@ void Renderable::bRender() {
       modelTrans.scale(scaleX, scaleY, scaleZ);
       modelTrans.rotate(ang, axis);
       //Bind the model matrix
-      safe_glUniformMatrix4fv(bshader.h_uModelMatrixBlur, glm::value_ptr(modelTrans.modelViewMatrix));
+      safe_glUniformMatrix4fv(bshader.h_uModelMatrixBlurHor, glm::value_ptr(modelTrans.modelViewMatrix));
    modelTrans.popMatrix();
 
    //Bind the positions
-   safe_glEnableVertexAttribArray(bshader.h_aPositionBlur);
+   safe_glEnableVertexAttribArray(bshader.h_aPositionBlurHor);
    glBindBuffer(GL_ARRAY_BUFFER, model->vertHandle());
-   safe_glVertexAttribPointer(bshader.h_aPositionBlur, 3, GL_FLOAT, GL_FALSE, 0, 0);
+   safe_glVertexAttribPointer(bshader.h_aPositionBlurHor, 3, GL_FLOAT, GL_FALSE, 0, 0);
    //DEBUG("positions: " << glGetError());
 
    //Bind the index
@@ -312,25 +317,71 @@ void Renderable::bRender() {
 
    // Set our "colorTextureSampler" sampler to user Texture Unit 0
    glEnable(GL_TEXTURE_2D);
-   glActiveTexture(GL_TEXTURE2);
-   glBindTexture(GL_TEXTURE_2D, 12);
-   glUniform1i(bshader.h_myTextureSamplerBlur, 2);
+   glActiveTexture(GL_TEXTURE0);
+   //glBindTexture(GL_TEXTURE_2D, 12);
+   glBindTexture(GL_TEXTURE_2D, Renderer::fbBloom_tex1);
+   glUniform1i(bshader.h_myTextureSamplerBlurHor, 0);
 
    //Draw the object!
    glDrawElements(GL_TRIANGLES, model->getIdxCount(), GL_UNSIGNED_INT, 0);
 
-   safe_glDisableVertexAttribArray(bshader.h_aPositionBlur);
+   safe_glDisableVertexAttribArray(bshader.h_aPositionBlurHor);
+   glDisable(GL_TEXTURE_2D);
+
+   glUseProgram(0);
+   // END OF BLUR PASS Horizontal
+
+
+   // BLUR PASS Vertical
+   glUseProgram(bshader.shadeProgBlurVer);
+   glViewport(0, 0, 1280, 720);
+   glClearColor(0, 0, 0, 1.0);
+
+   camera.setView(bshader.h_uViewMatrixBlurVer);
+   camera.setProjectionMatrix(bshader.h_uProjMatrixBlurVer, 1280.0 / 720.0, 0.1f, 100.0f);
+
+   modelTrans.useModelViewMatrix();
+   modelTrans.loadIdentity();
+   modelTrans.pushMatrix();
+      modelTrans.translate(position);
+      modelTrans.scale(scaleX, scaleY, scaleZ);
+      modelTrans.rotate(ang, axis);
+      //Bind the model matrix
+      safe_glUniformMatrix4fv(bshader.h_uModelMatrixBlurVer, glm::value_ptr(modelTrans.modelViewMatrix));
+   modelTrans.popMatrix();
+
+   //Bind the positions
+   safe_glEnableVertexAttribArray(bshader.h_aPositionBlurVer);
+   glBindBuffer(GL_ARRAY_BUFFER, model->vertHandle());
+   safe_glVertexAttribPointer(bshader.h_aPositionBlurVer, 3, GL_FLOAT, GL_FALSE, 0, 0);
+   //DEBUG("positions: " << glGetError());
+
+   //Bind the index
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->idxHandle());
+
+   // Set our "colorTextureSampler" sampler to user Texture Unit 0
+   glEnable(GL_TEXTURE_2D);
+   glActiveTexture(GL_TEXTURE0);
+   //glBindTexture(GL_TEXTURE_2D, 12);
+   glBindTexture(GL_TEXTURE_2D, Renderer::fbBloom_tex1);
+   glUniform1i(bshader.h_myTextureSamplerBlurVer, 0);
+
+   //Draw the object!
+   glDrawElements(GL_TRIANGLES, model->getIdxCount(), GL_UNSIGNED_INT, 0);
+
+   safe_glDisableVertexAttribArray(bshader.h_aPositionBlurVer);
    glDisable(GL_TEXTURE_2D);
 
    glUseProgram(0);
    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-   // END OF BLUR PASS
+   // END OF BLUR PASS Vertical
 
 
    // COMPOSITE PASS
-   glViewport(0, 0, (GLsizei)1280, (GLsizei)720);
-   glDisable(GL_TEXTURE_2D);
    glUseProgram(bshader.shadeProgComposite);
+   glViewport(0, 0, 1280, 720);
+   glClearColor(0, 0, 0, 1.0);
+
    camera.setView(bshader.h_uViewMatrixComposite);
    camera.setProjectionMatrix(bshader.h_uProjMatrixComposite, (float)1280 / 720, 0.1f, 100.0f);
 
@@ -366,12 +417,14 @@ void Renderable::bRender() {
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->idxHandle());
 
    // Set our "colorTextureSampler" sampler to user Texture Unit 0
+
+   glBindTexture(GL_TEXTURE_2D, 0);
    glEnable(GL_TEXTURE_2D);
+   glActiveTexture(GL_TEXTURE0);
+   //glBindTexture(GL_TEXTURE_2D, 12);
+   glBindTexture(GL_TEXTURE_2D, Renderer::fbBloom_tex1);
 
-   glActiveTexture(GL_TEXTURE2);
-   glBindTexture(GL_TEXTURE_2D, 12);
-
-   glUniform1i(bshader.h_myTextureSamplerComposite, 2);
+   glUniform1i(bshader.h_myTextureSamplerComposite, 0);
 
    //Draw the object!
    glDrawElements(GL_TRIANGLES, model->getIdxCount(), GL_UNSIGNED_INT, 0);

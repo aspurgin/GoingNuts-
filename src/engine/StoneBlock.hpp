@@ -11,6 +11,7 @@ class StoneBlock: public Block {
       StoneBlock(glm::vec3 center, float width, float height, ParticleSystem *psystem);
       int getStrength();
       float getMoveSpeedPercentage();
+      void makeDead();
    private:
       
 };

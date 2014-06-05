@@ -1,8 +1,8 @@
 #include "NutGame.hpp"
 
-#ifdef _WIN32
-#define _CRT_SECURE_NO_WARNINGS
-#endif
+//#ifdef _WIN32
+//#define _CRT_SECURE_NO_WARNINGS
+//#endif
 
 NutGame::NutGame() {
    this->drillDownPressed = false;
@@ -12,6 +12,7 @@ NutGame::NutGame() {
    this->left = false;
    this->right = false;
    this->up = false;
+   this->down = false;
    this->throwDynamitePressed = false;
    this->checkingGroupForOtherAdds = false;
    this->releasedSinceDownPress = true;
@@ -23,6 +24,7 @@ NutGame::NutGame() {
    this->psystem = ParticleSystem();
    this->isWon = false;
    this->level = 0;
+   this->useArrowKeys = true;
    NUMROWS = 0;
 }
 
@@ -45,6 +47,7 @@ void NutGame::init() {
    left = false;
    right = false;
    up = false;
+   down = false;
    throwDynamitePressed = false;
    checkingGroupForOtherAdds = false;
    releasedSinceDownPress = true;
@@ -564,7 +567,7 @@ void NutGame::handleKeyInput() {
    Block* block;
 
    if (!isGameOver() && !isGameWon()) {
-      if (drillLeftPressed && releasedSinceLeftPress) {
+      if (((useArrowKeys && drillLeftPressed) || (!useArrowKeys && left)) && releasedSinceLeftPress) {
          releasedSinceLeftPress = false;
          pos = glm::vec2(player.getCenter());
          pos.y *= -1;
@@ -573,15 +576,15 @@ void NutGame::handleKeyInput() {
                if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + .5 - 1)]->getMovableType() == BLOCK) {
                   block = (Block *)gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + .5 - 1)];
                   player.drillBlock(block, DRILLING_LEFT);
-                  if (block->isDead() && block->deathCounter == -1) {
-                     addToScore(1);
-                     block->deathCounter = 0;
-                  }
+                  //if (block->isDead() && block->deathCounter == -1) {
+                  //   addToScore(1);
+                  //   block->deathCounter = 0;
+                  //}
                }
             }
          }
       }
-      else if (drillRightPressed && releasedSinceRightPress) {
+      else if (((useArrowKeys && drillRightPressed) || (!useArrowKeys && right)) && releasedSinceRightPress) {
          releasedSinceRightPress = false;
          pos = glm::vec2(player.getCenter());
          pos.y *= -1;
@@ -590,15 +593,15 @@ void NutGame::handleKeyInput() {
                if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)]->getMovableType() == BLOCK) {
                   block = (Block *)gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)];
                   player.drillBlock(block, DRILLING_RIGHT);
-                  if (block->isDead() && block->deathCounter == -1) {
-                      addToScore(1);
-                     block->deathCounter = 0;
-                  }
+                  //if (block->isDead() && block->deathCounter == -1) {
+                  //    addToScore(1);
+                  //   block->deathCounter = 0;
+                  //}
                }
             }
          }
       }
-      else if (drillDownPressed && releasedSinceDownPress) {
+      else if (((useArrowKeys && drillDownPressed) || (!useArrowKeys && down)) && releasedSinceDownPress) {
          releasedSinceDownPress = false;
          pos = glm::vec2(player.getCenter());
          pos.y *= -1;
@@ -606,14 +609,14 @@ void NutGame::handleKeyInput() {
             if (gameGrid[(int)(pos.y + 1.5)][(int)(pos.x + .5)]->getMovableType() == BLOCK) {
                block = (Block *)gameGrid[(int)(pos.y + 1.5)][(int)(pos.x + .5)];
                player.drillBlock(block, DRILLING_DOWN);
-               if (block->isDead() && block->deathCounter == -1) {
-                  addToScore(1);
-                  block->deathCounter = 0;
-               }
+               //if (block->isDead() && block->deathCounter == -1) {
+               //   addToScore(1);
+               //   block->deathCounter = 0;
+               //}
             }
          }
       }
-      else if (drillUpPressed && releasedSinceUpPress) {
+      else if (((useArrowKeys && drillUpPressed) || (!useArrowKeys && up)) && releasedSinceUpPress) {
          releasedSinceUpPress = false;
          pos = glm::vec2(player.getCenter());
          pos.y *= -1;
@@ -622,10 +625,10 @@ void NutGame::handleKeyInput() {
                if (gameGrid[(int)(pos.y - 0.5)][(int)(pos.x + .5)]->getMovableType() == BLOCK) {
                   block = (Block *)gameGrid[(int)(pos.y - 0.5)][(int)(pos.x + .5)];
                   player.drillBlock(block, DRILLING_UP);
-                  if (block->isDead() && block->deathCounter == -1) {
-                     addToScore(1);
-                     block->deathCounter = 0;
-                  }
+                  //if (block->isDead() && block->deathCounter == -1) {
+                  //   addToScore(1);
+                  //   block->deathCounter = 0;
+                  //}
                }
             }
          }

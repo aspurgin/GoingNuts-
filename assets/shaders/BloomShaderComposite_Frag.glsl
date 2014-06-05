@@ -20,7 +20,6 @@ varying vec4 normal;
 varying vec4 light;
 varying vec4 position;
 
-varying vec2 UV;
 varying vec4 bloomCoord;
 
 void main() {
@@ -40,8 +39,8 @@ void main() {
    vec3 eyeVert = eyePos - positionVec;
    eyeVert = normalize(eyeVert);
 
-   vec3 lightVert = eyePos - lightVec;
-   lightVert = normalize(lightVert);
+   vec3 lightVert = lightVec - positionVec;
+   lightVert = normalize(lightVec);
 
    normalVec = normalize(normalVec);
    float angleBetweenCamera = dot(normalVec, eyeVert);

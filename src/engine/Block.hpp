@@ -11,7 +11,7 @@
 #include "../assets/Assets.hpp"
 #include <vector>
 
-#define HANG_TIME 1
+#define HANG_TIME 2
 
 class BlockGroup;
 
@@ -29,7 +29,7 @@ class Block: public Movable {
       int getMovableType();
       bool shouldFall();
       void setWillFall();
-      void makeDead();
+      virtual void makeDead();
       bool isInAGroup();
       BlockGroup* getGroupIn();
       void putInGroup(BlockGroup* group);
@@ -41,12 +41,13 @@ class Block: public Movable {
       void genParticles();
       void playHitGroundSound();
    protected:
+      bool isFractured;
       BlockGroup *groupIn;
       int blockType;
       std::vector<Block*> attatchedTo;
       ParticleSystem *psystem;
-   private:
       int timesDrilled;
+   private:   
       float curScale;
       
 };
