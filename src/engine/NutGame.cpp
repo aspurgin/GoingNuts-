@@ -12,6 +12,7 @@ NutGame::NutGame() {
    this->left = false;
    this->right = false;
    this->up = false;
+   this->down = false;
    this->throwDynamitePressed = false;
    this->checkingGroupForOtherAdds = false;
    this->releasedSinceDownPress = true;
@@ -22,6 +23,7 @@ NutGame::NutGame() {
    this->nutsLeft = 0;
    this->psystem = ParticleSystem();
    this->isWon = false;
+   this->useArrowKeys = true;
    NUMROWS = 0;
 }
 
@@ -44,6 +46,7 @@ void NutGame::init() {
    left = false;
    right = false;
    up = false;
+   down = false;
    throwDynamitePressed = false;
    checkingGroupForOtherAdds = false;
    releasedSinceDownPress = true;
@@ -562,7 +565,7 @@ void NutGame::handleKeyInput() {
    Block* block;
 
    if (!isGameOver() && !isGameWon()) {
-      if (drillLeftPressed && releasedSinceLeftPress) {
+      if (((useArrowKeys && drillLeftPressed) || (!useArrowKeys && left)) && releasedSinceLeftPress) {
          releasedSinceLeftPress = false;
          pos = glm::vec2(player.getCenter());
          pos.y *= -1;
@@ -579,7 +582,7 @@ void NutGame::handleKeyInput() {
             }
          }
       }
-      else if (drillRightPressed && releasedSinceRightPress) {
+      else if (((useArrowKeys && drillRightPressed) || (!useArrowKeys && right)) && releasedSinceRightPress) {
          releasedSinceRightPress = false;
          pos = glm::vec2(player.getCenter());
          pos.y *= -1;
@@ -596,7 +599,7 @@ void NutGame::handleKeyInput() {
             }
          }
       }
-      else if (drillDownPressed && releasedSinceDownPress) {
+      else if (((useArrowKeys && drillDownPressed) || (!useArrowKeys && down)) && releasedSinceDownPress) {
          releasedSinceDownPress = false;
          pos = glm::vec2(player.getCenter());
          pos.y *= -1;
@@ -611,7 +614,7 @@ void NutGame::handleKeyInput() {
             }
          }
       }
-      else if (drillUpPressed && releasedSinceUpPress) {
+      else if (((useArrowKeys && drillUpPressed) || (!useArrowKeys && up)) && releasedSinceUpPress) {
          releasedSinceUpPress = false;
          pos = glm::vec2(player.getCenter());
          pos.y *= -1;

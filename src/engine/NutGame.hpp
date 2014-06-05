@@ -70,6 +70,7 @@ class NutGame {
       bool left;
       bool right;
       bool up;
+      bool down;
       bool throwDynamitePressed;
       bool releasedSinceThrowDynamitePressed;
       Player getPlayer();
@@ -82,6 +83,7 @@ class NutGame {
       void setNumRows(int rows);
       void loadNextLevel();
       bool isWon;
+      bool useArrowKeys;
    private:
       std::list<Renderable*> getCertainObjectsToDraw(int type);
       void setFallingMovables(int row, int col);
