@@ -70,9 +70,10 @@ void main() {
 
    // Simple Silhouette
    // If angle is too drastic, color black
-   if (max(angleBetweenCamera, 0.0) < 0.4) {
+   if (max(angleBetweenCamera, 0.0) < 0.000) {
       // Silhouette Color:
       gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+      gl_FragColor = vec4(uMat.aColor, 1.0);
    }
    else {
       // Base Color

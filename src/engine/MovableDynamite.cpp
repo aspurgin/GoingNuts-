@@ -19,6 +19,7 @@ MovableDynamite::MovableDynamite(glm::vec3 center, float width, float height) {
    this->type = DYNAMITE_R;
    this->axis = glm::vec3(0, 1, 0.2);
    this->spinning = true;
+   this->shaderType = B_SHADE;
 }
 
 int MovableDynamite::getMovableType() {

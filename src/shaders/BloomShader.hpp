@@ -25,6 +25,7 @@ class BloomShader {
       GLint h_uModelMatrixBright;
       GLint h_uViewMatrixBright;
       GLint h_uProjMatrixBright;
+      GLint h_uBase;
 
       GLint h_aPositionBlurHor;
       GLint h_uModelMatrixBlurHor;
@@ -58,6 +59,7 @@ class BloomShader {
 
       BloomShader();
       void setMaterial(int);
+      void setBase(int);
 };
 
 #endif

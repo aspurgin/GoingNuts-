@@ -12,7 +12,7 @@ HardHat::HardHat(glm::vec3 center, float width, float height) {
    this->scaleY = 0.5f;
    this->scaleZ = 0.5f;
    this->mat = 0;
-   this->shaderType = C_SHADE;
+   this->shaderType = B_SHADE;
    this->modelTrans.useModelViewMatrix();
    this->offset = glm::vec3(0.0f,0.0f,0.0f);
    this->floatingUp = true;

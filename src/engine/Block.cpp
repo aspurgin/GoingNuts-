@@ -8,7 +8,7 @@ Block::Block() {
    timesDrilled = 0;
    groupIn = 0;
    model = Assets::getMesh(Assets::BLOCK_M);
-   this->shaderType = C_SHADE;
+   this->shaderType = PT_SHADE;
    scale = 0.5f;
    scaleX = 0.5f;
    scaleY = 0.5f;
@@ -80,7 +80,9 @@ void Block::setWillFall() {
 void Block::makeDead() {
 	timesDrilled = getStrength();
    state = DEAD;
-   deathCounter = 0;
+   if (deathCounter < 0) {
+      deathCounter = 0;
+   }
    genParticles();
 }
 

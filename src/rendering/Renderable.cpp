@@ -275,6 +275,9 @@ void Renderable::bRenderBright() {
       safe_glUniformMatrix4fv(bshader.h_uModelMatrixBright, glm::value_ptr(modelTrans.modelViewMatrix));
    modelTrans.popMatrix();
 
+   //Set base color
+   bshader.setBase(mat);
+
    //Bind the positions
    safe_glEnableVertexAttribArray(bshader.h_aPositionBright);
    glBindBuffer(GL_ARRAY_BUFFER, model->vertHandle());

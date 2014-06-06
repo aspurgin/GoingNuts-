@@ -171,7 +171,7 @@ namespace Renderer {
       }
 
       void renderBlocks() {
-         //usePTShader();
+         usePTShader();
 
          std::list<Renderable*> blocks = ngame->getBlocksToDraw();
 
@@ -189,9 +189,13 @@ namespace Renderer {
          glUseProgram(0);
       }
 
-      void renderNuts() {
+      void renderBloomObjects() {
          glUseProgram(0);
          std::list<Renderable*> nuts = ngame->getNutsToDraw();
+         std::list<Renderable*> hhats = ngame->getHardHatsToDraw();
+         std::list<Renderable*> dynamite = ngame->getDynamitesToDraw();
+
+         //renderBloomScene();
 
          // BRIGHT PASS
          glBindFramebuffer(GL_FRAMEBUFFER, fbBloom1);
@@ -200,12 +204,18 @@ namespace Renderer {
          glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
          glUseProgram(bshader.shadeProgBright);
          glViewport(0, 0, 1280, 720);
-         glClearColor(0, 0, 0, 1.0);
+         glClearColor(1, 1, 1, 1.0);
          glEnable(GL_TEXTURE_2D);
          camera.setView(bshader.h_uViewMatrixBright);
          camera.setProjectionMatrix(bshader.h_uProjMatrixBright, 1280.0 / 720.0, 0.1f, 100.0f);
          // glActiveTexture(GL_TEXTURE0);
          // glBindTexture(GL_TEXTURE_2D, fbBloom_tex1);
+         for (std::list<Renderable*>::iterator iter = dynamite.begin(); iter != dynamite.end(); ++iter) {
+            (*iter)->bRenderBright();
+         }
+         for (std::list<Renderable*>::iterator iter = hhats.begin(); iter != hhats.end(); ++iter) {
+            (*iter)->bRenderBright();
+         }
          for (std::list<Renderable*>::iterator iter = nuts.begin(); iter != nuts.end(); ++iter) {
             (*iter)->bRenderBright();
          }
@@ -223,12 +233,18 @@ namespace Renderer {
          glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
          glUseProgram(bshader.shadeProgBlurHor);
          glViewport(0, 0, 1280, 720);
-         glClearColor(0, 0, 0, 1.0);
+         glClearColor(1, 1, 1, 1.0);
          glEnable(GL_TEXTURE_2D);
          camera.setView(bshader.h_uViewMatrixBlurHor);
          camera.setProjectionMatrix(bshader.h_uProjMatrixBlurHor, 1280.0 / 720.0, 0.1f, 100.0f);
          glActiveTexture(GL_TEXTURE0);
          glBindTexture(GL_TEXTURE_2D, fbBloom_tex1);
+         for (std::list<Renderable*>::iterator iter2 = dynamite.begin(); iter2 != dynamite.end(); ++iter2) {
+            (*iter2)->bRenderBlurHor();
+         }
+         for (std::list<Renderable*>::iterator iter2 = hhats.begin(); iter2 != hhats.end(); ++iter2) {
+            (*iter2)->bRenderBlurHor();
+         }
          for (std::list<Renderable*>::iterator iter2 = nuts.begin(); iter2 != nuts.end(); ++iter2) {
             (*iter2)->bRenderBlurHor();
          }
@@ -246,12 +262,18 @@ namespace Renderer {
          glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
          glUseProgram(bshader.shadeProgBlurVer);
          glViewport(0, 0, 1280, 720);
-         glClearColor(0, 0, 0, 1.0);
+         glClearColor(1, 1, 1, 1.0);
          glEnable(GL_TEXTURE_2D);
          camera.setView(bshader.h_uViewMatrixBlurVer);
          camera.setProjectionMatrix(bshader.h_uProjMatrixBlurVer, 1280.0 / 720.0, 0.1f, 100.0f);
          glActiveTexture(GL_TEXTURE0);
          glBindTexture(GL_TEXTURE_2D, fbBloom_tex2);
+         for (std::list<Renderable*>::iterator iter3 = dynamite.begin(); iter3 != dynamite.end(); ++iter3) {
+            (*iter3)->bRenderBlurVer();
+         }
+         for (std::list<Renderable*>::iterator iter3 = hhats.begin(); iter3 != hhats.end(); ++iter3) {
+            (*iter3)->bRenderBlurVer();
+         }
          for (std::list<Renderable*>::iterator iter3 = nuts.begin(); iter3 != nuts.end(); ++iter3) {
             (*iter3)->bRenderBlurVer();
          }
@@ -268,7 +290,7 @@ namespace Renderer {
          glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
          glUseProgram(bshader.shadeProgComposite);
          glViewport(0, 0, 1280, 720);
-         glClearColor(0, 0, 0, 1.0);
+         glClearColor(1, 1, 1, 1.0);
          glEnable(GL_TEXTURE_2D);
          camera.setView(bshader.h_uViewMatrixComposite);
          camera.setProjectionMatrix(bshader.h_uProjMatrixComposite, 1280.0 / 720.0, 0.1f, 100.0f);
@@ -276,6 +298,12 @@ namespace Renderer {
          safe_glUniform3f(bshader.h_cameraPosComposite, -camera.eye.x, -camera.eye.y, -camera.eye.z);
          glActiveTexture(GL_TEXTURE0);
          glBindTexture(GL_TEXTURE_2D, Renderer::fbBloom_tex3);
+         for (std::list<Renderable*>::iterator iter4 = dynamite.begin(); iter4 != dynamite.end(); ++iter4) {
+            (*iter4)->render();
+         }
+         for (std::list<Renderable*>::iterator iter4 = hhats.begin(); iter4 != hhats.end(); ++iter4) {
+            (*iter4)->render();
+         }
          for (std::list<Renderable*>::iterator iter4 = nuts.begin(); iter4 != nuts.end(); ++iter4) {
             (*iter4)->render();
          }
@@ -337,11 +365,11 @@ namespace Renderer {
 
          renderWalls();
          ngame->psystem.render();
-         renderDynamite();
-         renderHardHat();
+         //renderDynamite();
+         //renderHardHat();
          renderSuperDrill();
          renderBlocks();
-         renderNuts();
+         renderBloomObjects();
 
          renderPlayer();
 
@@ -651,7 +679,7 @@ namespace Renderer {
       //renderBloomScene();
       renderGame();
       renderWinLoss();
-      renderDebugShadowMapText();
+      //renderDebugShadowMapText();
       //renderNormalMappedCylinder();
    }
 }

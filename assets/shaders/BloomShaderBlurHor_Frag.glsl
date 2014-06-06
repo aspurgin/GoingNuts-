@@ -1,7 +1,7 @@
 uniform sampler2D myTextureSampler;
 varying vec4 bloomCoord;
  
-const float blurSize = 1.0/128.0;
+const float blurSize = 1.0/150.0;
  
 void main() {
    vec4 bloomCoordLocal = bloomCoord;

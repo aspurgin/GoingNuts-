@@ -542,6 +542,7 @@ BloomShader ShaderUtils::installBloomShaders(const GLchar *vBrightShaderName, co
    bloomShader.h_uProjMatrixBright = safe_glGetUniformLocation(ShadeProg, "uProjMatrix");
    bloomShader.h_uViewMatrixBright = safe_glGetUniformLocation(ShadeProg, "uViewMatrix");
    bloomShader.h_uModelMatrixBright = safe_glGetUniformLocation(ShadeProg, "uModelMatrix");
+   bloomShader.h_uBase = safe_glGetUniformLocation(ShadeProg, "baseColor");
    bloomShader.shadeProgBright = ShadeProg;
    // END BRIGHT SHADER INSTALLATION
 

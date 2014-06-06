@@ -16,7 +16,7 @@ CrystalBlock::CrystalBlock(glm::vec3 center, float width, float height, Particle
    this->mat = 7;
    this->colorTexture = Assets::getTexture(Assets::DIRT_COLOR_T);
    this->normalTexture = Assets::getTexture(Assets::CRYSTAL_T);
-   this->shaderType = C_SHADE;//PT_SHADE;
+   //this->shaderType = C_SHADE;//PT_SHADE;
    this->type = CRYSTAL_BLOCK_R;
 }
 

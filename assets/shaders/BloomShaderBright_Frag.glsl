@@ -1,4 +1,5 @@
 // This is the bright pass
+uniform vec3 baseColor;
 
 void main() {
    float luminance = 0.9;
@@ -7,7 +8,7 @@ void main() {
 
    // Get the color without any alterations
    // vec3 color = texture2D(myTextureSampler, vec2(UV.x, 1.0 - UV.y)).rgb;
-   vec3 color = vec3(0.8, 0.2, 0.1);
+   vec3 color = baseColor;
 
    // // Adjust color based on grey scale and luminance
    // color *= (middleGrey / luminance );
