@@ -25,6 +25,7 @@ NutGame::NutGame() {
    this->isWon = false;
    this->level = 0;
    this->useArrowKeys = true;
+   this->depth = 0;
    NUMROWS = 0;
 }
 
@@ -57,6 +58,7 @@ void NutGame::init() {
    releasedSinceThrowDynamitePressed = true;
    nutsLeft = 0;
    isWon = false;
+   depth = 0;
    level = 0;
    levels.clear();
    levels.push_back(Level("levels/level9.txt"));
@@ -67,6 +69,7 @@ void NutGame::init() {
    levels.push_back(Level("levels/level3.txt"));
    levels.push_back(Level("levels/level2.txt"));
    levels.push_back(Level("levels/level1.txt"));
+   //levels.push_back(Level("levels/test.txt"));
 
    loadNextLevel();
 }
@@ -83,7 +86,7 @@ void NutGame::connectBlocks() {
    }
 }
 
-void NutGame::maybeAddToGroupLeft(int row, int col) {
+bool NutGame::maybeAddToGroupLeft(int row, int col) {
    Block* thisBlock;
    Block* left;
 
@@ -96,17 +99,18 @@ void NutGame::maybeAddToGroupLeft(int row, int col) {
       if (thisBlock->getBlockType() == left->getBlockType()) {
          if (thisBlock->getBlockType() == DIRTBLOCK) {
             if (((DirtBlock*)thisBlock)->getColor() == ((DirtBlock*)left)->getColor()) {
-               addToGroup(thisBlock, left);
+               return addToGroup(thisBlock, left);
             }
          }
          else {
-            addToGroup(thisBlock, left);
+            return addToGroup(thisBlock, left);
          }
       }
    }
+   return false;
 }
 
-void NutGame::maybeAddToGroupRight(int row, int col) {
+bool NutGame::maybeAddToGroupRight(int row, int col) {
    Block* thisBlock;
    Block* right;
    
@@ -120,17 +124,18 @@ void NutGame::maybeAddToGroupRight(int row, int col) {
       if (thisBlock->getBlockType() == right->getBlockType()) {
          if (thisBlock->getBlockType() == DIRTBLOCK) {
             if (((DirtBlock*)thisBlock)->getColor() == ((DirtBlock*)right)->getColor()) {
-               addToGroup(thisBlock, right);
+               return addToGroup(thisBlock, right);
             }
          }
          else {
-            addToGroup(thisBlock, right);
+            return addToGroup(thisBlock, right);
          }
       }
    }
+   return false;
 }
 
-void NutGame::maybeAddToGroupDown(int row, int col) {
+bool NutGame::maybeAddToGroupDown(int row, int col) {
    Block* thisBlock;
    Block* down;
    
@@ -143,14 +148,15 @@ void NutGame::maybeAddToGroupDown(int row, int col) {
       if (thisBlock->getBlockType() == down->getBlockType()) {
          if (thisBlock->getBlockType() == DIRTBLOCK) {
             if (((DirtBlock*)thisBlock)->getColor() == ((DirtBlock*)down)->getColor()) {
-               addToGroup(thisBlock, down);
+               return addToGroup(thisBlock, down);
             }
          }
          else {
-            addToGroup(thisBlock, down);
+            return addToGroup(thisBlock, down);
          }
       }
    }
+   return false;
 }
 
 bool NutGame::isBlockAtPosition(glm::vec2 pos) {
@@ -187,6 +193,8 @@ bool NutGame::isDrillingRight() {
 void NutGame::fallDown(double toAdd) {
    double before, after;
    int colColidedWith;
+   bool addedBeforeDied = false;
+   bool groupWouldStopFalling = false;
       
    for (int row = NUMROWS - 1; row >= 0; row--) {
       for (int col = 0; col < NUMCOLS; col++) {
@@ -237,19 +245,21 @@ void NutGame::fallDown(double toAdd) {
                            player.died();
                         }
                         else {
-                           maybeAddToGroupDown(row, col);
-                           maybeAddToGroupLeft(row, col);
-                           maybeAddToGroupRight(row, col);
-                           if (gameGrid[row][col]->getMovableType() == BLOCK && ((Block*)gameGrid[row][col])->isInAGroup()) {
-                              ((Block*)gameGrid[row][col])->getGroupIn()->stopGroupFalling();
-                              ((Block*)gameGrid[row][col])->getGroupIn()->setGroupCanNotFall();
-                              ((Block*)gameGrid[row][col])->getGroupIn()->adjustGroupPosition();
-                           }
-                           else {
+                           //Don't delete this.  Not sure if it was doing anything.
+                           //maybeAddToGroupDown(row, col);
+                           //maybeAddToGroupLeft(row, col);
+                           //maybeAddToGroupRight(row, col);
+                           //if (gameGrid[row][col]->getMovableType() == BLOCK && ((Block*)gameGrid[row][col])->isInAGroup()) {
+                              
+                           //   ((Block*)gameGrid[row][col])->getGroupIn()->stopGroupFalling();
+                           //   ((Block*)gameGrid[row][col])->getGroupIn()->setGroupCanNotFall();
+                           //   ((Block*)gameGrid[row][col])->getGroupIn()->adjustGroupPosition();
+                           //}
+                           //else {
                               gameGrid[row][col]->stopFalling();
                               gameGrid[row][col]->setCanNotFall();
                               gameGrid[row][col]->moveTo(glm::vec2(gameGrid[row][col]->getCenter().x, -row));
-                           }
+                           //}
                         }
                      }
                   }
@@ -278,23 +288,37 @@ void NutGame::fallDown(double toAdd) {
                         gameGrid[row][col] = 0;
                      }
                      else {
-                        if (player.getHasHardHat()) {
-                           player.takeAwayHardHat();
-                           ((Block*)gameGrid[row][col])->makeDead();
-                           if (((Block*)gameGrid[row][col])->isInAGroup()) {
-                              ((Block*)gameGrid[row][col])->getGroupIn()->stopGroupFalling();
-                              ((Block*)gameGrid[row][col])->getGroupIn()->adjustGroupPosition();
-                              ((Block*)gameGrid[row][col])->getGroupIn()->destroy();
-                              delete ((Block*)gameGrid[row][col])->getGroupIn();
-                           }
-                           gameGrid[row][col]->stopFalling();
-                           gameGrid[row][col]->setCanNotFall();
-                           gameGrid[row][col]->moveTo(glm::vec2(gameGrid[row][col]->getCenter().x, -row));
-                           //delete gameGrid[row][col];
-                           //gameGrid[row][col] = 0;
+                        addedBeforeDied = false;
+                        groupWouldStopFalling = false;
+                        addedBeforeDied = maybeAddToGroupLeft(row, col);
+                        if (addedBeforeDied) {
+                           maybeAddToGroupRight(row, col);
                         }
                         else {
-                           player.died();
+                           addedBeforeDied = maybeAddToGroupRight(row, col);
+                        }
+                        if (((Block*)gameGrid[row][col])->isInAGroup() && !player.getIsDead()) {
+                           groupWouldStopFalling = checkIfGroupWillStopFalling(((Block*)gameGrid[row][col])->getGroupIn(), toAdd);
+                        }
+                        if (!addedBeforeDied && !groupWouldStopFalling) {
+                           if (player.getHasHardHat()) {
+                              player.takeAwayHardHat();
+                              ((Block*)gameGrid[row][col])->makeDead();
+                              if (((Block*)gameGrid[row][col])->isInAGroup()) {
+                                 ((Block*)gameGrid[row][col])->getGroupIn()->stopGroupFalling();
+                                 ((Block*)gameGrid[row][col])->getGroupIn()->adjustGroupPosition();
+                                 ((Block*)gameGrid[row][col])->getGroupIn()->destroy();
+                                 delete ((Block*)gameGrid[row][col])->getGroupIn();
+                              }
+                              gameGrid[row][col]->stopFalling();
+                              gameGrid[row][col]->setCanNotFall();
+                              gameGrid[row][col]->moveTo(glm::vec2(gameGrid[row][col]->getCenter().x, -row));
+                              //delete gameGrid[row][col];
+                              //gameGrid[row][col] = 0;
+                           }
+                           else {
+                              player.died();
+                           }
                         }
                      }
                   }
@@ -322,6 +346,9 @@ void NutGame::fallDown(double toAdd) {
                   }
                   gameGrid[row + 1][col] = gameGrid[row][col];
                   gameGrid[row][col] = 0;
+                  if (gameGrid[row + 1][col]->getMovableType() == PLAYER) {
+                     player.addToDepth();
+                  }
                   if (row + 1 == NUMROWS - 1 && gameGrid[row + 1][col]->getMovableType() == PLAYER) {
                      row = -1;
                      col = NUMCOLS;
@@ -336,7 +363,7 @@ void NutGame::fallDown(double toAdd) {
                else if (gameGrid[row][col] != 0) {
                   double place = gameGrid[row][col]->getCenter().y;
                   int closestWhole = (int)place;
-                  if (place - closestWhole < -.9 || place - closestWhole > -.1) {
+                  if (place - closestWhole < -.85 || place - closestWhole > -.15) {
                      maybeAddToGroupLeft(row, col);
                      maybeAddToGroupRight(row, col);
                   }
@@ -378,7 +405,7 @@ void NutGame::fallDown(double toAdd) {
    }
 }
 
-void NutGame::addToGroup(Block* thisBlock, Block* otherBlock) {
+bool NutGame::addToGroup(Block* thisBlock, Block* otherBlock) {
    bool wasAdded = false;
    BlockGroup* temp;
 
@@ -416,6 +443,7 @@ void NutGame::addToGroup(Block* thisBlock, Block* otherBlock) {
          checkingGroupForOtherAdds = false;
       }
    }
+   return wasAdded;
 }
 
 void NutGame::checkGroupForOtherAdds(BlockGroup* group) {
@@ -796,7 +824,7 @@ int NutGame::getScore() {
 }
 
 int NutGame::getDepth() {
-   return (int)(player.getCenter().y) * -1;
+   return player.getDepth();
 }
 
 int NutGame::getLevel() {
@@ -808,7 +836,7 @@ bool NutGame::isGameOver() {
 }
 
 bool NutGame::isGameWon() {
-   return nutsLeft == 0;
+   return isWon;
 }
 
 void NutGame::updatePSystem(double dt) {
@@ -885,4 +913,24 @@ void NutGame::loadNextLevel() {
       connectBlocks();
       level++;
    }
+}
+
+bool NutGame::checkIfGroupWillStopFalling(BlockGroup* group, float toAdd) {
+   int row, col;
+   bool answer = false;
+   for (std::list<Block*>::iterator it = group->getListBeginIt(); it != group->getListEndIt(); ++it) {
+      (*it)->fall(toAdd);
+      row = (*it)->getCenter().y * -1;
+      col = (*it)->getCenter().x;
+      if (row < NUMROWS && gameGrid[row + 1][col] != 0) {
+         if (gameGrid[row][col]->isIntersecting(gameGrid[row + 1][col]) && gameGrid[row + 1][col]->getMovableType() != PLAYER) {
+            answer = true;
+         }
+      }
+   }
+   for (std::list<Block*>::iterator it = group->getListBeginIt(); it != group->getListEndIt(); ++it) {
+      (*it)->fall(-toAdd);
+   }
+   
+   return answer;
 }

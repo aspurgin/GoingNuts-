@@ -13,6 +13,7 @@ class BlockGroup {
       void addBlock(Block *block);
       void destroy();
       void moveGroupTo(BlockGroup* group);
+      bool shouldGroupStopFalling();
       Block* getTopRight();
       void setGroupCanNotFall();
       bool entireGroupCanFall();

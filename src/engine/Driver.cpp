@@ -183,15 +183,15 @@ int main(void)
          fpsCount = 0;
          fpsTime = 0;
       }
-      sprintf(scoreString, "FPS: %.0f Score: %d Energy: %f", 1.0/delta, game.getScore(), game.player.getEnergyLeft());
+      sprintf(scoreString, "FPS: %.0f", 1.0/delta);
       
       if (game.player.getIsDead()) {
-         sprintf(scoreString, "FPS: %.0f Score: %d  You are Dead", 1.0/delta, game.getScore());
+         sprintf(scoreString, "FPS: %.0f", 1.0/delta);
          //printf("YOU ARE DEAD\n");
          //break;
       }
       if (game.isWon) {
-         sprintf(scoreString, "FPS: %.0f Score: %d  %s", 1.0/delta, game.getScore(), "You won!!!");
+         sprintf(scoreString, "FPS: %.0f", 1.0/delta);
          //printf("YOU WON!!!!!!!!\n");
          //break;
       }

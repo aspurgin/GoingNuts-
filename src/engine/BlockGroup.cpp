@@ -86,3 +86,10 @@ std::list<Block*>::iterator BlockGroup::getListBeginIt() {
 std::list<Block*>::iterator BlockGroup::getListEndIt() {
    return blocks.end();
 }
+
+bool BlockGroup::shouldGroupStopFalling() {
+   for (std::list<Block*>::iterator it = blocks.begin(); it != blocks.end(); ++it) {
+      
+   }
+   return false;
+}

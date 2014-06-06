@@ -33,6 +33,7 @@ Player::Player(glm::vec3 center, float width, float height) {
    this->type = PLAYER_R;
    drillCount = 0;
    this->score = 0;
+   this->depth = 0;
 }
   
 void Player::drillBlock(Block *block, int state) {
@@ -254,4 +255,13 @@ int Player::getScore() {
 
 void Player::playHitGroundSound() {
    
+}
+
+
+void Player::addToDepth() {
+   depth++;
+}
+
+int Player::getDepth() {
+   return depth;
 }

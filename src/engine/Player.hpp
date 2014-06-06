@@ -21,7 +21,6 @@ class Player: public Movable {
       int getMovableType();
       bool shouldFall();
       void setWillFall();
-      int getDepth();
       float getEnergyLeft();
       void died();
       bool getIsDead();
@@ -49,6 +48,8 @@ class Player: public Movable {
       void addToScore(int num);
       int getScore();
       void playHitGroundSound();
+      void addToDepth();
+      int getDepth();
    private:
       Texture texture;
       float velocity;
@@ -68,6 +69,7 @@ class Player: public Movable {
       HardHat hat;
       int drillCount;
       int score;
+      int depth;
 };
 
 #endif

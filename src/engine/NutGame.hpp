@@ -83,16 +83,17 @@ class NutGame {
       void addToNutsLeft();
       void setNumRows(int rows);
       void loadNextLevel();
+      bool checkIfGroupWillStopFalling(BlockGroup* group, float toAdd);
       bool isWon;
       bool useArrowKeys;
    private:
       std::list<Renderable*> getCertainObjectsToDraw(int type);
       void setFallingMovables(int row, int col);
-      void addToGroup(Block* thisBlock, Block* otherBlock);
+      bool addToGroup(Block* thisBlock, Block* otherBlock);
       void connectBlocks();
-      void maybeAddToGroupLeft(int row, int col);
-      void maybeAddToGroupRight(int row, int col);
-      void maybeAddToGroupDown(int row, int col);
+      bool maybeAddToGroupLeft(int row, int col);
+      bool maybeAddToGroupRight(int row, int col);
+      bool maybeAddToGroupDown(int row, int col);
       void finishSettingFallingMovables();
       void checkGroupForOtherAdds(BlockGroup* group);
       int nutsLeft;
@@ -101,6 +102,7 @@ class NutGame {
       std::vector<BlockGroup*> mightFallGroupList;
       std::vector<Movable*> mightFallBlockList;
       int NUMROWS;
+      int depth;
       std::vector<Level> levels;
 };
 
