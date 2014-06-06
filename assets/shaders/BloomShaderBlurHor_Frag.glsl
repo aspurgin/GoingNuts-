@@ -1,7 +1,7 @@
 uniform sampler2D myTextureSampler;
 varying vec4 bloomCoord;
  
-const float blurSize = 1.0/256.0;
+const float blurSize = 1.0/128.0;
  
 void main() {
    vec4 bloomCoordLocal = bloomCoord;
@@ -22,6 +22,19 @@ void main() {
    sum += texture2D(myTextureSampler, vec2(bloomCoordLocal.x + 2.0*blurSize, bloomCoordLocal.y)) * 0.12;
    sum += texture2D(myTextureSampler, vec2(bloomCoordLocal.x + 3.0*blurSize, bloomCoordLocal.y)) * 0.09;
    sum += texture2D(myTextureSampler, vec2(bloomCoordLocal.x + 4.0*blurSize, bloomCoordLocal.y)) * 0.05;
+   // sum += texture2D(myTextureSampler, vec2(bloomCoordLocal.x - 4.0*blurSize, bloomCoordLocal.y)) * 0.03;
+   // sum += texture2D(myTextureSampler, vec2(bloomCoordLocal.x - 3.0*blurSize, bloomCoordLocal.y)) * 0.07;
+   // sum += texture2D(myTextureSampler, vec2(bloomCoordLocal.x - 2.0*blurSize, bloomCoordLocal.y)) * 0.10;
+   // sum += texture2D(myTextureSampler, vec2(bloomCoordLocal.x - blurSize, bloomCoordLocal.y)) * 0.13;
+   // sum += texture2D(myTextureSampler, vec2(bloomCoordLocal.x, bloomCoordLocal.y)) * 0.14;
+   // sum += texture2D(myTextureSampler, vec2(bloomCoordLocal.x + blurSize, bloomCoordLocal.y)) * 0.13;
+   // sum += texture2D(myTextureSampler, vec2(bloomCoordLocal.x + 2.0*blurSize, bloomCoordLocal.y)) * 0.10;
+   // sum += texture2D(myTextureSampler, vec2(bloomCoordLocal.x + 3.0*blurSize, bloomCoordLocal.y)) * 0.07;
+   // sum += texture2D(myTextureSampler, vec2(bloomCoordLocal.x + 4.0*blurSize, bloomCoordLocal.y)) * 0.03;
  
+ 
+   sum.w = 1.0;
    gl_FragColor = sum;
+   // gl_FragColor = vec4(0.1, 0.2, 0.8, 1.0);
+   //gl_FragColor = vec4(0.8, 0.2, 0.1, 1.0);
 }

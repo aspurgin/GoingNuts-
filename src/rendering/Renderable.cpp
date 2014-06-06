@@ -38,6 +38,28 @@ void Renderable::setSpin(bool spin) {
    spinning = spin;
 }
 
+void Renderable::renderBloom() {
+   modelTrans.useModelViewMatrix();
+   modelTrans.loadIdentity();
+   modelTrans.pushMatrix();
+      //modelTrans.translate(glm::vec3(0, 0, -1));
+      modelTrans.translate(position);
+      modelTrans.scale(scaleX, scaleY, scaleZ);
+      modelTrans.rotate(ang, glm::vec3(0, 1, 0));
+      safe_glUniformMatrix4fv(bshader.h_uModelMatrixBright, glm::value_ptr(modelTrans.modelViewMatrix));
+   modelTrans.popMatrix();
+   
+   safe_glEnableVertexAttribArray(bshader.h_aPositionBright);
+   glBindBuffer(GL_ARRAY_BUFFER, model->vertHandle());
+   safe_glVertexAttribPointer(bshader.h_aPositionBright, 3, GL_FLOAT, GL_FALSE, 0, 0);
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->idxHandle());
+   glDrawElements(GL_TRIANGLES, model->getIdxCount(), GL_UNSIGNED_INT, 0);
+
+   //modelTrans.popMatrix();
+
+   safe_glDisableVertexAttribArray(bshader.h_aPositionBright);
+}
+
 void Renderable::renderLightMap() {
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
@@ -241,21 +263,8 @@ void Renderable::ptsRender() {
    //safe_glDisableVertexAttribArray(ptshader.h_vertexUV);
 }
 
-void Renderable::bRender() {
-   Light light = Renderer::light;
-   Camera camera = Renderer::camera;
-
+void Renderable::bRenderBright() {
    // BRIGHT PASS
-   glBindFramebuffer(GL_FRAMEBUFFER, Renderer::fbBloom1);
-   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-   glUseProgram(bshader.shadeProgBright);
-   glViewport(0, 0, 1280, 720);
-   glClearColor(0, 0, 0, 1.0);
-
-   camera.setView(bshader.h_uViewMatrixBright);
-   camera.setProjectionMatrix(bshader.h_uProjMatrixBright, 1280.0 / 720.0, 0.1f, 100.0f);
-
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
    modelTrans.pushMatrix();
@@ -275,27 +284,18 @@ void Renderable::bRender() {
    //Bind the index
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->idxHandle());
 
-   glEnable(GL_TEXTURE_2D);
-   // glActiveTexture(GL_TEXTURE0);
-   // glBindTexture(GL_TEXTURE_2D, 12);
+   //glActiveTexture(GL_TEXTURE0);
+   //glBindTexture(GL_TEXTURE_2D, 0);
+   //glBindTexture(GL_TEXTURE_2D, Renderer::fbBloom_tex1);
    //Draw the object!
    glDrawElements(GL_TRIANGLES, model->getIdxCount(), GL_UNSIGNED_INT, 0);
 
    safe_glDisableVertexAttribArray(bshader.h_aPositionBright);
-   glDisable(GL_TEXTURE_2D);
-
-   glUseProgram(0);
    // END OF BRIGHT PASS
+}
 
-
+void Renderable::bRenderBlurHor() {
    // BLUR PASS Horizontal
-   glUseProgram(bshader.shadeProgBlurHor);
-   glViewport(0, 0, 1280, 720);
-   glClearColor(0, 0, 0, 1.0);
-
-   camera.setView(bshader.h_uViewMatrixBlurHor);
-   camera.setProjectionMatrix(bshader.h_uProjMatrixBlurHor, 1280.0 / 720.0, 0.1f, 100.0f);
-
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
    modelTrans.pushMatrix();
@@ -316,30 +316,22 @@ void Renderable::bRender() {
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->idxHandle());
 
    // Set our "colorTextureSampler" sampler to user Texture Unit 0
-   glEnable(GL_TEXTURE_2D);
-   glActiveTexture(GL_TEXTURE0);
-   //glBindTexture(GL_TEXTURE_2D, 12);
-   glBindTexture(GL_TEXTURE_2D, Renderer::fbBloom_tex1);
+   // glEnable(GL_TEXTURE_2D);
+   //glBindTexture(GL_TEXTURE_2D, 0);
+   // glActiveTexture(GL_TEXTURE0);
+   // glBindTexture(GL_TEXTURE_2D, Renderer::fbBloom_tex1);
    glUniform1i(bshader.h_myTextureSamplerBlurHor, 0);
 
    //Draw the object!
    glDrawElements(GL_TRIANGLES, model->getIdxCount(), GL_UNSIGNED_INT, 0);
 
    safe_glDisableVertexAttribArray(bshader.h_aPositionBlurHor);
-   glDisable(GL_TEXTURE_2D);
-
-   glUseProgram(0);
+   // glDisable(GL_TEXTURE_2D);
    // END OF BLUR PASS Horizontal
+}
 
-
+void Renderable::bRenderBlurVer() {
    // BLUR PASS Vertical
-   glUseProgram(bshader.shadeProgBlurVer);
-   glViewport(0, 0, 1280, 720);
-   glClearColor(0, 0, 0, 1.0);
-
-   camera.setView(bshader.h_uViewMatrixBlurVer);
-   camera.setProjectionMatrix(bshader.h_uProjMatrixBlurVer, 1280.0 / 720.0, 0.1f, 100.0f);
-
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
    modelTrans.pushMatrix();
@@ -360,34 +352,22 @@ void Renderable::bRender() {
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->idxHandle());
 
    // Set our "colorTextureSampler" sampler to user Texture Unit 0
-   glEnable(GL_TEXTURE_2D);
-   glActiveTexture(GL_TEXTURE0);
-   //glBindTexture(GL_TEXTURE_2D, 12);
-   glBindTexture(GL_TEXTURE_2D, Renderer::fbBloom_tex1);
+   // glEnable(GL_TEXTURE_2D);
+   //glBindTexture(GL_TEXTURE_2D, 0);
+   // glActiveTexture(GL_TEXTURE0);
+   // glBindTexture(GL_TEXTURE_2D, Renderer::fbBloom_tex2);
    glUniform1i(bshader.h_myTextureSamplerBlurVer, 0);
 
    //Draw the object!
    glDrawElements(GL_TRIANGLES, model->getIdxCount(), GL_UNSIGNED_INT, 0);
 
    safe_glDisableVertexAttribArray(bshader.h_aPositionBlurVer);
-   glDisable(GL_TEXTURE_2D);
-
-   glUseProgram(0);
-   glBindFramebuffer(GL_FRAMEBUFFER, 0);
    // END OF BLUR PASS Vertical
 
+}
 
+void Renderable::bRenderComposite() {
    // COMPOSITE PASS
-   glUseProgram(bshader.shadeProgComposite);
-   glViewport(0, 0, 1280, 720);
-   glClearColor(0, 0, 0, 1.0);
-
-   camera.setView(bshader.h_uViewMatrixComposite);
-   camera.setProjectionMatrix(bshader.h_uProjMatrixComposite, (float)1280 / 720, 0.1f, 100.0f);
-
-   safe_glUniform3f(bshader.h_lightPosComposite, light.position.x, light.position.y, light.position.z);
-   safe_glUniform3f(bshader.h_cameraPosComposite, -camera.eye.x, -camera.eye.y, -camera.eye.z);
-
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
    modelTrans.pushMatrix();
@@ -397,7 +377,7 @@ void Renderable::bRender() {
       //Bind the model matrix
       safe_glUniformMatrix4fv(bshader.h_uModelMatrixComposite, glm::value_ptr(modelTrans.modelViewMatrix));
    modelTrans.popMatrix();
-   
+
    //Color the object
    bshader.setMaterial(mat);
 
@@ -418,11 +398,10 @@ void Renderable::bRender() {
 
    // Set our "colorTextureSampler" sampler to user Texture Unit 0
 
-   glBindTexture(GL_TEXTURE_2D, 0);
-   glEnable(GL_TEXTURE_2D);
-   glActiveTexture(GL_TEXTURE0);
-   //glBindTexture(GL_TEXTURE_2D, 12);
-   glBindTexture(GL_TEXTURE_2D, Renderer::fbBloom_tex1);
+   // glBindTexture(GL_TEXTURE_2D, 0);
+   // glEnable(GL_TEXTURE_2D);
+   // glActiveTexture(GL_TEXTURE0);
+   // glBindTexture(GL_TEXTURE_2D, Renderer::fbBloom_tex2);
 
    glUniform1i(bshader.h_myTextureSamplerComposite, 0);
 
@@ -430,10 +409,6 @@ void Renderable::bRender() {
    glDrawElements(GL_TRIANGLES, model->getIdxCount(), GL_UNSIGNED_INT, 0);
 
    safe_glDisableVertexAttribArray(bshader.h_aPositionComposite);
-   glDisable(GL_TEXTURE_2D);
-
-   // END OF PASS
-   glUseProgram(0);
 }
 
 void Renderable::ftsRender() {
@@ -488,7 +463,7 @@ void Renderable::render() {
          ptsRender();
          break;
       case B_SHADE:
-         bRender();
+         bRenderComposite();
          break;
       case FT_SHADE:
          ftsRender();

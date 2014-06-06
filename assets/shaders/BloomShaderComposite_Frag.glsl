@@ -79,8 +79,9 @@ void main() {
 
    vec3 colorA = texture2D(myTextureSampler, bloomCoordLocal.st).rgb;
    vec3 colorB = gl_FragColor.rgb;
-   //gl_FragColor = vec4(1.0 - (1.0 - colorA) * (1.0 - colorB), 1.0);
-   gl_FragColor = vec4(colorA + colorB, 1.0);
+   //vec3 colorB = vec3(0.0);
+   gl_FragColor = vec4(1.0 - (1.0 - colorA) * (1.0 - colorB), 1.0);
+   //gl_FragColor = vec4(colorA + colorB, 1.0);
 
    // gl_FragColor.rgb = texture2D(myTextureSampler, vec2(UV.x, 1.0 - UV.y)).rgb;
    //gl_FragColor.rgb = vec3(0.5, 0.2, 0.1);

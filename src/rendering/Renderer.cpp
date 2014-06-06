@@ -18,6 +18,13 @@ namespace Renderer {
    NutGame *ngame;
    GLuint fbBloom_tex1;
    GLuint fbBloom1;
+   GLuint fbBloom_depth1;
+   GLuint fbBloom_tex2;
+   GLuint fbBloom2;
+   GLuint fbBloom_depth2;
+   GLuint fbBloom_tex3;
+   GLuint fbBloom3;
+   GLuint fbBloom_depth3;
 
    namespace {
       Hud* hud;
@@ -141,6 +148,28 @@ namespace Renderer {
          glClear(GL_DEPTH_BUFFER_BIT);
       }
 
+      void renderBloomScene() {
+         glBindFramebuffer(GL_FRAMEBUFFER, fbBloom1);
+         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+         glEnable(GL_BLEND);
+         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+         glUseProgram(bshader.shadeProgBright);
+         glViewport(0, 0, 1280, 720);
+         glClearColor(0, 0, 0, 1.0);
+         glEnable(GL_TEXTURE_2D);
+         camera.setView(bshader.h_uViewMatrixBright);
+         camera.setProjectionMatrix(bshader.h_uProjMatrixBright, 1280.0 / 720.0, 0.1f, 100.0f);
+         //glActiveTexture(GL_TEXTURE0);
+         //glBindTexture(GL_TEXTURE_2D, 0);
+         for (std::list<Renderable*>::iterator it = currObjs.begin(); it != currObjs.end(); ++it) {
+            (*it)->renderBloom();
+         }
+         glDisable(GL_TEXTURE_2D);
+         glUseProgram(0);
+         glDisable(GL_BLEND);
+         glBindFramebuffer(GL_FRAMEBUFFER, 0);
+      }
+
       void renderBlocks() {
          usePTShader();
 
@@ -161,10 +190,99 @@ namespace Renderer {
       }
 
       void renderNuts() {
+         glUseProgram(0);
          std::list<Renderable*> nuts = ngame->getNutsToDraw();
+
+         // BRIGHT PASS
+         glBindFramebuffer(GL_FRAMEBUFFER, fbBloom1);
+         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+         glEnable(GL_BLEND);
+         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+         glUseProgram(bshader.shadeProgBright);
+         glViewport(0, 0, 1280, 720);
+         glClearColor(0, 0, 0, 1.0);
+         glEnable(GL_TEXTURE_2D);
+         camera.setView(bshader.h_uViewMatrixBright);
+         camera.setProjectionMatrix(bshader.h_uProjMatrixBright, 1280.0 / 720.0, 0.1f, 100.0f);
+         // glActiveTexture(GL_TEXTURE0);
+         // glBindTexture(GL_TEXTURE_2D, fbBloom_tex1);
          for (std::list<Renderable*>::iterator iter = nuts.begin(); iter != nuts.end(); ++iter) {
-            (*iter)->render();
+            (*iter)->bRenderBright();
          }
+         glDisable(GL_TEXTURE_2D);
+         glUseProgram(0);
+         glDisable(GL_BLEND);
+         glBindFramebuffer(GL_FRAMEBUFFER, 0);
+         // END OF BRIGHT PASS
+
+
+         // BLUR PASS HORIZONTAL
+         glBindFramebuffer(GL_FRAMEBUFFER, fbBloom2);
+         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+         glEnable(GL_BLEND);
+         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+         glUseProgram(bshader.shadeProgBlurHor);
+         glViewport(0, 0, 1280, 720);
+         glClearColor(0, 0, 0, 1.0);
+         glEnable(GL_TEXTURE_2D);
+         camera.setView(bshader.h_uViewMatrixBlurHor);
+         camera.setProjectionMatrix(bshader.h_uProjMatrixBlurHor, 1280.0 / 720.0, 0.1f, 100.0f);
+         glActiveTexture(GL_TEXTURE0);
+         glBindTexture(GL_TEXTURE_2D, fbBloom_tex1);
+         for (std::list<Renderable*>::iterator iter2 = nuts.begin(); iter2 != nuts.end(); ++iter2) {
+            (*iter2)->bRenderBlurHor();
+         }
+         glBindTexture(GL_TEXTURE_2D, 0);
+         glDisable(GL_TEXTURE_2D);
+         glUseProgram(0);
+         glDisable(GL_BLEND);
+         glBindFramebuffer(GL_FRAMEBUFFER, 0);
+         // END OF BLUR PASS HORIZONTAL
+
+         // BLUR PASS VERTICAL
+         glBindFramebuffer(GL_FRAMEBUFFER, fbBloom3);
+         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+         glEnable(GL_BLEND);
+         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+         glUseProgram(bshader.shadeProgBlurVer);
+         glViewport(0, 0, 1280, 720);
+         glClearColor(0, 0, 0, 1.0);
+         glEnable(GL_TEXTURE_2D);
+         camera.setView(bshader.h_uViewMatrixBlurVer);
+         camera.setProjectionMatrix(bshader.h_uProjMatrixBlurVer, 1280.0 / 720.0, 0.1f, 100.0f);
+         glActiveTexture(GL_TEXTURE0);
+         glBindTexture(GL_TEXTURE_2D, fbBloom_tex2);
+         for (std::list<Renderable*>::iterator iter3 = nuts.begin(); iter3 != nuts.end(); ++iter3) {
+            (*iter3)->bRenderBlurVer();
+         }
+         glBindTexture(GL_TEXTURE_2D, 0);
+         glDisable(GL_TEXTURE_2D);
+         glUseProgram(0);
+         glDisable(GL_BLEND);
+         glBindFramebuffer(GL_FRAMEBUFFER, 0);
+         // END OF BLUR PASS VERTICAL
+
+
+         // COMPOSITE PASS
+         glEnable(GL_BLEND);
+         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+         glUseProgram(bshader.shadeProgComposite);
+         glViewport(0, 0, 1280, 720);
+         glClearColor(0, 0, 0, 1.0);
+         glEnable(GL_TEXTURE_2D);
+         camera.setView(bshader.h_uViewMatrixComposite);
+         camera.setProjectionMatrix(bshader.h_uProjMatrixComposite, 1280.0 / 720.0, 0.1f, 100.0f);
+         safe_glUniform3f(bshader.h_lightPosComposite, light.position.x, light.position.y, light.position.z);
+         safe_glUniform3f(bshader.h_cameraPosComposite, -camera.eye.x, -camera.eye.y, -camera.eye.z);
+         glActiveTexture(GL_TEXTURE0);
+         glBindTexture(GL_TEXTURE_2D, Renderer::fbBloom_tex3);
+         for (std::list<Renderable*>::iterator iter4 = nuts.begin(); iter4 != nuts.end(); ++iter4) {
+            (*iter4)->render();
+         }
+         glDisable(GL_TEXTURE_2D);
+         glUseProgram(0);
+         glDisable(GL_BLEND);
+         // END OF COMPOSITE PASS
       }
 
       void renderDynamite() {
@@ -370,21 +488,21 @@ namespace Renderer {
          cylinder = new Cylinder();
       }
 
-      void setUpBloomFBO() {
+      void setUpBloomFBO(GLuint *fbBloom, GLuint *fbBloom_tex, GLuint *fbBloom_depth) {
          // START OF FBO FOR BLOOM
-         fbBloom1 = 0;
-         fbBloom_tex1 = 0;
-         fbBloom_depth = 0;
          // generate the frame buffer
-         glGenFramebuffers(1, &fbBloom1);
+         glGenFramebuffers(1, fbBloom);
          // generate the texture
-         glGenTextures(1, &fbBloom_tex1);
+         glGenTextures(1, fbBloom_tex);
          // generate depth
-         glGenRenderbuffers(1, &fbBloom_depth);
+         glGenRenderbuffers(1, fbBloom_depth);
          
+         // Bind our frame buffer
+         glBindFramebuffer(GL_FRAMEBUFFER, *fbBloom);
+
          //create the colorbuffer texture and attach it to the frame buffer
          glEnable(GL_TEXTURE_2D);
-         glBindTexture(GL_TEXTURE_2D, fbBloom_tex1);
+         glBindTexture(GL_TEXTURE_2D, *fbBloom_tex);
          glTexImage2D (
            GL_TEXTURE_2D,
            0,
@@ -401,16 +519,16 @@ namespace Renderer {
          glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
          glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
          glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+         //glGenerateMipmap(GL_TEXTURE_2D);
 
-         // Bind our frame buffer
-         glBindFramebuffer(GL_FRAMEBUFFER, fbBloom1);
 
-         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fbBloom_tex1, 0);
+
+         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *fbBloom_tex, 0);
          glDisable(GL_TEXTURE_2D);
 
-         glBindRenderbuffer(GL_RENDERBUFFER, fbBloom_depth);
+         glBindRenderbuffer(GL_RENDERBUFFER, *fbBloom_depth);
          glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, 1280, 720);
-         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, fbBloom_depth);
+         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, *fbBloom_depth);
 
          GLenum draw_bufs2[] = { GL_COLOR_ATTACHMENT0 };
          glDrawBuffers (1, draw_bufs2);
@@ -506,16 +624,15 @@ namespace Renderer {
       glEnable(GL_TEXTURE_2D);
       
       setUpShadowFBO();
-      setUpBloomFBO();
+      setUpBloomFBO(&fbBloom1, &fbBloom_tex1, &fbBloom_depth1);
+      setUpBloomFBO(&fbBloom2, &fbBloom_tex2, &fbBloom_depth2);
+      setUpBloomFBO(&fbBloom3, &fbBloom_tex3, &fbBloom_depth3);
 
       modelTrans.useModelViewMatrix();
       modelTrans.loadIdentity();
       initDebugLightMap();
 
       cylinder = new Cylinder();
-
-      printf("this is fbBloom1 %d\n", fbBloom1);
-      printf("this is fbBloom_tex1 %d\n", fbBloom_tex1);
    }
 
    void render() {
@@ -530,9 +647,10 @@ namespace Renderer {
 
 
       renderLightShadowMap();
+      //renderBloomScene();
       renderGame();
       renderWinLoss();
-      //renderDebugShadowMapText();
+      renderDebugShadowMapText();
       //renderNormalMappedCylinder();
    }
 }

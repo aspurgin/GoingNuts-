@@ -15,4 +15,6 @@ void main() {
    bloomCoord = uProjMatrix * vPosition;
 
    gl_Position = bloomCoord;
+
+   // bloomCoord = bloomCoord * 0.5 + 0.5;
 }

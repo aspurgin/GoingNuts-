@@ -41,7 +41,6 @@ class Renderable {
       void ctsRender();
       void psRender();
       void ptsRender();
-      void bRender();
       void ftsRender();
       void updateSpin();
    public:
@@ -49,6 +48,11 @@ class Renderable {
       int typeColor;
       Renderable();
       virtual void render();// = 0;
+      void renderBloom();
+      void bRenderBright();
+      void bRenderBlurHor();
+      void bRenderBlurVer();
+      void bRenderComposite();
       //virtual void setModel();// = 0;
       void renderLightMap();
       virtual void setPosition(glm::vec3);

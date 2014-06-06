@@ -39,6 +39,10 @@ namespace Renderer {
       extern NutGame *ngame;
       extern GLuint fbBloom1;
       extern GLuint fbBloom_tex1;
+      extern GLuint fbBloom2;
+      extern GLuint fbBloom_tex2;
+      extern GLuint fbBloom3;
+      extern GLuint fbBloom_tex3;
 
       void Renderer(int, int, NutGame*, Hud*);
       void useCShader();
