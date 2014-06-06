@@ -1,4 +1,5 @@
 #include "Player.hpp"
+#include "PlayerStates.hpp"
 #include "../rendering/Renderer.hpp"
 
 Player::Player() {}
@@ -37,7 +38,7 @@ Player::Player(glm::vec3 center, float width, float height) {
 }
   
 void Player::drillBlock(Block *block, int state) {
-   drill->drillBlock(block);
+   drill->drillBlock(block, state);
    if (block->isDead()) {
       block->makeDead();
       addToScore(1);

@@ -23,9 +23,9 @@ int Block::getTimesDrilled() {
    return timesDrilled;
 }
 
-void Block::addToTimesDrilled() {
+void Block::addToTimesDrilled(int direction) {
    timesDrilled++;
-   genParticles();
+   genParticles(direction);
    if (timesDrilled >= getStrength()) {
       if (isInAGroup()) {
          groupIn->destroy();
@@ -83,7 +83,7 @@ void Block::makeDead() {
    if (deathCounter < 0) {
       deathCounter = 0;
    }
-   genParticles();
+   genParticles(0);
 }
 
 bool Block::isInAGroup() {
@@ -132,7 +132,37 @@ void Block::render() {
    Renderable::render();
 }
 
-void Block::genParticles() {
+void Block::genParticles(int direction) {
+   psystem->save();
+   switch (direction) {
+      case 0:
+         //printf("killing block?\n");
+         psystem->moveTo(center + glm::vec3(0, 0, 0));
+         psystem->setSpread(glm::vec3(4, 4, 4));
+         psystem->setInitialVelocity(glm::vec3(0, 4, 0));
+         break;
+      case DRILLING_DOWN:
+         //printf("drilling down\n");
+         psystem->moveTo(center + glm::vec3(0, 0.5, 0));
+         psystem->setSpread(glm::vec3(4, 4, 10));
+         psystem->setInitialVelocity(glm::vec3(0, 4.5, 0));
+         break;
+      case DRILLING_UP:
+         psystem->moveTo(center + glm::vec3(0, -0.5, 0));
+         psystem->setSpread(glm::vec3(4, 2, 4));
+         psystem->setInitialVelocity(glm::vec3(0, -1, 0));
+         break;
+      case DRILLING_RIGHT:
+         psystem->moveTo(center + glm::vec3(-0.5, 0, 0));
+         psystem->setSpread(glm::vec3(2, 4, 10));
+         psystem->setInitialVelocity(glm::vec3(-2.5, 4.5, 0));
+         break;
+      case DRILLING_LEFT:
+         psystem->moveTo(center + glm::vec3(0.5, 0, 0));
+         psystem->setSpread(glm::vec3(2, 4, 10));
+         psystem->setInitialVelocity(glm::vec3(2.5, 4.5, 0));
+         break;
+   }
    /*switch (blockType) {
       case CRYSTALBLOCK:
          psystem->setType(CRYSTALBLOCK);
@@ -152,8 +182,8 @@ void Block::genParticles() {
          break;
    }*/
    psystem->setMatID(this->mat);
-   psystem->moveTo(center + glm::vec3(0, 0.5, 0));
    psystem->burst(25);
+   psystem->revert();
 }
 
 void Block::playHitGroundSound() {

@@ -84,6 +84,10 @@ class ParticleSystem: public Renderable {
       /* Need to implement for Renderable template */
       void render();
       void renderLightMap();
+      /* save the current values for mass, ttl, pos, spread, and vel */
+      void save();
+      /* reload the saved values for mass, ttl, pos, vel, spread, and matID */
+      void revert();
 
    private:
       //Array of effect Particles
@@ -112,16 +116,14 @@ class ParticleSystem: public Renderable {
 
       /* calculates and sets net force for each Particle */
       void computeForces(std::vector<std::vector<Movable *> > gameGrid);//Movable* gameGrid[17][7]);
+      /* generate lava globs */
+      void sprayLava(glm::vec3 p, glm::vec3 v, int dir);
       /* generate sand particles */
       void spraySand(glm::vec3 p, glm::vec3 v, int dir);
       /* returns a random float from the range 0 to "of" */
       float randf(float of);
       /* returns a random float from the range "-of" to "of" */
       float srandf(float of);
-      /* save the current values for mass, ttl, pos, spread, and vel */
-      void save();
-      /* reload the saved values for mass, ttl, pos, vel, spread, and matID */
-      void revert();
 
       /* duplicate functions for effect particle system */
       void esAdd();

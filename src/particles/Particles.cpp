@@ -285,6 +285,9 @@ void ParticleSystem::computeForces(std::vector<std::vector<Movable *> > gameGrid
                if (((Block*)gameGrid[row][estCol - 1])->getBlockType() == SANDBLOCK) {
                   it->alive = false;
                   spraySand(it->pos, it->vel, COLLIDE_L);
+               } else if (((Block*)gameGrid[row][estCol - 1])->getBlockType() == LAVABLOCK) {
+                  it->alive = false;
+                  sprayLava(it->pos, it->vel, COLLIDE_L);
                }
                it->vel.x += it->vel.x * horizontalPush;
                //it->netForce.x += it->vel.x * horizontalPush;
@@ -297,6 +300,9 @@ void ParticleSystem::computeForces(std::vector<std::vector<Movable *> > gameGrid
                if (((Block*)gameGrid[row][estCol + 1])->getBlockType() == SANDBLOCK) {
                   it->alive = false;
                   spraySand(it->pos, it->vel, COLLIDE_R);
+               } else if (((Block*)gameGrid[row][estCol + 1])->getBlockType() == LAVABLOCK) {
+                  it->alive = false;
+                  sprayLava(it->pos, it->vel, COLLIDE_R);
                }
                it->vel.x += it->vel.x * horizontalPush;
                //it->netForce.x += it->vel.x * horizontalPush;
@@ -310,6 +316,9 @@ void ParticleSystem::computeForces(std::vector<std::vector<Movable *> > gameGrid
                if (((Block*)gameGrid[estRow + 1][col])->getBlockType() == SANDBLOCK) {
                   it->alive = false;
                   spraySand(it->pos, it->vel, COLLIDE_D);
+               } else if (((Block*)gameGrid[estRow + 1][col])->getBlockType() == LAVABLOCK) {
+                  it->alive = false;
+                  sprayLava(it->pos, it->vel, COLLIDE_D);
                }
                it->vel.y += it->vel.y * groundPush;
                //it->netForce.y += it->vel.y * groundPush * 2;
@@ -343,6 +352,49 @@ void ParticleSystem::computeForces(std::vector<std::vector<Movable *> > gameGrid
       }
    }
 }
+
+void ParticleSystem::sprayLava(glm::vec3 p, glm::vec3 v, int dir) {
+   glm::vec3 newVel, newSpread;
+
+   switch (dir) {
+      case COLLIDE_L:
+         newVel.x = -v.x / 2;
+         newVel.y = v.y / 2;
+         newVel.z = v.z / 2;
+         newSpread.x = abs(newVel.x);
+         newSpread.y = abs(newVel.y * 2) < 2 ? 2 : abs(newVel.y * 2);
+         newSpread.z = abs(newVel.z * 2) < 2 ? 2 : abs(newVel.z * 2);
+         break;
+      case COLLIDE_R:
+         newVel.x = -v.x / 2;
+         newVel.y = v.y / 2;
+         newVel.z = v.z / 2;
+         newSpread.x = abs(newVel.x);
+         newSpread.y = abs(newVel.y * 2) < 2 ? 2 : abs(newVel.y * 2);
+         newSpread.z = abs(newVel.z * 2) < 2 ? 2 : abs(newVel.z * 2);
+         break;
+      case COLLIDE_D:
+         newVel.x = v.x / 2;
+         newVel.y = -v.y / 2;
+         newVel.z = v.z / 2;
+         newSpread.x = abs(newVel.x * 2) < 2 ? 2 : abs(newVel.x * 2);
+         newSpread.y = abs(newVel.y);
+         newSpread.z = abs(newVel.z * 2) < 2 ? 2 : abs(newVel.z * 2);
+         break;
+   }
+
+   save();
+   pos = p;
+   mass = 0.1;
+   ttl = 2.5;
+   vel = newVel;
+   spread = newSpread;
+   mat = 8;
+   setScale(0.05, 0.05, 0.05);
+   esBurst(25);
+   revert();
+}
+
 
 void ParticleSystem::spraySand(glm::vec3 p, glm::vec3 v, int dir) {
    glm::vec3 newVel, newSpread;
