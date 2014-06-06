@@ -11,6 +11,7 @@ Hud::Hud(NutGame* nutGame) : Renderable()
    hardHatImage = new HardHatImage();
    dynamiteImage = new DynamiteImage();
    questionMark = new QuestionMark();
+   superDrillImage = new SuperDrillImage();
 
    //Cylinder* cylinder = new Cylinder();
    GoingNuts* goingNuts = new GoingNuts();
@@ -24,8 +25,11 @@ Hud::Hud(NutGame* nutGame) : Renderable()
    Depth* depth = new Depth();
    DepthMask* depthMask = new DepthMask();
    ScoreMask* scoreMask = new ScoreMask();
-   Number* number = new Number();
+   //Number* number = new Number();
    Minimap* minimap = new Minimap(nutGame);
+   EnergyPercentage* energyPercentage = new EnergyPercentage(nutGame);
+   LevelNumber* levelNumber = new LevelNumber(nutGame);
+   NewPercent* newPercent = new NewPercent();
    
    components.push_back(background);
    components.push_back(depthGuage);
@@ -39,11 +43,15 @@ Hud::Hud(NutGame* nutGame) : Renderable()
    components.push_back(nutOutline);
    components.push_back(energy);
    components.push_back(points);
-   components.push_back(number);
+   //components.push_back(number);
    components.push_back(powerUpBG);
    components.push_back(level);
    components.push_back(depth);
    components.push_back(minimap);
+   components.push_back(energyPercentage);
+   components.push_back(levelNumber);
+   components.push_back(newPercent);
+   //components.push_back(superDrillImage);
 }
 
 Hud::~Hud()
@@ -77,7 +85,7 @@ void Hud::renderWinLoss()
       youLost->render();
    }
 
-   if (!nutGame->player.getHasHardHat() && !(nutGame->player.getNumDynamites() > 0))
+   if (!nutGame->player.getHasHardHat() && !(nutGame->player.getNumDynamites() > 0))// && !(nutGame->player.getHasSuperDrill()))
    {
       questionMark->render();
    }
@@ -90,4 +98,9 @@ void Hud::renderWinLoss()
    {
       dynamiteImage->render();
    }
+   //if (nutGame->player.getHasSuperDrill())
+   /*if (true)
+   {
+      superDrillImage->render();
+   }*/
 }

@@ -7,7 +7,7 @@ Points::Points() {
    scaleY = 0.275f;
    scaleZ = 0.275f;
    colorTexture = Assets::getTexture(Assets::HUD_ELEMENTS_T);
-   this->position = glm::vec3(10, -1.5, 0);
+   this->position = glm::vec3(10, -1.3, 0);
    this->modelTrans.useModelViewMatrix();
 }
 

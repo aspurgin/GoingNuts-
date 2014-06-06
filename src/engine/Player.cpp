@@ -37,6 +37,10 @@ Player::Player(glm::vec3 center, float width, float height) {
   
 void Player::drillBlock(Block *block, int state) {
    drill->drillBlock(block);
+   if (block->isDead()) {
+      block->makeDead();
+      addToScore(1);
+   }
    this->state = state;
    drillCount = 0;
 }

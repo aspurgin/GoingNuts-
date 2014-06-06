@@ -20,7 +20,7 @@
 #include "MovableSuperDrill.hpp"
 #include "MovableDynamite.hpp"
 #include "HardHat.hpp"
-#include "Level.hpp"
+#include "EngineLevel.hpp"
 #include <stdio.h>
 #include <vector>
 
@@ -57,6 +57,7 @@ class NutGame {
       void addToScore(int num);
       int getScore();
       int getDepth();
+      int getLevel();
       bool isGameOver();
       bool isGameWon();
       bool drillDownPressed;
@@ -70,6 +71,7 @@ class NutGame {
       bool left;
       bool right;
       bool up;
+      bool down;
       bool throwDynamitePressed;
       bool releasedSinceThrowDynamitePressed;
       Player getPlayer();
@@ -82,6 +84,7 @@ class NutGame {
       void setNumRows(int rows);
       void loadNextLevel();
       bool isWon;
+      bool useArrowKeys;
    private:
       std::list<Renderable*> getCertainObjectsToDraw(int type);
       void setFallingMovables(int row, int col);
@@ -93,6 +96,7 @@ class NutGame {
       void finishSettingFallingMovables();
       void checkGroupForOtherAdds(BlockGroup* group);
       int nutsLeft;
+      int level;
       bool checkingGroupForOtherAdds;
       std::vector<BlockGroup*> mightFallGroupList;
       std::vector<Movable*> mightFallBlockList;

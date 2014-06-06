@@ -10,8 +10,7 @@
 
 class Number : public Renderable {
    public:
-      Number();
-      void render();
+      virtual void setPositionNumber(int pos);
 };
 
 #endif

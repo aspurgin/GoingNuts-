@@ -171,7 +171,7 @@ namespace Renderer {
       }
 
       void renderBlocks() {
-         usePTShader();
+         //usePTShader();
 
          std::list<Renderable*> blocks = ngame->getBlocksToDraw();
 
@@ -340,11 +340,12 @@ namespace Renderer {
          renderDynamite();
          renderHardHat();
          renderSuperDrill();
+         renderBlocks();
          renderNuts();
 
          renderPlayer();
 
-         renderBlocks();
+         
 
          glUseProgram(0);
       }
