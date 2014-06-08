@@ -670,7 +670,7 @@ namespace Renderer {
       renderHud();
       
       float eyeOffsetX = 3.0 + (ngame->player.getCenter().x - 3)/1.5;
-      float eyeOffsetZ = 12.0 + (ngame->player.getCenter().x - 3)*(ngame->player.getCenter().x - 3)/9.0;
+      float eyeOffsetZ = 10.0 + (ngame->player.getCenter().x - 3)*(ngame->player.getCenter().x - 3)/9.0;
       camera.setEye(glm::vec3(eyeOffsetX, ngame->player.getCenter().y, eyeOffsetZ));
       light.setPosition(glm::vec3(3.0, ngame->player.getCenter().y, 8.0f));
 
