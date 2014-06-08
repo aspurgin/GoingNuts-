@@ -484,5 +484,9 @@ void Renderable::setScale(float scaleX, float scaleY, float scaleZ) {
    this->scaleZ = scaleZ;
 }
 
+void Renderable::setShaderType(int type) {
+   this->shaderType = type;
+}
+
 
 

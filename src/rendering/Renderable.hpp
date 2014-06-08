@@ -58,5 +58,6 @@ class Renderable {
       virtual void setPosition(glm::vec3);
       void setScale(float, float, float);
       void setSpin(bool);
+      void setShaderType(int type);
 };
 #endif

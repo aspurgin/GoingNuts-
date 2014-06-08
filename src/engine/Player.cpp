@@ -27,6 +27,7 @@ Player::Player(glm::vec3 center, float width, float height) {
    this->colorTexture = Assets::getTexture(Assets::SQUIRREL_T);
    this->hat = HardHat(center, 0.99, 0.99);
    this->hat.setScale(0.25f, 0.25f, 0.25f);
+   this->hat.setShaderType(C_SHADE);
    this->hat.setSpin(false);
    this->threwDynamite = false;
    this->state = STATIC;
@@ -99,10 +100,18 @@ void Player::checkMoveState() {
 void Player::setAnimation() {
    switch(state) {
       case DRILLING_DOWN:
-      case DRILLING_UP:
-         model->setAt("drill", glfwGetTime()*2);
+         model->setAt("drill", glfwGetTime() * 2);
          drillCount++;
-         if(drillCount > 20) {
+         if (drillCount > 20) {
+            state = STATIC;
+            drillCount = 0;
+         }
+         ang = 0;
+         break;
+      case DRILLING_UP:
+         model->setAt("drillUp", glfwGetTime() * 2);
+         drillCount++;
+         if (drillCount > 20) {
             state = STATIC;
             drillCount = 0;
          }
