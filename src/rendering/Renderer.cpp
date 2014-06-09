@@ -211,6 +211,14 @@ namespace Renderer {
          rightWall3.setPosition(glm::vec3(6.5,-25.0,-0.0));
          rightWall3.render();
 
+         SideWall leftWall4(0.0), rightWall4(180.0);
+         usePTShader();
+         leftWall4.setPosition(glm::vec3(-0.5,-37.5,-0.0));
+         leftWall4.render();
+
+         rightWall4.setPosition(glm::vec3(6.5,-37.5,-0.0));
+         rightWall4.render();
+
          glUseProgram(0);
 
       }
