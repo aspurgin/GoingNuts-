@@ -3,6 +3,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/transform.hpp> 
 
 #include "../helperFiles/GLSL_helper.h"
 #include "../helperFiles/MStackHelp.h"
@@ -37,6 +38,11 @@ class Renderable {
       PhongShader pshader;
       BloomShader bshader;
       Mesh *model;
+      void csRender(glm::mat4);
+      void ctsRender(glm::mat4);
+      void psRender(glm::mat4);
+      void ptsRender(glm::mat4);
+      void ftsRender(glm::mat4);
       void csRender();
       void ctsRender();
       void psRender();
@@ -47,13 +53,20 @@ class Renderable {
       RenderType type;
       int typeColor;
       Renderable();
+      virtual void render(glm::mat4);
       virtual void render();// = 0;
+      void renderBloom(glm::mat4);
       void renderBloom();
+      void bRenderBright(glm::mat4);
       void bRenderBright();
+      void bRenderBlurHor(glm::mat4);
       void bRenderBlurHor();
+      void bRenderBlurVer(glm::mat4);
       void bRenderBlurVer();
+      void bRenderComposite(glm::mat4);
       void bRenderComposite();
       //virtual void setModel();// = 0;
+      void renderLightMap(glm::mat4);
       void renderLightMap();
       virtual void setPosition(glm::vec3);
       void setScale(float, float, float);

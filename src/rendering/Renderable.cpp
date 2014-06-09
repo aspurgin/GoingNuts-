@@ -39,6 +39,10 @@ void Renderable::setSpin(bool spin) {
 }
 
 void Renderable::renderBloom() {
+   renderBloom(glm::mat4(1));
+}
+
+void Renderable::renderBloom(glm::mat4 trans) {
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
    modelTrans.pushMatrix();
@@ -46,6 +50,7 @@ void Renderable::renderBloom() {
       modelTrans.translate(position);
       modelTrans.scale(scaleX, scaleY, scaleZ);
       modelTrans.rotate(ang, glm::vec3(0, 1, 0));
+      modelTrans.multMatrix(trans);
       safe_glUniformMatrix4fv(bshader.h_uModelMatrixBright, glm::value_ptr(modelTrans.modelViewMatrix));
    modelTrans.popMatrix();
    
@@ -61,6 +66,10 @@ void Renderable::renderBloom() {
 }
 
 void Renderable::renderLightMap() {
+   renderLightMap(glm::mat4(1));
+}
+
+void Renderable::renderLightMap(glm::mat4 trans) {
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
    modelTrans.pushMatrix();
@@ -68,6 +77,7 @@ void Renderable::renderLightMap() {
       modelTrans.translate(position);
       modelTrans.scale(scaleX, scaleY, scaleZ);
       modelTrans.rotate(ang, glm::vec3(0, 1, 0));
+      modelTrans.multMatrix(trans);
       safe_glUniformMatrix4fv(lmShader.h_uModelMatrix, glm::value_ptr(modelTrans.modelViewMatrix));
    modelTrans.popMatrix();
    
@@ -83,6 +93,10 @@ void Renderable::renderLightMap() {
 }
 
 void Renderable::csRender() {
+   csRender(glm::mat4(1));
+}
+
+void Renderable::csRender(glm::mat4 trans) {
    //Perform model transforms
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
@@ -90,6 +104,7 @@ void Renderable::csRender() {
       modelTrans.translate(position);
       modelTrans.scale(scaleX, scaleY, scaleZ);
       modelTrans.rotate(ang, axis);
+      modelTrans.multMatrix(trans);
       //Bind the model matrix
       safe_glUniformMatrix4fv(cshader.h_uModelMatrix, glm::value_ptr(modelTrans.modelViewMatrix));
    modelTrans.popMatrix();
@@ -120,6 +135,10 @@ void Renderable::csRender() {
 }
 
 void Renderable::ctsRender() {
+   ctsRender(glm::mat4(1));
+}
+
+void Renderable::ctsRender(glm::mat4 trans) {
    //Perform model transforms
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
@@ -127,6 +146,7 @@ void Renderable::ctsRender() {
       modelTrans.translate(position);
       modelTrans.scale(scaleX, scaleY, scaleZ);
       modelTrans.rotate(ang, axis);
+      modelTrans.multMatrix(trans);
       //Bind the model matrix
       safe_glUniformMatrix4fv(ctshader.h_uModelMatrix, glm::value_ptr(modelTrans.modelViewMatrix));
    modelTrans.popMatrix();
@@ -168,6 +188,10 @@ void Renderable::ctsRender() {
 }
 
 void Renderable::psRender() {
+   psRender(glm::mat4(1));
+}
+
+void Renderable::psRender(glm::mat4 trans) {
    //Perform model transforms
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
@@ -175,6 +199,7 @@ void Renderable::psRender() {
       modelTrans.translate(position);
       modelTrans.scale(scaleX, scaleY, scaleZ);
       modelTrans.rotate(ang, axis);
+      modelTrans.multMatrix(trans);
       //Bind the model matrix
       safe_glUniformMatrix4fv(pshader.h_uModelMatrix, glm::value_ptr(modelTrans.modelViewMatrix));
    modelTrans.popMatrix();
@@ -205,6 +230,10 @@ void Renderable::psRender() {
 }
 
 void Renderable::ptsRender() {
+   ptsRender(glm::mat4(1));
+}
+
+void Renderable::ptsRender(glm::mat4 trans) {
    glUseProgram(ptshader.shadeProg);
    
    ptshader.setMaterial(mat);
@@ -215,6 +244,7 @@ void Renderable::ptsRender() {
    modelTrans.translate(position);
    modelTrans.scale(scaleX, scaleY, scaleZ);
    modelTrans.rotate(ang, axis);
+   modelTrans.multMatrix(trans);
 
    safe_glUniformMatrix4fv(ptshader.h_uModelMatrix, glm::value_ptr(modelTrans.modelViewMatrix));
    
@@ -264,6 +294,10 @@ void Renderable::ptsRender() {
 }
 
 void Renderable::bRenderBright() {
+   bRenderBright(glm::mat4(1));
+}
+
+void Renderable::bRenderBright(glm::mat4 trans) {
    // BRIGHT PASS
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
@@ -271,6 +305,7 @@ void Renderable::bRenderBright() {
       modelTrans.translate(position);
       modelTrans.scale(scaleX, scaleY, scaleZ);
       modelTrans.rotate(ang, axis);
+      modelTrans.multMatrix(trans);
       //Bind the model matrix
       safe_glUniformMatrix4fv(bshader.h_uModelMatrixBright, glm::value_ptr(modelTrans.modelViewMatrix));
    modelTrans.popMatrix();
@@ -298,6 +333,11 @@ void Renderable::bRenderBright() {
 }
 
 void Renderable::bRenderBlurHor() {
+   bRenderBlurHor(glm::mat4(1));
+}
+
+
+void Renderable::bRenderBlurHor(glm::mat4 trans) {
    // BLUR PASS Horizontal
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
@@ -305,6 +345,7 @@ void Renderable::bRenderBlurHor() {
       modelTrans.translate(position);
       modelTrans.scale(scaleX, scaleY, scaleZ);
       modelTrans.rotate(ang, axis);
+      modelTrans.multMatrix(trans);
       //Bind the model matrix
       safe_glUniformMatrix4fv(bshader.h_uModelMatrixBlurHor, glm::value_ptr(modelTrans.modelViewMatrix));
    modelTrans.popMatrix();
@@ -334,6 +375,10 @@ void Renderable::bRenderBlurHor() {
 }
 
 void Renderable::bRenderBlurVer() {
+   bRenderBlurVer(glm::mat4(1));
+}
+
+void Renderable::bRenderBlurVer(glm::mat4 trans) {
    // BLUR PASS Vertical
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
@@ -341,6 +386,7 @@ void Renderable::bRenderBlurVer() {
       modelTrans.translate(position);
       modelTrans.scale(scaleX, scaleY, scaleZ);
       modelTrans.rotate(ang, axis);
+      modelTrans.multMatrix(trans);
       //Bind the model matrix
       safe_glUniformMatrix4fv(bshader.h_uModelMatrixBlurVer, glm::value_ptr(modelTrans.modelViewMatrix));
    modelTrans.popMatrix();
@@ -369,7 +415,7 @@ void Renderable::bRenderBlurVer() {
 
 }
 
-void Renderable::bRenderComposite() {
+void Renderable::bRenderComposite(glm::mat4 trans) {
    // COMPOSITE PASS
    modelTrans.useModelViewMatrix();
    modelTrans.loadIdentity();
@@ -377,6 +423,7 @@ void Renderable::bRenderComposite() {
       modelTrans.translate(position);
       modelTrans.scale(scaleX, scaleY, scaleZ);
       modelTrans.rotate(ang, axis);
+      modelTrans.multMatrix(trans);
       //Bind the model matrix
       safe_glUniformMatrix4fv(bshader.h_uModelMatrixComposite, glm::value_ptr(modelTrans.modelViewMatrix));
    modelTrans.popMatrix();
@@ -415,6 +462,10 @@ void Renderable::bRenderComposite() {
 }
 
 void Renderable::ftsRender() {
+   ftsRender(glm::mat4(1));
+}
+
+void Renderable::ftsRender(glm::mat4 trans) {
    glUseProgram(ftshader.shadeProg);
    
    ftshader.setMaterial(mat);
@@ -424,6 +475,7 @@ void Renderable::ftsRender() {
 
    modelTrans.translate(position);
    modelTrans.scale(scaleX,scaleY,scaleZ);
+   modelTrans.multMatrix(trans);
 
    safe_glUniformMatrix4fv(ftshader.h_uModelMatrix, glm::value_ptr(modelTrans.modelViewMatrix));
    
@@ -450,28 +502,32 @@ void Renderable::ftsRender() {
    safe_glDisableVertexAttribArray(ftshader.h_vertexUV);
 }
 
-void Renderable::render() {
+void Renderable::render(glm::mat4 trans) {
    updateSpin();
    switch (shaderType) {
       case C_SHADE:
-         csRender();
+         csRender(trans);
          break;
       case CT_SHADE:
-         ctsRender();
+         ctsRender(trans);
          break;
       case P_SHADE:
-         psRender();
+         psRender(trans);
          break;
       case PT_SHADE:
-         ptsRender();
+         ptsRender(trans);
          break;
       case B_SHADE:
-         bRenderComposite();
+         bRenderComposite(trans);
          break;
       case FT_SHADE:
-         ftsRender();
+         ftsRender(trans);
          break;
    }
+}
+
+void Renderable::render(){
+   render(glm::mat4(1));
 }
 
 void Renderable::setPosition(glm::vec3 pos) {

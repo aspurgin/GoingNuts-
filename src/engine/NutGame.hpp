@@ -101,6 +101,7 @@ class NutGame {
       bool checkingGroupForOtherAdds;
       std::vector<BlockGroup*> mightFallGroupList;
       std::vector<Movable*> mightFallBlockList;
+      std::vector<Renderable*> otherDrawables;
       int NUMROWS;
       int depth;
       std::vector<Level> levels;
