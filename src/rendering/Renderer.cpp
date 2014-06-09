@@ -80,6 +80,8 @@ namespace Renderer {
 
       void renderHud() {
          //*** Render the hud ***/
+         glEnable(GL_CULL_FACE);
+         glCullFace(GL_BACK);
          glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
          glEnable(GL_BLEND);
          glDisable(GL_DEPTH_TEST);
@@ -112,6 +114,7 @@ namespace Renderer {
          glUseProgram(0);
          glDisable(GL_BLEND);
          glEnable(GL_DEPTH_TEST);
+         glDisable(GL_CULL_FACE);
 
          //Clear the depth buffer to make the game draw over the HUD
          glClear(GL_DEPTH_BUFFER_BIT);
