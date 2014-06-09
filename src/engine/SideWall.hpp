@@ -10,7 +10,7 @@
 
 class SideWall : public Renderable {
    public:
-      SideWall();
+      SideWall(float angleToRot);
       void render();
 };
 

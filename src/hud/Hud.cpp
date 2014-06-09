@@ -31,11 +31,13 @@ Hud::Hud(NutGame* nutGame) : Renderable()
    LevelNumber* levelNumber = new LevelNumber(nutGame);
    NewPercent* newPercent = new NewPercent();
    
-   components.push_back(background);
+   //components.push_back(background);
    components.push_back(depthGuage);
    components.push_back(depthMask);
    components.push_back(scoreGuage);
    components.push_back(scoreMask);
+   components.push_back(depthGuage);
+   components.push_back(depthMask);
    //components.push_back(cylinder);
    components.push_back(goingNuts);
    components.push_back(sun);

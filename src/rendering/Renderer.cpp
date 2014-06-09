@@ -184,14 +184,29 @@ namespace Renderer {
       }
 
       void renderSideWalls() {
-         SideWall leftWall, rightWall;
+         SideWall leftWall1(0.0), rightWall1(180.0);
          usePTShader();
-         //leftWall.setPosition(glm::vec3(-0.5,0.0,-1.0));
-         //leftWall.render();
+         leftWall1.setPosition(glm::vec3(-0.5,0.0,-0.0));
+         leftWall1.render();
 
-         //rightWall.setPosition(glm::vec3(11.25,0.0,-1.0));
-         //Rotate wall 180 degrees
-         //rightWall.render();
+         rightWall1.setPosition(glm::vec3(6.5,0.0,-0.0));
+         rightWall1.render();
+
+         SideWall leftWall2(0.0), rightWall2(180.0);
+         usePTShader();
+         leftWall2.setPosition(glm::vec3(-0.5,-12.5,-0.0));
+         leftWall2.render();
+
+         rightWall2.setPosition(glm::vec3(6.5,-12.5,-0.0));
+         rightWall2.render();
+
+         SideWall leftWall3(0.0), rightWall3(180.0);
+         usePTShader();
+         leftWall3.setPosition(glm::vec3(-0.5,-25.0,-0.0));
+         leftWall3.render();
+
+         rightWall3.setPosition(glm::vec3(6.5,-25.0,-0.0));
+         rightWall3.render();
 
          glUseProgram(0);
 
@@ -681,10 +696,10 @@ namespace Renderer {
    void render() {
       currObjs = ngame->getObjectsToDraw();
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-      renderHud();
+      //renderHud();
       
       float eyeOffsetX = 3.0 + (ngame->player.getCenter().x - 3)/1.5;
-      float eyeOffsetZ = 10.0 + (ngame->player.getCenter().x - 3)*(ngame->player.getCenter().x - 3)/9.0;
+      float eyeOffsetZ = 11.0 + (ngame->player.getCenter().x - 3)*(ngame->player.getCenter().x - 3)/9.0;
       camera.setEye(glm::vec3(eyeOffsetX, ngame->player.getCenter().y, eyeOffsetZ));
       light.setPosition(glm::vec3(3.0, ngame->player.getCenter().y, 8.0f));
 
@@ -692,6 +707,7 @@ namespace Renderer {
       renderLightShadowMap();
       //renderBloomScene();
       renderGame();
+      renderHud();
       renderWinLoss();
       //renderDebugShadowMapText();
       //renderNormalMappedCylinder();
