@@ -21,6 +21,7 @@
 #include "../hud/Hud.hpp"
 #include "Wall.hpp"
 #include "../hud/Cylinder.hpp"
+#include "../engine/SideWall.hpp"
 
 namespace Renderer {
       extern Camera camera;

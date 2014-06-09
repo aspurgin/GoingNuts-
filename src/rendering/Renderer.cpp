@@ -183,6 +183,20 @@ namespace Renderer {
 
       }
 
+      void renderSideWalls() {
+         SideWall leftWall, rightWall;
+         usePTShader();
+         //leftWall.setPosition(glm::vec3(-0.5,0.0,-1.0));
+         //leftWall.render();
+
+         //rightWall.setPosition(glm::vec3(11.25,0.0,-1.0));
+         //Rotate wall 180 degrees
+         //rightWall.render();
+
+         glUseProgram(0);
+
+      }
+
       void renderPlayer() {
          useCTShader();
          ngame->player.render();
@@ -363,7 +377,6 @@ namespace Renderer {
             camera.setProjectionMatrix(cshader.h_uProjMatrix, (float)winWidth / winHeight, 0.1f, 100.0f);
          }*/
 
-         renderWalls();
          ngame->psystem.render();
          //renderDynamite();
          //renderHardHat();
@@ -372,7 +385,8 @@ namespace Renderer {
          renderBloomObjects();
 
          renderPlayer();
-
+         renderWalls();
+         renderSideWalls();
          
 
          glUseProgram(0);
