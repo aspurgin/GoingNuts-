@@ -49,7 +49,7 @@ bool Block::isDead() {
 
 bool Block::shouldDestroy() {
    if (isDead()) {
-      return deathCounter >= 0.2;
+      return deathCounter >= .2;
    }
    return false;
 }
@@ -128,8 +128,11 @@ void Block::setScale() {
 void Block::render() {
    setScale();
    position = center + glm::vec3(0, 0, -1);
+
+   glm::mat4 r = glm::rotate(90.f, 0.f, 1.f, 0.f);
+   r = glm::rotate(r, 90.f, 0.f, 0.f, 1.f);
    
-   Renderable::render();
+   Renderable::render(r);
 }
 
 void Block::genParticles() {
