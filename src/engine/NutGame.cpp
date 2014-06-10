@@ -308,13 +308,13 @@ void NutGame::fallDown(double toAdd) {
                         if (!addedBeforeDied && !groupWouldStopFalling) {
                            if (player.getHasHardHat()) {
                               player.takeAwayHardHat();
-                              ((Block*)gameGrid[row][col])->makeDead();
                               if (((Block*)gameGrid[row][col])->isInAGroup() && !((Block*)gameGrid[row][col])->isDead()) {
                                  ((Block*)gameGrid[row][col])->getGroupIn()->stopGroupFalling();
                                  ((Block*)gameGrid[row][col])->getGroupIn()->adjustGroupPosition();
                                  ((Block*)gameGrid[row][col])->getGroupIn()->destroy();
                                  delete ((Block*)gameGrid[row][col])->getGroupIn();
                               }
+                              ((Block*)gameGrid[row][col])->makeDead();
                               gameGrid[row][col]->stopFalling();
                               gameGrid[row][col]->setCanNotFall();
                               gameGrid[row][col]->moveTo(glm::vec2(gameGrid[row][col]->getCenter().x, -row));
