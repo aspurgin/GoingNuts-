@@ -86,6 +86,17 @@ namespace Renderer {
          glEnable(GL_BLEND);
          glDisable(GL_DEPTH_TEST);
 
+         glUseProgram(ptshader.shadeProg);
+         modelTrans.useModelViewMatrix();
+         modelTrans.loadIdentity();
+
+         orthographicCamera.setView(ptshader.h_uViewMatrix);
+         orthographicCamera.setProjectionMatrix(ptshader.h_uProjMatrix);
+         safe_glUniform3f(ptshader.h_lightPos, light.position.x, light.position.y, light.position.z);
+         safe_glUniform3f(ptshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
+
+         glUseProgram(0);
+
          glUseProgram(ftshader.shadeProg);
          modelTrans.useModelViewMatrix();
          modelTrans.loadIdentity();
@@ -98,7 +109,7 @@ namespace Renderer {
          //camera.setPosition(glm::vec3(3.0f, ngame->player.getCenter().y + 1, 6.0f));
          //light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y - 1, 6.0f));
 
-         glUseProgram(0);
+         /*glUseProgram(0);
 
          glUseProgram(ptshader.shadeProg);
          modelTrans.useModelViewMatrix();
@@ -107,7 +118,7 @@ namespace Renderer {
          orthographicCamera.setView(ptshader.h_uViewMatrix);
          orthographicCamera.setProjectionMatrix(ptshader.h_uProjMatrix);
          safe_glUniform3f(ptshader.h_lightPos, light.position.x, light.position.y, light.position.z);
-         safe_glUniform3f(ptshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
+         safe_glUniform3f(ptshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);*/
 
          hud->render();
 
@@ -405,7 +416,7 @@ namespace Renderer {
             camera.setView(cshader.h_uViewMatrix);
             camera.setProjectionMatrix(cshader.h_uProjMatrix, (float)winWidth / winHeight, 0.1f, 100.0f);
          }*/
-
+         renderWalls();
          ngame->psystem.render();
          //renderDynamite();
          //renderHardHat();
@@ -414,7 +425,7 @@ namespace Renderer {
          renderBloomObjects();
 
          renderPlayer();
-         renderWalls();
+        
          renderSideWalls();
          
 

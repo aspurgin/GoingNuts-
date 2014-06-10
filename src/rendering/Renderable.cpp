@@ -291,6 +291,7 @@ void Renderable::ptsRender(glm::mat4 trans) {
    safe_glDisableVertexAttribArray(ptshader.h_aPosition);
    safe_glDisableVertexAttribArray(ptshader.h_aNormal);
    //safe_glDisableVertexAttribArray(ptshader.h_vertexUV);
+   
 }
 
 void Renderable::bRenderBright() {
