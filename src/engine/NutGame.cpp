@@ -391,6 +391,10 @@ void NutGame::fallDown(double toAdd) {
             gameGrid[(int)(player.getCenter().y - .5) * -1][(int)player.getCenter().x] = &player;
             gameGrid[(int)(player.getCenter().y - .5) * -1][(int)(player.getCenter().x + .5) + 1] = 0;
          }
+         else if (player.getCenter().x > .5 && gameGrid[(int)(player.getCenter().y * -1)][(int)(player.getCenter().x - .5)] != 0 && player.isIntersecting(gameGrid[(int)(player.getCenter().y * -1)][(int)(player.getCenter().x - .5)])) {
+            player.setMoveHorizontal(STOPPED);
+            player.moveTo(glm::vec2(player.getMovingToColumn(), player.getCenter().y));
+         }
       }
       else if (!left) {
          player.setMoveHorizontal(STOPPED);
@@ -405,6 +409,10 @@ void NutGame::fallDown(double toAdd) {
          if (before < (int)(player.getCenter().x) + .5 && after > (int)(player.getCenter().x) + .5 && gameGrid[(int)(player.getCenter().y - .5) * -1][(int)(player.getCenter().x + .5)] == 0) {
             gameGrid[(int)(player.getCenter().y - .5) * -1][(int)(player.getCenter().x + .5)] = &player;
             gameGrid[(int)(player.getCenter().y - .5) * -1][(int)player.getCenter().x] = 0;
+         }
+         else if (player.getCenter().x < NUMCOLS - 1.5 && gameGrid[(int)(player.getCenter().y * -1)][(int)(player.getCenter().x + 1.5)] != 0 && player.isIntersecting(gameGrid[(int)(player.getCenter().y * -1)][(int)(player.getCenter().x + 1.5)])) {
+            player.setMoveHorizontal(STOPPED);
+            player.moveTo(glm::vec2(player.getMovingToColumn(), player.getCenter().y));
          }
       }
       else if (!right) {
@@ -682,7 +690,7 @@ void NutGame::handleKeyInput() {
       if (left) {
          pos = glm::vec2(player.getCenter());
          pos.y *= -1;
-         if (pos.x >= .5) {
+         if (pos.x >= .5 && !player.shouldFall()) {
             if ((gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - .00001)] == 0 || gameGrid[(int)(pos.y + 0.5)][(int)(pos.x - .00001)]->getMovableType() == PLAYER)) {
                player.setMovingToColumn((int)(player.getCenter().x - .00001));
                player.setMoveHorizontal(LEFT);
@@ -716,7 +724,7 @@ void NutGame::handleKeyInput() {
       else if (right) {
          pos = glm::vec2(player.getCenter());
          pos.y *= -1;
-         if (pos.x < NUMCOLS - 1) {
+         if (pos.x < NUMCOLS - 1 && !player.shouldFall()) {
             if ((gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)] == 0 || gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)]->getMovableType() == PLAYER)) {
                player.setMovingToColumn((int)(player.getCenter().x + .00001 + 1));
                player.setMoveHorizontal(RIGHT);
