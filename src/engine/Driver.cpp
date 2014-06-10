@@ -142,7 +142,22 @@ int main(void)
       return -1;
 
    //Create a windowed mode window and its OpenGL context
-   window = glfwCreateWindow(1280, 720, "Going Nuts!", NULL, NULL);
+   GLFWmonitor * mon = glfwGetPrimaryMonitor();
+   const GLFWvidmode* mode;
+   
+   if (mon != NULL) {
+      mode = glfwGetVideoMode(mon);
+      window = glfwCreateWindow(mode->width/*1280*/, mode->height/*720*/, "Going Nuts!", mon, NULL);
+   }
+   else {
+      GLFWvidmode * tmpmode = (GLFWvidmode *) malloc(sizeof (GLFWvidmode));
+      tmpmode->width = 1280;
+      tmpmode->height = 720;
+      mode = tmpmode;
+      window = glfwCreateWindow(mode->width/*1280*/, mode->height/*720*/, "Going Nuts!", NULL, NULL);
+   }
+
+   
    if (!window)
    {
       glfwTerminate();
@@ -159,7 +174,7 @@ int main(void)
    game.init();
    Hud hud(&game);
 
-   Renderer::Renderer(1280, 720, &game, &hud);
+   Renderer::Renderer(mode->width/*1280*/, mode->height/*720*/, &game, &hud);
    //Renderer renderer(1280, 720, &game, &hud);
    
    Assets::playMusic(Assets::GAME_M);
@@ -200,7 +215,7 @@ int main(void)
 
       lastTime = currentTime;
       // Render here
-      glViewport(0, 0, (GLsizei)1280, (GLsizei)720);
+      glViewport(0, 0, (GLsizei)mode->width/*1280*/, (GLsizei)mode->height/*720*/);
       Renderer::toggle = tog;
       Renderer::render();
       //renderer.toggle = tog;

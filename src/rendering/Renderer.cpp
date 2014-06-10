@@ -157,11 +157,11 @@ namespace Renderer {
          glEnable(GL_BLEND);
          glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
          glUseProgram(bshader.shadeProgBright);
-         glViewport(0, 0, 1280, 720);
+         glViewport(0, 0, /*1280*/winWidth, /*720*/winHeight);
          glClearColor(0, 0, 0, 1.0);
          glEnable(GL_TEXTURE_2D);
          camera.setView(bshader.h_uViewMatrixBright);
-         camera.setProjectionMatrix(bshader.h_uProjMatrixBright, 1280.0 / 720.0, 0.1f, 100.0f);
+         camera.setProjectionMatrix(bshader.h_uProjMatrixBright, ((float)winWidth) / winHeight/*1280.0 / 720.0*/, 0.1f, 100.0f);
          //glActiveTexture(GL_TEXTURE0);
          //glBindTexture(GL_TEXTURE_2D, 0);
          for (std::list<Renderable*>::iterator it = currObjs.begin(); it != currObjs.end(); ++it) {
@@ -243,11 +243,11 @@ namespace Renderer {
          glEnable(GL_BLEND);
          glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
          glUseProgram(bshader.shadeProgBright);
-         glViewport(0, 0, 1280, 720);
+         glViewport(0, 0, /*1280*/winWidth, /*720*/winHeight);
          glClearColor(1, 1, 1, 1.0);
          glEnable(GL_TEXTURE_2D);
          camera.setView(bshader.h_uViewMatrixBright);
-         camera.setProjectionMatrix(bshader.h_uProjMatrixBright, 1280.0 / 720.0, 0.1f, 100.0f);
+         camera.setProjectionMatrix(bshader.h_uProjMatrixBright, ((float)winWidth) / winHeight/*1280.0 / 720.0*/, 0.1f, 100.0f);
          // glActiveTexture(GL_TEXTURE0);
          // glBindTexture(GL_TEXTURE_2D, fbBloom_tex1);
          for (std::list<Renderable*>::iterator iter = dynamite.begin(); iter != dynamite.end(); ++iter) {
@@ -272,11 +272,12 @@ namespace Renderer {
          glEnable(GL_BLEND);
          glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
          glUseProgram(bshader.shadeProgBlurHor);
-         glViewport(0, 0, 1280, 720);
+         //glViewport(0, 0, 1280, 720);
+         glViewport(0, 0, /*1280*/winWidth, /*720*/winHeight);
          glClearColor(1, 1, 1, 1.0);
          glEnable(GL_TEXTURE_2D);
          camera.setView(bshader.h_uViewMatrixBlurHor);
-         camera.setProjectionMatrix(bshader.h_uProjMatrixBlurHor, 1280.0 / 720.0, 0.1f, 100.0f);
+         camera.setProjectionMatrix(bshader.h_uProjMatrixBlurHor, ((float)winWidth) / winHeight/*1280.0 / 720.0*/, 0.1f, 100.0f);
          glActiveTexture(GL_TEXTURE0);
          glBindTexture(GL_TEXTURE_2D, fbBloom_tex1);
          for (std::list<Renderable*>::iterator iter2 = dynamite.begin(); iter2 != dynamite.end(); ++iter2) {
@@ -301,11 +302,12 @@ namespace Renderer {
          glEnable(GL_BLEND);
          glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
          glUseProgram(bshader.shadeProgBlurVer);
-         glViewport(0, 0, 1280, 720);
+         //glViewport(0, 0, 1280, 720);
+         glViewport(0, 0, /*1280*/winWidth, /*720*/winHeight);
          glClearColor(1, 1, 1, 1.0);
          glEnable(GL_TEXTURE_2D);
          camera.setView(bshader.h_uViewMatrixBlurVer);
-         camera.setProjectionMatrix(bshader.h_uProjMatrixBlurVer, 1280.0 / 720.0, 0.1f, 100.0f);
+         camera.setProjectionMatrix(bshader.h_uProjMatrixBlurVer, ((float)winWidth) / winHeight/*1280.0 / 720.0*/, 0.1f, 100.0f);
          glActiveTexture(GL_TEXTURE0);
          glBindTexture(GL_TEXTURE_2D, fbBloom_tex2);
          for (std::list<Renderable*>::iterator iter3 = dynamite.begin(); iter3 != dynamite.end(); ++iter3) {
@@ -329,11 +331,12 @@ namespace Renderer {
          glEnable(GL_BLEND);
          glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
          glUseProgram(bshader.shadeProgComposite);
-         glViewport(0, 0, 1280, 720);
+         //glViewport(0, 0, 1280, 720);
+         glViewport(0, 0, /*1280*/winWidth, /*720*/winHeight);
          glClearColor(1, 1, 1, 1.0);
          glEnable(GL_TEXTURE_2D);
          camera.setView(bshader.h_uViewMatrixComposite);
-         camera.setProjectionMatrix(bshader.h_uProjMatrixComposite, 1280.0 / 720.0, 0.1f, 100.0f);
+         camera.setProjectionMatrix(bshader.h_uProjMatrixComposite, ((float)winWidth) / winHeight/*1280.0 / 720.0*/, 0.1f, 100.0f);
          safe_glUniform3f(bshader.h_lightPosComposite, light.position.x, light.position.y, light.position.z);
          safe_glUniform3f(bshader.h_cameraPosComposite, -camera.eye.x, -camera.eye.y, -camera.eye.z);
          glActiveTexture(GL_TEXTURE0);
@@ -576,8 +579,8 @@ namespace Renderer {
            GL_TEXTURE_2D,
            0,
            GL_RGBA,
-           1280,
-           720,
+           winWidth,//1280,
+           winHeight,//720,
            0,
            GL_RGBA,
            GL_UNSIGNED_BYTE,
@@ -596,7 +599,7 @@ namespace Renderer {
          glDisable(GL_TEXTURE_2D);
 
          glBindRenderbuffer(GL_RENDERBUFFER, *fbBloom_depth);
-         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, 1280, 720);
+         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, winWidth/*1280*/, winHeight/*720*/);
          glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, *fbBloom_depth);
 
          GLenum draw_bufs2[] = { GL_COLOR_ATTACHMENT0 };
@@ -627,7 +630,7 @@ namespace Renderer {
 
    void useCTShader() {
       glUseProgram(cetshader.shadeProg);
-      glViewport(0, 0, (GLsizei)1280, (GLsizei)720);
+      glViewport(0, 0, (GLsizei)winWidth/*1280*/, (GLsizei)winHeight/*720*/);
       modelTrans.useModelViewMatrix();
       modelTrans.loadIdentity();
 
@@ -639,7 +642,7 @@ namespace Renderer {
 
    void useCShader() {
       glUseProgram(cshader.shadeProg);
-      glViewport(0, 0, (GLsizei)1280, (GLsizei)720);
+      glViewport(0, 0, (GLsizei)winWidth/*1280*/, (GLsizei)winHeight/*720*/);
       modelTrans.useModelViewMatrix();
       modelTrans.loadIdentity();
 
