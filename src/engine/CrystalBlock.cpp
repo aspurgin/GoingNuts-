@@ -31,7 +31,9 @@ float CrystalBlock::getMoveSpeedPercentage() {
 void CrystalBlock::makeDead() {
    timesDrilled = getStrength();
    state = DEAD;
-   deathCounter = 0;
+   if (deathCounter < 0) {
+      deathCounter = 0;
+   }
    this->model = Assets::getMesh(Assets::EXPLODE_BLOCK_M);
    isFractured = true;
    //genParticles();

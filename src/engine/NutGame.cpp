@@ -69,7 +69,7 @@ void NutGame::init() {
    levels.push_back(Level("levels/level3.txt"));
    levels.push_back(Level("levels/level2.txt"));
    levels.push_back(Level("levels/level1.txt"));
-   //levels.push_back(Level("levels/test.txt"));
+   levels.push_back(Level("levels/test.txt"));
 
    loadNextLevel();
 }
@@ -316,7 +316,7 @@ void NutGame::fallDown(double toAdd) {
                               //delete gameGrid[row][col];
                               //gameGrid[row][col] = 0;
                            }
-                           else {
+                           else if (gameGrid[row + 1][colColidedWith]->shouldFall() == false || gameGrid[row][col]->shouldFall() == false) {
                               player.died();
                            }
                         }
@@ -358,6 +358,10 @@ void NutGame::fallDown(double toAdd) {
                      row = -1;
                      col = NUMCOLS;
                      isWon = true;
+                  }
+                  else if (row + 1 == NUMROWS - 1 && gameGrid[row + 1][col]->shouldFall() && gameGrid[row + 1][col]->getMovableType() != PLAYER) {
+                     delete gameGrid[row + 1][col];
+                     gameGrid[row + 1][col] = 0;
                   }
                }
                else if (gameGrid[row][col] != 0) {
@@ -483,7 +487,7 @@ void NutGame::checkGrid(double toAdd) {
 
 void NutGame::setFallingMovables(int row, int col) {
    Block* thisBlock;
-
+   
    if (row < NUMROWS - 2 && gameGrid[row][col]->getMovableType() == BLOCK
        && ((Block*)gameGrid[row][col])->isInAGroup()) {
       thisBlock = (Block*)gameGrid[row][col];
@@ -517,7 +521,8 @@ void NutGame::setFallingMovables(int row, int col) {
       }
    }
    else if (row < NUMROWS - 2 && gameGrid[row + 1][col] != 0 &&
-            !gameGrid[row + 1][col]->willFall() && gameGrid[row + 1][col]->getCanFall()) {
+            !gameGrid[row + 1][col]->willFall() && gameGrid[row + 1][col]->getCanFall() && gameGrid[row][col]->getMovableType() == BLOCK
+            && ((Block*)gameGrid[row][col])->isDead() != true) {
       gameGrid[row][col]->setCanFall();
       mightFallBlockList.push_back(gameGrid[row][col]);
    }
@@ -530,7 +535,7 @@ void NutGame::setFallingMovables(int row, int col) {
       gameGrid[row][col]->setWillFall();
    }
 }
-//Note: Zach, I edited this a tiny bit because there  were seg fault issues. It still does the same thing, fixed it. -Drew
+
 void NutGame::finishSettingFallingMovables() {
    bool somethingWasUpdated = true;
    int row, col;
@@ -564,10 +569,10 @@ void NutGame::finishSettingFallingMovables() {
       for (std::vector<Movable*>::iterator it = mightFallBlockList.begin(); it != mightFallBlockList.end(); ) {//++it) {
          row = (*it)->getCenter().y * -1 + .5;
          col = (*it)->getCenter().x + .5;
-         if (!(row < NUMROWS - 2 && (gameGrid[row + 1][col] == 0 || 
+         if (gameGrid[row][col] != 0 && !(row < NUMROWS - 2 && (gameGrid[row + 1][col] == 0 || 
              gameGrid[row + 1][col]->getMovableType() == PLAYER ||
              gameGrid[row + 1][col]->willFall() || gameGrid[row][col]->getCanFall()))) {
-            gameGrid[row][col]->setCanNotFall();
+             gameGrid[row][col]->setCanNotFall();
             
             //--it;
             
