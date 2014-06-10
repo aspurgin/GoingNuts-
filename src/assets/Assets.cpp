@@ -295,12 +295,13 @@ namespace Assets {
          //load all music tracks
          loadTrack("assets/audio/tracks/goingnuts.mp3", GAME_M);
          loadTrack("assets/audio/tracks/goingnutsgg.mp3", TITLE_M);
-
+         
          //load all sound effects
          loadSound("assets/audio/sfx/blockfall.wav", BLOCK_FALL_S);
          loadSound("assets/audio/sfx/itemget.wav", ITEM_S);
          loadSound("assets/audio/sfx/nutget.wav", NUT_S);
-
+         loadSound("assets/audio/sfx/drill.wav", DRILL_S);
+         loadSound("assets/audio/sfx/explosion.wav", EXPLODE_S);
       }
 
       //free everything

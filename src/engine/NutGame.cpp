@@ -72,6 +72,7 @@ void NutGame::init() {
    //levels.push_back(Level("levels/test.txt"));
 
    loadNextLevel();
+
 }
 
 void NutGame::connectBlocks() {
@@ -622,6 +623,7 @@ void NutGame::handleKeyInput() {
                if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + .5 - 1)]->getMovableType() == BLOCK) {
                   block = (Block *)gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + .5 - 1)];
                   player.drillBlock(block, DRILLING_LEFT);
+                  
                   //if (block->isDead() && block->deathCounter == -1) {
                   //   addToScore(1);
                   //   block->deathCounter = 0;
@@ -639,6 +641,7 @@ void NutGame::handleKeyInput() {
                if (gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)]->getMovableType() == BLOCK) {
                   block = (Block *)gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)];
                   player.drillBlock(block, DRILLING_RIGHT);
+                  
                   //if (block->isDead() && block->deathCounter == -1) {
                   //    addToScore(1);
                   //   block->deathCounter = 0;
@@ -685,6 +688,7 @@ void NutGame::handleKeyInput() {
          pos = glm::vec2(player.getCenter());
          player.throwDynamite();
          explodeDynamiteAt(-pos.y, pos.x);
+         Assets::playSound(Assets::EXPLODE_S);
       }
       
       if (left) {
@@ -885,12 +889,13 @@ void NutGame::explodeDynamiteAt(int row, int col) {
          if (rowCount >= 0 && rowCount < NUMROWS && colCount >= 0 && colCount < NUMCOLS) {
             if (gameGrid[rowCount][colCount] != 0) {
                if (gameGrid[rowCount][colCount]->getMovableType() == BLOCK && !((Block*) gameGrid[rowCount][colCount])->isDead()) {
-                  ((Block*) gameGrid[rowCount][colCount])->makeDead();
-                  if (((Block*) gameGrid[rowCount][colCount])->isInAGroup() && !((Block*)gameGrid[row][col])->isDead()) {
+                  
+                  if (((Block*) gameGrid[rowCount][colCount])->isInAGroup() && !((Block*)gameGrid[rowCount][colCount])->isDead()) {
                      ((Block*) gameGrid[rowCount][colCount])->getGroupIn()->stopGroupFalling();
                      ((Block*) gameGrid[rowCount][colCount])->getGroupIn()->destroy();
                      delete ((Block*) gameGrid[rowCount][colCount])->getGroupIn();
                   }
+                  ((Block*)gameGrid[rowCount][colCount])->makeDead();
                }
                else if (gameGrid[rowCount][colCount]->getMovableType() == DYNAMITE) {
                   delete gameGrid[rowCount][colCount];

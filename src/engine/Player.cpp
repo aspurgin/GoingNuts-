@@ -45,6 +45,7 @@ void Player::drillBlock(Block *block, int state) {
    }
    this->state = state;
    drillCount = 0;
+   Assets::playSound(Assets::DRILL_S);
 }
 
 int Player::getMovableType() {
@@ -212,6 +213,7 @@ bool Player::getHasHardHat() {
 
 void Player::collectHardHat() {
    hasHardHat = true;
+   Assets::playSound(Assets::ITEM_S);
 }
 
 void Player::takeAwayHardHat() {
@@ -221,10 +223,12 @@ void Player::takeAwayHardHat() {
 void Player::collectSuperDrill() {
    delete this->drill;
    this->drill = new SuperDrill();
+   Assets::playSound(Assets::ITEM_S);
 }
 
 void Player::collectDynamite() {
    numDynamites++;
+   Assets::playSound(Assets::ITEM_S);
 }
 
 void Player::throwDynamite() {
