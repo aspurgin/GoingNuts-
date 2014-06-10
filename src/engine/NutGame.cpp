@@ -69,7 +69,7 @@ void NutGame::init() {
    levels.push_back(Level("levels/level3.txt"));
    levels.push_back(Level("levels/level2.txt"));
    levels.push_back(Level("levels/level1.txt"));
-   levels.push_back(Level("levels/test.txt"));
+   //levels.push_back(Level("levels/test.txt"));
 
    loadNextLevel();
 }
