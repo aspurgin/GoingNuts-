@@ -13,7 +13,7 @@
 #include <vector>
 
 
-#define HANG_TIME 1
+#define HANG_TIME 1.5
 
 class BlockGroup;
 
