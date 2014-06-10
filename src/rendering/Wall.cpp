@@ -9,7 +9,7 @@ Wall::Wall(glm::vec3 pos) {
    scaleZ = 2;
    mat = 4;
    cshader = Assets::getCShader();
-   model = Assets::getMesh(Assets::BLOCK_M);
+   model = Assets::getMesh(Assets::SQUARE_M);
    this->position = pos;
 }
 

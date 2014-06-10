@@ -689,8 +689,8 @@ namespace Renderer {
       hud = theHud;
       //left = Wall(glm::vec3(-1.5, -10, 0));
       //right = Wall(glm::vec3(7.5, -10, 0));
-      back = Wall(glm::vec3(3.0, -8.0, -3.0));
-      back.setScale(glm::vec3(4.0, 12.0, 0.1));
+      back = Wall(glm::vec3(3.0, -15.0, -3.0));
+      back.setScale(glm::vec3(12.0, 50.0, 0.1));
       toggle = false;
       initialize();
       //hello
