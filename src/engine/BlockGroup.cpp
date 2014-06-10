@@ -32,6 +32,7 @@ void BlockGroup::addBlock(Block *block) {
 
 void BlockGroup::destroy() {
    for (std::list<Block*>::iterator it = blocks.begin(); it != blocks.end(); ++it) {
+      (*it)->putInGroup(0);
       (*it)->makeDead();
    }
 }

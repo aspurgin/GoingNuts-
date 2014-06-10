@@ -89,11 +89,12 @@ void NutGame::connectBlocks() {
 bool NutGame::maybeAddToGroupLeft(int row, int col) {
    Block* thisBlock;
    Block* left;
-
    if (col > 0 && gameGrid[row][col - 1] != 0 &&
        gameGrid[row][col] != 0 &&
        gameGrid[row][col]->getMovableType() == BLOCK &&
-       gameGrid[row][col - 1]->getMovableType() == BLOCK) {
+       gameGrid[row][col - 1]->getMovableType() == BLOCK && 
+       !((Block*)gameGrid[row][col - 1])->isDead() && 
+       !((Block*)gameGrid[row][col])->isDead()) {
       thisBlock = (Block*)gameGrid[row][col];
       left = (Block*)gameGrid[row][col - 1];
       if (thisBlock->getBlockType() == left->getBlockType()) {
@@ -117,7 +118,9 @@ bool NutGame::maybeAddToGroupRight(int row, int col) {
    if (col < NUMCOLS - 1 && gameGrid[row][col + 1] != 0 && 
        gameGrid[row][col] != 0 &&
        gameGrid[row][col]->getMovableType() == BLOCK &&
-       gameGrid[row][col + 1]->getMovableType() == BLOCK) {
+       gameGrid[row][col + 1]->getMovableType() == BLOCK && 
+       !((Block*)gameGrid[row][col + 1])->isDead() && 
+       !((Block*)gameGrid[row][col])->isDead()) {
          
       thisBlock = (Block*)gameGrid[row][col];
       right = (Block*)gameGrid[row][col + 1];
@@ -142,7 +145,9 @@ bool NutGame::maybeAddToGroupDown(int row, int col) {
    if (row < NUMROWS - 1 && gameGrid[row + 1][col] != 0 && 
        gameGrid[row][col] != 0 &&
        gameGrid[row + 1][col]->getMovableType() == BLOCK &&
-       gameGrid[row][col]->getMovableType() == BLOCK) {
+       gameGrid[row][col]->getMovableType() == BLOCK && 
+       !((Block*)gameGrid[row + 1][col])->isDead() && 
+       !((Block*)gameGrid[row][col])->isDead()) {
       thisBlock = (Block*)gameGrid[row][col];
       down = (Block*)gameGrid[row + 1][col];
       if (thisBlock->getBlockType() == down->getBlockType()) {
@@ -249,7 +254,7 @@ void NutGame::fallDown(double toAdd) {
                            //maybeAddToGroupDown(row, col);
                            //maybeAddToGroupLeft(row, col);
                            //maybeAddToGroupRight(row, col);
-                           //if (gameGrid[row][col]->getMovableType() == BLOCK && ((Block*)gameGrid[row][col])->isInAGroup()) {
+                           //if (gameGrid[row][col]->getMovableType() == BLOCK && ((Block*)gameGrid[row][col])->isInAGroup() && !((Block*)gameGrid[row][col])->isDead()) {
                               
                            //   ((Block*)gameGrid[row][col])->getGroupIn()->stopGroupFalling();
                            //   ((Block*)gameGrid[row][col])->getGroupIn()->setGroupCanNotFall();
@@ -304,7 +309,7 @@ void NutGame::fallDown(double toAdd) {
                            if (player.getHasHardHat()) {
                               player.takeAwayHardHat();
                               ((Block*)gameGrid[row][col])->makeDead();
-                              if (((Block*)gameGrid[row][col])->isInAGroup()) {
+                              if (((Block*)gameGrid[row][col])->isInAGroup() && !((Block*)gameGrid[row][col])->isDead()) {
                                  ((Block*)gameGrid[row][col])->getGroupIn()->stopGroupFalling();
                                  ((Block*)gameGrid[row][col])->getGroupIn()->adjustGroupPosition();
                                  ((Block*)gameGrid[row][col])->getGroupIn()->destroy();
@@ -326,7 +331,7 @@ void NutGame::fallDown(double toAdd) {
                      maybeAddToGroupDown(row, col);
                      maybeAddToGroupLeft(row, col);
                      maybeAddToGroupRight(row, col);
-                     if (gameGrid[row][col]->getMovableType() == BLOCK && ((Block*)gameGrid[row][col])->isInAGroup()) {
+                     if (gameGrid[row][col]->getMovableType() == BLOCK && ((Block*)gameGrid[row][col])->isInAGroup() && !((Block*)gameGrid[row][col])->isDead()) {
                         ((Block*)gameGrid[row][col])->getGroupIn()->stopGroupFalling();
                         ((Block*)gameGrid[row][col])->getGroupIn()->setGroupCanNotFall();
                         ((Block*)gameGrid[row][col])->getGroupIn()->adjustGroupPosition();
@@ -437,7 +442,7 @@ bool NutGame::addToGroup(Block* thisBlock, Block* otherBlock) {
       thisBlock->getGroupIn()->addBlock(otherBlock);
       wasAdded = true;
    }
-   if (wasAdded) {
+   if (wasAdded && !thisBlock->isDead()) {
       thisBlock->getGroupIn()->stopGroupFalling();
       thisBlock->getGroupIn()->setGroupCanNotFall();
       thisBlock->getGroupIn()->adjustGroupPosition();
@@ -873,7 +878,7 @@ void NutGame::explodeDynamiteAt(int row, int col) {
             if (gameGrid[rowCount][colCount] != 0) {
                if (gameGrid[rowCount][colCount]->getMovableType() == BLOCK && !((Block*) gameGrid[rowCount][colCount])->isDead()) {
                   ((Block*) gameGrid[rowCount][colCount])->makeDead();
-                  if (((Block*) gameGrid[rowCount][colCount])->isInAGroup()) {
+                  if (((Block*) gameGrid[rowCount][colCount])->isInAGroup() && !((Block*)gameGrid[row][col])->isDead()) {
                      ((Block*) gameGrid[rowCount][colCount])->getGroupIn()->stopGroupFalling();
                      ((Block*) gameGrid[rowCount][colCount])->getGroupIn()->destroy();
                      delete ((Block*) gameGrid[rowCount][colCount])->getGroupIn();
