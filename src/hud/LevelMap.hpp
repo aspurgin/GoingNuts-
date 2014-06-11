@@ -17,7 +17,8 @@ class LevelMap : public Renderable {
    	  NutGame* nutGame;
    	  PlayerImage* playerImage;
    	  int lastLevel;
-   	  glm::vec3 levelPositions[8];
+   	  int count;
+   	  glm::vec3 levelPositions[9];
       LevelMap(NutGame* nutGame);
       void render();
 };
