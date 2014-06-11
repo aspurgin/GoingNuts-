@@ -244,6 +244,9 @@ int main(void)
          //game.handleKeyInput();
          delta = currentTime - lastTime;
          fpsTime += delta;
+         if (delta > 0.26) {
+            delta = 0.26;
+         }
 
          if (!paused) {
             game.checkGrid(delta);
