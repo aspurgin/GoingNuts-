@@ -19,9 +19,16 @@
 NutGame game;
 bool tog = false;
 bool paused = false;
+bool gameHasNotStarted = true;
+int level;
 
 
 void keyPressed(GLFWwindow *window, int key, int scancode, int action, int mods) {
+   if (key == GLFW_KEY_G) {
+      if (action == GLFW_RELEASE) {
+         gameHasNotStarted = false;
+      }
+   }
    if (key == GLFW_KEY_P) {
       if (action == GLFW_RELEASE) {
          paused = !paused;
@@ -31,7 +38,7 @@ void keyPressed(GLFWwindow *window, int key, int scancode, int action, int mods)
          }
          else {
             Assets::playSound(Assets::RESUME_S);
-            Assets::resumeMusic();
+            Assets::playMusic(Assets::GAME_M);
          }
       }
    }
@@ -189,14 +196,24 @@ int main(void)
    glfwSetKeyCallback(window, keyPressed);
    Assets::loadAssets();
    //Camera& myCam = Renderer::getCamera();
-   game.init();
    Hud hud(&game);
-
    Renderer::Renderer(mode->width/*1280*/, mode->height/*720*/, &game, &hud);
    //Renderer renderer(1280, 720, &game, &hud);
+
+   Assets::playMusic(Assets::TITLE_M);
+   while (gameHasNotStarted) {
+      glViewport(0, 0, (GLsizei)mode->width/*1280*/, (GLsizei)mode->height/*720*/);
+      Renderer::renderStartScreen();
+      glfwSwapBuffers(window);
+      glfwPollEvents();
+   }
+   Assets::stopMusic();
+   game.init();
+   level = game.getLevel();
    
    Assets::playMusic(Assets::GAME_M);
    //Loop until the user closes the window
+   lastTime = glfwGetTime();
    while (!glfwWindowShouldClose(window)) {
       
       game.handleKeyInput();
