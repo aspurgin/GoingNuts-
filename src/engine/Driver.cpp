@@ -25,6 +25,14 @@ void keyPressed(GLFWwindow *window, int key, int scancode, int action, int mods)
    if (key == GLFW_KEY_P) {
       if (action == GLFW_RELEASE) {
          paused = !paused;
+         if (paused) {
+            Assets::playSound(Assets::PAUSE_S);
+            Assets::stopMusic();
+         }
+         else {
+            Assets::playSound(Assets::RESUME_S);
+            Assets::resumeMusic();
+         }
       }
    }
    if (!paused && !game.player.getIsDead() && !game.isWon) {
