@@ -357,7 +357,7 @@ namespace Assets {
          channel->getFrequency(&frequency);
          channel->setMode(FMOD_LOOP_NORMAL);
          printf("frequency: %f\n", frequency);
-         channel->setFrequency(frequency*1.28f);
+         channel->setFrequency(frequency*1.18f);
          channel->setPaused(false);
          musicChannel = channel;
       }
