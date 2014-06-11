@@ -495,6 +495,10 @@ void ParticleSystem::add() {
    glm::vec3 newVel;
    float newTTL;
 
+   if (p.size() > 250) {
+      return;
+   }
+
    newVel.x = vel.x + srandf(spread.x);
    newVel.y = vel.y + srandf(spread.y);
    newVel.z = vel.z + srandf(spread.z);
@@ -504,7 +508,7 @@ void ParticleSystem::add() {
 }
 
 void ParticleSystem::burst(int num) {
-   for (int i = 0; i < num && p.size() < 750; i++) {
+   for (int i = 0; i < num; i++) {
       add();
    }
 }
@@ -512,6 +516,9 @@ void ParticleSystem::burst(int num) {
 void ParticleSystem::esAdd() {
    glm::vec3 newVel;
 
+   if (es.size() > 250) {
+      return;
+   }
    newVel.x = vel.x + srandf(spread.x);
    newVel.y = vel.y + srandf(spread.y);
    newVel.z = vel.z + srandf(spread.z);
@@ -520,7 +527,7 @@ void ParticleSystem::esAdd() {
 }
 
 void ParticleSystem::esBurst(int num) {
-   for (int i = 0; i < num && es.size() < 750; i++) {
+   for (int i = 0; i < num; i++) {
       esAdd();
    }
 }
