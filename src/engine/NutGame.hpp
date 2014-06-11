@@ -107,6 +107,11 @@ class NutGame {
       int NUMROWS;
       int depth;
       std::vector<Level> levels;
+      int savedDepth;
+      int savedScore;
+      bool savedHasHardHat;
+      int savedNumDynamite;
+      float savedEnergy;
 };
 
 #endif

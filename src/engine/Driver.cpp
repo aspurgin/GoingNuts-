@@ -147,6 +147,9 @@ void keyPressed(GLFWwindow *window, int key, int scancode, int action, int mods)
          //game.reloadLevel();
          game.init();
       }
+      else if (key == GLFW_KEY_L) {
+         game.reloadLevel();
+      }
    }
    if (key == GLFW_KEY_ESCAPE) {
       glfwTerminate();

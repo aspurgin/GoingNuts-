@@ -27,6 +27,11 @@ NutGame::NutGame() {
    this->useArrowKeys = true;
    this->depth = 0;
    NUMROWS = 0;
+   this->savedDepth = 0;
+   this->savedScore = 0;
+   this->savedHasHardHat = false;
+   this->savedNumDynamite = 0;
+   this->savedEnergy = 100;
 }
 
 NutGame::~NutGame() {
@@ -60,6 +65,11 @@ void NutGame::init() {
    isWon = false;
    depth = 0;
    level = 0;
+   savedDepth = 0;
+   savedScore = 0;
+   savedHasHardHat = false;
+   savedNumDynamite = 0;
+   savedEnergy = 100;
    levels.clear();
 
    levels.push_back(Level("levels/level11.txt"));
@@ -366,7 +376,7 @@ void NutGame::fallDown(double toAdd) {
                      col = NUMCOLS;
                      loadNextLevel();
                   }
-                  else if (row + 1 == NUMROWS - 3  && gameGrid[row + 1][col]->getMovableType() == PLAYER && levels.size() == 0) {
+                  else if (row + 1 == NUMROWS - 3  && gameGrid[row + 1][col]->getMovableType() == PLAYER && level == levels.size()) {
                      row = -1;
                      col = NUMCOLS;
                      isWon = true;
@@ -736,7 +746,7 @@ void NutGame::handleKeyInput() {
       else if (right) {
          pos = glm::vec2(player.getCenter());
          pos.y *= -1;
-         if (pos.x < NUMCOLS - 1 && !player.shouldFall()) {
+         if (pos.x < NUMCOLS - 1.5 && !player.shouldFall()) {
             if ((gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)] == 0 || gameGrid[(int)(pos.y + 0.5)][(int)(pos.x + 1)]->getMovableType() == PLAYER)) {
                player.setMovingToColumn((int)(player.getCenter().x + .00001 + 1));
                player.setMoveHorizontal(RIGHT);
@@ -930,18 +940,22 @@ void NutGame::setNumRows(int rows) {
 
 void NutGame::loadNextLevel() {
    
-   if (levels.size() > 0) {
-      
+   if (level < levels.size()) {   
       for (int row = 0; row < NUMROWS; row++) {
          for (int col = 0; col < NUMCOLS; col++) {
+            gameGrid[row][col] = 0;
             if (gameGrid[row][col] != 0 && gameGrid[row][col]->getMovableType() != PLAYER) {
                delete gameGrid[row][col];
             }
          }
       }
+      savedDepth = getDepth();
+      savedScore = getScore();
+      savedHasHardHat = player.getHasHardHat();
+      savedNumDynamite = player.getNumDynamites();
+      savedEnergy = player.getEnergyLeft();
       
-      levels[levels.size() - 1].loadLevel(this);
-      levels.pop_back();
+      levels[levels.size() - level - 1].loadLevel(this);
       connectBlocks();
       level++;
    }
@@ -949,16 +963,27 @@ void NutGame::loadNextLevel() {
 
 void NutGame::reloadLevel() {
 
-   if (levels.size() > 0) {
+   if (level <= levels.size()) {
       for (int row = 0; row < NUMROWS; row++) {
          for (int col = 0; col < NUMCOLS; col++) {
+            gameGrid[row][col] = 0;
             if (gameGrid[row][col] != 0 && gameGrid[row][col]->getMovableType() != PLAYER) {
                delete gameGrid[row][col];
             }
          }
       }
+      
+      player.setDepth(savedDepth);
+      player.setScore(savedScore);
+      player.setHasHardHat(savedHasHardHat);
+      player.setNumDynamite(savedNumDynamite);
+      player.setEnergy(savedEnergy);
+      isWon = false;
+      player.makeAlive();
+      player.moveTo(glm::vec2(3, player.getCenter().y));
+      gameGrid[0][3] = &player;
 
-      levels[levels.size() - 1].loadLevel(this);
+      levels[levels.size() - level].loadLevel(this);
       connectBlocks();
    }
 }

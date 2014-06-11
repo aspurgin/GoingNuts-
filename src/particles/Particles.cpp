@@ -511,7 +511,9 @@ void ParticleSystem::burst(int num) {
 
 void ParticleSystem::esAdd() {
    glm::vec3 newVel;
-
+   if (es.size() > 250) {
+      return;
+   }
    newVel.x = vel.x + srandf(spread.x);
    newVel.y = vel.y + srandf(spread.y);
    newVel.z = vel.z + srandf(spread.z);

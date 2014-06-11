@@ -44,12 +44,18 @@ class Player: public Movable {
       int getNumDynamites();
       void takeAwayEnergy(float toSub);
       void addEnergy(float toAdd);
+      void setEnergy(float energy);
       bool threwDynamite;
       void addToScore(int num);
       int getScore();
       void playHitGroundSound();
       void addToDepth();
       int getDepth();
+      void setDepth(int score);
+      void setScore(int depth);
+      void setNumDynamite(int numDynamite);
+      void setHasHardHat(bool hasHardHat);
+      void makeAlive();
    private:
       Texture texture;
       float velocity;
