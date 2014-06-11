@@ -237,12 +237,7 @@ int main(void)
             level = game.getLevel();
             lastTime = glfwGetTime();
          }
-         while (paused) {
-            glViewport(0, 0, (GLsizei)mode->width/*1280*/, (GLsizei)mode->height/*720*/);
-            Renderer::renderLevelMap();
-            glfwSwapBuffers(window);
-            glfwPollEvents();
-         }
+         
          game.handleKeyInput();
 
          currentTime = glfwGetTime();
