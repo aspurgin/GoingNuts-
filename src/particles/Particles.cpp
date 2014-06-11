@@ -5,14 +5,24 @@
 #include "Particles.hpp"
 #include "../rendering/Renderer.hpp"
 
-Particle::Particle(float mass, float ttl, glm::vec3 pos, glm::vec3 vel, float x, float y, float z, int mat) {
+Particle::Particle(float mass, float ttl, glm::vec3 pos, glm::vec3 vel, float x, float y, float z, int mat, int type) {
    alive = true;
    this->mass = mass;
    this->ttl = ttl;
    this->pos = pos;
    this->vel = vel;
-   this->model = Assets::getMesh(Assets::SQUARE_M);
-   this->shaderType = C_SHADE;
+   this->pType = type;
+   switch (pType) {
+      case SPARK:
+         this->model = Assets::getMesh(Assets::SPARK_M);
+         shaderType = C_SHADE;
+         //colorTexture = Assets::getTexture(Assets::SPARK_T);
+         break;
+      default:
+         this->model = Assets::getMesh(Assets::SQUARE_M);
+         this->shaderType = C_SHADE;
+         break;
+   }
    scale = 0.5;
    //scaleX = 0.05;
    scaleX = x;
@@ -22,6 +32,7 @@ Particle::Particle(float mass, float ttl, glm::vec3 pos, glm::vec3 vel, float x,
    scaleZ = z;
    this->ang = 0;
    this->front = glm::vec3(0, 0, 1);
+   this->up = glm::vec3(0, 1, 0);
    this->modelTrans.useModelViewMatrix();
    this->modelTrans.loadIdentity();
    this->mat = mat;
@@ -33,24 +44,39 @@ Particle::~Particle() {
 }
 
 void Particle::render() {
-   glm::vec3 look = Renderer::camera.eye - pos;
-   look = glm::normalize(look);
-   axis = glm::cross(front, look);
-   ang = glm::acos(glm::dot(front, look)) * TO_DEGREES;
+   glm::vec3 dir, look;
+
+   switch(pType) {
+      case SPARK:
+         dir = glm::normalize(vel);
+         axis = glm::cross(up, dir);
+         ang = glm::acos(glm::dot(up, dir)) * TO_DEGREES;
+         break;
+      default: //billboarding
+         look = glm::normalize(Renderer::camera.eye - pos);
+         axis = glm::cross(front, look);
+         ang = glm::acos(glm::dot(front, look)) * TO_DEGREES;
+         //dir = glm::normalize(vel);
+         //axis = glm::cross(up, dir);
+         //ang = glm::acos(glm::dot(up, dir)) * TO_DEGREES;
+   }
    position = pos;
    Renderable::render();
 }
-
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////// ParticleSystem //////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
 ParticleSystem::ParticleSystem() {
    pos = glm::vec3();
    on = false;
    perSec = 50;
    mass = 0.05;
-   scaleX = 0.05;
-   scaleY = 0.05;
-   scaleZ = 0.05;
+   scaleX = 0.075;
+   scaleY = 0.075;
+   scaleZ = 0.075;
    time = 0;
-   ttl = 5;
+   ttl = 3;
+   ttlSpread = 2;
    spread = glm::vec3(4, 1, 4);
    vel = glm::vec3(0, 3, 0);
    numParticles = 0;
@@ -61,6 +87,7 @@ ParticleSystem::~ParticleSystem() {
 
 }
 
+/*
 ParticleSystem::ParticleSystem(glm::vec3 pos, int mat) {
    this->pos = pos;
    on = false;
@@ -73,7 +100,9 @@ ParticleSystem::ParticleSystem(glm::vec3 pos, int mat) {
    numParticles = 0;
    this->mat = mat;
 }
+*/
 
+/*
 ParticleSystem::ParticleSystem(glm::vec3 pos, glm::vec3 vel, glm::vec3 spread, int perSec,
                                float mass, float ttl) {
    this->pos = pos;
@@ -86,26 +115,7 @@ ParticleSystem::ParticleSystem(glm::vec3 pos, glm::vec3 vel, glm::vec3 spread, i
    time = 0;
    numParticles = 0;
 }
-
-void ParticleSystem::add() {
-   glm::vec3 newVel;
-
-   newVel.x = vel.x + srandf(spread.x);
-   newVel.y = vel.y + srandf(spread.y);
-   newVel.z = vel.z + srandf(spread.z);
-
-   p.push_back(Particle(mass, ttl, pos, newVel, scaleX, scaleY, scaleZ, mat));
-}
-
-void ParticleSystem::add(float mass, float ttl, glm::vec3 pos, glm::vec3 vel, float x, float y, float z, int mat) {
-   p.push_back(Particle(mass, ttl, pos, vel, scaleX, scaleY, scaleZ, mat));
-}
-
-void ParticleSystem::burst(int num) {
-   for (int i = 0; i < num; i++) {
-      add();
-   }
-}
+*/
 
 void ParticleSystem::moveTo(glm::vec3 to) {
    pos = to;
@@ -145,23 +155,27 @@ void ParticleSystem::setTTL(float newTTL) {
    ttl = newTTL;
 }
 
+void ParticleSystem::setTTLSpread(float newTTLSpread) {
+   ttlSpread = newTTLSpread;
+}
+
 void ParticleSystem::setType(int type) {
    switch (type) {
       case CRYSTALBLOCK:
-         //
-         break;
-      case DIRTBLOCK:
-         //
+         pType = CRYSTAL;
          break;
       case LAVABLOCK:
-         //
+         pType = LAVA;
          break;
       case SANDBLOCK:
-         //
+         pType = SAND;
          break;
       case STONEBLOCK:
-         //
+         pType = SPARK;
          break;
+      case DIRTBLOCK:
+      default:
+         pType = 0;
    }
 }
 
@@ -252,6 +266,7 @@ void ParticleSystem::computeForces(std::vector<std::vector<Movable *> > gameGrid
 
    for (std::vector<Particle>::iterator it = p.begin(); it != p.end(); ++it) {
       it->netForce = glm::vec3(0, GRAVITY * it->mass, 0);
+      //it->netForce = glm::vec3(0, 0, 0);
 
       //Find the estimated column and row of moving particle
       // Moving left
@@ -282,9 +297,12 @@ void ParticleSystem::computeForces(std::vector<std::vector<Movable *> > gameGrid
          // left collision check
          if (it->vel.x < 0 && estCol - 1 >= 0 && col < estCol) {
             if (gameGrid[row][col] && gameGrid[row][col]->getMovableType() == BLOCK && gameGrid[row][estCol - 1] && gameGrid[row][estCol - 1]->getMovableType() == BLOCK && it->isIntersecting(((Collidable*)gameGrid[row][estCol - 1]))) {
-               if (((Block*)gameGrid[row][estCol - 1])->getBlockType() == SANDBLOCK) {
+               if (((Block*)gameGrid[row][estCol - 1])->getBlockType() == SANDBLOCK && it->pType != SPARK) {
                   it->alive = false;
                   spraySand(it->pos, it->vel, COLLIDE_L);
+               } else if (((Block*)gameGrid[row][estCol - 1])->getBlockType() == LAVABLOCK && it->pType != SPARK) {
+                  it->alive = false;
+                  sprayLava(it->pos, it->vel, COLLIDE_L);
                }
                it->vel.x += it->vel.x * horizontalPush;
                //it->netForce.x += it->vel.x * horizontalPush;
@@ -294,9 +312,12 @@ void ParticleSystem::computeForces(std::vector<std::vector<Movable *> > gameGrid
          } // right collision check
          else if (estCol + 1 < numCols && col > estCol) {
             if (gameGrid[row][col] && gameGrid[row][col]->getMovableType() == BLOCK && gameGrid[row][estCol + 1] && gameGrid[row][estCol + 1]->getMovableType() == BLOCK && it->isIntersecting(((Collidable*)gameGrid[row][estCol + 1]))) {
-               if (((Block*)gameGrid[row][estCol + 1])->getBlockType() == SANDBLOCK) {
+               if (((Block*)gameGrid[row][estCol + 1])->getBlockType() == SANDBLOCK && it->pType != SPARK) {
                   it->alive = false;
                   spraySand(it->pos, it->vel, COLLIDE_R);
+               } else if (((Block*)gameGrid[row][estCol + 1])->getBlockType() == LAVABLOCK && it->pType != SPARK) {
+                  it->alive = false;
+                  sprayLava(it->pos, it->vel, COLLIDE_R);
                }
                it->vel.x += it->vel.x * horizontalPush;
                //it->netForce.x += it->vel.x * horizontalPush;
@@ -307,9 +328,12 @@ void ParticleSystem::computeForces(std::vector<std::vector<Movable *> > gameGrid
          //Downward collision check
          if (it->vel.y < 0 && estRow + 1 < numRows) {
             if (gameGrid[row][col] && gameGrid[row][col]->getMovableType() == BLOCK && gameGrid[estRow + 1][col] && gameGrid[estRow + 1][col]->getMovableType() == BLOCK && it->isIntersecting(((Collidable*)gameGrid[estRow + 1][col]))) {
-               if (((Block*)gameGrid[estRow + 1][col])->getBlockType() == SANDBLOCK) {
+               if (((Block*)gameGrid[estRow + 1][col])->getBlockType() == SANDBLOCK && it->pType != SPARK) {
                   it->alive = false;
                   spraySand(it->pos, it->vel, COLLIDE_D);
+               } else if (((Block*)gameGrid[estRow + 1][col])->getBlockType() == LAVABLOCK && it->pType != SPARK) {
+                  it->alive = false;
+                  sprayLava(it->pos, it->vel, COLLIDE_D);
                }
                it->vel.y += it->vel.y * groundPush;
                //it->netForce.y += it->vel.y * groundPush * 2;
@@ -320,28 +344,50 @@ void ParticleSystem::computeForces(std::vector<std::vector<Movable *> > gameGrid
             it->vel.z += it->vel.z * -2;
             //it->netForce.z += it->vel.z * -2;
          }
-         /*if (col > 0 && col < numCols - 1 && gameGrid[row][col - 1] && it->isIntersecting((Collidable*)gameGrid[row][col - 1])) {
-          it->vel += glm::vec3((it->vel.x) * horizontalPush, 0, 0);
-          printf("isIntersecting:%d\n", it->isIntersecting((Collidable*)gameGrid[row][col - 1]));
-          } // right collision check
-          else if (col > 0 && col < numCols - 1 && gameGrid[row][col + 1] && it->isIntersecting((Collidable*)gameGrid[row][col + 1])) {
-          it->vel += glm::vec3((it->vel.x) * horizontalPush, 0, 0);
-          printf("isIntersecting:%d\n", it->isIntersecting((Collidable*)gameGrid[row][col + 1]));
-          }
-          // bottom collision check
-          if (row > 0 && row < numRows - 1 && gameGrid[row + 1][col] && it->isIntersecting((Collidable*)gameGrid[row + 1][col])) {
-          it->vel += glm::vec3(0, (it->vel.y) * groundPush, 0);
-          printf("isIntersecting:%d\n", it->isIntersecting((Collidable*)gameGrid[row + 1][col]));
-          } // top collision check
-          else if (1) {
-          // some top collision checking here
-          }
-          // back wall collision check #hardcodelife
-          if (it->pos.z <= -0.4) {
-          it->vel += glm::vec3(0, 0, it->vel.z * -2);
-          }*/
       }
    }
+}
+
+void ParticleSystem::sprayLava(glm::vec3 p, glm::vec3 v, int dir) {
+   glm::vec3 newVel, newSpread;
+
+   switch (dir) {
+      case COLLIDE_L:
+         newVel.x = -v.x / 2;
+         newVel.y = v.y / 2;
+         newVel.z = v.z / 2;
+         newSpread.x = abs(newVel.x);
+         newSpread.y = abs(newVel.y * 2) < 2 ? 2 : abs(newVel.y * 2);
+         newSpread.z = abs(newVel.z * 2) < 2 ? 2 : abs(newVel.z * 2);
+         break;
+      case COLLIDE_R:
+         newVel.x = -v.x / 2;
+         newVel.y = v.y / 2;
+         newVel.z = v.z / 2;
+         newSpread.x = abs(newVel.x);
+         newSpread.y = abs(newVel.y * 2) < 2 ? 2 : abs(newVel.y * 2);
+         newSpread.z = abs(newVel.z * 2) < 2 ? 2 : abs(newVel.z * 2);
+         break;
+      case COLLIDE_D:
+         newVel.x = v.x / 2;
+         newVel.y = -v.y / 2;
+         newVel.z = v.z / 2;
+         newSpread.x = abs(newVel.x * 2) < 2 ? 2 : abs(newVel.x * 2);
+         newSpread.y = abs(newVel.y);
+         newSpread.z = abs(newVel.z * 2) < 2 ? 2 : abs(newVel.z * 2);
+         break;
+   }
+
+   save();
+   pos = p;
+   mass = 0.1;
+   ttl = 2.5;
+   vel = newVel;
+   spread = newSpread;
+   mat = 8;
+   setScale(0.05, 0.05, 0.05);
+   esBurst(25);
+   revert();
 }
 
 void ParticleSystem::spraySand(glm::vec3 p, glm::vec3 v, int dir) {
@@ -382,7 +428,7 @@ void ParticleSystem::spraySand(glm::vec3 p, glm::vec3 v, int dir) {
    spread = newSpread;
    mat = 0;
    setScale(0.01, 0.01, 0.01);
-   esBurst(25);
+   esBurst(100);
    revert();
 }
 
@@ -404,6 +450,8 @@ void ParticleSystem::save() {
    sscaleX = scaleX;
    sscaleY = scaleY;
    sscaleZ = scaleZ;
+   pType = sType;
+   sTTLSpread = ttlSpread;
 }
 
 void ParticleSystem::revert() {
@@ -414,16 +462,19 @@ void ParticleSystem::revert() {
    spread = sspread;
    mat = smat;
    setScale(sscaleX, sscaleY, sscaleZ);
+   pType = sType;
+   pType = sType;
+   ttlSpread = sTTLSpread;
 }
 
 void ParticleSystem::render() {
    int i;
 
    for (std::vector<Particle>::iterator it = p.begin(); it != p.end(); ++it) {
-         it->render();
+      it->render();
    }
    for (std::vector<Particle>::iterator it = es.begin(); it != es.end(); ++it) {
-         it->render();
+      it->render();
    }
 }
 
@@ -436,6 +487,28 @@ void ParticleSystem::renderLightMap() {
    }
 }
 
+void ParticleSystem::add(float mass, float ttl, glm::vec3 pos, glm::vec3 vel, float x, float y, float z, int mat) {
+   p.push_back(Particle(mass, ttl, pos, vel, scaleX, scaleY, scaleZ, mat, type));
+}
+
+void ParticleSystem::add() {
+   glm::vec3 newVel;
+   float newTTL;
+
+   newVel.x = vel.x + srandf(spread.x);
+   newVel.y = vel.y + srandf(spread.y);
+   newVel.z = vel.z + srandf(spread.z);
+   newTTL = ttl + srandf(ttlSpread);
+
+   p.push_back(Particle(mass, newTTL, pos, newVel, scaleX, scaleY, scaleZ, mat, pType));
+}
+
+void ParticleSystem::burst(int num) {
+   for (int i = 0; i < num && p.size() < 750; i++) {
+      add();
+   }
+}
+
 void ParticleSystem::esAdd() {
    glm::vec3 newVel;
 
@@ -443,11 +516,27 @@ void ParticleSystem::esAdd() {
    newVel.y = vel.y + srandf(spread.y);
    newVel.z = vel.z + srandf(spread.z);
 
-   es.push_back(Particle(mass, ttl, pos, newVel, scaleX, scaleY, scaleZ, mat));
+   es.push_back(Particle(mass, ttl, pos, newVel, scaleX, scaleY, scaleZ, mat, pType));
 }
 
 void ParticleSystem::esBurst(int num) {
-   for (int i = 0; i < num; i++) {
+   for (int i = 0; i < num && es.size() < 750; i++) {
       esAdd();
    }
 }
+
+/*void ParticleSystem::sparkAdd() {
+   glm::vec3 newVel;
+
+   newVel.x = vel.x + srandf(spread.x);
+   newVel.y = vel.y + srandf(spread.y);
+   newVel.z = vel.z + srandf(spread.z);
+
+   ss.push_back(Particle(mass, ttl, pos, newVel, scaleX, scaleY, scaleZ, mat, pType));
+}*/
+
+/*void ParticleSystem::sparkBurst(int num) {
+   for (int i = 0; i < num; i++) {
+      sparkAdd();
+   }
+}*/

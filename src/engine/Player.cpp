@@ -1,4 +1,5 @@
 #include "Player.hpp"
+#include "PlayerStates.hpp"
 #include "../rendering/Renderer.hpp"
 
 Player::Player() {}
@@ -38,7 +39,7 @@ Player::Player(glm::vec3 center, float width, float height) {
 }
   
 void Player::drillBlock(Block *block, int state) {
-   drill->drillBlock(block);
+   drill->drillBlock(block, state);
    if (block->isDead()) {
       block->makeDead();
       addToScore(1);
@@ -110,9 +111,9 @@ void Player::setAnimation() {
          ang = 0;
          break;
       case DRILLING_UP:
-         model->setAt("drillUp", glfwGetTime() * 2);
+         model->setAt("drillUp", glfwGetTime()*2);
          drillCount++;
-         if (drillCount > 20) {
+         if(drillCount > 20) {
             state = STATIC;
             drillCount = 0;
          }

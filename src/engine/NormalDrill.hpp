@@ -5,7 +5,7 @@
 
 class NormalDrill: public Drill {
    public:
-      void drillBlock(Block *block);
+      void drillBlock(Block *block, int direction);
    private:
 };
 

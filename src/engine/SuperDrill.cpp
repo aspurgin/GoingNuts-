@@ -1,6 +1,6 @@
 #include "SuperDrill.hpp"
 
-void SuperDrill::drillBlock(Block *block) {
+void SuperDrill::drillBlock(Block *block, int direction) {
    if (!block->isDead()) {
       block->makeDead();
       if (block->isInAGroup()) {

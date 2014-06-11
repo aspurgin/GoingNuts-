@@ -3,7 +3,7 @@
 LavaBlock::LavaBlock() {};
 
 LavaBlock::LavaBlock(glm::vec3 center, int color) {
-   this->center = center;    
+   this->center = center;
    this->blockType = LAVABLOCK;
 }
 

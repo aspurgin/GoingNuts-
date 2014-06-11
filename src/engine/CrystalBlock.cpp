@@ -36,5 +36,5 @@ void CrystalBlock::makeDead() {
    }
    this->model = Assets::getMesh(Assets::EXPLODE_BLOCK_M);
    isFractured = true;
-   //genParticles();
+   genParticles(0);
 }

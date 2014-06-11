@@ -7,6 +7,7 @@
 #include "BlockTypes.hpp"
 #include "MovableTypes.hpp"
 #include "BlockGroup.hpp"
+#include "PlayerStates.hpp"
 #include "../shaders/CellShader.hpp"
 #include "../particles/Particles.hpp"
 #include "../assets/Assets.hpp"
@@ -24,7 +25,7 @@ class Block: public Movable {
       virtual float getMoveSpeedPercentage() = 0;
       int getTimesDrilled();
       bool isDead();
-      void addToTimesDrilled();
+      void addToTimesDrilled(int direction);
       int getBlockType();
       bool shouldDestroy();
       void incrementDeathCounter(double toAdd);
@@ -40,7 +41,7 @@ class Block: public Movable {
       void render();
       void setScale();
       void updatePSystem(double dt);
-      void genParticles();
+      void genParticles(int direction);
       void playHitGroundSound();
    protected:
       bool isFractured;

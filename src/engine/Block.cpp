@@ -23,9 +23,9 @@ int Block::getTimesDrilled() {
    return timesDrilled;
 }
 
-void Block::addToTimesDrilled() {
+void Block::addToTimesDrilled(int direction) {
    timesDrilled++;
-   genParticles();
+   genParticles(direction);
    if (timesDrilled >= getStrength()) {
       if (isInAGroup()) {
          groupIn->destroy();
@@ -67,7 +67,19 @@ bool Block::shouldFall() {
 	if (fallCounter >= HANG_TIME) {
       return true;
    }
-   scale = curScale;
+	scale = curScale;
+
+	if (fallCounter > 0) {
+      psystem->save();
+      psystem->setMatID(mat);
+      psystem->moveTo(glm::vec3(center + glm::vec3(psystem->srandf(.5), -0.55, 0)));
+      psystem->setTTL(.75);
+      psystem->setInitialVelocity(glm::vec3(0, 0, 0));
+      psystem->setSpread(glm::vec3(0, 0, 0));
+      psystem->setScale(0.03, 0.03, 0.03);
+      psystem->esAdd();
+      psystem->revert();
+	}
    return false;
 }
 
@@ -83,7 +95,7 @@ void Block::makeDead() {
    if (deathCounter < 0) {
       deathCounter = 0;
    }
-   genParticles();
+   genParticles(0);
 }
 
 bool Block::isInAGroup() {
@@ -135,28 +147,86 @@ void Block::render() {
    Renderable::render(r);
 }
 
-void Block::genParticles() {
-   /*switch (blockType) {
+void Block::genParticles(int direction) {
+   psystem->save();
+   switch (direction) {
+      case 0:
+         //printf("killing block?\n");
+         psystem->moveTo(center + glm::vec3(0, 0, 0));
+         psystem->setSpread(glm::vec3(4, 4, 4));
+         psystem->setInitialVelocity(glm::vec3(0, 4, 0));
+         break;
+      case DRILLING_DOWN:
+         //printf("drilling down\n");
+         psystem->moveTo(center + glm::vec3(0, 0.5, 0));
+         psystem->setSpread(glm::vec3(4, 4, 10));
+         psystem->setInitialVelocity(glm::vec3(0, 4.5, 0));
+         break;
+      case DRILLING_UP:
+         psystem->moveTo(center + glm::vec3(0, -0.5, 0));
+         psystem->setSpread(glm::vec3(4, 2, 4));
+         psystem->setInitialVelocity(glm::vec3(0, -1, 0));
+         break;
+      case DRILLING_RIGHT:
+         psystem->moveTo(center + glm::vec3(-0.5, 0, 0));
+         psystem->setSpread(glm::vec3(2, 4, 10));
+         psystem->setInitialVelocity(glm::vec3(-2.5, 4.5, 0));
+         break;
+      case DRILLING_LEFT:
+         psystem->moveTo(center + glm::vec3(0.5, 0, 0));
+         psystem->setSpread(glm::vec3(2, 4, 10));
+         psystem->setInitialVelocity(glm::vec3(2.5, 4.5, 0));
+         break;
+   }
+
+   psystem->setType(blockType);
+   psystem->setMatID(this->mat);
+   switch (blockType) {
       case CRYSTALBLOCK:
-         psystem->setType(CRYSTALBLOCK);
-         //psystem->mass = 1;
+         psystem->burst(25);
          break;
       case DIRTBLOCK:
-         //psystem->mass = 0.05;
+         psystem->setScale(0.05, 0.05, 0.05);
+         psystem->burst(25);
          break;
       case LAVABLOCK:
-         //s;
+         psystem->setScale(0.075, 0.075, 0.075);
+         psystem->burst(25);
          break;
       case SANDBLOCK:
-         //s;
+         psystem->setScale(0.02, 0.02, 0.02);
+         psystem->burst(25);
          break;
       case STONEBLOCK:
-         //s;
+         psystem->setScale(0.175, 0.175, 0.075);
+         if (this->state != DEAD) {
+            psystem->setMatID(9);
+            psystem->setScale(1, 1, 1);
+            psystem->setTTL(.5);
+            psystem->setTTLSpread(.25);
+            if (direction == DRILLING_UP) { //special case
+               psystem->setSpread(glm::vec3(1.5, 2, 1.5));
+            }
+            else {
+               psystem->setInitialVelocity(glm::vec3(0, 1, 0));
+               psystem->setSpread(glm::vec3(1, 2, 2));
+            }
+            psystem->burst(100);
+            ////
+            //spread = glm::vec3(4, 1, 4);
+            //vel = glm::vec3(0, 3, 0);
+            //psystem->setSpread(glm::vec3());
+            //psystem->setInitialVelocity(glm::vec3(0.1,0.1,0));
+            ////
+            //psystem->sparkBurst(25);
+         }
+         else {
+            psystem->burst(25);
+         }
+
          break;
-   }*/
-   psystem->setMatID(this->mat);
-   psystem->moveTo(center + glm::vec3(0, 0.5, 0));
-   psystem->burst(25);
+   }
+   psystem->revert();
 }
 
 void Block::playHitGroundSound() {

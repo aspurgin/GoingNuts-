@@ -13,7 +13,7 @@ namespace Assets {
       //create a map for sounds and music
       std::map<int, FMOD::Sound*> sounds, music;
 
-      Mesh *squirrel, *block, *nut, *depthWheel, *background, *guageMask1, *guageMask2, *scoreMask1, *scoreMask2, *youWon, *youLost, *cylinder, *goingNuts, *sun, *nutColor, *nutOutline, *energy, *points, *powerUpBG, *questionMark, *level, *depth, *depthMask, *scoreMask, *number, *hardHat, *dynamite, *hardHatImage, *dynamiteImage, *square, *playerImage, *nutImage, *explodeBlock, *number0, *number1, *number2, *number3, *number4, *number5, *number6, *number7, *number8, *number9, *newPercent, *superDrillImage, *sideWall, *startScreen, *levelMap;
+      Mesh *squirrel, *block, *nut, *depthWheel, *background, *guageMask1, *guageMask2, *scoreMask1, *scoreMask2, *youWon, *youLost, *cylinder, *goingNuts, *sun, *nutColor, *nutOutline, *energy, *points, *powerUpBG, *questionMark, *level, *depth, *depthMask, *scoreMask, *number, *hardHat, *dynamite, *hardHatImage, *dynamiteImage, *square, *playerImage, *nutImage, *explodeBlock, *number0, *number1, *number2, *number3, *number4, *number5, *number6, *number7, *number8, *number9, *newPercent, *superDrillImage, *spark, *sideWall, *startScreen, *levelMap;
 
       Texture whiteDepthWheel, blackDepthWheel, hudElements, cylinderNormal, cylinderColor, dirtColor, dirtNormal, rockColor, rockNormal, squirrelTex, crystalNormal, sandNormal, lavaNormal, backgroundTex, sideWallTex, levelMapTex;
       std::map<int, Mesh*> meshes;
@@ -58,6 +58,9 @@ namespace Assets {
          backgroundTex = Texture("assets/textures/RockyCaveTexture.jpg");
          sideWallTex = Texture("assets/textures/SideWall.jpg");
          levelMapTex = Texture("assets/textures/LevelMap.png");
+
+         //sparkTex = Texture("assets/textures/Spark.png");
+         //sparkTex = Texture("assets/textures/Spark2.png", RGBA_TEX);
 
          textures[WHITE_DEPTH_WHEEL_T] = whiteDepthWheel;
          textures[BLACK_DEPTH_WHEEL_T] = blackDepthWheel;
@@ -123,6 +126,7 @@ namespace Assets {
          number9 = new Mesh("assets/models/Number9.obj");
          newPercent = new Mesh("assets/models/NewPercent.obj");
          superDrillImage = new Mesh("assets/models/SuperDrillImage.obj");
+         spark = new Mesh("assets/models/Cube.obj.bu.bu");
          sideWall = new Mesh("assets/models/SideWall.obj");
          startScreen = new Mesh("assets/models/StartScreen.obj");
          levelMap = new Mesh("assets/models/LevelMap.obj");
@@ -172,6 +176,7 @@ namespace Assets {
          number9->buildBuffers();
          newPercent->buildBuffers();
          superDrillImage->buildBuffers();
+         spark->buildBuffers();
          sideWall->buildBuffers();
          levelMap->buildBuffers();
          startScreen->buildBuffers();
@@ -221,6 +226,7 @@ namespace Assets {
          meshes[Number9_M] = number9;
          meshes[NEW_PERCENT_M] = newPercent;
          meshes[SUPER_DRILL_IMAGE_M] = superDrillImage;
+         meshes[SPARK_M] = spark;
          meshes[SIDE_WALL_M] = sideWall;
          meshes[START_SCREEN_M] = startScreen;
          meshes[LEVEL_MAP_M] = levelMap;

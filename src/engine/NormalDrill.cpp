@@ -1,7 +1,7 @@
 #include "NormalDrill.hpp"
 
-void NormalDrill::drillBlock(Block *block) {
+void NormalDrill::drillBlock(Block *block, int direction) {
    if (!block->isDead()) {
-      block->addToTimesDrilled();
+      block->addToTimesDrilled(direction);
    }
 }
