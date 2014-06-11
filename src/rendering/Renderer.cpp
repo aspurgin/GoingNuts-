@@ -796,7 +796,7 @@ namespace Renderer {
       renderGame();
       renderHud();
       renderWinLoss();
-      renderLevelMap();
+      //renderLevelMap();
 
    }
 }
