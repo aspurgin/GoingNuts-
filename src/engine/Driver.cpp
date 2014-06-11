@@ -223,7 +223,20 @@ int main(void)
       //Loop until the user closes the window
       lastTime = glfwGetTime();
       while (!glfwWindowShouldClose(window) && !quit) {
-
+         if (game.getLevel() != level) {
+            int x = 0;
+            paused = true;
+            while (x < 150) {
+               glViewport(0, 0, (GLsizei)mode->width/*1280*/, (GLsizei)mode->height/*720*/);
+               Renderer::renderLevelMap();
+               glfwSwapBuffers(window);
+               glfwPollEvents();
+               x++;
+            }
+            paused = false;
+            level = game.getLevel();
+            lastTime = glfwGetTime();
+         }
          game.handleKeyInput();
 
          currentTime = glfwGetTime();

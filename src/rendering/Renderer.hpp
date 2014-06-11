@@ -53,6 +53,7 @@ namespace Renderer {
       void renderCube(glm::vec3, int, float);
       void renderSquirrel(glm::vec3, int, float);
       void renderStartScreen();
+      void renderLevelMap();
       //void renderNormalMappedCylinder();
       void render();
 };
