@@ -30,6 +30,7 @@ Hud::Hud(NutGame* nutGame) : Renderable()
    EnergyPercentage* energyPercentage = new EnergyPercentage(nutGame);
    LevelNumber* levelNumber = new LevelNumber(nutGame);
    NewPercent* newPercent = new NewPercent();
+   startScreen = new StartScreen();
    
    //components.push_back(background);
    components.push_back(depthGuage);
@@ -100,9 +101,15 @@ void Hud::renderWinLoss()
    {
       dynamiteImage->render();
    }
+   
    //if (nutGame->player.getHasSuperDrill())
    /*if (true)
    {
       superDrillImage->render();
    }*/
+}
+
+void Hud::renderStartScreen()
+{
+   startScreen->render();
 }
