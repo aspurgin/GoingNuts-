@@ -31,7 +31,7 @@ Hud::Hud(NutGame* nutGame) : Renderable()
    LevelNumber* levelNumber = new LevelNumber(nutGame);
    NewPercent* newPercent = new NewPercent();
    startScreen = new StartScreen();
-   levelMap = new LevelMap();
+   levelMap = new LevelMap(nutGame);
    
    //components.push_back(background);
    components.push_back(depthGuage);
