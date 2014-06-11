@@ -18,10 +18,17 @@
 
 NutGame game;
 bool tog = false;
+bool paused = false;
 
 
 void keyPressed(GLFWwindow *window, int key, int scancode, int action, int mods) {
-   if (!game.player.getIsDead() && !game.isWon) {
+   if (key == GLFW_KEY_P) {
+      if (action == GLFW_RELEASE) {
+         paused = !paused;
+      }
+   }
+   if (!paused && !game.player.getIsDead() && !game.isWon) {
+      
       if (key == GLFW_KEY_E) {
          if (action == GLFW_RELEASE) {
             tog = !tog;
@@ -112,10 +119,13 @@ void keyPressed(GLFWwindow *window, int key, int scancode, int action, int mods)
          game.useArrowKeys = !game.useArrowKeys;
       }
    }
-   if (key == GLFW_KEY_R) {
-      game.init();
+   if (!paused) {
+      if (key == GLFW_KEY_R) {
+         //game.reloadLevel();
+         game.init();
+      }
    }
-   else if (key == GLFW_KEY_ESCAPE) {
+   if (key == GLFW_KEY_ESCAPE) {
       glfwTerminate();
 
       exit(0);
@@ -180,19 +190,21 @@ int main(void)
    Assets::playMusic(Assets::GAME_M);
    //Loop until the user closes the window
    while (!glfwWindowShouldClose(window)) {
+      
       game.handleKeyInput();
       
       currentTime = glfwGetTime();
-      //game.handleKeyInput();
+         //game.handleKeyInput();
       delta = currentTime - lastTime;
       fpsTime += delta;
       
-      //if (!game.player.getIsDead() && !game.isWon) {
+      if (!paused) {
          game.checkGrid(delta);
          game.fallDown(delta);
          game.player.takeAwayEnergy(delta);
-      //}
-      game.updatePSystem(delta);
+         game.updatePSystem(delta);
+      }
+      
       if (fpsTime >= 1) {
          curFps = fpsCount;
          fpsCount = 0;
@@ -213,22 +225,25 @@ int main(void)
       
       glfwSetWindowTitle(window, scoreString);
 
+      
       lastTime = currentTime;
       // Render here
       glViewport(0, 0, (GLsizei)mode->width/*1280*/, (GLsizei)mode->height/*720*/);
       Renderer::toggle = tog;
-      Renderer::render();
-      //renderer.toggle = tog;
-      //renderer.render();
+      if (!paused) {
+         Renderer::render();
 
-      //Swap front and back buffers
-    
-      glfwSwapBuffers(window);
+         //renderer.toggle = tog;
+         //renderer.render();
 
+         //Swap front and back buffers
+
+         glfwSwapBuffers(window);
+      }
       //Poll for and process events
       glfwPollEvents();
 
-      glm::vec3 pos = Renderer::camera.getPosition();
+      //glm::vec3 pos = Renderer::camera.getPosition();
       //printf("Cam pos: %f, %f, %f\n", pos.x, pos.y, pos.z);
       fpsCount++;
       //Assets::update();
