@@ -75,8 +75,8 @@ ParticleSystem::ParticleSystem() {
    scaleY = 0.075;
    scaleZ = 0.075;
    time = 0;
-   ttl = 5;
-   ttlSpread = 4;
+   ttl = 3;
+   ttlSpread = 2;
    spread = glm::vec3(4, 1, 4);
    vel = glm::vec3(0, 3, 0);
    numParticles = 0;
@@ -504,7 +504,7 @@ void ParticleSystem::add() {
 }
 
 void ParticleSystem::burst(int num) {
-   for (int i = 0; i < num; i++) {
+   for (int i = 0; i < num && p.size() < 750; i++) {
       add();
    }
 }
@@ -520,7 +520,7 @@ void ParticleSystem::esAdd() {
 }
 
 void ParticleSystem::esBurst(int num) {
-   for (int i = 0; i < num; i++) {
+   for (int i = 0; i < num && es.size() < 750; i++) {
       esAdd();
    }
 }
