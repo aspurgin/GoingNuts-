@@ -61,6 +61,8 @@ void NutGame::init() {
    depth = 0;
    level = 0;
    levels.clear();
+
+   levels.push_back(Level("levels/level11.txt"));
    levels.push_back(Level("levels/level9.txt"));
    levels.push_back(Level("levels/level8.txt"));
    levels.push_back(Level("levels/level7.txt"));
@@ -72,7 +74,11 @@ void NutGame::init() {
    //levels.push_back(Level("levels/test.txt"));
 
    loadNextLevel();
+   //reloadLevel();
+}
 
+void NutGame::setLevel(int level) {
+   this->level = level;
 }
 
 void NutGame::connectBlocks() {
@@ -923,6 +929,7 @@ void NutGame::setNumRows(int rows) {
 void NutGame::loadNextLevel() {
    
    if (levels.size() > 0) {
+      
       for (int row = 0; row < NUMROWS; row++) {
          for (int col = 0; col < NUMCOLS; col++) {
             if (gameGrid[row][col] != 0 && gameGrid[row][col]->getMovableType() != PLAYER) {
@@ -935,6 +942,22 @@ void NutGame::loadNextLevel() {
       levels.pop_back();
       connectBlocks();
       level++;
+   }
+}
+
+void NutGame::reloadLevel() {
+
+   if (levels.size() > 0) {
+      for (int row = 0; row < NUMROWS; row++) {
+         for (int col = 0; col < NUMCOLS; col++) {
+            if (gameGrid[row][col] != 0 && gameGrid[row][col]->getMovableType() != PLAYER) {
+               delete gameGrid[row][col];
+            }
+         }
+      }
+
+      levels[levels.size() - 1].loadLevel(this);
+      connectBlocks();
    }
 }
 

@@ -83,6 +83,8 @@ class NutGame {
       void addToNutsLeft();
       void setNumRows(int rows);
       void loadNextLevel();
+      void reloadLevel();
+      void setLevel(int);
       bool checkIfGroupWillStopFalling(BlockGroup* group, float toAdd);
       bool isWon;
       bool useArrowKeys;
