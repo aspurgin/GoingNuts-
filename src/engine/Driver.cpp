@@ -147,6 +147,9 @@ void keyPressed(GLFWwindow *window, int key, int scancode, int action, int mods)
          //game.reloadLevel();
          game.init();
       }
+      else if (key == GLFW_KEY_L) {
+         game.reloadLevel();
+      }
    }
    if (key == GLFW_KEY_ESCAPE) {
       glfwTerminate();
@@ -179,17 +182,17 @@ int main(void)
    GLFWmonitor * mon = glfwGetPrimaryMonitor();
    const GLFWvidmode* mode;
    
-   if (mon != NULL) {
-      mode = glfwGetVideoMode(mon);
-      window = glfwCreateWindow(mode->width/*1280*/, mode->height/*720*/, "Going Nuts!", mon, NULL);
-   }
-   else {
+   //if (mon != NULL) {
+     // mode = glfwGetVideoMode(mon);
+     // window = glfwCreateWindow(mode->width/*1280*/, mode->height/*720*/, "Going Nuts!", mon, NULL);
+   //}
+   //else {
       GLFWvidmode * tmpmode = (GLFWvidmode *) malloc(sizeof (GLFWvidmode));
       tmpmode->width = 1280;
       tmpmode->height = 720;
       mode = tmpmode;
       window = glfwCreateWindow(mode->width/*1280*/, mode->height/*720*/, "Going Nuts!", NULL, NULL);
-   }
+   //}
 
    
    if (!window)
@@ -246,9 +249,9 @@ int main(void)
          //game.handleKeyInput();
          delta = currentTime - lastTime;
          fpsTime += delta;
-         if (delta > 0.26) {
+         /*if (delta > 0.26) {
             delta = 0.26;
-         }
+         }*/
 
          if (!paused) {
             for (float total = 0; total < delta; total += ONE_UPDATE) {

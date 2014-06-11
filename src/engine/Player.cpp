@@ -279,3 +279,27 @@ void Player::addToDepth() {
 int Player::getDepth() {
    return depth;
 }
+
+void Player::setDepth(int depth) {
+   this->depth = depth;
+}
+
+void Player::setScore(int score) {
+   this->score = score;
+}
+
+void Player::setNumDynamite(int numDynamite) {
+   this->numDynamites = numDynamite;
+}
+
+void Player::setHasHardHat(bool hasHardHat) {
+   this->hasHardHat = hasHardHat;
+}
+
+void Player::setEnergy(float energy) {
+   this->foodPercent = energy;
+}
+
+void Player::makeAlive() {
+   isDead = false;
+}
