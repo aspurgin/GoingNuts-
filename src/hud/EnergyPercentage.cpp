@@ -45,7 +45,7 @@ void EnergyPercentage::render() {
       numbers[0]->render();
    }
 
-   if (tensDigit > 0)
+   if (tensDigit > 0 || hundredsDigit > 0)
    {
       numbers[tensDigit]->setPositionNumber(1);
       numbers[tensDigit]->render();
