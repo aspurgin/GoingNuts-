@@ -438,7 +438,7 @@ bool NutGame::addToGroup(Block* thisBlock, Block* otherBlock) {
          if (thisBlock->getGroupIn() != otherBlock->getGroupIn()) {
             temp = otherBlock->getGroupIn();
             otherBlock->getGroupIn()->moveGroupTo(thisBlock->getGroupIn());
-            //DEBUG("Deleted Here 5");
+            DEBUG("Deleted Here 5");
             delete temp;
             wasAdded = true;
          }
@@ -457,6 +457,8 @@ bool NutGame::addToGroup(Block* thisBlock, Block* otherBlock) {
       thisBlock->getGroupIn()->addBlock(otherBlock);
       wasAdded = true;
    }
+   DEBUG("" << thisBlock->getCenter().y << "   " << thisBlock->getCenter().x);
+   DEBUG("" << otherBlock->getCenter().y << "   " << otherBlock->getCenter().x);
    if (wasAdded && !thisBlock->isDead()) {
       thisBlock->getGroupIn()->stopGroupFalling();
       thisBlock->getGroupIn()->setGroupCanNotFall();

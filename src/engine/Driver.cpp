@@ -16,6 +16,8 @@
 #include "../assets/Assets.hpp"
 #include "../rendering/Renderer.hpp"
 
+#define ONE_UPDATE 0.015
+
 NutGame game;
 bool tog = false;
 bool paused = false;
@@ -232,10 +234,12 @@ int main(void)
          fpsTime += delta;
 
          if (!paused) {
-            game.checkGrid(delta);
-            game.fallDown(delta);
-            game.player.takeAwayEnergy(delta);
-            game.updatePSystem(delta);
+            for (float total = 0; total < delta; total += ONE_UPDATE) {
+               game.checkGrid(ONE_UPDATE);
+               game.fallDown(ONE_UPDATE);
+               game.player.takeAwayEnergy(ONE_UPDATE);
+               game.updatePSystem(ONE_UPDATE);
+            }
          }
 
          if (fpsTime >= 1) {
