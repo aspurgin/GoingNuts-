@@ -8,11 +8,17 @@
 #include "../assets/Assets.hpp"
 #include "../rendering/Renderable.hpp"
 #include "LevelMapTexture.hpp"
+#include "PlayerImage.hpp"
+#include "../engine/NutGame.hpp"
 
 class LevelMap : public Renderable {
    public:
    	  LevelMapTexture* levelMapTexture;
-      LevelMap();
+   	  NutGame* nutGame;
+   	  PlayerImage* playerImage;
+   	  int lastLevel;
+   	  glm::vec3 levelPositions[8];
+      LevelMap(NutGame* nutGame);
       void render();
 };
 
