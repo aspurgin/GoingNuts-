@@ -226,7 +226,7 @@ int main(void)
          if (game.getLevel() != level) {
             int x = 0;
             paused = true;
-            while (x < 150) {
+            while (x < 1000) {
                glViewport(0, 0, (GLsizei)mode->width/*1280*/, (GLsizei)mode->height/*720*/);
                Renderer::renderLevelMap();
                glfwSwapBuffers(window);
@@ -236,6 +236,12 @@ int main(void)
             paused = false;
             level = game.getLevel();
             lastTime = glfwGetTime();
+         }
+         while (paused) {
+            glViewport(0, 0, (GLsizei)mode->width/*1280*/, (GLsizei)mode->height/*720*/);
+            Renderer::renderLevelMap();
+            glfwSwapBuffers(window);
+            glfwPollEvents();
          }
          game.handleKeyInput();
 

@@ -3,7 +3,7 @@
 LevelMap::LevelMap(NutGame* nutGame) {
    levelMapTexture = new LevelMapTexture();
    this->nutGame = nutGame;
-   lastLevel = 1;
+   lastLevel = 0;
    playerImage = new PlayerImage();
    levelPositions[0] = glm::vec3(0.0,8.0,0.0);
    levelPositions[1] = glm::vec3(0.0,6.3,0.0);
@@ -18,7 +18,7 @@ LevelMap::LevelMap(NutGame* nutGame) {
 
 void LevelMap::render() {
    levelMapTexture->render();
-   int currLevel = nutGame->getLevel();
+   int currLevel = nutGame->getLevel() - 1;
 
    if (currLevel != lastLevel)
    {
@@ -26,16 +26,16 @@ void LevelMap::render() {
    	  lastLevel = currLevel;
    }
 
-   float percent = ((float)count)/100.0f;
-   printf("%f\n", percent);
+   float percent = ((float)count)/1000.0f;
+   //printf("%f\n", percent);
 
    glm::vec3 newPos = percent*levelPositions[currLevel] + (1.0f-percent)*levelPositions[currLevel-1];
-   printf("%f, %f, %f\n", newPos.x, newPos.y, newPos.z);
+   //printf("%f, %f, %f\n", newPos.x, newPos.y, newPos.z);
 
    playerImage->setPosition(newPos);
    playerImage->render();
 
-   if (count < 100)
+   if (count < 1000)
    {
       count++;
    }
