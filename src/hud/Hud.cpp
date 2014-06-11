@@ -31,6 +31,7 @@ Hud::Hud(NutGame* nutGame) : Renderable()
    LevelNumber* levelNumber = new LevelNumber(nutGame);
    NewPercent* newPercent = new NewPercent();
    startScreen = new StartScreen();
+   levelMap = new LevelMap();
    
    //components.push_back(background);
    components.push_back(depthGuage);
@@ -112,4 +113,9 @@ void Hud::renderWinLoss()
 void Hud::renderStartScreen()
 {
    startScreen->render();
+}
+
+void Hud::renderLevelMap()
+{
+   levelMap->render();
 }

@@ -34,6 +34,7 @@
 #include "NewPercent.hpp"
 #include "SuperDrillImage.hpp"
 #include "StartScreen.hpp"
+#include "LevelMap.hpp"
 
 class Hud: public Renderable
 {
@@ -44,6 +45,7 @@ class Hud: public Renderable
       void setModel();
       void renderWinLoss();
       void renderStartScreen();
+      void renderLevelMap();
 
    private:
       NutGame* nutGame;
@@ -54,6 +56,7 @@ class Hud: public Renderable
       QuestionMark* questionMark;
       SuperDrillImage* superDrillImage;
       StartScreen* startScreen;
+      LevelMap* levelMap;
       std::vector<Renderable*> components;
 };
 
