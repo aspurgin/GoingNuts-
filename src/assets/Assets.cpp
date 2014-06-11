@@ -13,9 +13,9 @@ namespace Assets {
       //create a map for sounds and music
       std::map<int, FMOD::Sound*> sounds, music;
 
-      Mesh *squirrel, *block, *nut, *depthWheel, *background, *guageMask1, *guageMask2, *scoreMask1, *scoreMask2, *youWon, *youLost, *cylinder, *goingNuts, *sun, *nutColor, *nutOutline, *energy, *points, *powerUpBG, *questionMark, *level, *depth, *depthMask, *scoreMask, *number, *hardHat, *dynamite, *hardHatImage, *dynamiteImage, *square, *playerImage, *nutImage, *explodeBlock, *number0, *number1, *number2, *number3, *number4, *number5, *number6, *number7, *number8, *number9, *newPercent, *superDrillImage, *spark;
+      Mesh *squirrel, *block, *nut, *depthWheel, *background, *guageMask1, *guageMask2, *scoreMask1, *scoreMask2, *youWon, *youLost, *cylinder, *goingNuts, *sun, *nutColor, *nutOutline, *energy, *points, *powerUpBG, *questionMark, *level, *depth, *depthMask, *scoreMask, *number, *hardHat, *dynamite, *hardHatImage, *dynamiteImage, *square, *playerImage, *nutImage, *explodeBlock, *number0, *number1, *number2, *number3, *number4, *number5, *number6, *number7, *number8, *number9, *newPercent, *superDrillImage, *spark, *sideWall, *startScreen, *levelMap;
 
-      Texture whiteDepthWheel, blackDepthWheel, hudElements, cylinderNormal, cylinderColor, dirtColor, dirtNormal, rockColor, rockNormal, squirrelTex, crystalNormal, sandNormal, lavaNormal, backgroundTex;//, sparkTex;
+      Texture whiteDepthWheel, blackDepthWheel, hudElements, cylinderNormal, cylinderColor, dirtColor, dirtNormal, rockColor, rockNormal, squirrelTex, crystalNormal, sandNormal, lavaNormal, backgroundTex, sideWallTex, levelMapTex;
       std::map<int, Mesh*> meshes;
       std::map<int, Texture> textures;
       CellShader cshader;
@@ -25,6 +25,7 @@ namespace Assets {
       PhongTextureShader ptshader;
       PhongShader pshader;
       BloomShader bshader;
+      FMOD::Channel *musicChannel;
   
       //code found from tutorial: http://katyscode.wordpress.com/2012/10/05/cutting-your-teeth-on-fmod-part-1-build-environment-initialization-and-playing-sounds/
       void FMODErrorCheck(FMOD_RESULT res) {
@@ -55,6 +56,8 @@ namespace Assets {
          lavaNormal = Texture("assets/textures/LavaTileableNormals1.png");
          
          backgroundTex = Texture("assets/textures/RockyCaveTexture.jpg");
+         sideWallTex = Texture("assets/textures/SideWall.jpg");
+         levelMapTex = Texture("assets/textures/LevelMap.png");
 
          //sparkTex = Texture("assets/textures/Spark.png");
          //sparkTex = Texture("assets/textures/Spark2.png", RGBA_TEX);
@@ -73,8 +76,8 @@ namespace Assets {
          textures[SAND_T] = sandNormal;
          textures[LAVA_T] = lavaNormal;
          textures[BACKGROUND_T] = backgroundTex;
-         //textures[SPARK_T] = sparkTex;
-
+         textures[SIDE_WALL_T] = sideWallTex;
+         textures[LEVEL_MAP_T] = levelMapTex;
       }
 
       void loadMeshes() {
@@ -124,7 +127,9 @@ namespace Assets {
          newPercent = new Mesh("assets/models/NewPercent.obj");
          superDrillImage = new Mesh("assets/models/SuperDrillImage.obj");
          spark = new Mesh("assets/models/Cube.obj.bu.bu");
-         
+         sideWall = new Mesh("assets/models/SideWall.obj");
+         startScreen = new Mesh("assets/models/StartScreen.obj");
+         levelMap = new Mesh("assets/models/LevelMap.obj");
 
          block->buildBuffers();
          explodeBlock->buildBuffers();
@@ -172,6 +177,9 @@ namespace Assets {
          newPercent->buildBuffers();
          superDrillImage->buildBuffers();
          spark->buildBuffers();
+         sideWall->buildBuffers();
+         levelMap->buildBuffers();
+         startScreen->buildBuffers();
 
          meshes[SQUIRREL_M] = squirrel;
          meshes[BLOCK_M] = block;
@@ -219,6 +227,9 @@ namespace Assets {
          meshes[NEW_PERCENT_M] = newPercent;
          meshes[SUPER_DRILL_IMAGE_M] = superDrillImage;
          meshes[SPARK_M] = spark;
+         meshes[SIDE_WALL_M] = sideWall;
+         meshes[START_SCREEN_M] = startScreen;
+         meshes[LEVEL_MAP_M] = levelMap;
       }
 
       void initShaders() {
@@ -298,13 +309,16 @@ namespace Assets {
 
          //load all music tracks
          loadTrack("assets/audio/tracks/goingnuts.mp3", GAME_M);
-         loadTrack("assets/audio/tracks/goingnutsgg.mp3", TITLE_M);
-
+         loadTrack("assets/audio/tracks/goingnutstitle.mp3", TITLE_M);
+         
          //load all sound effects
          loadSound("assets/audio/sfx/blockfall.wav", BLOCK_FALL_S);
          loadSound("assets/audio/sfx/itemget.wav", ITEM_S);
          loadSound("assets/audio/sfx/nutget.wav", NUT_S);
-
+         loadSound("assets/audio/sfx/drill.wav", DRILL_S);
+         loadSound("assets/audio/sfx/explosion.wav", EXPLODE_S);
+         loadSound("assets/audio/sfx/pauseGame.wav", PAUSE_S);
+         loadSound("assets/audio/sfx/resumeGame.wav", RESUME_S);
       }
 
       //free everything
@@ -349,9 +363,15 @@ namespace Assets {
          channel->getFrequency(&frequency);
          channel->setMode(FMOD_LOOP_NORMAL);
          printf("frequency: %f\n", frequency);
-         channel->setFrequency(frequency*1.28f);
+         channel->setFrequency(frequency*1.18f);
          channel->setPaused(false);
+         musicChannel = channel;
       }
+   }
+
+   void stopMusic() {
+      musicChannel->stop();
+      //musicChannel->setMute(true);
    }
 
    Mesh* getMesh(int type) {

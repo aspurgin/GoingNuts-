@@ -80,9 +80,22 @@ namespace Renderer {
 
       void renderHud() {
          //*** Render the hud ***/
+         glEnable(GL_CULL_FACE);
+         glCullFace(GL_BACK);
          glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
          glEnable(GL_BLEND);
          glDisable(GL_DEPTH_TEST);
+
+         glUseProgram(ptshader.shadeProg);
+         modelTrans.useModelViewMatrix();
+         modelTrans.loadIdentity();
+
+         orthographicCamera.setView(ptshader.h_uViewMatrix);
+         orthographicCamera.setProjectionMatrix(ptshader.h_uProjMatrix);
+         safe_glUniform3f(ptshader.h_lightPos, light.position.x, light.position.y, light.position.z);
+         safe_glUniform3f(ptshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
+
+         glUseProgram(0);
 
          glUseProgram(ftshader.shadeProg);
          modelTrans.useModelViewMatrix();
@@ -96,7 +109,7 @@ namespace Renderer {
          //camera.setPosition(glm::vec3(3.0f, ngame->player.getCenter().y + 1, 6.0f));
          //light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y - 1, 6.0f));
 
-         glUseProgram(0);
+         /*glUseProgram(0);
 
          glUseProgram(ptshader.shadeProg);
          modelTrans.useModelViewMatrix();
@@ -105,13 +118,14 @@ namespace Renderer {
          orthographicCamera.setView(ptshader.h_uViewMatrix);
          orthographicCamera.setProjectionMatrix(ptshader.h_uProjMatrix);
          safe_glUniform3f(ptshader.h_lightPos, light.position.x, light.position.y, light.position.z);
-         safe_glUniform3f(ptshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
+         safe_glUniform3f(ptshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);*/
 
          hud->render();
 
          glUseProgram(0);
          glDisable(GL_BLEND);
          glEnable(GL_DEPTH_TEST);
+         glDisable(GL_CULL_FACE);
 
          //Clear the depth buffer to make the game draw over the HUD
          glClear(GL_DEPTH_BUFFER_BIT);
@@ -154,11 +168,11 @@ namespace Renderer {
          glEnable(GL_BLEND);
          glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
          glUseProgram(bshader.shadeProgBright);
-         glViewport(0, 0, 1280, 720);
+         glViewport(0, 0, /*1280*/winWidth, /*720*/winHeight);
          glClearColor(0, 0, 0, 1.0);
          glEnable(GL_TEXTURE_2D);
          camera.setView(bshader.h_uViewMatrixBright);
-         camera.setProjectionMatrix(bshader.h_uProjMatrixBright, 1280.0 / 720.0, 0.1f, 100.0f);
+         camera.setProjectionMatrix(bshader.h_uProjMatrixBright, ((float)winWidth) / winHeight/*1280.0 / 720.0*/, 0.1f, 100.0f);
          //glActiveTexture(GL_TEXTURE0);
          //glBindTexture(GL_TEXTURE_2D, 0);
          for (std::list<Renderable*>::iterator it = currObjs.begin(); it != currObjs.end(); ++it) {
@@ -178,6 +192,43 @@ namespace Renderer {
          for (std::list<Renderable*>::iterator it = blocks.begin(); it != blocks.end(); ++it) {
             (*it)->render();
          }
+
+         glUseProgram(0);
+
+      }
+
+      void renderSideWalls() {
+         SideWall leftWall1(0.0), rightWall1(180.0);
+         usePTShader();
+         leftWall1.setPosition(glm::vec3(-0.5,0.0,-0.0));
+         leftWall1.render();
+
+         rightWall1.setPosition(glm::vec3(6.5,0.0,-0.0));
+         rightWall1.render();
+
+         SideWall leftWall2(0.0), rightWall2(180.0);
+         usePTShader();
+         leftWall2.setPosition(glm::vec3(-0.5,-12.5,-0.0));
+         leftWall2.render();
+
+         rightWall2.setPosition(glm::vec3(6.5,-12.5,-0.0));
+         rightWall2.render();
+
+         SideWall leftWall3(0.0), rightWall3(180.0);
+         usePTShader();
+         leftWall3.setPosition(glm::vec3(-0.5,-25.0,-0.0));
+         leftWall3.render();
+
+         rightWall3.setPosition(glm::vec3(6.5,-25.0,-0.0));
+         rightWall3.render();
+
+         SideWall leftWall4(0.0), rightWall4(180.0);
+         usePTShader();
+         leftWall4.setPosition(glm::vec3(-0.5,-37.5,-0.0));
+         leftWall4.render();
+
+         rightWall4.setPosition(glm::vec3(6.5,-37.5,-0.0));
+         rightWall4.render();
 
          glUseProgram(0);
 
@@ -203,11 +254,11 @@ namespace Renderer {
          glEnable(GL_BLEND);
          glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
          glUseProgram(bshader.shadeProgBright);
-         glViewport(0, 0, 1280, 720);
+         glViewport(0, 0, /*1280*/winWidth, /*720*/winHeight);
          glClearColor(1, 1, 1, 1.0);
          glEnable(GL_TEXTURE_2D);
          camera.setView(bshader.h_uViewMatrixBright);
-         camera.setProjectionMatrix(bshader.h_uProjMatrixBright, 1280.0 / 720.0, 0.1f, 100.0f);
+         camera.setProjectionMatrix(bshader.h_uProjMatrixBright, ((float)winWidth) / winHeight/*1280.0 / 720.0*/, 0.1f, 100.0f);
          // glActiveTexture(GL_TEXTURE0);
          // glBindTexture(GL_TEXTURE_2D, fbBloom_tex1);
          for (std::list<Renderable*>::iterator iter = dynamite.begin(); iter != dynamite.end(); ++iter) {
@@ -232,11 +283,12 @@ namespace Renderer {
          glEnable(GL_BLEND);
          glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
          glUseProgram(bshader.shadeProgBlurHor);
-         glViewport(0, 0, 1280, 720);
+         //glViewport(0, 0, 1280, 720);
+         glViewport(0, 0, /*1280*/winWidth, /*720*/winHeight);
          glClearColor(1, 1, 1, 1.0);
          glEnable(GL_TEXTURE_2D);
          camera.setView(bshader.h_uViewMatrixBlurHor);
-         camera.setProjectionMatrix(bshader.h_uProjMatrixBlurHor, 1280.0 / 720.0, 0.1f, 100.0f);
+         camera.setProjectionMatrix(bshader.h_uProjMatrixBlurHor, ((float)winWidth) / winHeight/*1280.0 / 720.0*/, 0.1f, 100.0f);
          glActiveTexture(GL_TEXTURE0);
          glBindTexture(GL_TEXTURE_2D, fbBloom_tex1);
          for (std::list<Renderable*>::iterator iter2 = dynamite.begin(); iter2 != dynamite.end(); ++iter2) {
@@ -261,11 +313,12 @@ namespace Renderer {
          glEnable(GL_BLEND);
          glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
          glUseProgram(bshader.shadeProgBlurVer);
-         glViewport(0, 0, 1280, 720);
+         //glViewport(0, 0, 1280, 720);
+         glViewport(0, 0, /*1280*/winWidth, /*720*/winHeight);
          glClearColor(1, 1, 1, 1.0);
          glEnable(GL_TEXTURE_2D);
          camera.setView(bshader.h_uViewMatrixBlurVer);
-         camera.setProjectionMatrix(bshader.h_uProjMatrixBlurVer, 1280.0 / 720.0, 0.1f, 100.0f);
+         camera.setProjectionMatrix(bshader.h_uProjMatrixBlurVer, ((float)winWidth) / winHeight/*1280.0 / 720.0*/, 0.1f, 100.0f);
          glActiveTexture(GL_TEXTURE0);
          glBindTexture(GL_TEXTURE_2D, fbBloom_tex2);
          for (std::list<Renderable*>::iterator iter3 = dynamite.begin(); iter3 != dynamite.end(); ++iter3) {
@@ -289,11 +342,12 @@ namespace Renderer {
          glEnable(GL_BLEND);
          glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
          glUseProgram(bshader.shadeProgComposite);
-         glViewport(0, 0, 1280, 720);
+         //glViewport(0, 0, 1280, 720);
+         glViewport(0, 0, /*1280*/winWidth, /*720*/winHeight);
          glClearColor(1, 1, 1, 1.0);
          glEnable(GL_TEXTURE_2D);
          camera.setView(bshader.h_uViewMatrixComposite);
-         camera.setProjectionMatrix(bshader.h_uProjMatrixComposite, 1280.0 / 720.0, 0.1f, 100.0f);
+         camera.setProjectionMatrix(bshader.h_uProjMatrixComposite, ((float)winWidth) / winHeight/*1280.0 / 720.0*/, 0.1f, 100.0f);
          safe_glUniform3f(bshader.h_lightPosComposite, light.position.x, light.position.y, light.position.z);
          safe_glUniform3f(bshader.h_cameraPosComposite, -camera.eye.x, -camera.eye.y, -camera.eye.z);
          glActiveTexture(GL_TEXTURE0);
@@ -362,7 +416,6 @@ namespace Renderer {
             camera.setView(cshader.h_uViewMatrix);
             camera.setProjectionMatrix(cshader.h_uProjMatrix, (float)winWidth / winHeight, 0.1f, 100.0f);
          }*/
-
          renderWalls();
          ngame->psystem.render();
          //renderDynamite();
@@ -372,7 +425,8 @@ namespace Renderer {
          renderBloomObjects();
 
          renderPlayer();
-
+        
+         renderSideWalls();
          
 
          glUseProgram(0);
@@ -397,6 +451,38 @@ namespace Renderer {
          //light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y - 1, 6.0f));
 
          hud->renderWinLoss();
+
+         glUseProgram(0);
+         glDisable(GL_BLEND);
+         glEnable(GL_DEPTH_TEST);
+
+         //Clear the depth buffer to make the game draw over the HUD
+         glClear(GL_DEPTH_BUFFER_BIT);
+
+         glUseProgram(0);
+      }
+
+      
+
+      void renderLevelMap() {
+         //*** Render Win Loss ***/
+         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+         glEnable(GL_BLEND);
+         glDisable(GL_DEPTH_TEST);
+
+         glUseProgram(ftshader.shadeProg);
+         modelTrans.useModelViewMatrix();
+         modelTrans.loadIdentity();
+
+         orthographicCamera.setView(ftshader.h_uViewMatrix);
+         orthographicCamera.setProjectionMatrix(ftshader.h_uProjMatrix);
+         safe_glUniform3f(ftshader.h_lightPos, light.position.x, light.position.y, light.position.z);
+         safe_glUniform3f(ftshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
+
+         //camera.setPosition(glm::vec3(3.0f, ngame->player.getCenter().y + 1, 6.0f));
+         //light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y - 1, 6.0f));
+
+         hud->renderLevelMap();
 
          glUseProgram(0);
          glDisable(GL_BLEND);
@@ -536,8 +622,8 @@ namespace Renderer {
            GL_TEXTURE_2D,
            0,
            GL_RGBA,
-           1280,
-           720,
+           winWidth,//1280,
+           winHeight,//720,
            0,
            GL_RGBA,
            GL_UNSIGNED_BYTE,
@@ -556,7 +642,7 @@ namespace Renderer {
          glDisable(GL_TEXTURE_2D);
 
          glBindRenderbuffer(GL_RENDERBUFFER, *fbBloom_depth);
-         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, 1280, 720);
+         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, winWidth/*1280*/, winHeight/*720*/);
          glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, *fbBloom_depth);
 
          GLenum draw_bufs2[] = { GL_COLOR_ATTACHMENT0 };
@@ -587,7 +673,7 @@ namespace Renderer {
 
    void useCTShader() {
       glUseProgram(cetshader.shadeProg);
-      glViewport(0, 0, (GLsizei)1280, (GLsizei)720);
+      glViewport(0, 0, (GLsizei)winWidth/*1280*/, (GLsizei)winHeight/*720*/);
       modelTrans.useModelViewMatrix();
       modelTrans.loadIdentity();
 
@@ -599,7 +685,7 @@ namespace Renderer {
 
    void useCShader() {
       glUseProgram(cshader.shadeProg);
-      glViewport(0, 0, (GLsizei)1280, (GLsizei)720);
+      glViewport(0, 0, (GLsizei)winWidth/*1280*/, (GLsizei)winHeight/*720*/);
       modelTrans.useModelViewMatrix();
       modelTrans.loadIdentity();
 
@@ -635,8 +721,8 @@ namespace Renderer {
       hud = theHud;
       //left = Wall(glm::vec3(-1.5, -10, 0));
       //right = Wall(glm::vec3(7.5, -10, 0));
-      back = Wall(glm::vec3(3.0, -8.0, -3.0));
-      back.setScale(glm::vec3(4.0, 12.0, 0.1));
+      back = Wall(glm::vec3(3.0, -15.0, -3.0));
+      back.setScale(glm::vec3(12.0, 50.0, 0.1));
       toggle = false;
       initialize();
       //hello
@@ -648,8 +734,8 @@ namespace Renderer {
       glClearDepth(1.0f);  // Depth Buffer Setup
       glDepthFunc(GL_LEQUAL); // The Type Of Depth Testing
       glEnable(GL_DEPTH_TEST);// Enable Depth Testing
-      glEnable(GL_CULL_FACE);
-      glCullFace(GL_BACK);
+      //glEnable(GL_CULL_FACE);
+      //glCullFace(GL_BACK);
       glEnable(GL_TEXTURE_2D);
       
       setUpShadowFBO();
@@ -664,13 +750,43 @@ namespace Renderer {
       cylinder = new Cylinder();
    }
 
+   void renderStartScreen() {
+      //*** Render Win Loss ***/
+      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+      glEnable(GL_BLEND);
+      glDisable(GL_DEPTH_TEST);
+
+      glUseProgram(ftshader.shadeProg);
+      modelTrans.useModelViewMatrix();
+      modelTrans.loadIdentity();
+
+      orthographicCamera.setView(ftshader.h_uViewMatrix);
+      orthographicCamera.setProjectionMatrix(ftshader.h_uProjMatrix);
+      safe_glUniform3f(ftshader.h_lightPos, light.position.x, light.position.y, light.position.z);
+      safe_glUniform3f(ftshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
+
+      //camera.setPosition(glm::vec3(3.0f, ngame->player.getCenter().y + 1, 6.0f));
+      //light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y - 1, 6.0f));
+
+      hud->renderStartScreen();
+
+      glUseProgram(0);
+      glDisable(GL_BLEND);
+      glEnable(GL_DEPTH_TEST);
+
+      //Clear the depth buffer to make the game draw over the HUD
+      glClear(GL_DEPTH_BUFFER_BIT);
+
+      glUseProgram(0);
+   }
+
    void render() {
       currObjs = ngame->getObjectsToDraw();
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-      renderHud();
+      //renderHud();
       
       float eyeOffsetX = 3.0 + (ngame->player.getCenter().x - 3)/1.5;
-      float eyeOffsetZ = 12.0 + (ngame->player.getCenter().x - 3)*(ngame->player.getCenter().x - 3)/9.0;
+      float eyeOffsetZ = 11.0 + (ngame->player.getCenter().x - 3)*(ngame->player.getCenter().x - 3)/9.0;
       camera.setEye(glm::vec3(eyeOffsetX, ngame->player.getCenter().y, eyeOffsetZ));
       light.setPosition(glm::vec3(3.0, ngame->player.getCenter().y, 8.0f));
 
@@ -678,9 +794,10 @@ namespace Renderer {
       renderLightShadowMap();
       //renderBloomScene();
       renderGame();
+      renderHud();
       renderWinLoss();
-      //renderDebugShadowMapText();
-      //renderNormalMappedCylinder();
+      renderLevelMap();
+
    }
 }
 

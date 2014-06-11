@@ -49,10 +49,10 @@ void DepthGuageMask::render() {
    glDrawElements(GL_TRIANGLES, mask1->getIdxCount(), GL_UNSIGNED_INT, 0);
    modelTrans.popMatrix();
 
-   safe_glDisableVertexAttribArray(cshader.h_aPosition);
+   /*safe_glDisableVertexAttribArray(cshader.h_aPosition);
    safe_glDisableVertexAttribArray(cshader.h_aNormal);
    safe_glDisableVertexAttribArray(cshader.h_vertexUV);
-
+   */
 
    cshader.setMaterial(mat);
    modelTrans.useModelViewMatrix();
@@ -91,6 +91,7 @@ void DepthGuageMask::render() {
    safe_glDisableVertexAttribArray(cshader.h_aPosition);
    safe_glDisableVertexAttribArray(cshader.h_aNormal);
    safe_glDisableVertexAttribArray(cshader.h_vertexUV);
+   glUseProgram(0);
 }
 
 void DepthGuageMask::setModel() {

@@ -28,6 +28,7 @@ Player::Player(glm::vec3 center, float width, float height) {
    this->colorTexture = Assets::getTexture(Assets::SQUIRREL_T);
    this->hat = HardHat(center, 0.99, 0.99);
    this->hat.setScale(0.25f, 0.25f, 0.25f);
+   this->hat.setShaderType(C_SHADE);
    this->hat.setSpin(false);
    this->threwDynamite = false;
    this->state = STATIC;
@@ -45,6 +46,7 @@ void Player::drillBlock(Block *block, int state) {
    }
    this->state = state;
    drillCount = 0;
+   Assets::playSound(Assets::DRILL_S);
 }
 
 int Player::getMovableType() {
@@ -100,9 +102,9 @@ void Player::checkMoveState() {
 void Player::setAnimation() {
    switch(state) {
       case DRILLING_DOWN:
-         model->setAt("drill", glfwGetTime()*2);
+         model->setAt("drill", glfwGetTime() * 2);
          drillCount++;
-         if(drillCount > 20) {
+         if (drillCount > 20) {
             state = STATIC;
             drillCount = 0;
          }
@@ -212,6 +214,7 @@ bool Player::getHasHardHat() {
 
 void Player::collectHardHat() {
    hasHardHat = true;
+   Assets::playSound(Assets::ITEM_S);
 }
 
 void Player::takeAwayHardHat() {
@@ -221,10 +224,12 @@ void Player::takeAwayHardHat() {
 void Player::collectSuperDrill() {
    delete this->drill;
    this->drill = new SuperDrill();
+   Assets::playSound(Assets::ITEM_S);
 }
 
 void Player::collectDynamite() {
    numDynamites++;
+   Assets::playSound(Assets::ITEM_S);
 }
 
 void Player::throwDynamite() {

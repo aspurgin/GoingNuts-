@@ -83,6 +83,8 @@ class NutGame {
       void addToNutsLeft();
       void setNumRows(int rows);
       void loadNextLevel();
+      void reloadLevel();
+      void setLevel(int);
       bool checkIfGroupWillStopFalling(BlockGroup* group, float toAdd);
       bool isWon;
       bool useArrowKeys;
@@ -101,6 +103,7 @@ class NutGame {
       bool checkingGroupForOtherAdds;
       std::vector<BlockGroup*> mightFallGroupList;
       std::vector<Movable*> mightFallBlockList;
+      std::vector<Renderable*> otherDrawables;
       int NUMROWS;
       int depth;
       std::vector<Level> levels;

@@ -2,6 +2,7 @@
 #define __BLOCK_H__
 
 #include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
 #include "Movable.hpp"
 #include "BlockTypes.hpp"
 #include "MovableTypes.hpp"
@@ -12,7 +13,8 @@
 #include "../assets/Assets.hpp"
 #include <vector>
 
-#define HANG_TIME 1
+
+#define HANG_TIME 1.5
 
 class BlockGroup;
 

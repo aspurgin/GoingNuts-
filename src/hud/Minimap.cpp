@@ -5,6 +5,17 @@ Minimap::Minimap(NutGame* nutGame) {
 }
 
 void Minimap::render() {
+   float levelYSpace;
+
+   if (nutGame->getLevel() == 1)
+   {
+      levelYSpace = 0.0;
+   }
+   else
+   {
+      levelYSpace = 2.0;
+   }
+
    for (int i = 0; i < nutGame->gameGrid.size(); i++)
    {
    	  std::vector<Movable*> gridLine = nutGame->gameGrid[i];
@@ -13,7 +24,7 @@ void Minimap::render() {
          if (gridLine[j])
          {
          	float x = ((float)j)*0.35f - 12.0f;
-         	float y = -1.0f*((float)i)*0.35f + 0.5f;
+         	float y = -1.0f*((float)i)*0.35f + 0.5f + levelYSpace;
          	RenderType rtype = gridLine[j]->type;
          	
          	if (rtype == DIRT_BLOCK_R || rtype == CRYSTAL_BLOCK_R || rtype == LAVA_BLOCK_R 

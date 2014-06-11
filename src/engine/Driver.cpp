@@ -18,10 +18,38 @@
 
 NutGame game;
 bool tog = false;
+bool paused = false;
+bool gameHasNotStarted = true;
+int level;
+bool quit = false;
 
 
 void keyPressed(GLFWwindow *window, int key, int scancode, int action, int mods) {
-   if (!game.player.getIsDead() && !game.isWon) {
+   if (key == GLFW_KEY_G) {
+      if (action == GLFW_RELEASE) {
+         gameHasNotStarted = false;
+      }
+   }
+   else if (key == GLFW_KEY_Q) {
+      if (action == GLFW_RELEASE) {
+         quit = true;
+      }
+   }
+   if (key == GLFW_KEY_P) {
+      if (action == GLFW_RELEASE) {
+         paused = !paused;
+         if (paused) {
+            Assets::playSound(Assets::PAUSE_S);
+            Assets::stopMusic();
+         }
+         else {
+            Assets::playSound(Assets::RESUME_S);
+            Assets::playMusic(Assets::GAME_M);
+         }
+      }
+   }
+   if (!paused && !game.player.getIsDead() && !game.isWon) {
+      
       if (key == GLFW_KEY_E) {
          if (action == GLFW_RELEASE) {
             tog = !tog;
@@ -112,13 +140,17 @@ void keyPressed(GLFWwindow *window, int key, int scancode, int action, int mods)
          game.useArrowKeys = !game.useArrowKeys;
       }
    }
-   if (key == GLFW_KEY_R) {
-      game.init();
+   if (!paused) {
+      if (key == GLFW_KEY_R) {
+         //game.reloadLevel();
+         game.init();
+      }
    }
-   else if (key == GLFW_KEY_ESCAPE) {
+   if (key == GLFW_KEY_ESCAPE) {
       glfwTerminate();
+      quit = true;
 
-      exit(0);
+      //exit(0);
    }
 }
 
@@ -142,7 +174,22 @@ int main(void)
       return -1;
 
    //Create a windowed mode window and its OpenGL context
-   window = glfwCreateWindow(1280, 720, "Going Nuts!", NULL, NULL);
+   GLFWmonitor * mon = glfwGetPrimaryMonitor();
+   const GLFWvidmode* mode;
+   
+   if (mon != NULL) {
+      mode = glfwGetVideoMode(mon);
+      window = glfwCreateWindow(mode->width/*1280*/, mode->height/*720*/, "Going Nuts!", mon, NULL);
+   }
+   else {
+      GLFWvidmode * tmpmode = (GLFWvidmode *) malloc(sizeof (GLFWvidmode));
+      tmpmode->width = 1280;
+      tmpmode->height = 720;
+      mode = tmpmode;
+      window = glfwCreateWindow(mode->width/*1280*/, mode->height/*720*/, "Going Nuts!", NULL, NULL);
+   }
+
+   
    if (!window)
    {
       glfwTerminate();
@@ -155,70 +202,88 @@ int main(void)
    GLenum err = glewInit();
    glfwSetKeyCallback(window, keyPressed);
    Assets::loadAssets();
-   //Camera& myCam = Renderer::getCamera();
-   game.init();
-   Hud hud(&game);
+   //while (!glfwWindowShouldClose(window)) {
+      //Camera& myCam = Renderer::getCamera();
+      Hud hud(&game);
+      Renderer::Renderer(mode->width/*1280*/, mode->height/*720*/, &game, &hud);
+      //Renderer renderer(1280, 720, &game, &hud);
 
-   Renderer::Renderer(1280, 720, &game, &hud);
-   //Renderer renderer(1280, 720, &game, &hud);
-   
-   Assets::playMusic(Assets::GAME_M);
-   //Loop until the user closes the window
-   while (!glfwWindowShouldClose(window)) {
-      game.handleKeyInput();
-      
-      currentTime = glfwGetTime();
-      //game.handleKeyInput();
-      delta = currentTime - lastTime;
-      fpsTime += delta;
-      
-      //if (!game.player.getIsDead() && !game.isWon) {
-         game.checkGrid(delta);
-         game.fallDown(delta);
-         game.player.takeAwayEnergy(delta);
-      //}
-      game.updatePSystem(delta);
-      if (fpsTime >= 1) {
-         curFps = fpsCount;
-         fpsCount = 0;
-         fpsTime = 0;
+      Assets::playMusic(Assets::TITLE_M);
+      while (gameHasNotStarted) {
+         glViewport(0, 0, (GLsizei)mode->width/*1280*/, (GLsizei)mode->height/*720*/);
+         Renderer::renderStartScreen();
+         glfwSwapBuffers(window);
+         glfwPollEvents();
       }
-      sprintf(scoreString, "FPS: %.0f", 1.0/delta);
-      
-      if (game.player.getIsDead()) {
-         sprintf(scoreString, "FPS: %.0f", 1.0/delta);
-         //printf("YOU ARE DEAD\n");
-         //break;
+      Assets::stopMusic();
+      game.init();
+      level = game.getLevel();
+
+      Assets::playMusic(Assets::GAME_M);
+      //Loop until the user closes the window
+      lastTime = glfwGetTime();
+      while (!glfwWindowShouldClose(window) && !quit) {
+
+         game.handleKeyInput();
+
+         currentTime = glfwGetTime();
+         //game.handleKeyInput();
+         delta = currentTime - lastTime;
+         fpsTime += delta;
+
+         if (!paused) {
+            game.checkGrid(delta);
+            game.fallDown(delta);
+            game.player.takeAwayEnergy(delta);
+            game.updatePSystem(delta);
+         }
+
+         if (fpsTime >= 1) {
+            curFps = fpsCount;
+            fpsCount = 0;
+            fpsTime = 0;
+         }
+         sprintf(scoreString, "FPS: %.0f", 1.0 / delta);
+
+         if (game.player.getIsDead()) {
+            sprintf(scoreString, "FPS: %.0f", 1.0 / delta);
+            //printf("YOU ARE DEAD\n");
+            //break;
+         }
+         if (game.isWon) {
+            sprintf(scoreString, "FPS: %.0f", 1.0 / delta);
+            //printf("YOU WON!!!!!!!!\n");
+            //break;
+         }
+
+         glfwSetWindowTitle(window, scoreString);
+
+
+         lastTime = currentTime;
+         // Render here
+         glViewport(0, 0, (GLsizei)mode->width/*1280*/, (GLsizei)mode->height/*720*/);
+         Renderer::toggle = tog;
+         if (!paused) {
+            Renderer::render();
+
+            //renderer.toggle = tog;
+            //renderer.render();
+
+            //Swap front and back buffers
+
+            glfwSwapBuffers(window);
+         }
+         //Poll for and process events
+         glfwPollEvents();
+
+         //glm::vec3 pos = Renderer::camera.getPosition();
+         //printf("Cam pos: %f, %f, %f\n", pos.x, pos.y, pos.z);
+         fpsCount++;
+         //Assets::update();
       }
-      if (game.isWon) {
-         sprintf(scoreString, "FPS: %.0f", 1.0/delta);
-         //printf("YOU WON!!!!!!!!\n");
-         //break;
-      }
-      
-      glfwSetWindowTitle(window, scoreString);
-
-      lastTime = currentTime;
-      // Render here
-      glViewport(0, 0, (GLsizei)1280, (GLsizei)720);
-      Renderer::toggle = tog;
-      Renderer::render();
-      //renderer.toggle = tog;
-      //renderer.render();
-
-      //Swap front and back buffers
-    
-      glfwSwapBuffers(window);
-
-      //Poll for and process events
-      glfwPollEvents();
-
-      glm::vec3 pos = Renderer::camera.getPosition();
-      //printf("Cam pos: %f, %f, %f\n", pos.x, pos.y, pos.z);
-      fpsCount++;
-      //Assets::update();
-   }
-
+      //delete &game;
+      //Assets::stopMusic();
+   //}
    glfwTerminate();
    
    return 0;
