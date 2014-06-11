@@ -25,6 +25,7 @@ namespace Assets {
       PhongTextureShader ptshader;
       PhongShader pshader;
       BloomShader bshader;
+      FMOD::Channel *musicChannel;
   
       //code found from tutorial: http://katyscode.wordpress.com/2012/10/05/cutting-your-teeth-on-fmod-part-1-build-environment-initialization-and-playing-sounds/
       void FMODErrorCheck(FMOD_RESULT res) {
@@ -310,6 +311,8 @@ namespace Assets {
          loadSound("assets/audio/sfx/nutget.wav", NUT_S);
          loadSound("assets/audio/sfx/drill.wav", DRILL_S);
          loadSound("assets/audio/sfx/explosion.wav", EXPLODE_S);
+         loadSound("assets/audio/sfx/pauseGame.wav", PAUSE_S);
+         loadSound("assets/audio/sfx/resumeGame.wav", RESUME_S);
       }
 
       //free everything
@@ -356,7 +359,16 @@ namespace Assets {
          printf("frequency: %f\n", frequency);
          channel->setFrequency(frequency*1.28f);
          channel->setPaused(false);
+         musicChannel = channel;
       }
+   }
+
+   void stopMusic() {
+      musicChannel->setMute(true);
+   }
+
+   void resumeMusic() {
+      musicChannel->setMute(false);
    }
 
    Mesh* getMesh(int type) {
