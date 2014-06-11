@@ -29,7 +29,6 @@ namespace Assets {
    void playSound(int);
    void playMusic(int);
    void stopMusic();
-   void resumeMusic();
    Mesh* getMesh(int);
    Texture& getTexture(int) ;
    CellShader& getCShader();

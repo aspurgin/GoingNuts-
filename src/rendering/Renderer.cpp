@@ -462,35 +462,7 @@ namespace Renderer {
          glUseProgram(0);
       }
 
-      void renderStartScreen() {
-         //*** Render Win Loss ***/
-         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-         glEnable(GL_BLEND);
-         glDisable(GL_DEPTH_TEST);
-
-         glUseProgram(ftshader.shadeProg);
-         modelTrans.useModelViewMatrix();
-         modelTrans.loadIdentity();
-
-         orthographicCamera.setView(ftshader.h_uViewMatrix);
-         orthographicCamera.setProjectionMatrix(ftshader.h_uProjMatrix);
-         safe_glUniform3f(ftshader.h_lightPos, light.position.x, light.position.y, light.position.z);
-         safe_glUniform3f(ftshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
-
-         //camera.setPosition(glm::vec3(3.0f, ngame->player.getCenter().y + 1, 6.0f));
-         //light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y - 1, 6.0f));
-
-         hud->renderStartScreen();
-
-         glUseProgram(0);
-         glDisable(GL_BLEND);
-         glEnable(GL_DEPTH_TEST);
-
-         //Clear the depth buffer to make the game draw over the HUD
-         glClear(GL_DEPTH_BUFFER_BIT);
-
-         glUseProgram(0);
-      }
+      
 
       void renderLevelMap() {
          //*** Render Win Loss ***/
@@ -778,6 +750,36 @@ namespace Renderer {
       cylinder = new Cylinder();
    }
 
+   void renderStartScreen() {
+      //*** Render Win Loss ***/
+      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+      glEnable(GL_BLEND);
+      glDisable(GL_DEPTH_TEST);
+
+      glUseProgram(ftshader.shadeProg);
+      modelTrans.useModelViewMatrix();
+      modelTrans.loadIdentity();
+
+      orthographicCamera.setView(ftshader.h_uViewMatrix);
+      orthographicCamera.setProjectionMatrix(ftshader.h_uProjMatrix);
+      safe_glUniform3f(ftshader.h_lightPos, light.position.x, light.position.y, light.position.z);
+      safe_glUniform3f(ftshader.h_cameraPos, -camera.eye.x, -camera.eye.y, -camera.eye.z);
+
+      //camera.setPosition(glm::vec3(3.0f, ngame->player.getCenter().y + 1, 6.0f));
+      //light.setPosition(glm::vec3(ngame->player.getCenter().x, ngame->player.getCenter().y - 1, 6.0f));
+
+      hud->renderStartScreen();
+
+      glUseProgram(0);
+      glDisable(GL_BLEND);
+      glEnable(GL_DEPTH_TEST);
+
+      //Clear the depth buffer to make the game draw over the HUD
+      glClear(GL_DEPTH_BUFFER_BIT);
+
+      glUseProgram(0);
+   }
+
    void render() {
       currObjs = ngame->getObjectsToDraw();
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -796,8 +798,6 @@ namespace Renderer {
       renderWinLoss();
       renderLevelMap();
 
-      //renderDebugShadowMapText();
-      //renderNormalMappedCylinder();
    }
 }
 

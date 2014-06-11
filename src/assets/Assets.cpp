@@ -303,7 +303,7 @@ namespace Assets {
 
          //load all music tracks
          loadTrack("assets/audio/tracks/goingnuts.mp3", GAME_M);
-         loadTrack("assets/audio/tracks/goingnutsgg.mp3", TITLE_M);
+         loadTrack("assets/audio/tracks/goingnutstitle.mp3", TITLE_M);
          
          //load all sound effects
          loadSound("assets/audio/sfx/blockfall.wav", BLOCK_FALL_S);
@@ -364,11 +364,8 @@ namespace Assets {
    }
 
    void stopMusic() {
-      musicChannel->setMute(true);
-   }
-
-   void resumeMusic() {
-      musicChannel->setMute(false);
+      musicChannel->stop();
+      //musicChannel->setMute(true);
    }
 
    Mesh* getMesh(int type) {
