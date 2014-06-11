@@ -85,10 +85,16 @@ void CellShader::setMaterial(int i) {
       safe_glUniform1f(h_uMatShine, 4.0);
       break;
     case 8:
-      safe_glUniform3f(h_uMatAmb, 0.8, 0.1, 0.0);
-      safe_glUniform3f(h_uMatDif, 0.9, 0.2, 0.1);
-      safe_glUniform3f(h_uMatSpec, 0.7, 0.0, 0.0);
-      safe_glUniform1f(h_uMatShine, 4.0);
-      break;
+       safe_glUniform3f(h_uMatAmb, 0.8, 0.1, 0.0);
+       safe_glUniform3f(h_uMatDif, 0.9, 0.2, 0.1);
+       safe_glUniform3f(h_uMatSpec, 0.7, 0.0, 0.0);
+       safe_glUniform1f(h_uMatShine, 4.0);
+       break;
+    case 9:
+       safe_glUniform3f(h_uMatAmb, 1.0, 0.9, 0.4);
+       safe_glUniform3f(h_uMatDif, 1.0, 0.9, 0.4);
+       safe_glUniform3f(h_uMatSpec, 1.0, 0.9, 0.4);
+       safe_glUniform1f(h_uMatShine, 100.0);
+       break;
   }
 }

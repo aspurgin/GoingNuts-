@@ -14,16 +14,18 @@
 #include <vector>
 #include <cstdlib>
 #include <glm/glm.hpp>
+#include "ParticleTypes.hpp"
 #include "../rendering/Renderable.hpp"
 #include "../engine/Movable.hpp"
 #include "../assets/Assets.hpp"
 
 class Particle: public Renderable, public Collidable {
    public:
-      Particle(float mass, float ttl, glm::vec3 pos, glm::vec3 vel, float x, float y, float z, int mat);
+      Particle(float mass, float ttl, glm::vec3 pos, glm::vec3 vel, float x, float y, float z, int mat, int type);
       ~Particle();
 
       bool alive;
+      int pType;
       float mass;
       float ttl;
       glm::vec3 pos;
@@ -33,6 +35,7 @@ class Particle: public Renderable, public Collidable {
       glm::vec3 netForce;
       
       glm::vec3 front;
+      glm::vec3 up;
       // Need list of things that are applying forces
       // Need textureID field
 
@@ -73,6 +76,8 @@ class ParticleSystem: public Renderable {
       void setSpread(glm::vec3 newSpread);
       /* sets the time, in seconds, a Particle is alive for */
       void setTTL(float newTTL);
+      /* sets the spread of time to live, in seconds, for a Particle */
+      void setTTLSpread(float newTTL);
       /* sets the type, based on blockType, of the generated Particles */
       void setType(int type);
       /* turns on automatic generation of Particles */
@@ -89,24 +94,41 @@ class ParticleSystem: public Renderable {
       /* reload the saved values for mass, ttl, pos, vel, spread, and matID */
       void revert();
 
+      /* returns a random float from the range 0 to "of" */
+      float randf(float of);
+      /* returns a random float from the range "-of" to "of" */
+      float srandf(float of);
+      /* duplicate functions for effect particle system */
+      void esAdd();
+      void esBurst(int num);
+
+      /* duplicate functions for spark particle system */
+      //void sparkAdd();
+      //void sparkBurst(int num);
+
    private:
       //Array of effect Particles
+      //std::vector<Particle> ss;
       std::vector<Particle> es;
       std::vector<Particle> p;
       bool on;
       float perSec;
       int numParticles;
+      int pType;
       float time;
       float mass;
       float ttl;
+      float ttlSpread;
       glm::vec3 pos;
       glm::vec3 vel;
       glm::vec3 spread;
 
       //Backup values
       int smat;
+      int sType;
       float smass;
       float sttl;
+      float sTTLSpread;
       float sscaleX;
       float sscaleY;
       float sscaleZ;
@@ -120,14 +142,9 @@ class ParticleSystem: public Renderable {
       void sprayLava(glm::vec3 p, glm::vec3 v, int dir);
       /* generate sand particles */
       void spraySand(glm::vec3 p, glm::vec3 v, int dir);
-      /* returns a random float from the range 0 to "of" */
-      float randf(float of);
-      /* returns a random float from the range "-of" to "of" */
-      float srandf(float of);
 
-      /* duplicate functions for effect particle system */
-      void esAdd();
-      void esBurst(int num);
+
+
 };
 
 #endif

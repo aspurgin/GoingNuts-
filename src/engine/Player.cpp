@@ -100,8 +100,16 @@ void Player::checkMoveState() {
 void Player::setAnimation() {
    switch(state) {
       case DRILLING_DOWN:
-      case DRILLING_UP:
          model->setAt("drill", glfwGetTime()*2);
+         drillCount++;
+         if(drillCount > 20) {
+            state = STATIC;
+            drillCount = 0;
+         }
+         ang = 0;
+         break;
+      case DRILLING_UP:
+         model->setAt("drillUp", glfwGetTime()*2);
          drillCount++;
          if(drillCount > 20) {
             state = STATIC;

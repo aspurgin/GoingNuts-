@@ -13,9 +13,9 @@ namespace Assets {
       //create a map for sounds and music
       std::map<int, FMOD::Sound*> sounds, music;
 
-      Mesh *squirrel, *block, *nut, *depthWheel, *background, *guageMask1, *guageMask2, *scoreMask1, *scoreMask2, *youWon, *youLost, *cylinder, *goingNuts, *sun, *nutColor, *nutOutline, *energy, *points, *powerUpBG, *questionMark, *level, *depth, *depthMask, *scoreMask, *number, *hardHat, *dynamite, *hardHatImage, *dynamiteImage, *square, *playerImage, *nutImage, *explodeBlock, *number0, *number1, *number2, *number3, *number4, *number5, *number6, *number7, *number8, *number9, *newPercent, *superDrillImage;
+      Mesh *squirrel, *block, *nut, *depthWheel, *background, *guageMask1, *guageMask2, *scoreMask1, *scoreMask2, *youWon, *youLost, *cylinder, *goingNuts, *sun, *nutColor, *nutOutline, *energy, *points, *powerUpBG, *questionMark, *level, *depth, *depthMask, *scoreMask, *number, *hardHat, *dynamite, *hardHatImage, *dynamiteImage, *square, *playerImage, *nutImage, *explodeBlock, *number0, *number1, *number2, *number3, *number4, *number5, *number6, *number7, *number8, *number9, *newPercent, *superDrillImage, *spark;
 
-      Texture whiteDepthWheel, blackDepthWheel, hudElements, cylinderNormal, cylinderColor, dirtColor, dirtNormal, rockColor, rockNormal, squirrelTex, crystalNormal, sandNormal, lavaNormal, backgroundTex;
+      Texture whiteDepthWheel, blackDepthWheel, hudElements, cylinderNormal, cylinderColor, dirtColor, dirtNormal, rockColor, rockNormal, squirrelTex, crystalNormal, sandNormal, lavaNormal, backgroundTex;//, sparkTex;
       std::map<int, Mesh*> meshes;
       std::map<int, Texture> textures;
       CellShader cshader;
@@ -56,6 +56,9 @@ namespace Assets {
          
          backgroundTex = Texture("assets/textures/RockyCaveTexture.jpg");
 
+         //sparkTex = Texture("assets/textures/Spark.png");
+         //sparkTex = Texture("assets/textures/Spark2.png", RGBA_TEX);
+
          textures[WHITE_DEPTH_WHEEL_T] = whiteDepthWheel;
          textures[BLACK_DEPTH_WHEEL_T] = blackDepthWheel;
          textures[HUD_ELEMENTS_T] = hudElements;
@@ -70,6 +73,7 @@ namespace Assets {
          textures[SAND_T] = sandNormal;
          textures[LAVA_T] = lavaNormal;
          textures[BACKGROUND_T] = backgroundTex;
+         //textures[SPARK_T] = sparkTex;
 
       }
 
@@ -119,6 +123,7 @@ namespace Assets {
          number9 = new Mesh("assets/models/Number9.obj");
          newPercent = new Mesh("assets/models/NewPercent.obj");
          superDrillImage = new Mesh("assets/models/SuperDrillImage.obj");
+         spark = new Mesh("assets/models/Cube.obj.bu.bu");
          
 
          block->buildBuffers();
@@ -166,6 +171,7 @@ namespace Assets {
          number9->buildBuffers();
          newPercent->buildBuffers();
          superDrillImage->buildBuffers();
+         spark->buildBuffers();
 
          meshes[SQUIRREL_M] = squirrel;
          meshes[BLOCK_M] = block;
@@ -212,6 +218,7 @@ namespace Assets {
          meshes[Number9_M] = number9;
          meshes[NEW_PERCENT_M] = newPercent;
          meshes[SUPER_DRILL_IMAGE_M] = superDrillImage;
+         meshes[SPARK_M] = spark;
       }
 
       void initShaders() {
